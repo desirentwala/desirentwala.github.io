@@ -595,7 +595,7 @@ section.section {
 ============================= */
 
 #parallax1 {
-  background-image: url(../img/parallax/4.jpg);
+  background-image: url(../img/00.jpg);
   height: 500px;
 }
 
@@ -605,7 +605,7 @@ section.section {
 }
 
 #testimonials {
-  background-image: url(../img/1.jpg);
+  background-image: url(../img/03.jpg);
   height: 500px;
 }
 
