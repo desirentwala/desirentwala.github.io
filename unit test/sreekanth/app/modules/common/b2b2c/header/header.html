@@ -1,0 +1,47 @@
+<!--b2b2c header-->
+<div class="col-xs-2 visible-xs" [class.menuOverlay]="isMenuOpenFlag">
+  <div class="mobileMenu visible-xs">
+    <div class="inner onclick-menu">
+      <div class="spinner-master">
+        <input type="checkbox" class="ced" id="spinner-form" (change)="toggleMenu($event)" />
+        <label for="spinner-form" class="spinner-spin">
+          <div class="spinner diagonal part-1"></div>
+        <div class="spinner horizontal"></div>
+        <div class="spinner diagonal part-2"></div></label>
+        <ul class="onclick-menu-content" *ngIf="isUserAccountMenuFlag===false">
+          <li *ngIf="!showDashboard" (click)="goBack()" class="backMenu"><i class="fa fa-angle-left faic"></i><span>{{'NCPLabel.back' | translate}}</span></li>
+          <li *ngFor="let mainmenus of menujsondata">
+            <a *ngIf="mainmenus.url && !mainmenus.child" (click)="navigateRouterMenu(mainmenus);closeMenu()" [attr.id]=mainmenus.id>
+              <span><i class={{mainmenus.imageName}} [attr.id]=mainmenus.id></i> {{mainmenus.name |translate}}</span>
+            </a>
+            <a *ngIf="!mainmenus.url && mainmenus.child" (click)="changeLevel(mainmenus.child)" [attr.id]=mainmenus.id>
+              <span><i class={{mainmenus.imageName}}></i> {{mainmenus.name | translate}}</span><i class="fa fa-angle-right faic"></i>
+            </a>
+            <a *ngIf="!mainmenus.url && !mainmenus.child" [attr.id]=mainmenus.id>
+              <span><i class={{mainmenus.imageName}}></i> {{mainmenus.name| translate}}</span>
+            </a>
+          </li>
+        </ul>
+      </div>
+    </div>
+    <!-- <div class="menuOverlay" *ngIf="isMenuOpenFlag"></div> -->
+  </div>
+
+</div>
+<!--left side-->
+<div class="productBrand">
+  <div class="pr0 pull-left pl-xs-0">
+
+    <div class="navbar-header">
+      <a class="navbar-brand" (click)="navigateRouterLink('/b2b2c')"><img src="{{brandingJson['img_src']}}" class="img-responsive" alt="{{brandingJson['header_img']}}"></a>
+    </div>
+  </div>
+</div>
+<!--right side-->
+<div class="pr0 pull-right pl-xs-0">
+
+  <div class="navbar-header">
+    <a class="navbar-brand mr0" (click)="navigateRouterLink('/b2b2c')"><img src="{{partnerJson['img']}}" class="img-responsive" alt="{{brandingJson['footer_alt']}}"></a>
+  </div>
+</div>
+

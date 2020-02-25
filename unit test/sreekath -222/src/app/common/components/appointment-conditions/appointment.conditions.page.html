@@ -1,0 +1,36 @@
+<ion-toolbar>
+  <ion-item>
+    <div class="w-100 dialog">
+      <ion-item lines="none" class="appt-header">
+        <ion-title class="dialog-header"><strong>
+            <i class="fas fa-exclamation-triangle"></i> {{ header }}
+          </strong></ion-title>
+      </ion-item>
+    </div>
+    <ion-buttons class="cursor closeBtn" slot="end">
+      <ion-icon (click)="dismiss()" name="close" class="close"></ion-icon>
+    </ion-buttons>
+  </ion-item>
+</ion-toolbar>
+
+<div class="text-center modal-body">
+  <ion-item lines="none">
+    <ion-label class="tc-label-header">{{subHeader}}</ion-label>
+  </ion-item>
+  <ul *ngFor="let data of tc; let i = index;" class="pt-0 pb-0 ul-item">
+    <li class="tc-label">{{ data }}</li>
+    <hr class="li-border" [ngClass]="{'nth-hr': tc.length-1 === i }">
+  </ul>
+</div>
+<div class="pl-3">
+  <ion-item class="agree" lines="none">
+    <ion-checkbox mode="md" color="secondary" (click)="status = !status" disabled="false"></ion-checkbox>
+    <ion-text class="tc-label pl-3">Agree with the above conditions...</ion-text>
+  </ion-item>
+</div>
+<div class="pb-2 pl-3">
+  <ion-button (click)="bookAndPay()" class="float-left mr-4" [ngClass]="{disabled : status ? 'active' : 'inactive' }"
+    [disabled]="status === false">
+    <ion-text>Book now</ion-text>
+  </ion-button>
+</div>

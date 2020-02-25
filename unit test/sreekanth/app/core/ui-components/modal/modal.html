@@ -1,0 +1,30 @@
+<div [class.modal]="!editorMode || isPreviewModal" tabindex="-1" role="dialog" #modalRoot (keydown.esc)="closeOnEscape ? close() : 0"
+    [ngClass]="{ in: isOpened, fade: isOpened }" [ngStyle]="{ display: isOpened ? 'block' : 'none' }" (click)="closeOnOutsideClick ? close() : 0">
+    <div [@modalAnim] [class]="'modal-dialog ' + modalClass" (click)="preventClosing($event)">
+        <div [@modalAnim] class="modal-content" tabindex="0" *ngIf="isOpened">
+            <div class="modal-header">
+                <button *ngIf="!hideCloseButton" type="button" class="close" data-dismiss="modal" [attr.aria-label]="cancelButtonLabel || 'Close'"
+                (click)="close()"><span aria-hidden="true">&times;</span></button>
+                <div *ngIf="modalTitle">
+                    <misc-h2 label="{{modalTitle}}" iconClass="{{titleIcon}}" miscClass="modalHead"></misc-h2>
+                </div>
+                <div class="btns-row"></div>
+                <ng-content select="modal-header"></ng-content>
+            </div>
+            <div class="modal-body" [class.overFlowX]="overFlowXFlag" [class.overFlowY500]="overFlowYFlag">
+                <ng-content select="modal-content"></ng-content>
+            </div>
+            <div class="modal-footer">
+                <ng-content select="modal-footer"></ng-content>
+                <div class="btns-row" *ngIf="cancelButtonLabel || submitButtonLabel">
+                    <button-field *ngIf="cancelButtonLabel" buttonType="custom" data-dismiss="modal" buttonName="{{ cancelButtonLabel }}" buttonClass="ncp-linkBtn"
+                        (click)="close()"></button-field>
+
+                    <!--<button *ngIf="cancelButtonLabel" type="button" class="btn btn-default" data-dismiss="modal" (click)="close()">{{ cancelButtonLabel }}</button>-->
+                    <button-field *ngIf="submitButtonLabel" buttonType="custom" data-dismiss="modal" buttonName="{{ submitButtonLabel }}" buttonClass="ncp-btn w100p"
+                        (click)="onSubmit.emit(undefined)"></button-field>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

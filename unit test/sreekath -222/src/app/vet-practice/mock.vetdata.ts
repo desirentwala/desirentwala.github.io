@@ -1,0 +1,71 @@
+export class mockData{
+"data":[
+    {"id":10037,
+    "slotId":1,
+    "userId":5,
+    "practiceAppointmentTypeId":1,
+    "statusId":14,
+    "cancelNotes":null,
+    "vsBookingId":null,
+    "userRating":null,
+    "practiceRating":null,
+    "bookingTransactionId":2,
+    "createdOn":"2019-12-24T15:29:48.000Z",
+    "updatedOn":"2019-12-24T15:32:29.000Z",
+    "slot":
+    {
+        "id":1,
+        "startsAt":"2019-12-24T15:25:00.000Z",
+        "duration":15,
+        "isPrivate":false,
+        "user":
+        {
+            "id":4,
+            "firstName":"Chetan KV",
+            "lastName":"0"
+        }
+    },
+    "appointments":[
+        {
+            "id":1,
+            "userId":5,
+            "petId":1,
+            "bookingId":10037,
+            "notes":null,
+            "createdOn":"2019-12-24T15:29:48.000Z",
+            "pet":{
+            "petName":"Coco",
+            "profilePic":"PE_1.jpg"}}],
+            "status":
+            {
+                "statusName":"Completed"
+            },
+            "practiceAppointmentType":
+            {
+                "appointmentType":"General Checkup",
+                "customerFee":20
+            },
+            "user":
+            {
+                "id":5,
+                "firstName":"Madhura S ",
+                "lastName":"0"
+            }},
+            {
+                "id":10038,
+                "slotId":2,
+                "userId":5,
+                "practiceAppointmentTypeId":1,
+                "statusId":13,
+                "cancelNotes":null,
+                "vsBookingId":null,
+                "userRating":null,
+                "practiceRating":null,
+                "bookingTransactionId":3,
+                "createdOn":"2019-12-24T15:35:29.000Z",
+                "updatedOn":"2019-12-24T15:36:10.000Z",
+                "slot":
+                {
+                    "id":2,
+                    "startsAt":"2019-12-26T10:00:00.000Z",
+                    "duration":20,"isPrivate":false,"user":{"id":4,"firstName":"Chetan KV","lastName":"0"}},"appointments":[{"id":2,"userId":5,"petId":1,"bookingId":10038,"notes":null,"createdOn":"2019-12-24T15:35:29.000Z","pet":{"petName":"Coco","profilePic":"PE_1.jpg"}}],"status":{"statusName":"Cancelled"},"practiceAppointmentType":{"appointmentType":"General Checkup","customerFee":20},"user":{"id":5,"firstName":"Madhura S ","lastName":"0"}},{"id":10040,"slotId":2,"userId":6,"practiceAppointmentTypeId":1,"statusId":13,"cancelNotes":null,"vsBookingId":null,"userRating":null,"practiceRating":null,"bookingTransactionId":4,"createdOn":"2019-12-24T15:54:28.000Z","updatedOn":"2019-12-24T15:56:22.000Z","slot":{"id":2,"startsAt":"2019-12-26T10:00:00.000Z","duration":20,"isPrivate":false,"user":{"id":4,"firstName":"Chetan KV","lastName":"0"}},"appointments":[{"id":3,"userId":6,"petId":3,"bookingId":10040,"notes":null,"createdOn":"2019-12-24T15:54:28.000Z","pet":{"petName":"tomy","profilePic":"PE_3.png"}}],"status":{"statusName":"Cancelled"},"practiceAppointmentType":{"appointmentType":"General Checkup","customerFee":20},"user":{"id":6,"firstName":"suni a","lastName":"0"}},{"id":10042,"slotId":2,"userId":6,"practiceAppointmentTypeId":1,"statusId":13,"cancelNotes":null,"vsBookingId":null,"userRating":null,"practiceRating":null,"bookingTransactionId":5,"createdOn":"2019-12-24T15:57:40.000Z","updatedOn":"2019-12-24T16:05:50.000Z","slot":{"id":2,"startsAt":"2019-12-26T10:00:00.000Z","duration":20,"isPrivate":false,"user":{"id":4,"firstName":"Chetan KV","lastName":"0"}},"appointments":[{"id":4,"userId":6,"petId":3,"bookingId":10042,"notes":null,"createdOn":"2019-12-24T15:57:40.000Z","pet":{"petName":"tomy","profilePic":"PE_3.png"}}],"status":{"statusName":"Cancelled"},"practiceAppointmentType":{"appointmentType":"General Checkup","customerFee":20},"user":{"id":6,"firstName":"suni a","lastName":"0"}},{"id":10044,"slotId":3,"userId":6,"practiceAppointmentTypeId":1,"statusId":11,"cancelNotes":null,"vsBookingId":null,"userRating":null,"practiceRating":null,"bookingTransactionId":6,"createdOn":"2019-12-24T16:06:49.000Z","updatedOn":"2019-12-24T16:54:09.000Z","slot":{"id":3,"startsAt":"2019-12-26T07:30:00.000Z","duration":25,"isPrivate":false,"user":{"id":4,"firstName":"Chetan KV","lastName":"0"}},"appointments":[{"id":5,"userId":6,"petId":3,"bookingId":10044,"notes":null,"createdOn":"2019-12-24T16:06:49.000Z","pet":{"petName":"tomy","profilePic":"PE_3.png"}}],"status":{"statusName":"Confirmed"},"practiceAppointmentType":{"appointmentType":"General Checkup","customerFee":20},"user":{"id":6,"firstName":"suni a","lastName":"0"}},{"id":10046,"slotId":2,"userId":6,"practiceAppointmentTypeId":1,"statusId":13,"cancelNotes":null,"vsBookingId":null,"userRating":null,"practiceRating":null,"bookingTransactionId":7,"createdOn":"2019-12-24T16:09:59.000Z","updatedOn":"2019-12-24T16:10:54.000Z","slot":{"id":2,"startsAt":"2019-12-26T10:00:00.000Z","duration":20,"isPrivate":false,"user":{"id":4,"firstName":"Chetan KV","lastName":"0"}},"appointments":[{"id":6,"userId":6,"petId":4,"bookingId":10046,"notes":null,"createdOn":"2019-12-24T16:09:59.000Z","pet":{"petName":"bunty","profilePic":"PE_4.jpg"}}],"status":{"statusName":"Cancelled"},"practiceAppointmentType":{"appointmentType":"General Checkup","customerFee":20},"user":{"id":6,"firstName":"suni a","lastName":"0"}},{"id":10048,"slotId":2,"userId":6,"practiceAppointmentTypeId":1,"statusId":13,"cancelNotes":null,"vsBookingId":null,"userRating":null,"practiceRating":null,"bookingTransactionId":8,"createdOn":"2019-12-24T16:11:29.000Z","updatedOn":"2019-12-24T16:20:48.000Z","slot":{"id":2,"startsAt":"2019-12-26T10:00:00.000Z","duration":20,"isPrivate":false,"user":{"id":4,"firstName":"Chetan KV","lastName":"0"}},"appointments":[{"id":7,"userId":6,"petId":3,"bookingId":10048,"notes":null,"createdOn":"2019-12-24T16:11:29.000Z","pet":{"petName":"tomy","profilePic":"PE_3.png"}}],"status":{"statusName":"Cancelled"},"practiceAppointmentType":{"appointmentType":"General Checkup","customerFee":20},"user":{"id":6,"firstName":"suni a","lastName":"0"}},{"id":10050,"slotId":4,"userId":6,"practiceAppointmentTypeId":1,"statusId":11,"cancelNotes":null,"vsBookingId":null,"userRating":null,"practiceRating":null,"bookingTransactionId":9,"createdOn":"2019-12-24T16:14:01.000Z","updatedOn":"2019-12-24T18:52:13.000Z","slot":{"id":4,"startsAt":"2019-12-26T09:00:00.000Z","duration":20,"isPrivate":false,"user":{"id":4,"firstName":"Chetan KV","lastName":"0"}},"appointments":[{"id":8,"userId":6,"petId":4,"bookingId":10050,"notes":null,"createdOn":"2019-12-24T16:14:01.000Z","pet":{"petName":"bunty","profilePic":"PE_4.jpg"}}],"status":{"statusName":"Confirmed"},"practiceAppointmentType":{"appointmentType":"General Checkup","customerFee":20},"user":{"id":6,"firstName":"suni a","lastName":"0"}},{"id":10052,"slotId":2,"userId":5,"practiceAppointmentTypeId":1,"statusId":13,"cancelNotes":null,"vsBookingId":null,"userRating":null,"practiceRating":null,"bookingTransactionId":10,"createdOn":"2019-12-24T16:22:49.000Z","updatedOn":"2019-12-24T16:24:02.000Z","slot":{"id":2,"startsAt":"2019-12-26T10:00:00.000Z","duration":20,"isPrivate":false,"user":{"id":4,"firstName":"Chetan KV","lastName":"0"}},"appointments":[{"id":9,"userId":5,"petId":2,"bookingId":10052,"notes":null,"createdOn":"2019-12-24T16:22:49.000Z","pet":{"petName":"Scuby","profilePic":"PE_2.jpg"}}],"status":{"statusName":"Cancelled"},"practiceAppointmentType":{"appointmentType":"General Checkup","customerFee":20},"user":{"id":5,"firstName":"Madhura S ","lastName":"0"}},{"id":10055,"slotId":2,"userId":5,"practiceAppointmentTypeId":1,"statusId":13,"cancelNotes":null,"vsBookingId":null,"userRating":null,"practiceRating":null,"bookingTransactionId":11,"createdOn":"2019-12-24T16:57:24.000Z","updatedOn":"2019-12-24T17:49:15.000Z","slot":{"id":2,"startsAt":"2019-12-26T10:00:00.000Z","duration":20,"isPrivate":false,"user":{"id":4,"firstName":"Chetan KV","lastName":"0"}},"appointments":[{"id":10,"userId":5,"petId":1,"bookingId":10055,"notes":null,"createdOn":"2019-12-24T16:57:24.000Z","pet":{"petName":"Coco","profilePic":"PE_1.jpg"}}],"status":{"statusName":"Cancelled"},"practiceAppointmentType":{"appointmentType":"General Checkup","customerFee":20},"user":{"id":5,"firstName":"Madhura S ","lastName":"0"}},{"id":10058,"slotId":11,"userId":5,"practiceAppointmentTypeId":1,"statusId":14,"cancelNotes":null,"vsBookingId":null,"userRating":null,"practiceRating":null,"bookingTransactionId":13,"createdOn":"2019-12-24T21:09:41.000Z","updatedOn":"2019-12-25T12:59:39.000Z","slot":{"id":11,"startsAt":"2019-12-28T12:00:00.000Z","duration":55,"isPrivate":false,"user":{"id":4,"firstName":"Chetan KV","lastName":"0"}},"appointments":[{"id":12,"userId":5,"petId":5,"bookingId":10058,"notes":null,"createdOn":"2019-12-24T21:09:41.000Z","pet":{"petName":"mans","profilePic":"PE_5.png"}}],"status":{"statusName":"Completed"},"practiceAppointmentType":{"appointmentType":"General Checkup","customerFee":20},"user":{"id":5,"firstName":"Madhura S ","lastName":"0"}},{"id":10062,"slotId":25,"userId":5,"practiceAppointmentTypeId":1,"statusId":13,"cancelNotes":null,"vsBookingId":null,"userRating":null,"practiceRating":null,"bookingTransactionId":23,"createdOn":"2019-12-25T15:40:23.000Z","updatedOn":"2019-12-25T21:48:22.000Z","slot":{"id":25,"startsAt":"2019-12-27T04:00:00.000Z","duration":15,"isPrivate":false,"user":{"id":4,"firstName":"Chetan KV","lastName":"0"}},"appointments":[{"id":14,"userId":5,"petId":8,"bookingId":10062,"notes":null,"createdOn":"2019-12-25T15:40:23.000Z","pet":{"petName":"Scuby","profilePic":"PE_1.jpg"}}],"status":{"statusName":"Cancelled"},"practiceAppointmentType":{"appointmentType":"General Checkup","customerFee":20},"user":{"id":5,"firstName":"Madhura S ","lastName":"0"}},{"id":10064,"slotId":25,"userId":5,"practiceAppointmentTypeId":1,"statusId":13,"cancelNotes":null,"vsBookingId":null,"userRating":null,"practiceRating":null,"bookingTransactionId":25,"createdOn":"2019-12-26T05:22:46.000Z","updatedOn":"2019-12-26T05:23:30.000Z","slot":{"id":25,"startsAt":"2019-12-27T04:00:00.000Z","duration":15,"isPrivate":false,"user":{"id":4,"firstName":"Chetan KV","lastName":"0"}},"appointments":[{"id":16,"userId":5,"petId":7,"bookingId":10064,"notes":null,"createdOn":"2019-12-26T05:22:46.000Z","pet":{"petName":"Coco","profilePic":"PE_7.png"}}],"status":{"statusName":"Cancelled"},"practiceAppointmentType":{"appointmentType":"General Checkup","customerFee":20},"user":{"id":5,"firstName":"Madhura S ","lastName":"0"}},{"id":10065,"slotId":25,"userId":5,"practiceAppointmentTypeId":1,"statusId":11,"cancelNotes":null,"vsBookingId":null,"userRating":null,"practiceRating":null,"bookingTransactionId":26,"createdOn":"2019-12-26T05:24:34.000Z","updatedOn":"2019-12-26T10:44:29.000Z","slot":{"id":25,"startsAt":"2019-12-27T04:00:00.000Z","duration":15,"isPrivate":false,"user":{"id":4,"firstName":"Chetan KV","lastName":"0"}},"appointments":[{"id":17,"userId":5,"petId":7,"bookingId":10065,"notes":null,"createdOn":"2019-12-26T05:24:34.000Z","pet":{"petName":"Coco","profilePic":"PE_7.png"}}],"status":{"statusName":"Confirmed"},"practiceAppointmentType":{"appointmentType":"General Checkup","customerFee":20},"user":{"id":5,"firstName":"Madhura S ","lastName":"0"}},{"id":10073,"slotId":51,"userId":5,"practiceAppointmentTypeId":1,"statusId":11,"cancelNotes":null,"vsBookingId":null,"userRating":null,"practiceRating":null,"bookingTransactionId":38,"createdOn":"2019-12-26T10:35:23.000Z","updatedOn":"2019-12-27T05:36:48.000Z","slot":{"id":51,"startsAt":"2019-12-27T07:00:00.000Z","duration":20,"isPrivate":false,"user":{"id":4,"firstName":"Chetan KV","lastName":"0"}},"appointments":[{"id":24,"userId":5,"petId":7,"bookingId":10073,"notes":null,"createdOn":"2019-12-26T10:35:23.000Z","pet":{"petName":"Coco","profilePic":"PE_7.png"}}],"status":{"statusName":"Confirmed"},"practiceAppointmentType":{"appointmentType":"General Checkup","customerFee":20},"user":{"id":5,"firstName":"Madhura S ","lastName":"0"}},{"id":10078,"slotId":49,"userId":5,"practiceAppointmentTypeId":1,"statusId":11,"cancelNotes":null,"vsBookingId":null,"userRating":null,"practiceRating":null,"bookingTransactionId":47,"createdOn":"2019-12-26T14:35:44.000Z","updatedOn":"2019-12-27T10:49:06.000Z","slot":{"id":49,"startsAt":"2019-12-27T09:30:00.000Z","duration":20,"isPrivate":false,"user":{"id":4,"firstName":"Chetan KV","lastName":"0"}},"appointments":[{"id":26,"userId":5,"petId":19,"bookingId":10078,"notes":null,"createdOn":"2019-12-26T14:35:44.000Z","pet":{"petName":"test","profilePic":null}}],"status":{"statusName":"Confirmed"},"practiceAppointmentType":{"appointmentType":"General Checkup","customerFee":20},"user":{"id":5,"firstName":"Madhura S ","lastName":"0"}},{"id":10079,"slotId":74,"userId":6,"practiceAppointmentTypeId":1,"statusId":11,"cancelNotes":null,"vsBookingId":null,"userRating":null,"practiceRating":null,"bookingTransactionId":55,"createdOn":"2019-12-27T09:45:17.000Z","updatedOn":null,"slot":{"id":74,"startsAt":"2019-12-28T09:45:00.000Z","duration":30,"isPrivate":false,"user":{"id":4,"firstName":"Chetan KV","lastName":"0"}},"appointments":[{"id":27,"userId":6,"petId":4,"bookingId":10079,"notes":null,"createdOn":"2019-12-27T09:45:17.000Z","pet":{"petName":"bunty","profilePic":"PE_4.jpg"}}],"status":{"statusName":"Confirmed"},"practiceAppointmentType":{"appointmentType":"General Checkup","customerFee":20},"user":{"id":6,"firstName":"suni a","lastName":"0"}},{"id":10080,"slotId":57,"userId":5,"practiceAppointmentTypeId":1,"statusId":10,"cancelNotes":null,"vsBookingId":null,"userRating":null,"practiceRating":null,"bookingTransactionId":57,"createdOn":"2019-12-27T11:19:01.000Z","updatedOn":null,"slot":{"id":57,"startsAt":"2019-12-29T04:14:00.000Z","duration":15,"isPrivate":false,"user":{"id":4,"firstName":"Chetan KV","lastName":"0"}},"appointments":[{"id":28,"userId":5,"petId":7,"bookingId":10080,"notes":null,"createdOn":"2019-12-27T11:19:01.000Z","pet":{"petName":"Coco","profilePic":"PE_7.png"}}],"status":{"statusName":"Awaiting confirmation"},"practiceAppointmentType":{"appointmentType":"General Checkup","customerFee":20},"user":{"id":5,"firstName":"Madhura S ","lastName":"0"}}]}

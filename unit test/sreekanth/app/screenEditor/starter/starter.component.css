@@ -1,0 +1,6 @@
+.starteHeader{
+    text-align: center;padding: 1rem;border-bottom: 3px dashed hsl(0, 0%, 85%);
+}
+.se-button:active,.se-button:focus {
+    color: black!important;
+}

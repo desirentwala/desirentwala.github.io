@@ -1,0 +1,41 @@
+
+<div *ngIf="loading=='yes' && loaderType!='DOTS'" class="pageLoader pageLoaderNCP">
+    <div class="transparentloading "></div>
+    <img *ngIf="!useCSS" class="loadingimage" src="assets/img/pleasewait.gif" />
+    <div *ngIf="useCSS" id="cssload-wrapper"> 
+        <!--(Speed cable) loader for RBT -->
+        <div class="cssload-loader">
+            <div class="cssload-line"></div>
+            <div class="cssload-line"></div>
+            <div class="cssload-line"></div>
+            <div class="cssload-line"></div>
+            <div class="cssload-line"></div>
+            <div class="cssload-line"></div>
+            <div class="cssload-subline"></div>
+            <div class="cssload-subline"></div>
+            <div class="cssload-subline"></div>
+            <div class="cssload-subline"></div>
+            <div class="cssload-subline"></div>
+            <div class="cssload-loader-circle-1">
+                <div class="cssload-loader-circle-2"></div>
+            </div>
+            <div class="cssload-needle"></div>
+            <div class="cssload-loading">loading</div>
+        </div>
+    </div>
+</div>
+<div *ngIf="loading=='yes' && loaderType=='DOTS'" class="dotLoader">
+    <div class="bounce1"></div>
+    <div class="bounce2"></div>
+    <div class="bounce3"></div>
+</div>
+<!-- for CT -->
+<div *ngIf="loading=='yes' && loaderType!='DOTS'" class="pageLoader pageLoaderCT"> 
+    <div class="transparentloading "></div>
+    <div class="mainLoader">
+        <div class="mainLoaderItem mainLoaderItem-1"></div>
+        <div class="mainLoaderItem mainLoaderItem-2"></div>
+        <div class="mainLoaderItem mainLoaderItem-3"></div>
+        <div class="mainLoaderItem mainLoaderItem-4"></div>
+        </div>
+</div>

@@ -1,0 +1,545 @@
+<div id="template" class="sidebar-shadow se-scroll se-left-sidebar" style="display: none">
+    <h5> Templates
+        <ul class="se-optionsList hide" [class.show]="toggleTempProdFlag" (mouseleave)="toggleTempProdFlag =false;">
+            <li class="m5 p5 se-li " (click)="toggleTempProdFlag =false;filterMasterJsonByProdCode()"> Show all </li>
+            <li class="m5 p5 se-li " (click)="toggleTempProdFlag =false;filterMasterJsonByProdCode(item['code'])" *ngFor="let item of avilableProdTemplateList;let i =index">
+                {{item['code']}} - {{item['desc'] | translate}}
+            </li>
+        </ul>
+        <span class="pull-right se-spin cursor-pointer p5" (click)="template()">X</span>
+        <i class="fa fa-filter pull-right p5" title="Filter based on products " (click)="toggleTempProdFlag = !toggleTempProdFlag "></i>
+        <i class="fa fa-gear pull-right p5" title="Filter based on lob" *ngIf="mode === 'Snippet' || mode === 'Endorsements'" (click)="toggleTempLobFlag = !toggleTempLobFlag "></i>
+    </h5>
+    <div>
+        <input class="form-control vfr" type="text" [formControl]="searchTemplate" placeholder="Search here">
+        <div class="overflow-y w100p">
+            <ng-template #recursiveMasterElementSpace let-list>
+                <div ngxDroppable (drop)="genUniqueId();ref.markForCheck()" [model]="list" [copy]="true" dropZone="master-area">
+                    <ng-container *ngFor="let item of list">
+                        <div class="ngx-dnd-item b-radius10" ngxDraggable [model]="item" dropZones="select-area">{{item?.masterElementName}}</div>
+                    </ng-container>
+                </div>
+            </ng-template>
+            <ng-container *ngTemplateOutlet="recursiveMasterElementSpace;context:{$implicit:masterElements }"></ng-container>
+        </div>
+    </div>
+</div>
+<div id="model" class="sidebar-shadow se-scroll se-left-sidebar" style="display: none">
+    <h5>Mapping items
+        <span class="pull-right se-spin cursor-pointer p5" (click)="model()">X</span>
+    </h5>
+    <div>
+        <input class="form-control vfr" type="text" [formControl]="searchModel" placeholder="Search here">
+        <div class="overflow-y w100p">
+            <ng-template #recursiveModelItemSpace let-list let-map="map">
+                <ng-container *ngTemplateOutlet="addMappingButtonTemplate;context:{$implicit:list, map: map }"></ng-container>
+                <div ngxDroppable (drop)="genUniqueId();ref.markForCheck()" [model]="list" [copy]="true" dropZone="model-area">
+                    <ng-container *ngFor="let item of list">
+                        <div *ngIf="item['keyName'] " class="ngx-dnd-item  b-radius10" ngxDraggable [model]="item" dropZones="restricted-area-model">
+                            {{item?.keyName}} - {{item?.keyType}}
+                            <i *ngIf="item['isNew'] || isNewLOB" id="{{item?.keyName}}" class="fa fa-remove cursor-pointer pull-right mr20" style="font-size:20px;color:red"
+                                (click)="removeMapping(list, map, item)"></i>
+                            <i class="fa fa-angle-up pull-right mr5 fs20" *ngIf="item['maximize'] && item['keyType'] !== 'Control'" (click)="item['maximize'] = !item['maximize']"></i>
+                            <i class="fa fa-angle-down pull-right mr5 fs20" *ngIf="!item['maximize'] && item['keyType'] !== 'Control'" (click)="item['maximize'] = !item['maximize']"></i>
+                        </div>
+                        <div class="se-model-child" *ngIf="item['maximize']">
+                            <ng-container *ngIf="item['children'] && item['children'].length > 0">
+                                <ng-container *ngTemplateOutlet="recursiveModelItemSpace;context:{$implicit:item['children'], map: map[item['keyName']] }"></ng-container>
+                            </ng-container>
+                            <ng-container *ngIf="!item['children'] || item['children'].length == 0">
+                                <ng-container *ngTemplateOutlet="addMappingButtonTemplate;context:{$implicit:item['children'],map: map[item['keyName']] }"></ng-container>
+                            </ng-container>
+                        </div>
+                    </ng-container>
+                </div>
+            </ng-template>
+            <ng-template #addMappingButtonTemplate let-list let-map="map">
+                <div *ngIf="!config.useLegacy" class="row mlr25 mt-12 pull-right">
+                    <div class="plusBtnBeforeDropdown">
+                        <i [class.fa-plus]="!addNewMappingRowShowButton" [class.fa-minus]="addNewMappingRowShowButton" class="fa cursor-pointer"
+                            (click)="addNewMappingRowShowButton = !addNewMappingRowShowButton;setUnsetListAndMap(addNewMappingRowShowButton, list, map)"
+                            title="Add New"></i>
+                    </div>
+                </div>
+            </ng-template>
+            <div *ngIf="addNewMappingRowShowButton" class="row mlr15">
+                <div class="col-md-10 p0 mt10" (clickOutside)="addedFormControlListToggle=false">
+                    <div class="input-group dropdownWithTextBox">
+                        <div [formGroup]="addedModelGroup">
+                            <input type="text" formControlName="value" id="addedModelGroupValue" class="form-control" placeholder="Enter new mapping"
+                                aria-describedby="inputGroup-sizing-default">
+                        </div>
+                        <div class="input-group-prepend">
+                            <button class="btn btn-outline-secondary dropdown-toggle" type="button" data-toggle="dropdown show" aria-haspopup="true"
+                                aria-expanded="false" (click)="addedFormControlListToggle = !addedFormControlListToggle">{{ addedModelGroup.value.type}}</button>
+                            <ul class="dropdown-menu" [class.show]="addedFormControlListToggle" (click)="addedFormControlListToggle = !addedFormControlListToggle">
+                                <li class="dropdown-item" (click)="addedModelGroup.get('type').patchValue(null)"> -- Select Type -- </li>
+                                <ng-container *ngFor="let type of formControlTypeList">
+                                    <li class="dropdown-item" (click)="addedModelGroup.get('type').patchValue(type)"> {{type}}</li>
+                                </ng-container>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-2 p0 mt10">
+                    <i class="fa fa-plus btn btn-primary plusBtnWithdropdown" (click)="createMapping()" title="Add" [class.disabled]="!this.addedModelGroup.value['value'] || !this.addedModelGroup.value['type']"></i>
+                </div>
+            </div>
+            <ng-container *ngTemplateOutlet="recursiveModelItemSpace;context:{$implicit:derivedModel, map: editorService.transactionMapping }"></ng-container>
+            <ng-container *ngIf="!derivedModel || derivedModel.length === 0">
+                <h6 class="h6LinkText p50">Too lazy to create a new mapping structure?
+                    <p class="cursor-pointer" (click)="toggleLobFlag=true"> choose an existing LOB here</p>
+                </h6>
+            </ng-container>
+        </div>
+    </div>
+</div>
+<div id="snippets" class="sidebar-shadow se-scroll se-left-sidebar" style="display: none">
+    <h5>Snippets
+        <span class="pull-right se-spin cursor-pointer p5" (click)="snippets()">X</span>
+    </h5>
+    <div>
+        <div class="overflow-y w100p">
+            <ng-template #recursiveSnippetSpace let-list>
+                <div ngxDroppable (drop)="ref.markForCheck()" [model]="list" [copy]="true" dropZone="snip-area">
+                    <ng-container *ngFor="let item of list">
+                        <div class="ngx-dnd-item  b-radius10" ngxDraggable [model]="item" dropZones="select-area">{{item?.fileName}}
+                            <i class="fa fa-eye mr15 mt2 pull-right" (click)="previewSnippet(item)"></i>
+                        </div>
+                    </ng-container>
+                </div>
+            </ng-template>
+            <ng-container *ngTemplateOutlet="recursiveSnippetSpace;context:{$implicit:snippetArray }"></ng-container>
+        </div>
+    </div>
+</div>
+<div id="uiComponents" class="sidebar-shadow se-scroll se-left-sidebar " style="display: none">
+    <h5>UI Elements
+        <span class="pull-right se-spin  cursor-pointer p5" (click)="UiElement()">X</span>
+    </h5>
+    <div>
+        <input class="form-control vfr" type="text" [formControl]="searchElement" placeholder="Search here">
+        <ng-template #recursiveUIElementSpace let-list>
+            <div ngxDroppable (drop)="genUniqueId();ref.markForCheck()" [model]="list" [copy]="true" dropZone="ui-area">
+                <ng-container *ngFor="let item of list">
+                    <div class="ngx-dnd-item  b-radius10" ngxDraggable [model]="item" dropZones="select-area">{{item?.controlType}}{{item?.subControlType}}
+
+                    </div>
+                </ng-container>
+            </div>
+        </ng-template>
+        <ng-container *ngTemplateOutlet="recursiveUIElementSpace;context:{$implicit:uiElementList }"></ng-container>
+    </div>
+</div>
+<div id="eventConstants" class="sidebar-shadow se-scroll se-left-sidebar " style="display: none">
+    <h5>Events
+        <span class="pull-right se-spin  cursor-pointer p5" (click)="displayEventConstants()">X</span>
+    </h5>
+    <div>
+        <!-- <input class="form-control vfr" type="text" [formControl]="searchElement" placeholder="Search here"> -->
+        <ng-template #eventConstantsSpace let-list>
+            <div ngxDroppable (drop)="genUniqueId();ref.markForCheck()" [model]="editorService.utils.obj?.values(list)" [copy]="true"
+                dropZone="events-area">
+                <ng-container *ngFor="let item of editorService.utils.obj?.values(list)">
+                    <div class="ngx-dnd-item  b-radius10" ngxDraggable [model]="item" [title]="item.shortDesc || item.name || item" dropZones="restricted-area-event">{{item.name || item}}
+                        <i *ngIf="item.brief" class="fa fa-info-circle pull-right cursor-pointer pr10" style="font-size:20px" [title]="item.brief"></i>
+                    </div>
+                </ng-container>
+            </div>
+        </ng-template>
+        <ng-container *ngTemplateOutlet="eventConstantsSpace;context:{$implicit:eventConstants }"></ng-container>
+    </div>
+</div>
+<span *ngIf="doShowDraggableMenu" draggable=true (dragend)="keyButtonDragHandler($event)" id="keyButtons" class=" se-keyButtons-group">
+    <i id="keyButtonsCLose" class=" se-spin se-keyButton-close cursor-pointer " (click)="keyButtons()">X</i>
+    <ng-container *ngIf="!isPreviewMode">
+        <button *ngIf="masterElements && masterElements.length > 0" class="p5 btn se-keyButtons cursor-pointer m5" (click)="template()">
+            Template
+        </button>
+        <button *ngIf="derivedModel" class="p5 btn se-keyButtons cursor-pointer m5" (click)="model()">
+            Mapping
+        </button>
+        <button *ngIf="eventConstants && editorService.utils.obj?.values(eventConstants).length > 0" class="p5 btn se-keyButtons cursor-pointer m5"
+            (click)="displayEventConstants()">
+            Events
+        </button>
+        <button class="p5 btn se-keyButtons cursor-pointer m5" (click)="UiElement()">
+            UI Elements
+        </button>
+        <button class="p5 btn se-keyButtons cursor-pointer m5" (click)="snippets()">
+            Snippets
+        </button>
+    </ng-container>
+    <ng-container *ngIf="isPreviewMode">
+        <ng-container *ngFor="let key of editorService.utils.obj.keys(screenPreviewConfig)">
+            <button class="p5 btn se-keyButton cursor-pointer m5" [class.se-keyButton-active]="screenPreviewConfig[key]" (click)="screenPreviewConfig[key] = !screenPreviewConfig[key]; shared.doTriggerScreenManipulatorEvent(screenPreviewConfig)">
+                {{key}}
+            </button>
+        </ng-container>
+    </ng-container>
+</span>
+<section>
+    <div id="se-main" class="se-main">
+        <div class="row m0">
+            <ng-container *ngIf="!isSetupJSON">
+                <i class="fa fa-bars pull-left se-barButton se-scale" (click)="keyButtons()"></i>
+                <h2 class="pull-left">
+                    Configure Product {{productCode }}</h2>
+                <ng-container *ngIf="enableLOBSwitch || ( !isCollapseModelElement && isNewLOB )">
+                    <div class="se-lob-dropdown" *ngIf="themeList && themeList.length > 0 ">
+                        <div class="d-block h100p" (click)="toggleLobFlag = !toggleLobFlag">
+                            <span>
+                                <i class="fa fa-delicious pos_static mr5"></i>
+                                <ng-container *ngIf="!lob">Choose LOB </ng-container>
+                                <ng-container *ngIf="lob">{{lob}} </ng-container>
+                            </span>
+                            <i class="fa fa-angle-down fs19 pt2 pl5 mb2"></i>
+                        </div>
+                        <ul class="optionsList hide" [class.show]="toggleLobFlag" (mouseleave)="toggleLobFlag =false;">
+                            <ng-container *ngFor="let item of editorService.modelMethodList">
+                                <li class="m5 p5 text-center se-li" style="text-transform: capitalize" (click)="toggleLobFlag =false;changeLob(item)">
+                                    {{item['lob']}}
+                                </li>
+                            </ng-container>
+                        </ul>
+                    </div>
+                </ng-container>
+                <div class="pull-left">
+                    <button class="btn btn-primary mt5 mr5 ml5 p5" (click)="toggleRTL()" *ngIf="!isRtl">Enable RTL </button>
+                    <button class="btn btn-primary mt5 mr5 ml5 p5" (click)="toggleRTL()" *ngIf="isRtl">Enable LTR </button>
+                    <button class="btn btn-primary mt5 mr5 ml5 p5" (click)="toggleInspectMode()" *ngIf="!isInspectMode">Enable Inspect Mode </button>
+                    <button class="btn btn-info  mt5 mr5 ml5 p5" (click)="toggleInspectMode()" *ngIf="isInspectMode">Disable Inspect Mode</button>
+                </div>
+                <div class="se-theme-dropdown" *ngIf="themeList && themeList.length > 0 ">
+                    <div class="d-block h100p" (click)="toggleThemeFlag = !toggleThemeFlag">
+                        <span>
+                            <i class="fa fa-delicious pos_static mr5"></i> Apply Themes </span>
+                        <i class="fa fa-angle-down fs19 pt2 pl5 mb2"></i>
+                    </div>
+                    <ul class="optionsList hide" [class.show]="toggleThemeFlag" (mouseleave)="toggleFlag =false;">
+                        <ng-container *ngFor="let item of themeList">
+                            <li *ngIf="item.split('.')[0] !== 'rtlTheme'" class="m5 p5 text-center se-li" style="text-transform: capitalize" (click)="toggleThemeFlag =false;changeTheme(item)">
+                                {{item.split('.')[0]}}
+                            </li>
+                        </ng-container>
+                    </ul>
+                </div>
+                <div class="se-modal-dropdown " *ngIf="formService.previewModal && formService.previewModal.length > 0 ">
+                    <div class="d-block h100p" (click)="toggleFlag = !toggleFlag">
+                        <span>
+                            <i class="fa fa-delicious pos_static mr5"></i> Modal View </span>
+                        <i class="fa fa-angle-down fs19 pt2 pl5 mb2"></i>
+                    </div>
+                    <ul class="optionsList hide" [class.show]="toggleFlag" (mouseleave)="toggleFlag =false;">
+                        <li class="m5 p5 text-center se-li" (click)="toggleFlag =false;openModals(i)" *ngFor="let item of formService.previewModal;let i =index">
+                            Modal {{i}}
+                        </li>
+                    </ul>
+                </div>
+            </ng-container>
+            <i class=" fa fa-arrow-left se-keyHover p-md-7 ml0 p5  pull-right btn btn-primary cursor-pointer" title="Stater Page" (click)="navigateStart()"></i>
+            <ng-container *ngIf="this.productJson['elementList'] && this.productJson['elementList'].length > 0">
+                <i class=" btn btn-primary se-keyHover fa fa-save pull-right cursor-pointer  p-md-7 ml0 p5" title="Downlaod" (click)="saveDataToFile($event)"></i>
+                <i class="btn btn-primary se-keyHover fa fa-copy pull-right cursor-pointer p-md-7 ml0 p5" title="Copy" (click)="copyToClipboard($event)"></i>
+                <i class="btn btn-primary se-keyHover fa fa-eye pull-right cursor-pointer p-md-7 ml0 p5" *ngIf="!isPreviewMode" title="Full Preview"
+                    (click)="isPreviewMode = !isPreviewMode "></i>
+                <i class="btn btn-primary se-keyHover fa fa-eye-slash pull-right cursor-pointer p-md-7 ml0 p5" *ngIf="isPreviewMode" title="Close Preview"
+                    (click)="isPreviewMode = !isPreviewMode "></i>
+                <i class="fa fa-database se-keyHover btn btn-primary  pull-right cursor-pointer p-md-7 ml0 p5" (click)="logIt()" title="Log Point"></i>
+                <i class="fa fa-folder-open-o se-keyHover btn btn-primary  pull-right cursor-pointer p-md-7 ml0 p5" (click)="openSavePoint()"
+                    title="Save Point"></i>
+            </ng-container>
+            <ng-container *ngIf="isSetupJSON">
+                <i class=" btn btn-primary se-keyHover fa fa-save pull-right cursor-pointer  p-md-7 ml0 p5" title="Downlaod" (click)="saveSetupToFile()"></i>
+                <i class="btn btn-primary se-keyHover fa fa-copy pull-right cursor-pointer p-md-7 ml0 p5" title="Copy" (click)="copySetupToClipboard($event)"></i>
+                <i class="fa fa-database se-keyHover btn btn-primary  pull-right cursor-pointer p-md-7 ml0 p5" (click)="saveSetupToDatabase()"
+                    title="Save to Database"></i>
+            </ng-container>
+        </div>
+        <ng-container *ngIf="!isSetupJSON">
+            <div class="row">
+                <ng-container *ngIf="!isPreviewMode">
+                    <div class="dndArea se-scroll-horizontal overflow-y" [class.d-none]="previewFlag || modalPreviewJson.elementList.length > 0"
+                        [class.w100p]="!isCollapseModelElement || isCollapseTemplate || isCollapseUIElement || !isCollapseEvents"
+                        (mouseenter)="isStructHover = true" (mouseleave)="isStructHover = false">
+                        <ng-container *ngTemplateOutlet="recursiveSpace;context:{$implicit:productJson?.elementList }"></ng-container>
+                    </div>
+                    <div class="dndArea se-scroll-horizontal overflow-y" *ngIf="modalPreviewJson.elementList.length > 0" [class.d-none]="previewFlag"
+                        [class.w100p]="!isCollapseModelElement || isCollapseTemplate || isCollapseUIElement || !isCollapseEvents"
+                        (mouseenter)="isStructHover = true" (mouseleave)="isStructHover = false">
+                        <ng-container *ngTemplateOutlet="recursiveSpace;context:{$implicit:modalPreviewJson?.elementList }"></ng-container>
+                    </div>
+                    <div *ngIf="productJson && productJson.elementList && productJson.elementList.length > 0" class="previewArea overflow-y se-scroll-horizontal"
+                        [class.w100p]="previewFlag" [class.d-none]="!isCollapseModelElement || isCollapseTemplate || isCollapseUIElement || !isCollapseEvents">
+                        <i class="fa fa-expand se-spin se-fullView" title="Full screen View" *ngIf="!previewFlag" (click)="previewFlag = true;ref.markForCheck()"></i>
+                        <i class="fa fa-compress se-spin se-fullView" title="Compressed View" *ngIf="previewFlag" (click)="previewFlag = false;ref.detectChanges()"></i>
+                        <i class=" se-spin se-closeModalView" title="Close modal" *ngIf="modalPreviewJson.elementList.length > 0" (click)="openModals();ref.markForCheck()">X</i>
+                        <div [class.d-none]="modalPreviewJson.elementList.length > 0">
+                            <ncp-form [formData]="productJson"></ncp-form>
+                        </div>
+                        <div *ngIf="modalPreviewJson.elementList.length > 0">
+                            <ncp-form [formData]="modalPreviewJson"></ncp-form>
+                        </div>
+                    </div>
+                </ng-container>
+                <ng-container *ngIf="isPreviewMode">
+                    <ng-container *ngTemplateOutlet="previewSpace;"></ng-container>
+                </ng-container>
+            </div>
+        </ng-container>
+        <ng-container *ngIf="isSetupJSON">
+            <div class="row p5">
+                <ng-container *ngTemplateOutlet="productSetupJSONSpace;"></ng-container>
+            </div>
+        </ng-container>
+    </div>
+</section>
+
+<ncp-modal [modalKey]="editingModal" isPreviewModal=true overFlowYFlag="true" modalClass="modal-lg" [closeOnEscape]="false"
+    [closeOnOutsideClick]="false" [hideCloseButton]="true">
+
+    <modal-content>
+        <json-editor [(ngModel)]="jsonEdit" (change)="jsonEdited($event)">
+        </json-editor>
+    </modal-content>
+    <modal-footer>
+        <button class="btn btn-info pull-right" (click)="closeModal(true);"> Save</button>
+        <button class=" btn btn-default pull-right" (click)="closeModal(false);"> Cancel</button>
+    </modal-footer>
+</ncp-modal>
+<ncp-modal [modalKey]="savePointModal" isPreviewModal=true overFlowYFlag="true" modalClass="modal-lg" [closeOnEscape]="false"
+    [closeOnOutsideClick]="false" [hideCloseButton]="true">
+
+    <modal-content>
+        <table class="table">
+            <thead class="thead-inverse">
+                <th>#</th>
+                <th>Log Id</th>
+                <th>Product Code</th>
+                <th>Time Stamp</th>
+                <th>Actions</th>
+            </thead>
+            <tbody>
+                <tr *ngFor="let logItem of logArray;let index = index">
+                    <td>{{index +1 }}</td>
+                    <td>{{logItem?.id}}</td>
+                    <td>
+                        <ng-container *ngIf="logItem?.starterObj?.newProdCode; else saveElseProdCode">
+                            {{logItem?.starterObj?.newProdCode}}
+                        </ng-container>
+                        <ng-template #saveElseProdCode>{{logItem?.starterObj?.existingProdCode}}</ng-template>
+                    </td>
+                    <td>
+                        <div>{{logItem?.timeStamp | date: 'MMMM EEEE d'}}</div>
+                        <div>{{logItem?.timeStamp | date: 'h:mm a'}}</div>
+                    </td>
+                    <td>
+                        <i class="fa fa-external-link se-keyHover btn btn-primary   cursor-pointer p-md-7 ml0 p5" (click)="openFromLog(logItem)"
+                            title="Open this"></i>
+                        <i class="fa fa-trash-o se-keyHover btn    cursor-pointer p-md-7 ml0 p5" (click)="deleteFromLog(index)" title="Delete"></i>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </modal-content>
+    <modal-footer>
+        <button class="btn btn-info pull-right" (click)="savePointModal = false"> CLOSE X</button>
+    </modal-footer>
+</ncp-modal>
+<ncp-modal [modalKey]="snippetModal" isPreviewModal=true overFlowYFlag="true" modalClass="modal-lg" [closeOnEscape]="false"
+    [closeOnOutsideClick]="false" [hideCloseButton]="true">
+
+    <modal-content>
+        <ng-container *ngIf="formService.snippetPreviewModal.length > 0">
+            <button class="m5 btn btn-default p5 text-center se-li" (click)="openModals(i)" *ngFor="let item of formService.snippetPreviewModal;let i =index">
+                Modal {{i}}
+            </button>
+        </ng-container>
+        <ng-container *ngIf="snippetJson && modalPreviewJson.elementList.length === 0">
+            <ncp-form [formData]="snippetJson"></ncp-form>
+        </ng-container>
+        <ng-container *ngIf=" modalPreviewJson.elementList.length > 0">
+            <ncp-form [formData]="modalPreviewJson"></ncp-form>
+        </ng-container>
+    </modal-content>
+    <modal-footer>
+        <button class=" btn btn-default pull-right" (click)="modalPreviewJson.elementList = [];snippetModal = false;formService.isSnippetPreview = false;formService.snippetPreviewModal = []">
+            Close X</button>
+    </modal-footer>
+</ncp-modal>
+
+<ng-template #recursiveSpace let-list>
+    <div class="ngx-dnd-container " ngxDroppable (drop)="genUniqueId();ref.markForCheck()" [model]="list" dropZone="select-area">
+        <ng-container *ngFor="let item of list">
+            <div class="ngx-dnd-item-editor b-radius10" ngxDraggable (mouseenter)="setHover(item)" (mouseleave)="setMouseLeave(item)"
+                [id]="item['uniqueId']" [model]="item" dropZone="select-area" dropZones="select-area">
+                <ng-container *ngIf="item['controlType'] === 'Ng2Wizard'">
+                    Tab Navigator
+                </ng-container>
+                <ng-container *ngIf="item['controlType'] !== 'Ng2Wizard'">
+                    {{item?.controlType}}
+                </ng-container>
+                {{item?.subControlType}} {{item?.tabTitle | translate}} {{item?.modalTitle | translate}}
+                <ng-container *ngIf="isCollapseEvents">
+                    <ng-container *ngIf="item['fileName']">
+                        - {{item?.fileName}}
+                    </ng-container>
+                    <ng-container *ngIf="item['elementFormName']">
+                        <span> - {{item?.elementFormName}}
+                            <ng-container *ngTemplateOutlet="mappingSpace;context:{$implicit:item,type: 'elementFormName'}"></ng-container>
+                        </span>
+                    </ng-container>
+                    <ng-container *ngIf="item['groupName']">
+                        <span> - {{item?.groupName}}
+                            <ng-container *ngTemplateOutlet="mappingSpace;context:{$implicit:item,type: 'groupName'}"></ng-container>
+                        </span>
+                    </ng-container>
+                    <ng-container *ngIf="item['groupArrayName']">
+                        <span> - {{item?.groupArrayName}}
+                            <ng-container *ngTemplateOutlet="mappingSpace;context:{$implicit:item,type: 'groupArrayName'}"></ng-container>
+                        </span>
+                    </ng-container>
+                    <ng-container *ngIf="item['controlArrayName']">
+                        <span> - {{item?.controlArrayName}}
+                            <ng-container *ngTemplateOutlet="mappingSpace;context:{$implicit:item,type: 'controlArrayName'}"></ng-container>
+                        </span>
+                    </ng-container>
+                    <ng-container *ngIf="item['secondaryFormName']">
+                        <span> - {{item?.secondaryFormName}}
+                            <ng-container *ngTemplateOutlet="mappingSpace;context:{$implicit:item,type: 'secondaryFormName'}"></ng-container>
+                        </span>
+                    </ng-container>
+                    <ng-container *ngIf="item['thirdFormName']">
+                        <span>- {{item?.thirdFormName}}
+                            <ng-container *ngTemplateOutlet="mappingSpace;context:{$implicit:item,type: 'thirdFormName'}"></ng-container>
+                        </span>
+                    </ng-container>
+                    <ng-container *ngIf="item['fourthFormName']">
+                        <span> - {{item?.fourthFormName}}
+                            <ng-container *ngTemplateOutlet="mappingSpace;context:{$implicit:item,type: 'fourthFormName'}"></ng-container>
+                        </span>
+                    </ng-container>
+                    <ng-container *ngIf="item['fifthFormName']">
+                        <span> - {{item?.fifthFormName}}
+                            <ng-container *ngTemplateOutlet="mappingSpace;context:{$implicit:item,type: 'fifthFormName'}"></ng-container>
+                        </span>
+                    </ng-container>
+                    <ng-container *ngIf="item['sixthFormName']">
+                        <span> - {{item?.sixthFormName}}
+                            <ng-container *ngTemplateOutlet="mappingSpace;context:{$implicit:item,type: 'sixthFormName'}"></ng-container>
+                        </span>
+                    </ng-container>
+                </ng-container>
+
+                <ng-container *ngIf="!isCollapseEvents">
+                    <span class="br1 p2" style="background: #54534d">
+                        <ng-container *ngTemplateOutlet="eventArraySpace;context:{$implicit:item}"></ng-container>
+                    </span>
+                    <span [class.hide]="!item?.changeId && !item?.clickId" class="br1 p2" style="background: #54534d"> {{item?.changeId ? 'CHANGE : ' + item.changeId : ''}} {{item?.clickId ? ' | CLICK : ' + item.clickId
+                        : ''}}
+                        <ng-container *ngTemplateOutlet="eventSpace;context:{$implicit:item}"></ng-container>
+                    </span>
+                </ng-container>
+                <i *ngIf="item['uniqueId']" class="fa fa-trash se-scale mr4 pull-right se-delete-icon" (click)="remove(item)" title="Delete"></i>
+                <i *ngIf="item['uniqueId'] && item['controlType'] !== 'Include'" class="fa fa-edit se-scale pull-right se-edit-icon" (click)="openEditingModal(item)"
+                    title="Edit"></i>
+                <i *ngIf="item['uniqueId'] && item['controlType'] !== 'Include'" class="fa fa-copy se-scale pull-right se-edit-icon" (click)="duplicate(item,list)"
+                    title="Duplicate"></i>
+                <i *ngIf="item['elementList'] && item['minimize'] && item['controlType'] !== 'Include'" class="fa fa-expand se-scale  pull-right se-edit-icon"
+                    (click)="item['minimize'] = false" title="Expand"></i>
+                <i *ngIf="item['elementList'] && !item['minimize'] && item['controlType'] !== 'Include'" class="fa fa-compress se-scale pull-right se-edit-icon"
+                    (click)="item['minimize'] = true" title="Compress"></i>
+                <i *ngIf="(item['controlType'] === 'Ng2Wizard' || item['controlType'] === 'Navigator') && !item['minimize']" class="fa fa-arrow-right se-scale fa-2x se-nav-next-icons"
+                    (click)="processNavigation(item,'NEXT')" title="Next"></i>
+                <i *ngIf="(item['controlType'] === 'Ng2Wizard' || item['controlType'] === 'Navigator' ) && !item['minimize']" class="fa fa-arrow-left se-scale fa-2x se-nav-prev-icons"
+                    (click)="processNavigation(item,'PREV')" title="Previous"></i>
+                <ng-container *ngIf="item['elementList'] && !item['minimize'] && item['controlType'] !== 'Include' ">
+                    <ng-container *ngTemplateOutlet="recursiveSpace;context:{$implicit:item.elementList }"></ng-container>
+                </ng-container>
+            </div>
+        </ng-container>
+    </div>
+</ng-template>
+<ng-template #mappingSpace let-item let-type="type">
+    <ng-container *ngIf="!item['isExcludeControl'] 
+            || item['isChangeControlGroup'] 
+            || item['isGetControlValue'] 
+            || item['isCustomControl']  ">
+        <span *ngIf="!isCollapseModelElement" class="ngx-model-item" ngxDroppable (drop)="handleMappingDrop(item, $event, type);genUniqueId()"
+            [model]="dummyList" dropZone="restricted-area">{{type }}</span>
+    </ng-container>
+</ng-template>
+<ng-template #eventSpace let-item>
+    <ng-container>
+        <ng-container *ngIf="filterUIComponentPropByControlType(item['controlType'], 'changeId').length > 0">
+            <span class="ngx-model-item" ngxDroppable (drop)="handleEventDrop(item, $event, 'changeId');genUniqueId()" [model]="dummyList"
+                dropZone="restricted-area-event">Drop - Change Event </span>
+        </ng-container>
+        <ng-container *ngIf="filterUIComponentPropByControlType(item['controlType'], 'clickId').length > 0 ">
+            <span class="ngx-model-item" ngxDroppable (drop)="handleEventDrop(item, $event, 'clickId');genUniqueId()" [model]="dummyList"
+                dropZone="restricted-area-event">Drop - Click Event </span>
+        </ng-container>
+    </ng-container>
+</ng-template>
+<ng-template #eventArraySpace let-item>
+    <ng-container *ngIf="item['events'] && item['events'].length > 0">
+        <ng-container *ngFor="let eventObj of item['events'];">
+            <span class=""> {{eventObj['eventId'] }} - {{eventObj['triggerEvent']}}
+                <i class="fa fa-trash btn btn-danger p5" title="Delete Event" (click)="removeEvent(item, eventObj['eventId'])"></i>
+                <i class="fa fa-edit btn btn-info p5" title="Edit Event" (click)="editEvent(item, eventObj['eventId'])"></i>
+            </span>
+        </ng-container>
+    </ng-container>
+    <i class="fa fa-plus btn btn-primary p-md-7" title="Add Event" (click)="addEventObj(item)"></i>
+</ng-template>
+<ng-template #previewSpace>
+    <div *ngIf="b2bFlag" id="wrapper" class="BusinessContainer redBar">
+        <div class="container-fluid bg-fff">
+            <ncp-navbar></ncp-navbar>
+        </div>
+        <div class="container-fluid bodyBg">
+            <ncp-menubar></ncp-menubar>
+            <banner></banner>
+            <ncp-form [formData]="productJson"></ncp-form>
+        </div>
+    </div>
+    <div *ngIf="b2cFlag" id="wrapper" class="clientContainer">
+        <div class="container-fluid bg-fff">
+            <b2c-ncp-navbar></b2c-ncp-navbar>
+        </div>
+        <div class="container-fluid bodyBg">
+            <ncp-menubar></ncp-menubar>
+            <banner></banner>
+            <ncp-form [formData]="productJson"></ncp-form>
+        </div>
+    </div>
+    <div *ngIf="b2b2cFlag" id="wrapper" class="customerContainer">
+        <div class="container-fluid bg-fff">
+            <nav class="navbar navbar-default">
+                <div class="header-holder">
+                    <div class="row mb0">
+                        <b2b2c-ncp-header></b2b2c-ncp-header>
+                    </div>
+                </div>
+            </nav>
+        </div>
+        <div class="container-fluid bodyBg">
+            <ncp-menubar></ncp-menubar>
+            <banner></banner>
+            <ncp-form [formData]="productJson"></ncp-form>
+        </div>
+    </div>
+    <div *ngIf="(b2bFlag || b2b2cFlag || b2cFlag)" id="wrapper">
+        <ncp-footer> </ncp-footer>
+    </div>
+
+
+</ng-template>
+<ng-template #productSetupJSONSpace>
+    <div class="col-md-6 col-sm-10 col-lg-5 col-xs-10 w50p">
+        <json-editor [config]="{ mode: 'code' }" [(ngModel)]="setupDetails" (change)="jsonEdited($event)"></json-editor>
+    </div>
+    <div class="col-md-6 col-sm-10 col-lg-5 col-xs-10 p0 w50p" style="background-color: beige;">
+        <json-editor [config]="{ mode: 'tree' }" [(ngModel)]="setupDetails" (change)="jsonEdited($event)"></json-editor>
+    </div>
+</ng-template>

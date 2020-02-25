@@ -1,0 +1,418 @@
+<!--<div class="customer-border">
+    <div class="row">
+        <ul class="nav nav-tabs" role="tablist">
+            <li class="active np col-md-6 col-sm-6">
+                <a aria-controls="tab-1" class="btn" data-toggle="tab" role="tab" aria-expanded="true">{{'NCPLabel.userDetails' | translate}}</a>
+            </li>
+            <li class="np col-md-6 col-sm-6">
+                <a aria-controls="tab-2" class="btn" data-toggle="tab" role="tab" aria-expanded="false">{{'NCPLabel.personalDetails' | translate}}</a>
+                <div class="row">
+                    <ncp-label elementLabel="NCPLabel.userLanguage"></ncp-label>
+                    <div class="form-check disabled">
+                        <drop-down>
+                        </drop-down>
+                    </div>
+                </div>
+            </li>
+        </ul>
+    </div>
+</div>-->
+<div class="customer-border">
+    <div class="row">
+        <ul *ngIf="!hidePersonalDetailsfalg" class="nav nav-tabs mb20" role="tablist">
+            <li [ngClass]="{'active ': userDetailFlag }" class="np col-md-6 col-sm-6 col-xs-6 no-pad">
+                <a (click)="openUserDetail()" aria-controls="tab-1" class="btn" data-toggle="tab" role="tab" aria-expanded="true">
+                    <i class="fa fa-user iconHeader"></i>
+                    <span class="labelHeader">{{'NCPLabel.userDetails' | translate}}</span>
+                </a>
+            </li>
+            <li  [ngClass]="{'active ': personalDetailFlag }" class="np col-md-6 col-sm-6  col-xs-6 no-pad">
+                <a (click)="openPersonalDetail()" aria-controls="tab-2" class="btn" data-toggle="tab" role="tab" aria-expanded="true">
+                    <i class="fa fa-user-circle iconHeader"></i>
+                    <span class="labelHeader">{{'NCPLabel.personalDetails' | translate}}</span>
+                </a>
+            </li>
+        </ul>
+        <div [formGroup]="userDetailFormGroup">
+            <div class="tab-content mb0" *ngIf="userDetailFlag">
+                <!--<div class="row pl15"><div class="col-md-12 col-sm-12 col-xs-12"><h4>{{'NCPLabel.userDetails' | translate}}</h4></div></div>-->
+                <!--<hr class="style8 pb20">-->
+
+                <div class="col-md-3 col-sm-3 col-xs-11 pull-xs-left pull-right pullLeftRTL">
+                    <div class="row">
+                        <!--<div class="col-md-12 col-sm-12 col-xs-12"><img class="img-responsive" [src]="imageSrc" alt="{{'NCPLabel.customerPhoto' | translate}}"/></div>-->
+
+                        <div class="customerImgContainer">
+                            <img class="img-responsive userImage" [src]="imageSrc">
+                            <input *ngIf="showImg" type='file' (change)="imageUploaded($event)" class="iconicBtn customFileBtn" src="assets/img/icon_profile.png"/>
+                            <i *ngIf="showImg" class="iconicBtn customFileBtn fa fa-pencil" (click)="deletePhoto()"></i>
+                            <i *ngIf="showDeleteButton" class="iconicBtn customFileBtn fa fa-trash-o" (click)="deletePhoto()"></i>
+                            <i *ngIf="showSaveButton" class="iconicBtn customFileBtn fa fa-save" (click)="savePhoto()"></i>
+                            <!-- <input class="iconicBtn fa fa-save"  type='button' (click)="savePhoto()" /> -->
+                        </div>
+
+                    </div>
+                </div>
+                <div class="col-md-8 col-sm-9 col-xs-12">
+                    <div class="row userIDMarTopFloat">
+                        <ncp-label elementLabel="NCPLabel.UserID" customFlag=true labelClass="col-md-4 col-sm-4 col-xs-12 labelAlign"></ncp-label>
+                        <div class="form-check disabled">
+                            <text-box [inputType]="text" formControlName=user_id customFlag=true textBoxClass="col-md-8 col-sm-8 col-xs-11 p0" elementLabel="NCPLabel.UserID"></text-box>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <ncp-label elementLabel="NCPLabel.Name" customFlag=true labelClass="col-md-4 col-sm-4 col-xs-12 labelAlign">
+                        </ncp-label>
+                        <div class="form-check disabled">
+                            <text-box [inputType]="text" formControlName=user_name customFlag=true textBoxClass="col-md-8 col-sm-8 col-xs-11 p0" elementLabel="NCPLabel.Name">
+                            </text-box>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <ncp-label elementLabel="NCPLabel.roleId" customFlag=true labelClass="col-md-4 col-sm-4 col-xs-12 labelAlign">
+                        </ncp-label>
+                        <div class="form-check disabled">
+                            <text-box [inputType]="text" formControlName=roleId_desc customFlag=true textBoxClass="col-md-8 col-sm-8 col-xs-11 p0" elementLabel="NCPLabel.UserGroup">
+                            </text-box>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <ncp-label elementLabel="NCPLabel.branch" customFlag=true labelClass="col-md-4 col-sm-4 col-xs-12 labelAlign">
+                        </ncp-label>
+                        <div class="form-check disabled">
+                            <text-box [inputType]="text" formControlName=user_branch_desc customFlag=true textBoxClass="col-md-8 col-sm-8 col-xs-11 p0" elementLabel="NCPLabel.branch">
+                            </text-box>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <ncp-label elementLabel="NCPLabel.Language" customFlag=true labelClass="col-md-4 col-sm-4 col-xs-12 labelAlign">
+                        </ncp-label>
+                        <div class="form-check disabled">
+                            <text-box [inputType]="text" formControlName=user_lang_desc customFlag=true textBoxClass="col-md-8 col-sm-8 col-xs-11 p0" elementLabel="NCPLabel.Language">
+                            </text-box>
+                        </div>
+                    </div>
+
+                </div>
+
+                <!--<div class="btns-row pull-left mb20">
+            <div *ngIf="enableEditButton">	
+                <div class="col-md-2 col-sm-3 col-xs-12 pull-right pr-md-0">
+                  <button-field buttonType="custom" buttonClass="ncp-btn"  buttonName="NCPBtn.edit" (click)='editCustomerDetail()'></button-field>
+                </div>
+            </div>
+            <div *ngIf="enableUpdateButton">
+                <div class="col-md-2 col-sm-3 col-xs-12 pr-md-0 pl-md-0 pull-right">	
+                  <button-field buttonType="custom" buttonName="NCPBtn.save"  buttonClass="ncp-btn" (click)='updateCustomerDetail()'></button-field>
+                </div>
+            </div>
+          
+     </div>   -->
+
+                <div *ngIf="externalUserFlag" class="btns-row">
+                    <button-field buttonType="custom" buttonName="{{'NCPBtn.changeRecoveryQuestions'| translate}}" buttonClass="ncpbtn-default"
+                        iconClass="fa fa-key" (click)='nullPwdField();currentPasswordSetRecovery.open()'>
+                    </button-field>
+                    <button-field buttonType="custom" buttonClass="ncpbtn-default" buttonName="{{'NCPBtn.changePassword' | translate}}" iconClass="fa fa-key"
+                        (click)='nullPwdField();currentPassword.open()'>
+                    </button-field>
+                </div>
+            </div>
+        </div>
+        <div [formGroup]="personalDetailFormGroup">
+            <div class="tab-content mb0" *ngIf="personalDetailFlag && !hidePersonalDetailsfalg">
+                <!--<div class="row pl15"><div class="col-md-12 col-sm-12 col-xs-12 pl0 pl-xs-15"><h4>{{'NCPLabel.personalDetails' | translate}}</h4></div></div>-->
+                <div class="row mlr0-i">
+                    <div class="col-md-9 col-sm-12 col-xs-12">
+                        <div class="row">
+                            <ncp-label elementLabel="NCPLabel.dateOfBirth" customFlag=true labelClass="col-md-4 col-sm-4 col-xs-12 labelAlign"> </ncp-label>
+                            <div class="form-check enabled">
+                                <dateof-birth formControlName="dob" customFlag=true dobCustomClass="col-md-8 col-sm-8 col-xs-11 p0" [ageControl]="personalDetailFormGroup.controls['age']"
+                                    placeHolder="age" ngDefaultControl elementLabel="NCPLabel.dateOfBirth"> </dateof-birth>
+                                <!--<ncp-date-picker [options]="NCPDatePickerNormalOptions"></ncp-date-picker>-->
+                            </div>
+                        </div>
+                        <div class="row">
+                                <ncp-label elementLabel="NCPLabel.gender" customFlag=true labelClass="col-md-4 col-sm-4 col-xs-12 labelAlign">
+                                </ncp-label>
+                                <div class="form-check enabled">
+                                    <button-radio formControlName="gender" customFlag=true buttonradioCustomClass="col-md-8 col-sm-8 col-xs-11 p0" buttonRadioId1="NCPBtn.male"
+                                        buttonRadioId2="NCPBtn.female" buttonValue1="M" buttonValue2="F" connectorName="NCPLabel.or" elementLabel="NCPLabel.gender">
+                                    </button-radio>
+                            </div>
+                        </div>
+                        <div class="row">
+                                <ncp-label elementLabel="NCPLabel.addressline1" customFlag=true labelClass="col-md-4 col-sm-4 col-xs-12 labelAlign">
+                                </ncp-label>
+                                <div class="form-check enabled ">
+                                    <text-box [inputType]="text" formControlName="addressLine1" customFlag=true textBoxClass="col-md-8 col-sm-8 col-xs-11 p0" elementLabel="NCPLabel.addressline1">
+                                    </text-box>
+                            </div>
+                        </div>
+                        <error-handler [elementControl]="personalDetailFormGroup.controls['addressLine1']" [customMessages]="{maxlength:'NCPLabelcustomMessages.addr1maximumlengthshouldbelessthan50'}">
+                        </error-handler>
+                        <div class="row">
+                                <ncp-label elementLabel="NCPLabel.addressline2" customFlag=true labelClass="col-md-4 col-sm-4 col-xs-12 labelAlign">
+                                </ncp-label>
+                                <div class="form-check">
+                                    <text-box [inputType]="text" formControlName="addressLine2" customFlag=true textBoxClass="col-md-8 col-sm-8 col-xs-11 p0" elementLabel="NCPLabel.addressline2"></text-box>
+                                </div>
+                            </div>
+                        <error-handler [elementControl]="personalDetailFormGroup.controls['addressLine2']" [customMessages]="{maxlength:'NCPLabelcustomMessages.addr2maximumlengthshouldbelessthan50'}">
+                        </error-handler>
+                        <div *ngIf=zipcodeFlag class="row">
+                                <ncp-label elementLabel="NCPLabel.zipcode" customFlag=true labelClass="col-md-4 col-sm-4 col-xs-12 labelAlign">
+                                </ncp-label>
+                                <div class="form-check enabled">
+                                    <text-box inputType="number" formControlName="zipcode" customFlag=true textBoxClass="col-md-8 col-sm-8 col-xs-11 p0" elementLabel="NCPLabel.zipcode">
+                                    </text-box>
+                            </div>
+                        </div>
+                        <div *ngIf=zipcodeFlag>
+                            <error-handler [elementControl]="personalDetailFormGroup.controls['zipcode']" [customMessages]="{maxlength:'NCPLabelcustomMessages.zipcodeshouldnotexceed6digits'}">
+                            </error-handler>
+                        </div>
+                        <div class="row">
+                                <ncp-label elementLabel="NCPLabel.city" customFlag=true labelClass="col-md-4 col-sm-4 col-xs-12 labelAlign">
+                                </ncp-label>
+                                <div class="form-check enabled">
+                                    <text-box [inputType]="text" formControlName="city" customFlag=true textBoxClass="col-md-8 col-sm-8 col-xs-11 p0" elementLabel="NCPLabel.city">
+                                    </text-box>
+                            </div>
+                        </div>
+                        <div class="row">
+                                <ncp-label elementLabel="NCPLabel.officeNumber" customFlag=true labelClass="col-md-4 col-sm-4 col-xs-12 labelAlign">
+                                </ncp-label>
+                                <div class="form-check enabled ">
+                                    <text-box formControlName="user_phone" inputType=number customFlag=true textBoxClass="col-md-8 col-sm-8 col-xs-11 p0" elementLabel="NCPLabel.officeNumber"></text-box>
+                            </div>
+                        </div>
+                        <error-handler [elementControl]="personalDetailFormGroup.controls['user_phone']" [customMessages]="{maxlength:'NCPLabelcustomMessages.pleaseEntervalidphonenumber'}">
+                        </error-handler>
+                        <div class="row">
+                                <ncp-label elementLabel="NCPLabel.personalNumber" customFlag=true labelClass="col-md-4 col-sm-4 col-xs-12 labelAlign">
+                                </ncp-label>
+                                <div class="form-check enabled">
+                                    <text-box formControlName="user_mobile" inputType=number customFlag=true textBoxClass="col-md-8 col-sm-8 col-xs-11 p0" elementLabel="NCPLabel.personalNumber"></text-box>
+                                </div>
+                        </div>
+                        <error-handler [elementControl]="personalDetailFormGroup.controls['user_mobile']" [customMessages]="{maxlength:'NCPLabelcustomMessages.pleaseEnter15Digitvalidmobilenumber'}">
+                        </error-handler>
+
+
+
+                    </div>
+                </div>
+                <div class="mlr0-i btns-row">
+                    <button-field buttonType="custom" buttonClass="ncpbtn-default w100p pull-right" buttonName="NCPBtn.save" iconClass="fa fa-save"
+                        (click)="UpdatePersonalDetails()">
+                    </button-field>
+                </div>
+                <!--<div class="col-md-3 col-sm-3 col-xs-12">
+              <img class="img-responsive" [src]="imageSrc" alt=" Photo" />
+          </div>  -->
+
+
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+<div [formGroup]="modalFormGroup">
+    <ncp-modal #currentPassword modalClass="modal-lg" modalTitle="NCPBtn.changePassword" titleIcon="fa fa-key" hideCloseButton="true">
+        <modal-content>
+            <div *ngIf="isError" class="alert alert-danger clearfix mb10">
+                <ul *ngFor="let error of errors">
+                    <li>
+                        {{error.errDesc}}
+                    </li>
+                </ul>
+            </div>
+
+            <div class="row">
+                <ncp-label elementLabel="NCPLabel.currentPassword" customFlag=true labelClass="col-md-4 col-sm-4 col-xs-12 labelAlign"></ncp-label>
+                <text-box inputType="password" formControlName="current_password" customFlag=true textBoxClass="col-md-6 col-sm-8 col-xs-12" elementLabel="NCPLabel.currentPassword"></text-box>
+            </div>
+        </modal-content>
+
+        <modal-footer>
+            <div class="btns-row">
+                <button-field buttonClass="ncp-linkBtn" buttonType="custom" (click)="currentPassword.close();isError = false" iconClass="fa fa-close"
+                    buttonName="NCPBtn.close"></button-field>
+                <button-field buttonClass="ncp-btn" buttonType="custom" [isDisabled]="!modalFormGroup.get('current_password').value" (click)="checkCurrentPassword();"
+                    iconClass="fa fa-arrow-right" buttonName="NCPBtn.continue">
+                </button-field>
+            </div>
+
+        </modal-footer>
+    </ncp-modal>
+
+    <ncp-modal [modalKey]="changePasswordModal" modalClass="modal-lg" modalTitle="NCPBtn.changePassword" titleIcon="fa fa-key"
+        hideCloseButton="true">
+        <modal-content>
+
+            <ncp-errorHandler [isError]="isError" [errors]="errors" customFlag=true errorCustomClass="alert alert-danger clearfix mb10">
+            </ncp-errorHandler>
+
+            <div class="row">
+                <ncp-label elementLabel="NCPLabel.newPassword" customFlag=true labelClass="col-md-4 col-sm-4 col-xs-12 labelAlign">
+                </ncp-label>
+                <text-box inputType="password" id="password" (keyup)="passwordStrength($event)" formControlName="user_password" customFlag=true
+                    textBoxClass="col-md-6 col-sm-8 col-xs-12" elementLabel="NCPLabel.newPassword">
+                </text-box>
+            </div>
+            <div class="ml35p w47p passwordCheckerAlignRTL">
+                <ncp-password-strength-bar [passwordToCheck]="acceptPassword">
+                </ncp-password-strength-bar>
+            </div>
+            <div class="row">
+                <ncp-label elementLabel="NCPLabel.confirmNewPassword" customFlag=true labelClass="col-md-4 col-sm-4 col-xs-12 labelAlign">
+                </ncp-label>
+                <div class="col-md-6 col-sm-8 col-xs-12" (mouseover)=" modalFormGroup.controls.confirm_password.value ? isPasswordIcon = true: isPasswordIcon= false"
+                    (mouseleave)="isPasswordIcon = false;mousedown = false">
+                    <input type="password" formControlName="confirm_password" [type]="mousedown ? 'text' : 'password'" customFlag=true class="form-control vfr"
+                    />
+                    <i *ngIf="isPasswordIcon && !mousedown" class="fa fa-eye viewPassword" (mousedown)="mousedown = true"></i>
+                    <i *ngIf="isPasswordIcon && mousedown" class="fa fa-eye viewPassword" (mouseup)="mousedown = false"></i>
+                </div>
+            </div>
+        </modal-content>
+        <modal-footer>
+            <div class="btns-row">
+                <button-field buttonClass="ncp-linkBtn" buttonType="custom" buttonName="NCPBtn.close" (click)="changePasswordModal =false;isError = false;currentPassword.close()"
+                    iconClass="fa fa-close">
+                </button-field>
+                <button-field buttonClass="ncp-btn" buttonType="custom" buttonName="NCPBtn.save" (click)="changePassword();currentPassword.close()"
+                    iconClass="fa fa-save">
+                </button-field>
+            </div>
+        </modal-footer>
+    </ncp-modal>
+    <ncp-modal [modalKey]="passwordUpdateModal" modalClass="modal-md" hideCloseButton="true">
+        <modal-content>
+            <div class="row">
+                <div class="col-md-9 col-sm-9 col-xs-8 label-col">
+                    <label class="pl0">
+                        <i class=" iconLabel"></i>
+                        <span class="labelDisplay">Password has been changed successfully</span>
+                    </label>
+                </div>
+                <div class="col-md-3 col-sm-3 col-xs-4 pull-right pl-md-0 mb20">
+                    <button-field buttonClass="ncp-linkBtn" buttonType="custom" (click)="closePasswordSuccessModal()" buttonName="NCPBtn.close"
+                        iconClass="fa fa-close"></button-field>
+                </div>
+            </div>
+        </modal-content>
+    </ncp-modal>
+
+
+    <ncp-modal #currentPasswordSetRecovery modalClass="modal-lg" modalTitle="NCPLabel.change/setSecurityQuestion" titleIcon="fa fa-key">
+        <modal-content>
+            <div class="row">
+                    <ncp-label elementLabel="NCPLabel.currentPassword" customFlag=true labelClass="col-md-4 col-sm-4 col-xs-11 labelAlign plr-sm-0">
+                    </ncp-label>
+                    <text-box inputType="password" formControlName="current_password" customFlag=true textBoxClass="col-md-6 col-sm-8 col-xs-11" elementLabel="NCPLabel.currentPassword">
+                    </text-box>
+            </div>
+            <div *ngIf="isError" class="alert alert-danger">
+                <ul *ngFor="let error of errors">
+                    <li>
+                        {{error.errDesc}}
+                    </li>
+                </ul>
+            </div>
+        </modal-content>
+
+        <modal-footer>
+
+            <div class="btns-row">
+                <button-field buttonClass="ncp-linkBtn" iconClass="fa fa-close" buttonType="custom" buttonName="NCPBtn.close" (click)="currentPasswordSetRecovery.close();currentPasswordSetRecovery.reset(); isError = false;">
+                </button-field>
+                <button-field buttonClass="ncp-btn" iconClass="fa fa-arrow-right" buttonType="custom" buttonName="NCPBtn.continue" [isDisabled]="!modalFormGroup.get('current_password').value"
+                    (click)="checkCurrentPasswordSetRecovery();">
+                </button-field>
+            </div>
+        </modal-footer>
+    </ncp-modal>
+
+
+    <ncp-modal [modalKey]="setRecoveryQuesModal" modalClass="modal-lg">
+        <modal-header>
+            <div class="row">
+                <div class="col-md-12 col-sm-12 col-xs-12 pl0">
+                    <h2>
+                        <i class="fa fa-key iconHeader"></i>
+                        <span class="iconLabel">{{'NCPLabel.setRecoveryQuestion' | translate}}</span>
+                    </h2>
+                </div>
+            </div>
+        </modal-header>
+        <modal-content>
+            <div class="row">
+                <ncp-label elementLabel="NCPLabel.recoveryQuestion1" customFlag=true labelClass="col-md-3 col-sm-6 col-xs-12 label-col"></ncp-label>
+                <drop-down elementId="recoveryQuestion1_code" formControlName="recoveryQuestion1_code" miscSubType="QUES" miscType="MiscInfo"
+                    pickListFlag=true isCodeDesc=true [descControl]="modalFormGroup.controls['recoveryQuestion1_desc']" ngDefaultControl
+                    customFlag=true dropdownClass="col-md-6 col-sm-6 col-xs-11 p0" elementLabel="NCPLabel.recoveryQuestion1" (change)=compareRecoveryQuestions() changeId = "recoveryQuestionChanged" displayOnClick=true>
+                </drop-down>
+            </div>
+            <div class="row">
+                    <ncp-label elementLabel="NCPLabel.answer1" customFlag=true labelClass="col-md-3 col-sm-6 col-xs-12 label-col" mandatoryFlag=true></ncp-label>
+                    <text-box [inputType]="text" formControlName="recoveryAnswer1" customFlag=true textBoxClass="col-md-6 col-sm-6 col-xs-11 p0">
+                    </text-box>
+            </div>
+            <error-handler  [elementControl]="modalFormGroup.controls['recoveryAnswer1']"   [skipDirtyCheck]= true  [customMessages]="{required :'NCPLabel.answers1required'}" customFlag=true errorCustomClass="col-md-offset-3 col-sm-offset-0 col-xs-offset-0 col-md-6 col-sm-6 col-xs-11 p0">
+            </error-handler>
+            <div class="row">
+                <ncp-label elementLabel="NCPLabel.recoveryQuestion2" customFlag=true labelClass="col-md-3 col-sm-6 col-xs-12 label-col"></ncp-label>
+                    <drop-down elementID="recoveryQuestion2_code" formControlName="recoveryQuestion2_code" miscSubType="QUES" miscType="MiscInfo"
+                        pickListFlag=true isCodeDesc=true [descControl]="modalFormGroup.controls['recoveryQuestion2_desc']" ngDefaultControl
+                        customFlag=true dropdownClass="col-md-6 col-sm-6 col-xs-11 p0" changeId="recoveryQuestionChanged" displayOnClick=true>
+                    </drop-down>
+            </div>
+            <error-handler [elementControl]="modalFormGroup.controls['recoveryQuestion2_code']" [skipDirtyCheck]=true [customMessages]="{pattern :'NCPLabelcustomMessages.RecoveryQuestion'}" customFlag=true errorCustomClass="col-md-offset-3 col-sm-offset-0 col-xs-offset-0 col-md-6 col-sm-6 col-xs-11 p0">
+            </error-handler>
+            
+            <div class="row">
+                    <ncp-label elementLabel="NCPLabel.answer2" customFlag=true labelClass="col-md-3 col-sm-6 col-xs-12 label-col" mandatoryFlag=true></ncp-label>
+                    <text-box [inputType]="text" formControlName="recoveryAnswer2" customFlag=true textBoxClass="col-md-6 col-sm-6 col-xs-11 p0">
+                    </text-box>
+            </div>
+            <error-handler  [elementControl]="modalFormGroup.controls['recoveryAnswer2']"   [skipDirtyCheck]= true  [customMessages]="{required :'NCPLabel.answers2required'}" customFlag=true errorCustomClass="col-md-offset-3 col-sm-offset-0 col-xs-offset-0 col-md-6 col-sm-6 col-xs-11 p0">
+            </error-handler>
+        </modal-content>
+
+        <modal-footer>
+            <div *ngIf="isSuccess" class="alert alert-danger">
+                <ul *ngFor="let succ of success">
+                    <li>
+                        {{succ.succDesc}}
+                    </li>
+                </ul>
+            </div>
+            <div class="btns-row">
+                <button-field buttonClass="ncp-linkBtn" iconClass="fa fa-close" buttonType="custom" buttonName="NCPBtn.close" (click)="resetValidator();setRecoveryQuesModal=false;isSuccess = false;currentPasswordSetRecovery.close()">
+                </button-field>
+                <button-field buttonClass="ncp-btn" iconClass="fa fa-check" buttonType="custom" buttonName="NCPBtn.confirm" (click)="changeRecoveryQuestions();currentPasswordSetRecovery.close()">
+                </button-field>
+            </div>
+
+        </modal-footer>
+    </ncp-modal>
+</div>
+
+<ncp-modal #updatePersonalDetailsSuccesModal [modalKey]=personalDetailsModal  modalClass="modal-lg" [hideCloseButton]=true>
+    <modal-content>
+        <div class="row">
+            <div class="col-md-9 col-sm-9 col-xs-8 label-col">
+                <label class="pl0">
+                    <span>{{'NCPLabel.personalDetailsSave' | translate}}</span>
+                </label>
+            </div>
+            <div class="col-md-3 col-sm-3 col-xs-4 pull-right pl-md-0 mb20">
+                <button-field buttonClass="ncp-linkBtn" buttonType="custom" (click)="personalDetailsModal = false; updatePersonalDetailsSuccesModal.close()" buttonName="NCPBtn.close" iconClass="fa fa-close"></button-field>
+            </div>
+        </div>
+    </modal-content>
+</ncp-modal>

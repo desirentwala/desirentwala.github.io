@@ -1,0 +1,4 @@
+<ion-list>
+    <ion-item *ngFor="let content of popupMenuContent" (click)="onMenuItemClick(content);onDismiss()">{{content}}</ion-item>
+    <ion-item (click)="onDismiss()">Dismiss</ion-item>
+</ion-list>

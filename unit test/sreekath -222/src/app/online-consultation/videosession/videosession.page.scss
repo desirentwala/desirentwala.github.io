@@ -1,0 +1,136 @@
+@import '../../../theme/variables.scss';
+$mobile-width: 468px;
+$color-grey: #d1cbcb;
+app-subscriber {
+  display: block;
+  float: left;
+}
+.header {
+  display: none;
+}
+@media screen and (max-width: 762px) {
+  ion-icon {
+    font-size: 33px;
+    padding: 10px;
+    color: var(--ion-color-medium-shade);
+  }
+  .caller-img {
+    position: fixed;
+    right: 30px;
+    top: 23px;
+    background-color: var(--ion-color-medium-shade);
+    width: 125px;
+    height: 100px;
+  }
+  .caller-options:hover {
+    color: var(--ion-color-primary);
+  }
+}
+@media screen and (min-width: 762px) {
+  .header{
+    height: 4rem;
+    display: block !important;
+    ion-toolbar{
+      ion-col{
+        line-height: 50px;
+      }
+      // .videocallheader{
+      //   text-align: center;
+      // }
+      .mic{
+        font-size: 14px;
+        float: right;
+      }
+      .callstatus{
+        text-align: center;
+      }
+    }
+  }
+  ion-icon {
+    font-size: 35px;
+    padding: 15px;
+    color: var(--ion-color-medium-shade);
+  }
+  .caller-img {
+    position: fixed;
+    right: 4rem;
+    bottom: 5rem;
+    width: 15rem;
+    height: 9.5rem;
+  }
+}
+.caller-options {
+  position: fixed;
+  left: 0;
+  bottom: 35px;
+  right: 0;
+  &:hover {
+    color: var(--ion-color-primary);
+  }
+}
+
+.publisher{
+  border: 1.5px solid var( --ion-color-primary-contrast);
+  box-shadow: 0 0 10px var( --ion-color-primary-contrast);
+}
+
+@media (max-width: 480px) {
+  .caller-img {
+    right: 1.25rem !important;
+    .publisher{
+      width: 8rem !important;
+      height: 6.5rem !important;
+      border: 1px solid var( --ion-color-primary-contrast);
+      box-shadow: 0 0 5px var( --ion-color-primary-contrast);
+    }
+  }
+}
+
+@media (min-width: 480px) and (max-width: 768px) {
+  .publisher{
+    border: 1.5px solid var( --ion-color-primary-contrast);
+    box-shadow: 0 0 8px var( --ion-color-primary-contrast);
+  }
+}
+/* Portrait */
+@media only screen 
+  and (min-device-width: 468px)
+  and (max-device-width: 762px) 
+  and (orientation: portrait) {
+    .caller-img {
+      right: 3rem !important;
+      width: 11rem !important;
+      height: 8rem !important;
+      .publisher{
+        width: 11rem !important;
+        height: 8rem !important;
+        border: 1px solid var( --ion-color-primary-contrast);
+        box-shadow: 0 0 5px var( --ion-color-primary-contrast);
+      }
+    }
+  }
+/* Landscape */
+@media only screen 
+  and (max-device-width: 1023px) 
+  and (orientation: landscape) {
+    .header{
+      display: none !important;
+    }
+    .caller-img {
+      position: fixed;
+      right: 2rem !important;
+      bottom: 1.5rem !important;
+      top: auto;
+      background-color: var(--ion-color-medium-shade);
+      width: 9rem !important;
+      height: 7rem !important;
+      .publisher{
+        width: 9rem !important;
+        height: 7rem !important;
+        border: 1px solid var( --ion-color-primary-contrast);
+        box-shadow: 0 0 5px var( --ion-color-primary-contrast);
+      }
+    }
+    
+  }
+

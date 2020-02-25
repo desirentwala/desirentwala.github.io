@@ -1,0 +1,32 @@
+<ion-header>
+  <ion-toolbar (click)="mediaDevices()">
+    <ion-title >Device-inputs</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+    <form [formGroup]="formData" (ngSubmit)="deviceInputs()" autocomplete="off">
+    <ion-item>
+        <ion-label >Microphones</ion-label>
+        <ion-select class="Microphone" [(ngModel)]="Microphone" formControlName="Microphone" placeholder="Select One">
+          <ion-select-option *ngFor="let audioinput of microphones" [value]="audioinput" value="audioinput">{{audioinput.label}}</ion-select-option>
+        </ion-select>
+      </ion-item>
+      <ion-item>
+        <ion-label>Camera</ion-label>
+        <ion-select class="camera" [(ngModel)]="Camera"  formControlName="Camera" placeholder="Select One" >
+            <ion-select-option *ngFor="let videoinput of camera" [value]="videoinput" value="videoinput">{{videoinput.label}}</ion-select-option>
+        </ion-select>
+      </ion-item>
+      <ion-item>
+        <ion-label>Speakers</ion-label>
+        <ion-select placeholder="Select One" [(ngModel)]="Speaker" formControlName="Speaker"  >
+            <ion-select-option *ngFor="let audioOutput of speakers" [value]="audioOutput" value="audioOutput">{{audioOutput.label}}</ion-select-option>
+        </ion-select>
+      </ion-item>
+      <ion-row>
+        <ion-button (click)="cancel()">Cancel</ion-button>
+        <ion-button type="submit" >Submit</ion-button>
+      </ion-row>
+    </form>
+</ion-content>

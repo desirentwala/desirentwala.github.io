@@ -1,0 +1,224 @@
+<div class="logoAndContactContainer">
+  <div class="logoAndLanguageDropdown col-md-4 col-sm-3 col-xs-12">
+    <div class=" footerLogoContainer">
+      <a *ngIf="brandingJson['img']" class="footer-logo">
+        <img src="{{brandingJson['img']}}" alt={{brandingJson.footer_alt}}>
+      </a>
+    </div>
+    <div class="languageDDRTL languageContainer hidden-xs" *ngIf="showLanguage && !b2b2cFlag &&  !b2cFlag">
+      <label class="languageLabel"> {{'NCPLabel.changeLanguage' | translate}} </label>
+      <div class="languageDropdownContainer">
+        <div class="languageDropdown">
+          <span>{{type}}</span>
+          <i class="icon-arrow-d"></i>
+          <ul>
+            <li *ngFor="let languages of brandingJson.language" (click)="setType(languages.langDesc);changeLanguage(languages.langCode,languages.langDesc)">{{languages.langDesc}}</li>
+            <!--<li (click)="setType('chinese');changeLanguage('cn')">??</li>-->
+          </ul>
+        </div>
+      </div>
+    </div>
+    
+  </div>
+  <div class="col-md-7 col-sm-8 col-xs-12 footerMainLinkContainer">
+    <nav class="footerNav">
+      <ul *ngFor="let footerLinks1 of brandingJson['footerLinks1']" class="footerNavList">
+        <li class="footerNavListItems">
+          <a class="footerNavListItemsLink" *ngIf="footerLinks1['target']==='_blank'" href="{{footerLinks1['url']}}" target="{{footerLinks1['target']}}">
+            <i class="fa fa-institution iconAnchorLink"></i>
+            <span class="labelAnchorLink">{{footerLinks1['name'] | translate}}</span>
+          </a>
+          <a class="footerNavListItemsLink" *ngIf="footerLinks1['target']!='_blank'" (click)="navigateRouterLink(footerLinks1['url'])"
+            target="{{footerLinks1['target']}}">
+            <i class="fa fa-question-circle iconAnchorLink"></i>
+            <span class="labelAnchorLink">{{footerLinks1['name'] | translate}} </span>
+          </a>
+        </li>
+      </ul>
+      <ul *ngFor="let footerLinks2 of brandingJson['footerLinks2']" class="footerNavList">
+        <li class="footerNavListItems">
+          <a class="footerNavListItemsLink" *ngIf="footerLinks2['target']==='_blank'" target="{{footerLinks2['target']}" href="{{footerLinks2['url']}}">
+            <i class="fa fa-question-circle iconAnchorLink"></i>
+            <span class="labelAnchorLink">{{footerLinks2['name'] | translate}} </span>
+          </a>
+          <a class="footerNavListItemsLink" *ngIf="footerLinks2['target']!='_blank'" target="{{footerLinks2['target']}}" (click)="navigateRouterLink(footerLinks2['url'])">
+            <i class="fa fa-question-circle iconAnchorLink"></i>
+            <span class="labelAnchorLink">{{footerLinks2['name'] | translate}}</span>
+          </a>
+        </li>
+      </ul>
+      <ul *ngFor="let footerLinks3 of brandingJson['footerLinks3']" class="footerNavList">
+        <li class="footerNavListItems">
+          <a class="footerNavListItemsLink" *ngIf="footerLinks3['target']==='_blank'" target="{{footerLinks3['target']}}" href="{{footerLinks3['url']}}">
+            <i class=" iconAnchorLink"></i>
+            <span class="labelAnchorLink">{{footerLinks3['name'] | translate}} </span>
+          </a>
+          <a class="footerNavListItemsLink" *ngIf="footerLinks3['target']!='_blank'" target="{{footerLinks3['target']}}" (click)="navigateRouterLink(footerLinks3['url'])">
+            <i class=" iconAnchorLink"></i>
+            <span class="labelAnchorLink">{{footerLinks3['name'] | translate}}</span>
+          </a>
+        </li>
+      </ul>
+
+    </nav>
+  </div>
+  <div class="col-xs-12 languageDDRTL languageContainer visible-xs" *ngIf="showLanguage && !b2b2cFlag && !b2cFlag">
+      <label class="languageLabel"> {{'NCPLabel.changeLanguage' | translate}} </label>
+      <div class="languageDropdownContainer">
+        <div class="languageDropdown">
+          <span>{{type}}</span>
+          <i class="icon-arrow-d"></i>
+          <ul>
+            <li *ngFor="let languages of brandingJson.language" (click)="setType(languages.langDesc);changeLanguage(languages.langCode,languages.langDesc)">{{languages.langDesc}}</li>
+            <!--<li (click)="setType('chinese');changeLanguage('cn')">??</li>-->
+          </ul>
+        </div>
+      </div>
+    </div>
+</div>
+  <!--<div class="row heading-row">
+    <div class="col-md-9 col-sm-9 hidden-xs">
+    </div>
+    <div class="col-md-2 col-sm-3 col-xs-6 pull-right pull-xs-left">
+      
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-md-10 col-sm-9 col-xs-12">
+      
+    </div>-->
+  <!--<div class="w-xs-100 plr15 mt5p mt-sm-8p pull-sm-right">
+        <button (click)="changeLang.open()" class="ncp-btn6">{{'NCPBtn.changeLanguage' | translate}}</button>
+    </div>-->
+
+  <!--<div *ngIf="showLanguage" class="col-md-2 col-sm-3 col-xs-12 pull-right ">
+      <label class="col-md-12 col-sm-12 col-xs-12 white pr0 text-right text-xs-left pl-xs-0"> {{'NCPLabel.changeLanguage' | translate}}   </label>
+      <div class="col-md-9 col-sm-9 col-xs-6 p0 pull-right pull-xs-left">
+        <div class="languageDropdown">
+          <span>{{type}}</span><i class="icon-arrow-d"></i>
+          <ul>
+            <li *ngFor="let languages of brandingJson.language" (click)="setType(languages.langDesc);changeLanguage(languages.langCode,languages.langDesc)">{{languages.langDesc}}</li>-->
+  <!--<li (click)="setType('chinese');changeLanguage('cn')">??</li>-->
+  <!--</ul>
+        </div>
+      </div>
+    </div>
+  </div>-->
+
+  <!--
+<div *ngIf="b2b2cFlag">
+  <div class="footerFrame">
+    <div class="row heading-row">
+      <div class="col-md-6 col-sm-6  bb-xs-1">
+        <div class="col-md-4 col-sm-5 col-xs-5 pl0">
+          <a class="logo w100p nativeLogo" target="_blank" *ngIf="brandingJson.img" href="{{brandingJson.url}}"><img src="{{brandingJson.img}}" alt={{brandingJson.footer_alt}}></a>
+        </div>
+        <div class="row">
+          <div class="col-md-12 col-sm-12 col-xs-12 br1 br-xs-0">
+            <nav class="footerNav">
+              <ul class="col-md-4 col-sm-4 plr0">
+                <li *ngFor="let footerLinks1 of brandingJson.footerLinks1">
+                  <a *ngIf="footerLinks1.target==='_blank'" href="{{footerLinks1.url}}" target="{{footerLinks1.target}}"> {{footerLinks1.name}} </a>
+                  <a *ngIf="footerLinks1.target!='_blank'" (click)="navigateRouterLink(footerLinks1.url)" target="{{footerLinks1.target}}"> {{footerLinks1.name}} </a>
+                </li>
+              </ul>
+              <ul class="col-md-4 col-sm-4 plr0">
+                <li *ngFor="let footerLinks2 of brandingJson.footerLinks2">
+                  <a *ngIf="footerLinks2.target==='_blank'" target="{{footerLinks2.target}}" href="{{footerLinks2.url}}"> {{footerLinks2.name}} </a>
+                  <a *ngIf="footerLinks2.target!='_blank'" target="{{footerLinks2.target}}" (click)="navigateRouterLink(footerLinks2.url)"> {{footerLinks2.name}} </a>
+                </li>
+              </ul>
+              <ul class="col-md-4 col-sm-4 plr0">
+                <li *ngFor="let footerLinks3 of brandingJson.footerLinks3">
+                  <a *ngIf="footerLinks3.target==='_blank'" target="{{footerLinks3.target}}" href="{{footerLinks3.url}}"> {{footerLinks3.name}} </a>
+                  <a *ngIf="footerLinks3.target!='_blank'" target="{{footerLinks3.target}}" (click)="navigateRouterLink(footerLinks3.url)"> {{footerLinks3.name}} </a>
+                </li>
+              </ul>
+            </nav>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-6 col-sm-6 mt-xs-20">
+        <div class="col-md-4 col-sm-5 col-xs-5 pr0 pull-xs-left pl-xs-0">
+          <a class="logo w100p partnerLogo pull-xs-left" target="_blank" *ngIf="partnerJson.img" href="{{partnerJson.url}}"><img src="{{partnerJson.img}}" alt={{partnerJson.footer_alt}}></a>
+        </div>
+        <div class="row">
+          <div class="col-md-12 col-sm-12 col-xs-12 ml20 pl-xs-0">
+            <nav class="footerNav pull-right w100p">
+              <ul class="col-md-4 col-sm-4 plr0">
+                <li *ngFor="let footerLinks1 of partnerJson.footerLinks1">
+                  <a *ngIf="footerLinks1.target==='_blank'" href="{{footerLinks1.url}}" target="{{footerLinks1.target}}"> {{footerLinks1.name}} </a>
+                  <a *ngIf="footerLinks1.target!='_blank'" (click)="navigateRouterLink(footerLinks1.url)" target="{{footerLinks1.target}}"> {{footerLinks1.name}} </a>
+                </li>
+              </ul>
+              <ul class="col-md-4 col-sm-4 plr0">
+                <li *ngFor="let footerLinks2 of partnerJson.footerLinks2">
+                  <a *ngIf="footerLinks2.target==='_blank'" target="{{footerLinks2.target}}" href="{{footerLinks2.url}}"> {{footerLinks2.name}} </a>
+                  <a *ngIf="footerLinks2.target!='_blank'" target="{{footerLinks2.target}}" (click)="navigateRouterLink(footerLinks2.url)"> {{footerLinks2.name}} </a>
+                </li>
+              </ul>
+              <!--<ul class="col-md-4 col-sm-4 plr0">
+                <li *ngFor="let footerLinks3 of partnerJson.footerLinks3"> <a> {{footerLinks3.name}} </a></li>
+              </ul> 
+            </nav>
+          </div>
+        </div>
+      </div>
+      <div *ngIf="showLanguage" class="col-md-2 col-sm-3 col-xs-12 pull-right">
+        <label class="col-md-12 col-sm-12 col-xs-12 white pr0 text-right text-xs-left pl-xs-0"> {{'NCPLabel.changeLanguage' | translate}}   </label>
+      <div class="col-md-9 col-sm-9 col-xs-6 p0 pull-right pull-xs-left">
+          <div class="languageDropdown">
+            <span>{{type}}</span><i class="icon-arrow-d"></i>
+            <ul>
+              <li *ngFor="let languages of brandingJson.language" (click)="setType(languages.langDesc);changeLanguage(languages.langCode,languages.langDesc)">{{languages.langDesc}}</li>
+              <!--<li (click)="setType('chinese');changeLanguage('cn')">??</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<ncp-modal class="modalForm theme-color languageModal" #changeLang [closeOnEscape]="false" [closeOnOutsideClick]="false"
+  hideCloseButton="true" modalClass="modal-lg">
+  <modal-header>
+    <div class="row">
+      <!--<div class="pt15 pl15 fs22">
+				<i class="glyphicon glyphicon-wrench confed"></i>
+			</div>
+      <div class="col-md-11 col-sm-10 col-xs-10 label-col text-left">
+        <h2><span class="labelHeader">{{'NCPBtn.changeLanguage' | translate}}</h2>
+      </div>
+    </div>
+  </modal-header>
+
+  <modal-content>
+    <div class="row lang-mtb">
+      <div class="col-xs-offset-1 col-sm-offset-0 mtb10 col-md-5 col-xs-offset-0 col-md-offset-1 col-sm-6 col-xs-10">
+        <button class="lang-btn" (click)="changeLanguage('en');changeLang.close()">
+                    <div class="fw600">
+                        <span>Please choose your preferred Language</span>
+                        <div class="mt10 theme-color">English</div>
+                    </div>
+                </button>
+      </div>
+      <div class="col-xs-offset-1 col-sm-offset-0 col-xs-offset-0 col-md-offset-0 mtb10 col-md-5 col-sm-6 col-xs-10">
+        <button class="lang-btn pull-left" (click)="changeLanguage('cn');changeLang.close()">
+                    <div class="ls3 fw600">
+                        <div>?????????</div>
+                        <div class="mt10 theme-color">??</div>
+                    </div>
+                </button>
+      </div>
+    </div>
+  </modal-content>
+
+  <modal-footer>
+    <div class="btns-row text-right">
+      <div class="col-md-2 col-sm-3 col-xs-12 pull-right pl-md-0 pl-sm-0 mb20   plr-xs-0">
+        <button class="ncp-linkBtn" (click)="changeLang.close()">{{'NCPBtn.Close'| translate}}</button>
+      </div>
+    </div>
+  </modal-footer>
+</ncp-modal>-->

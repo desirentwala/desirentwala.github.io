@@ -1,0 +1,34 @@
+<div [formGroup]="roleMaintenanceFormGroup" class="row radio-btn">
+    <div>
+        <div class="row">
+            <ncp-label elementLabel="NCPLabel.roleId" elementId="roleId " mandatoryFlag="true">
+            </ncp-label>
+            <text-box formControlName="roleId" ngDefaultControl acceptPattern="[a-zA-Z]" maxLength="5" elementLabel="NCPLabel.RoleID"
+                mandatoryFlag="true">
+            </text-box>
+        </div>
+        <error-handler [elementControl]="roleMaintenanceFormGroup.controls['roleId']" [customMessages]="{required: 'NCPLabelcustomMessages.pleaseEnterRoleId', minlength:'NCPLabelcustomMessages.roleIdshouldbemin3Charecters'}">
+        </error-handler>
+        <div class="row">
+            <ncp-label elementLabel="NCPLabel.roleDesc" elementId="roleDesc" mandatoryFlag="true">
+            </ncp-label>
+            <text-box formControlName="roleDesc" inputType="text" acceptPattern="[A-Za-z]" maxLength="15"
+                ngDefaultControl elementLabel="NCPLabel.RoleDesc" mandatoryFlag="true"></text-box>
+        </div>
+        <error-handler [elementControl]="roleMaintenanceFormGroup.controls['roleDesc']" [customMessages]="{required: 'NCPLabelcustomMessages.pleaseEnterRoleDesc',minlength:'NCPLabelcustomMessages.roleDescshouldbemin5Charecters'}">
+        </error-handler>
+        <div class="row">
+            <ncp-label elementLabel="NCPLabel.systemRoleId" elementId="systemRoleId" mandatoryFlag="true">
+            </ncp-label>
+            <drop-down elementId="systemRoleId" formControlName="systemRoleId" displayCodeAndDesc=true
+                miscType="ROLEID" param1="Y" elementId="RoleId" pickListFlag=true isCodeDesc=true ngDefaultControl
+                displayOnClick=true [descControl]="roleMaintenanceFormGroup.controls['systemRoleDesc']" elementLabel="NCPLabel.systemRoleId"
+                mandatoryFlag="true">
+            </drop-down>
+        </div>
+        <div class="btns-row">
+            <button-field (click)="doAction($event)" buttonType="custom" [isDisabled]="!this.roleMaintenanceFormGroup.valid"
+                buttonClass="ncpbtn-default" buttonName="NCPBtn.submit"></button-field>
+        </div>
+    </div>
+</div>

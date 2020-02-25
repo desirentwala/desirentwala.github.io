@@ -1,0 +1,507 @@
+.ngx-dnd-container {
+	margin: 10px;
+	padding: 10px 0px 10px 10px;
+	background-color: rgba(14, 10, 10, 0.2);
+	border-left: 1px solid hsl(0, 100%, 50%) !important;
+	border-right: 0px !important;
+	border-top: 0px !important;
+	border-bottom: 0px !important;
+}
+
+.ngx-dnd-item:hover {
+	border-right: 1px solid hsl(130, 98%, 50%) !important;
+	box-shadow: 0 2px 5px 0 rgba(232, 13, 13, 0.95), 0 2px 10px 0 rgba(64, 16, 16, 0.97);
+}
+
+.ngx-dnd-item-editor:hover {
+	border-left: 1px solid hsl(130, 98%, 50%) !important;
+	border-right: 0px !important;
+	border-top: 0px !important;
+	border-bottom: 0px !important;
+}
+
+.ngx-dnd-item {
+	margin: 10px;
+	padding: 10px 0px 10px 10px;
+	background-color: hsl(249, 9%, 8%);
+	transition: opacity 0.4s ease-in-out;
+	border: 1px solid lightblue;
+	display: block;
+}
+
+.ngx-dnd-item-editor {
+	margin: 10px 5px 10px 10px;
+	padding: 10px 0px 10px 10px;
+	background-color: hsl(240, 9%, 33%);
+	transition: opacity 0.4s ease-in-out;
+	border-right: 1px solid lightblue;
+	border-left: 0px !important;
+	border-top: 0px !important;
+	border-bottom: 0px !important;
+	display: block;
+}
+
+.ngx-dnd-item:not(.has-handle):not(.move-disabled),
+.ngx-dnd-item.has-handle [ngxdraghandle],
+.ngx-dnd-item.has-handle [ngxDragHandle] {
+	cursor: move;
+	cursor: grab;
+	cursor: -webkit-grab;
+}
+
+.ngx-dnd-item .ngx-dnd-content {
+	-webkit-user-select: none;
+	-moz-user-select: none;
+	-ms-user-select: none;
+	user-select: none;
+}
+
+.ngx-dnd-item:hover {
+	border: 1px solid hsl(130, 98%, 50%);
+	box-shadow: 0 2px 5px 0 hsl(130, 98%, 50%), 0 2px 10px 0 rgba(6, 68, 1, 0.97);
+}
+
+.ngx-dnd-item-editor:hover {
+	border: 1px solid hsl(130, 98%, 50%);
+}
+
+.gu-mirror {
+	position: fixed !important;
+	margin: 0 !important;
+	z-index: 9999 !important;
+	opacity: 0.8;
+	-ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=80)";
+	filter: alpha(opacity=80);
+}
+
+.gu-hide {
+	display: none !important;
+}
+
+.gu-unselectable {
+	-webkit-user-select: none !important;
+	-moz-user-select: none !important;
+	-ms-user-select: none !important;
+	user-select: none !important;
+}
+
+.gu-transit {
+	opacity: 1;
+	-ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=100)";
+	filter: alpha(opacity=100);
+}
+
+.se-edit-icon {
+	background-color: hsla(105, 87%, 16%, 0.65);
+	padding: 5px;
+	border-radius: 10px;
+}
+
+.se-delete-icon {
+	background-color: hsla(12, 80%, 47%, 0.822);
+	padding: 5px;
+	border-radius: 10px;
+}
+
+.ngx-model-item {
+	text-align: center;
+	background-color: mediumslateblue;
+	border: 1px solid greenyellow;
+	padding: 2px;
+	margin: 2px;
+	text-overflow: ellipsis;
+	display: inline-block;
+	width: fit-content;
+}
+
+.dndArea {
+	width: 47%;
+	height: 90vh;
+	float: left;
+	color: white;
+}
+
+.previewArea {
+	width: 53%;
+	height: 90vh;
+	float: right;
+	background-color: white;
+}
+
+.se-left-sidebar {
+	height: 100%;
+	width: 20%;
+	float: left !important;
+	color: hsl(0, 0%, 100%);
+	background-color: hsla(356, 2%, 18%, 0.8);
+	position: fixed !important;
+	overflow: auto;
+	left: 0;
+	animation: animationleft;
+	animation-name: animationleft;
+	animation-duration: 0.5s;
+}
+
+.se-right-sidebar {
+	height: 100%;
+	width: 20%;
+	color: hsl(0, 0%, 100%);
+	background-color: hsla(356, 2%, 18%, 0.8);
+	position: fixed !important;
+	overflow: auto;
+	float: right;
+	right: 0;
+	animation: animateright;
+	animation-name: animateright;
+	animation-duration: 0.4s;
+}
+
+.se-bottom-sidebar {
+	width: 60%;
+	height: 10%;
+	color: hsl(0, 0%, 100%);
+	background-color: hsla(356, 2%, 18%, 0.8);
+	position: absolute !important;
+	overflow: auto;
+	bottom: 0;
+	left: 20%;
+	animation: animatebottom;
+	animation-name: animatebottom;
+	animation-duration: 0.4s;
+}
+
+.sidebar-shadow {
+	box-shadow: 0 2px 5px 0 rgba(232, 13, 13, 0.95), 0 2px 10px 0 rgba(64, 16, 16, 0.97);
+}
+
+.w-mc {
+	width: max-content !important;
+}
+
+.se-scroll::-webkit-scrollbar-track,
+.se-scroll-horizontal::-webkit-scrollbar-track {
+	box-shadow: inset 0 0 1px rgba(0, 0, 0, 0.3), webkit moz o ms;
+	background-color: darkgray;
+}
+
+/* .se-scroll::-webkit-scrollbar,
+	{
+	width: 5px;
+	background-color: darkgray;
+} */
+
+.se-scroll::-webkit-scrollbar,
+.se-scroll-horizontal::-webkit-scrollbar {
+	height: 5px;
+	width: 5px;
+	background-color: rgb(169, 169, 169);
+}
+
+.se-scroll::-webkit-scrollbar-thumb,
+.se-scroll-horizontal::-webkit-scrollbar-thumb {
+	background-color: rgb(65, 64, 75);
+}
+
+.se-keyButtons {
+	transition: 0.5s ease-in-out;
+	background: hsl(48, 100%, 93%);
+	box-shadow: -8px 8px 20px 0px #020000, -4px 5px 1px 1px rgba(121, 158, 134, 0.97);
+}
+
+.se-keyButton {
+	transition: 0.5s ease-in-out;
+	background: hsl(48, 100%, 93%);
+	box-shadow: -8px 8px 20px 0px #020000, -4px 5px 1px 1px rgba(121, 158, 134, 0.97);
+}
+
+.se-keyButtons:hover {
+	background: hsl(207, 84%, 58%);
+	color: floralwhite;
+	box-shadow: -4px 4px 11px 0px #ffffff96, inset 0px -45px 1px 1px rgba(51, 81, 214, 0.97);
+}
+
+.se-keyButton-active {
+	background: hsl(207, 84%, 58%);
+	color: floralwhite;
+	box-shadow: -4px 4px 11px 0px #ffffff96, inset 0px -45px 1px 1px rgba(51, 81, 214, 0.97);
+}
+
+.se-keyButtons-group {
+	position: fixed !important;
+	top: 9%;
+	margin: 0;
+	z-index: 12;
+	background-color: hsl(0, 3%, 12%);
+	padding: 7px;
+	display: grid;
+}
+
+.se-fullView {
+	z-index: 15;
+	border: 1px solid hsl(160, 100%, 75%);
+	padding: 7px;
+	border-radius: 26px;
+	background: hsl(220, 42%, 58%);
+	color: hsl(0, 0%, 100%);
+	position: fixed;
+	box-shadow: -6px 4px 9px 3px #6b6363;
+	right: 2.5%;
+	top: 7%;
+}
+
+.se-keyButton-close {
+	color: hsl(0, 0%, 100%);
+	box-shadow: 0px 1px 0px 1px #fbfbff;
+	opacity: inherit;
+	right: -12%;
+	padding: 4px;
+	padding-right: 10px;
+	padding-left: 10px;
+	background: hsl(0, 0%, 0%);
+	position: absolute;
+	top: -9%;
+	font-style: normal;
+	border-radius: 52px;
+}
+
+.se-spin:hover {
+	animation: spin 0.3s cubic-bezier(1, 0.91, 0.08, -0.02);
+	box-shadow: none;
+}
+
+.se-scale:hover {
+	animation: scale 0.5s cubic-bezier(1, 0.91, 0.08, -0.02);
+	box-shadow: none;
+}
+
+@keyframes spin {
+	from {
+		transform: rotate(0deg);
+	}
+	to {
+		transform: rotate(360deg);
+	}
+}
+
+@keyframes scale {
+	from {
+		transform: scale(1.5);
+	}
+	to {
+		transform: scale(1);
+	}
+}
+
+.se-modal-dropdown {
+	right: 22%;
+	margin-top: 4px;
+	padding: 4px;
+	padding-left: 5px;
+	width: max-content;
+	background-color: hsl(0, 2%, 35%);
+	position: fixed;
+	border: 1px solid black;
+	color: white;
+	border-radius: 5px;
+	box-shadow: -3px 3px 15px 0px #4c4848, 6px 4px 15px 0px #4c4848;
+}
+
+.se-theme-dropdown {
+	right: 33%;
+	margin-top: 4px;
+	padding: 4px;
+	padding-left: 5px;
+	width: max-content;
+	background-color: hsl(0, 2%, 35%);
+	position: fixed;
+	border: 1px solid black;
+	color: white;
+	border-radius: 5px;
+	box-shadow: -3px 3px 15px 0px #4c4848, 6px 4px 15px 0px #4c4848;
+}
+
+.se-lob-dropdown {
+	z-index: 5;
+	right: 45%;
+	margin-top: 4px;
+	padding: 4px;
+	padding-left: 5px;
+	width: max-content;
+	background-color: hsl(0, 2%, 35%);
+	position: fixed;
+	border: 1px solid black;
+	color: rgb(238, 102, 102);
+	border-radius: 5px;
+	box-shadow: -3px 3px 15px 0px #4c4848, 6px 4px 15px 0px #4c4848;
+}
+
+.se-closeModalView {
+	z-index: 17;
+	border: 1px solid hsl(0, 100%, 50%);
+	padding: 5px;
+	padding-right: 10px;
+	padding-left: 10px;
+	font-style: normal;
+	border-radius: 26px;
+	background: hsla(0, 0%, 0%, 0.65);
+	color: hsl(0, 100%, 100%);
+	position: fixed;
+	box-shadow: -5px 5px 20px 0px #230909;
+	right: 0%;
+	top: 7%;
+}
+
+.se-barButton {
+	padding: 5px;
+	margin: 9px;
+	margin-right: 25px;
+	font-size: 18px;
+	margin-left: 11px;
+	border: 1px solid hsl(0, 0%, 100%);
+	color: hsl(0, 0%, 100%);
+}
+
+.se-optionsList {
+	position: absolute;
+	z-index: 12;
+	background: hsl(0, 0%, 100%);
+	color: hsl(0, 0%, 0%);
+	border: 1px solid hsl(0, 59%, 21%);
+	border-radius: 20px;
+	font-size: smaller;
+	right: 1px;
+	padding: 5px;
+	box-shadow: 4px 3px 20px 0px azure;
+	cursor: pointer;
+}
+
+.se-li {
+	transition: 0.3s cubic-bezier(0.96, 0.14, 0.34, 0.38);
+}
+
+.se-li:hover {
+	border-radius: 11px;
+	box-shadow: 1px 5px 0px 0px darkgrey, inset 0px -1px 11px 0px darkgrey;
+}
+
+.se-main {
+	margin: 0;
+	background-color: hsla(0, 0%, 54%, 0.98);
+}
+
+.se-basic-icons {
+	display: inline-block;
+	float: right;
+}
+
+.se-nav-next-icons {
+	padding: 5px;
+	position: fixed;
+	top: 7%;
+	right: 58%;
+	background: rgba(44, 76, 35, 0.62);
+	opacity: 0.7;
+	border-radius: 25px;
+	box-shadow: 1px 5px 20px 0px #6684c194;
+}
+
+.se-nav-prev-icons {
+	padding: 5px;
+	position: fixed;
+	top: 7%;
+	background: rgba(44, 76, 35, 0.62);
+	opacity: 0.7;
+	border-radius: 25px;
+	box-shadow: 1px 5px 20px 0px #6684c194;
+}
+
+.se-keyHover:hover {
+	transform: translateY(4px);
+	border-right: 1px solid rgb(0, 0, 0);
+	border-radius: 12px;
+	border-left: 1px solid rgb(0, 0, 0);
+	box-shadow: 3px 4px 7px 1px #243860, -3px 4px 7px 1px #243860;
+	transition: cubic-bezier(0, 0.81, 0, -1.13);
+	transition-duration: 0.2s;
+}
+
+.se-keyHover:hover:after {
+	content: attr(title);
+	padding: 3px 6px;
+	width: fit-content;
+	margin: 0 auto;
+}
+
+.se-keyHover {
+	border: 1px solid rgb(70, 114, 203);
+	box-shadow: 1px 2px #3b3737;
+}
+
+.se-modal-dropdown:hover,
+.se-theme-dropdown:hover {
+	z-index: 5
+}
+
+.se-model-child {
+	border-left: 1px dashed rgb(255, 0, 0);
+	margin-left: 13px;
+	background-color: rgb(65, 64, 76);
+	padding: 5px;
+	margin-right: 5px;
+}
+.dropdownWithTextBox{
+	display: flex;
+}
+.dropdownWithTextBox .input-group-prepend{
+	display: table-cell !important;
+}
+.dropdownWithTextBox .input-group-prepend .btn{	
+    padding: 6.5px 5px 6px 4px;
+    background: #dcdada;
+    color: black;
+    margin: 0 auto;
+    border-radius: 0;
+    font-size: 17px;
+}
+.dropdown-toggle{
+	background: #6785c1;
+}
+.dropdownWithTextBox .form-control{
+	display: table-cell !important;
+	border-radius: 0;
+}
+.dropdown-item{
+	width: 100%;
+    display: inline-block;
+    color: #000;
+	padding: 5px 10px;
+}
+.dropdown-item:hover{
+	background: #000000;
+	color: #fff;
+}
+.plusBtnWithdropdown{	
+    margin-left: 4px;
+    border-radius: 6px;
+    font-size: 15px;
+    box-shadow: 0px 0px 42px 0px #b1a2a2;
+
+}
+.plusBtnBeforeDropdown {
+    position: absolute;
+    color: hsl(0, 0%, 100%);
+    box-shadow: 0px 1px 20px 3px #fbfbff;
+    opacity: 0.75;
+    background: hsl(0, 0%, 0%);
+    font-style: normal;
+    border-radius: 50%;
+    padding: 4px 8px 4px 8px;	
+}
+.h6LinkText{
+	font-style: italic;	
+    color: beige;
+    text-align: center;
+}
+.h6LinkText p:hover{
+	text-decoration: underline
+}

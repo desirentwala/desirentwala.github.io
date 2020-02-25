@@ -1,0 +1,134 @@
+<fieldset>
+    <div class="row">
+        <div class="w100p pull-left">
+            <div *ngIf="plans[selectedPlanIndex] && plans[selectedPlanIndex]['planDetails']" class="col-sm-8 col-md-6 col-xs-12 no-pad item col-centered">
+                <div class="pri-head headingBar planselected">
+                    <p class="ders">{{plans[selectedPlanIndex].planTypeDesc}}</p>
+                    <misc-h3 miscClass="heads">{{selectedPlanPremium}}</misc-h3>
+
+                </div>
+                <div [class.hide]="favPlansFlag">
+                    <div *ngFor="let coverage of plans[selectedPlanIndex]['planDetails'];let evenFlag = even; let oddFlag = odd"  class="planselectedeven">
+                        <div *ngIf="relativeCoveragesMapBuffer[coverage.covgCd] && relativeCoveragesMapBuffer[coverage.covgCd].isFavPlan===true">
+                            <i *ngIf="relativeCoveragesMapBuffer[coverage.covgCd]['type']===1" class="fa fa-check quotenew  col-md-2 col-sm-2 col-xs-2"></i>
+                            <i *ngIf="relativeCoveragesMapBuffer[coverage.covgCd]['type']===2" class="fa fa-plus quotenew  col-md-2 col-sm-2 col-xs-2"></i>
+                            <i *ngIf="relativeCoveragesMapBuffer[coverage.covgCd]['type']===3" class="fa minus quotenew  col-md-2 col-sm-2 col-xs-2"></i>
+                            <i *ngIf="relativeCoveragesMapBuffer[coverage.covgCd]['type']===4" class="fa fa-code-fork fa-flip-vertical quotenew  col-md-2 col-sm-2 col-xs-2"></i>
+                            <div class="col-xs-10 col-sm-10 col-md-10 mb10 planselectedeven">
+                                <h6 class="mb0">{{coverage.covgDesc | translate}}</h6>
+                                <h3 class="mt0">{{relativeCoveragesMapBuffer[coverage.covgCd].displayCovgSi}}</h3>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div [class.hide]="!favPlansFlag">
+                    <div class="pri-list row planselectedeven">
+                        <i class="fa fa-check quotenew  col-md-2 col-sm-2 col-xs-2"></i>
+                        <div class="col-xs-10 col-sm-10 col-md-10">
+                            <p class="nop" [class.accordionStriked]="!cvgGroups['1']" (click)="toggleDetail('retainedPlan')">Retained Coverages</p>
+                            <div *ngIf="cvgGroups['1']" id="retainedPlan">
+                                <div *ngFor="let cvgGrp of obj.values(cvgGroups['1']); let j = index;let evenFlag = even; let oddFlag = odd;">
+                                    <div (click)="toggleCovgGroupDetail('retainedPlan', j);(this.rotateFlag === j.toString()) ? this.rotateFlag='':this.rotateFlag= j.toString();" class="pri-list row col-sm-12" [class.planeven]="evenFlag" [class.planodd]="oddFlag" [class.planselectedeven]="evenFlag" [class.planselectedodd]="oddFlag">
+                                        <div class="col-xs-12 col-md-12 col-sm-12 plantable-align">
+                                            <h6>{{cvgGrp.coverageGrpDesc | translate}}
+                                                <i class="icon-arrow-d pull-right" [class.rotate]="rotateFlag === j.toString()"></i>
+                                            </h6>
+                                        </div>
+                                        <div style="display:none;" id="{{j}}-plan-retainedPlan">
+                                            <h1 ></h1>
+                                            <table class="w100p">
+                                                <tbody *ngFor="let cvg of cvgGrp.coverage">
+                                                    <tr>
+                                                        <td class="col-md-8 col-sm-8 idata  col-xs-6">{{cvg.covgDesc | translate}}</td>
+                                                        <td class="idata1 col-md-4 col-sm-4 col-xs-6">{{cvg.displayCovgSi}}</td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="pri-list row planselectedodd">
+                        <i class="fa fa-plus quotenew  col-md-2 col-sm-2 col-xs-2"></i>
+                        <div class="col-xs-10 col-sm-10">
+                            <p class="nop" [class.accordionStriked]="!cvgGroups['2']" (click)="toggleDetail('includedPlan')">Coverage Inclusion</p>
+                            <div *ngIf="cvgGroups['2']" id="includedPlan">
+                                <div *ngFor="let cvgGrp of obj.values(cvgGroups['2']); let j = index;let evenFlag = even; let oddFlag = odd;">
+                                    <div (click)="toggleCovgGroupDetail('includedPlan', j);(this.rotateFlag === j.toString()) ? this.rotateFlag='':this.rotateFlag= j.toString();" class="pri-list row col-sm-12" [class.planeven]="evenFlag" [class.planodd]="oddFlag" [class.planselectedeven]="evenFlag" [class.planselectedodd]="oddFlag">
+                                        <div class="col-xs-12 col-sm-12 plantable-align">
+                                            <h6>{{cvgGrp.coverageGrpDesc | translate}}
+                                                <i class="icon-arrow-d pull-right" [class.rotate]="rotateFlag === j.toString()"></i>
+                                            </h6>
+
+                                        </div>
+                                        <div style="display:none;" id="{{j}}-plan-includedPlan">
+                                            <h1 ></h1>
+                                            <table class="w100p">
+                                                <tbody *ngFor="let cvg of cvgGrp.coverage">
+                                                    <tr>
+                                                        <td class="col-md-8 col-sm-8 idata  col-xs-6">{{cvg.covgDesc | translate}}</td>
+                                                        <td class="idata1 col-md-4 col-sm-4 col-xs-6">{{cvg.displayCovgSi}}</td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="pri-list row planselectedeven">
+                        <i class="fa fa-minus quotenew  col-md-2 col-sm-2 col-xs-2"></i>
+                        <div class="col-xs-10 col-sm-10">
+                            <p class="nop" [class.accordionStriked]="!cvgGroups['3']" (click)="toggleDetail('excludedPlan')">Excluded Coverages</p>
+                            <div *ngIf="cvgGroups['3']" id="excludedPlan">
+                                <div *ngFor="let cvgGrp of obj.values(cvgGroups['3']); let j = index;let evenFlag = even; let oddFlag = odd;">
+                                    <div (click)="toggleCovgGroupDetail('excludedPlan', j);(this.rotateFlag === j.toString()) ? this.rotateFlag='':this.rotateFlag= j.toString();" class="pri-list row col-sm-12" [class.planeven]="evenFlag" [class.planodd]="oddFlag" [class.planselectedeven]="evenFlag" [class.planselectedodd]="oddFlag">
+                                        <div class="col-xs-12 col-sm-12 plantable-align">
+                                            <h6>{{cvgGrp.coverageGrpDesc | translate}}
+                                                <i class="icon-arrow-d pull-right" [class.rotate]="rotateFlag === j.toString()"></i>
+                                            </h6>
+
+                                        </div>
+                                        <div style="display:none;" id="{{j}}-plan-excludedPlan">
+                                            <h1 ></h1>
+                                            <table class="w100p">
+                                                <tbody *ngFor="let cvg of cvgGrp.coverage">
+                                                    <tr>
+                                                        <td class="col-md-8 col-sm-8 idata  col-xs-6">{{cvg.covgDesc | translate}}</td>
+                                                        <td class="idata1 col-md-4 col-sm-4 col-xs-6">{{cvg.displayCovgSi}}</td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!--<div class="pri-list row planselectedodd">
+                <i class="fa fa-code-fork fa-flip-vertical quotenew"></i>
+                <div class="col-xs-10 col-sm-10">
+                    <p class="nop" (click)="toggleDetail('addonPlan')">Add ons</p>
+                    <div style="display: none;" id="addonPlan">
+                        <p *ngFor="let coverage of plans[selectedPlanIndex]['planDetails']; let i = index;" class="nop1">
+                            <span *ngIf="relativeCoveragesMapBuffer[coverage.covgCd]['type']===4">
+                            {{coverage.covgDesc}} {{ relativeCoveragesMapBuffer[coverage.covgCd]['displayCovgSi'] }}
+                        </span>
+                        </p>
+                    </div>
+                </div>
+            </div>-->
+                </div>
+            </div>
+        </div>
+        <div class="col-md-12 col-xs-10 col-centered clearfix">
+            <p class="text-center policy-link">
+                <button (click)="switchView()" id="viewPlans" class="ncpbtn-default mt20"> switch View </button>
+            </p>
+        </div>
+    </div>
+
+</fieldset>

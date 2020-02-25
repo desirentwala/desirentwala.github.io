@@ -1,0 +1,27 @@
+<div *ngIf="premiumBlock" class="col-md-12 col-sm-12-col-xs-12 headingBar">
+    <div *ngIf="productCode!='PMO'">{{formattedAmount}}</div>
+    <div>{{premiumLabel | translate}}</div>
+</div>
+<div *ngIf="!premiumBlock" class="col-sm-6 col-md-6 col-xs-12">
+    <div class="itemBlockContainer">
+        <!--<i class="fa fa-check quotenew"></i>-->
+        <div class="col-xs-12 col-sm-12 col-md-12 p0">
+            <p>{{labelControl.value}}</p>
+            <div>
+                <!--<span class="fs18 lh50 fwb mr5 pull-left">$</span>-->
+                <input [ngClass]="isDisabled? 'notAllowed' :' '" class="plan-input pull-left text-right itemBlockAlignRTL" [disabled]="isDisabled" (focus)="getActualValue()" (blur)="formatAmount($event, 'input')" [value]="formattedAmount"
+                    (keypress)="validateDec($event)"
+                    placeholder="Enter Sum Insured"/>
+                <slider *ngIf="hasSlider"
+                 [formControl]="amountControl"
+                 [customFlag]="true" 
+                 [sliderClass]="sliderClass"
+                 [readOnly]="isDisabled"
+                 ></slider>
+                 <button *ngIf="showDelBtn" (click)="deleteItem()" class="iconicBtn">
+                        <i class="fa fa-trash"></i>
+                    </button>   
+            </div>
+        </div>
+    </div>
+</div>

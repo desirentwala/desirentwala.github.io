@@ -1,0 +1,38 @@
+@import '../../../theme/variables.scss';
+/*
+*iphone x & pixel 2 xl landscape view appointment card alignment
+// */ 
+// @media (max-width: 480px) {
+//   .text-left{
+//     font-family: var(--ion-default-font);
+//     font-size: 28px;
+//     font-weight: bold;
+//     font-stretch: normal;
+//     font-style: normal;
+//     line-height: normal;
+//     letter-spacing: normal;
+//     color: var(--ion-color-medium-shade);
+//   }
+// }
+
+// @media (max-width: 320px) {
+//   .text-left{
+//     font-size: 25px;
+//   }
+// }
+// page header alignment // 
+@media only screen and (min-device-width: 320px)
+            and (max-device-width: 900px)
+            and (orientation: portrait) {
+              .page-header{
+                 margin-top: 0rem !important;
+               }
+            }
+
+@media only screen and (min-device-width: 320px)
+            and (max-device-width: 960px)
+            and (orientation: landscape) {  
+              .page-header{
+                 margin-top: 0rem !important;
+               }
+            }

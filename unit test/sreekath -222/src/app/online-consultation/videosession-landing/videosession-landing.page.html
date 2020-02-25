@@ -1,0 +1,42 @@
+<ion-header class="header">
+  <ion-toolbar>
+    <ion-grid no-padding>
+      <ion-row>
+        <ion-col no-padding>
+          <ion-title class="videocallheader">
+            <img class="home-logo" src="./assets/imgs/logo.png" alt="logo">
+          </ion-title>
+        </ion-col>
+      </ion-row> 
+    </ion-grid>
+  </ion-toolbar>
+</ion-header>
+<ion-content class="disable-background">
+  <!-- <div class="close-video-card">
+    <ion-icon name="close-circle-outline" (click)="backToAppointments()"></ion-icon>
+  </div> -->
+  <ion-card class="ion-padding video-card">
+    <div class="Video-Call-with-Dr">
+      <ion-label>Video call with <span class="text-style-1">{{PracticeName}}</span></ion-label>
+    </div>
+    <div class="Video-Caller-image">
+      <img [src]="subscriberPic"  class="Group-2">
+    </div>
+    <ion-row class="calloptions" justify-content-center>
+      <!-- <div class="call-options">
+        <ion-icon name="mic" (click)="mic()" [title]="'mic'"></ion-icon>
+      </div>
+      <div class="call-options">
+        <ion-icon name="videocam" (click)="videocam()" [title]="'videocam'"></ion-icon>
+      </div> -->
+      <ion-button shape="round" class="startvideo">
+          &nbsp;&nbsp;<span class="join" (click)="startSession()">Join</span>&nbsp;&nbsp;
+      </ion-button>
+      <ion-button shape="round" class="startvideo">
+        <span class="join" (click)="cancelVideoCall()" >Cancel</span>
+      </ion-button>
+      </ion-row>
+  </ion-card>
+</ion-content>
+
+  

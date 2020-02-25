@@ -1,0 +1,69 @@
+<div *ngIf="customFlag">
+    <div [class]="buttonradioCustomClass" [id]="elementId">
+            <p class="mainFloatLabel">{{elementLabel | translate}}<span *ngIf="mandatoryFlag" class="aste">*</span></p>
+        <div class="radio-group">
+            <div  [class.invalid]="invalidFlag" [ngClass]="!tooltipShow ? 'notAllowed' :' '" class="col-md-5 col-xs-5 col-sm-5 p0">
+                <input class="radiobutton" type="radio" [id]="buttonId1" [name]="elementId" [value]="buttonValue1" (click)="onbuttonclick(buttonValue1)"
+                    [checked]="defaultbuttonOne" [formControl]="elementControl" [ngClass]="{'invalid': invalidFlag}">
+                <label class="btn btn-default" [attr.for]="buttonId1">
+               <i *ngIf="iconClass1" ngClass="{{iconClass1}} iconRadioBtn"></i><span class="labelRadioBtn"> {{buttonRadioId1 | translate}}</span>
+                </label>
+            </div>
+            <div class="col-md-2 col-xs-2 col-sm-2 separatorLabel">
+                <span class="orlabel"><span class="labelRadioBtn">{{connectorName | translate}}</span></span>
+            </div>
+            <div  [class.invalid]="invalidFlag" [ngClass]="!tooltipShow ? 'notAllowed' :' '" class="col-md-5 col-xs-5 col-sm-5 p0">
+                <input class="radiobutton" type="radio" [id]="buttonId2" [name]="elementId" [value]="buttonValue2" (click)="onbuttonclick(buttonValue2)"
+                    [checked]="defaultbuttonTwo" [formControl]="elementControl"  [ngClass]="{'invalid': invalidFlag}">
+                <label class="btn btn-default" [attr.for]="buttonId2">
+                <i *ngIf="iconClass" ngClass="{{iconClass}} iconRadioBtn"></i><span class="labelRadioBtn">{{buttonRadioId2 | translate}}</span>
+                    </label>
+            </div>
+
+        </div>
+    </div>
+    <div *ngIf="tooltipTitle" class="col-sm-1 col-md-1 col-xs-1 tooltip-align tooltip-mobile3">
+        <button  type="button" class="btn btn-link info-tooltip" data-toggle="toggle" [tooltipPlacement]="tooltipPlacement"
+            [tooltip]="tooltipHTML" [id]="elementId">
+            <i class="icon-tooltip" [id]="elementId"></i>
+            <tooltip-content #tooltipHTML [excludeId]="elementId">
+                <div innerHTML="{{tooltipTitle | translate}}"></div>
+            </tooltip-content>
+         </button>
+    </div>
+</div>
+<div *ngIf="!customFlag">
+    <div class="col-md-5 col-sm-6 col-xs-11 tooltip-mobile2 pr-sm-0" [id]="elementId">
+        <p class="mainFloatLabel">{{elementLabel | translate}}<span *ngIf="mandatoryFlag" class="aste">*</span></p>
+        <div class="radio-group">
+            <div  [class.invalid]="invalidFlag" [ngClass]="!tooltipShow ? 'notAllowed' :' '" class="col-md-5 col-xs-5 col-sm-5 p0">
+                <input class="radiobutton" type="radio" [id]="buttonId1" [name]="elementId" [value]="buttonValue1" (click)="onbuttonclick(buttonValue1)"
+                    [checked]="defaultbuttonOne" [formControl]="elementControl" [ngClass]="{'invalid': invalidFlag}">
+                <label class="btn btn-default" [attr.for]="buttonId1">
+
+                <i *ngIf="iconClass1" ngClass="{{iconClass1}} iconRadioBtn"></i><span class="labelRadioBtn">{{buttonRadioId1 | translate}}</span>
+           </label>
+            </div>
+            <div class="col-md-2 col-xs-2 col-sm-2 separatorLabel">
+                <span class="orlabel"><span class="labelRadioBtn">{{connectorName | translate}}</span></span>
+            </div>
+            <div [class.invalid]="invalidFlag" [ngClass]="!tooltipShow ? 'notAllowed' :' '" class="col-md-5 col-xs-5 col-sm-5 p0">
+                <input class="radiobutton" type="radio" [id]="buttonId2" [name]="elementId" [value]="buttonValue2" (click)="onbuttonclick(buttonValue2)"
+                    [checked]="defaultbuttonTwo" [formControl]="elementControl" [ngClass]="{'invalid': invalidFlag}">
+                <label class="btn btn-default" [attr.for]="buttonId2">
+                <i *ngIf="iconClass" ngClass="{{iconClass}} iconRadioBtn"></i><span class="labelRadioBtn">{{buttonRadioId2 | translate}}</span>
+                    </label>
+            </div>
+
+        </div>
+    </div>
+    <div *ngIf="tooltipTitle && tooltipShow" class="col-sm-1 col-md-1 col-xs-1 tooltip-align tooltip-mobile3">
+        <button  type="button" class="btn btn-link info-tooltip" data-toggle="toggle" [tooltipPlacement]="tooltipPlacement"
+            [tooltip]="tooltipHTML" [id]="elementId">
+            <i class="icon-tooltip" [id]="elementId"></i>
+            <tooltip-content #tooltipHTML [excludeId]="elementId">
+                <div innerHTML="{{tooltipTitle | translate}}"></div>
+              </tooltip-content>
+        </button>
+    </div>
+</div>

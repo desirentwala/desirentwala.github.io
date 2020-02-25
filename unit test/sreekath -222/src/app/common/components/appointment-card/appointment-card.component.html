@@ -1,0 +1,143 @@
+<div
+  *ngIf="previousAppointments.length === 0 && upcommingAppointments.length === 0 && sheduledAppointments.length === 0">
+  <h3 class="pl-3 no-data">No appointments present</h3>
+</div>
+<div *ngIf="upcommingAppointments.length !== 0">
+  <ion-item lines="none">
+    <h3 class="header appointment-status">Upcoming appointments</h3>
+  </ion-item>
+  <div class="appointmentCard pb-0 fontFamily" *ngFor="let appointmentData of upcommingAppointments;let i = index">
+    <ion-item lines="none" *ngIf="i < 3">
+      <ion-row class="w-100">
+        <ion-col size="2">
+          <div class="appointmentDate">
+            <ion-label class="upcoming-month"><strong class=" month">{{appointmentData.time.date.month}}</strong>
+            </ion-label>
+            <ion-label class="date upcoming-date">{{appointmentData.time.date.date}}</ion-label>
+          </div>
+        </ion-col>
+        <ion-col size="9" class="appointment-description">
+          <ion-label class="medium upcoming-time">{{appointmentData.time.date.day}},
+            {{appointmentData.time.start}} - {{appointmentData.time.end}}</ion-label>
+          <ion-label *ngIf="petOwner" class="low upcoming-appointment-with">
+            Appointment with {{appointmentData.completeData.slot.user.firstName}}</ion-label>
+          <ion-label *ngIf="!petOwner" class="low upcoming-appointment-with">
+            Appointment with {{appointmentData.completeData.user.firstName}}</ion-label>
+          <div *ngIf="petOwner && !appointmentData.completeData.slot.isPrivate">
+            <ion-label class="edit"
+              *ngIf="(appointmentData.time.dateDiff === 1 && appointmentData.time.timeDiff > 0) || appointmentData.time.dateDiff > 1"
+              (click)="editAppointment(appointmentData.completeData)">
+              <i class="fal fa-pencil pr-2"></i>Edit</ion-label>
+          </div>
+          <ion-col size="12" class="mediumDevices"
+            *ngIf="appointmentData.time.timeDiff <= +10  && appointmentData.time.dateDiff === 0 && appointmentData.status !== 'Completed'">
+            <div (click)="navigateToVideo(appointmentData)">
+              <ion-row class="w-100 ion-padding videoCall">
+                <ion-col size="2">
+                  <i class="p-2 fal fa-video-plus icon"></i>
+                </ion-col>
+                <ion-col size="9">
+                  <ion-label>Video call with
+                    <strong *ngIf="petOwner"> {{appointmentData.completeData.slot.user.firstName}}</strong>
+                    <strong *ngIf="!petOwner"> {{appointmentData.completeData.user.firstName}}</strong>
+                  </ion-label>
+                  <ion-label><strong *ngIf="appointmentData.time.timeDiff > 0">in {{appointmentData.time.timeDiff}}min -
+                    </strong><strong>Click here to join</strong></ion-label>
+                </ion-col>
+              </ion-row>
+            </div>
+          </ion-col>
+          <!-- <ion-label class="info"
+            *ngIf="appointmentData.time.timeDiff > -10 && appointmentData.time.timeDiff < 10 && appointmentData.time.dateDiff === 0">
+            <ion-icon class="iconImg" name="information-circle"></ion-icon>Read instruction before you join
+          </ion-label> -->
+        </ion-col>
+        <ion-col size="12" class="verySmallDevice pl-0"
+          *ngIf="appointmentData.time.timeDiff <= +10 && appointmentData.time.dateDiff === 0 && appointmentData.status !== 'Completed'">
+          <div (click)="navigateToVideo(appointmentData)">
+            <ion-row class="w-100 videoCall">
+              <ion-col size="2">
+                <i class="fal fa-video-plus icon"></i>
+              </ion-col>
+              <ion-col size="9">
+                <ion-label class="fontsize">Video call with
+                  <strong *ngIf="petOwner"> {{appointmentData.completeData.slot.user.firstName}}</strong>
+                  <strong *ngIf="!petOwner"> {{appointmentData.completeData.user.firstName}}</strong>
+                </ion-label>
+                <ion-label class="fontsize"><strong *ngIf="appointmentData.time.timeDiff > 0">in
+                    {{appointmentData.time.timeDiff}}min -
+                  </strong><strong>Click here to join</strong></ion-label>
+              </ion-col>
+            </ion-row>
+          </div>
+        </ion-col>
+      </ion-row>
+    </ion-item>
+  </div>
+</div>
+<div *ngIf="sheduledAppointments.length !== 0">
+  <!-- sheduled appointments -->
+  <ion-item lines="none">
+    <h3 class="header appointment-status">Scheduled</h3>
+  </ion-item>
+  <div class="appointmentCard pb-0 fontFamily" *ngFor="let appointmentData of sheduledAppointments;let i = index">
+    <ion-item lines="none" *ngIf="i < 3">
+      <ion-row class="w-100">
+        <ion-col size="2">
+          <div class="appointmentDate">
+            <ion-label class="upcoming-month"><strong class="month">{{appointmentData.time.date.month}}</strong>
+            </ion-label>
+            <ion-label class="date upcoming-date">{{appointmentData.time.date.date}}</ion-label>
+          </div>
+        </ion-col>
+        <ion-col size="9" class="appointment-description">
+          <ion-label class="medium upcoming-time">{{appointmentData.time.date.day}},
+            {{appointmentData.time.start}} - {{appointmentData.time.end}} -
+            <ion-text class="low upcoming-appointment-with">(Awaiting confirmation)</ion-text>
+          </ion-label>
+          <ion-label *ngIf="appointmentData.completeData.slot.practice" class="low upcoming-appointment-with">
+            Appointment with {{appointmentData.completeData.slot.user.firstName}}</ion-label>
+          <ion-label *ngIf="!appointmentData.completeData.slot.practice" class="low upcoming-appointment-with">
+            Appointment with {{appointmentData.completeData.user.firstName}}</ion-label>
+          <div *ngIf="petOwner && !appointmentData.completeData.slot.isPrivate">
+            <ion-label class="edit"
+              *ngIf="(appointmentData.time.dateDiff === 1 && appointmentData.time.timeDiff > 0) || appointmentData.time.dateDiff > 1"
+              (click)="editAppointment(appointmentData.completeData)">
+              <i class="fal fa-pencil pr-2"></i>Edit</ion-label>
+          </div>
+        </ion-col>
+      </ion-row>
+    </ion-item>
+  </div>
+</div>
+
+<!-- list of all previous appointments -->
+<div *ngIf="previousAppointments.length !== 0">
+  <ion-item lines="none">
+    <h3 class="header appointment-status">Previous appointments</h3>
+  </ion-item>
+  <div class="appointmentCard fontFamily pb-0 " *ngFor="let appointmentData of previousAppointments;let i = index ">
+    <ion-item lines="none" *ngIf="i < 3">
+      <ion-row class="w-100">
+        <ion-col size="2">
+          <div class="opacity appointmentDate">
+            <ion-label class="previovs opacity previous-month text-uppercase"><strong>{{appointmentData.time.date.month}}</strong>
+            </ion-label>
+            <ion-label class="date opacity previovs previous-date">{{appointmentData.time.date.date}}</ion-label>
+          </div>
+        </ion-col>
+        <ion-col size="9" class="appointment-description">
+          <ion-label class="medium opacity previous-time">{{appointmentData.time.date.day}},
+            {{appointmentData.time.start}} - {{appointmentData.time.end}}</ion-label>
+          <ion-label *ngIf="petOwner"
+            class="low opacity previovs previous-appointment-with">
+            Appointment with
+            {{appointmentData.completeData.slot.user.firstName}}</ion-label>
+          <ion-label *ngIf="!petOwner"
+            class="low opacity previovs previous-appointment-with">
+            Appointment with
+            {{appointmentData.completeData.user.firstName}}</ion-label>
+        </ion-col>
+      </ion-row>
+    </ion-item>
+  </div>

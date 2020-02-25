@@ -1,0 +1,52 @@
+<div [formGroup]="userGroupMaintenanceFormGroup" class="row radio-btn" >
+    <div>
+        <div class="row" >
+            <ncp-label elementLabel="NCPLabel.BranchID" elementId="BranchId" [mandatoryFlag]="true"></ncp-label>
+            <drop-down elementId="BranchId" param1="{{userBranchCode}}"  formControlName="branch_id" miscType="BranchGroup" pickListFlag=true elementId="UserBranch"
+            isCodeDesc=true displayCodeAndDesc=true [descControl]="userGroupMaintenanceFormGroup.controls['branch_desc']" displayCodeAndDesc=true
+            displayOnClick=true changeId="branchChangeId" ngDefaultControl elementLabel="NCPLabel.userBranch" mandatoryFlag="true" isLazyLoading="true" (change)="reset()">
+        </drop-down>
+
+        </div>
+        <error-handler [elementControl]="userGroupMaintenanceFormGroup.controls['branch_id']" [customMessages]="{required: 'NCPLabelcustomMessages.pleaseSelectBranchId'}">
+        </error-handler>
+        <div class="row">
+            <ncp-label elementLabel="NCPLabel.userGroupId" elementId="UserGroupId" mandatoryFlag="true"></ncp-label>
+            <text-box formControlName="user_group_code" ngDefaultControl elementLabel="NCPLabel.userGroupId" mandatoryFlag="true"></text-box>
+        </div>
+        <error-handler [elementControl]="userGroupMaintenanceFormGroup.controls['user_group_code']" [customMessages]="{required: 'NCPErrorMessage.enterUserGroupId'}">
+        </error-handler>
+
+        <div class="row">
+            <ncp-label elementLabel="NCPLabel.userGroupDesc" elementId="UserGroupdesc" mandatoryFlag="true"></ncp-label>
+            <text-box formControlName="user_group_desc" ngDefaultControl elementLabel="NCPLabel.userGroupDesc" mandatoryFlag="true"></text-box>
+        </div>
+        <error-handler [elementControl]="userGroupMaintenanceFormGroup.controls['user_group_desc']" [customMessages]="{required: 'NCPLabelcustomMessages.enterUserGroupDesc'}">
+        </error-handler>
+
+        <div class="row">
+            <ncp-label elementLabel="NCPLabel.userGroupUsers" elementId="UserGroupUsers" [mandatoryFlag]="true"></ncp-label>
+             <drop-down elementId="user_group_users" formControlName="user_group_users" pickListFlag=true miscType="ChildBranchUsers" param1="{{branchId}}" displayCodeAndDesc=true
+                 [descControl]="userGroupMaintenanceFormGroup.controls['user_group_user_desc']"
+                ngDefaultControl changeId="userGroupUsersChangeId"  elementLabel="NCPLabel.userGroupUsers" mandatoryFlag="true" multipleSelect=true  isLazyLoading="true" displayOnClick=true >
+            </drop-down>
+        </div>
+       <div formArrayName="user_permissions" *ngFor="let user_permission of userGroupMaintenanceFormGroup.get('user_permissions')['controls']; let i = index;">
+            <div [formGroupName]="i">
+                <div class="row">
+                    <div class="col-xs-12 col-sm-4 col-md-4 col-lg-4 labelAlign" >
+                        <ncp-label elementLabel="NCPLabel.userGroupPermission" customFlag=true labelClass="text-right d-inlineBlock"></ncp-label>
+                        <ncp-label elementLabel="{{userGroupMaintenanceFormGroup.get('user_group_users').value[i].code}}" [mandatoryFlag]="true" customFlag=true labelClass="text-right d-inlineBlock ml-5"></ncp-label>
+                    </div>
+                    <drop-down formControlName="user_permissions" pickListFlag=true isCodeDesc=true miscSubType="UGPERM" miscType="MiscInfo"
+                        displayCodeAndDesc=true ngDefaultControl elementLabel="NCPLabel.userGroupPermission"
+                        mandatoryFlag="true" multipleSelect=true displaySelectAllCheckBox=true isLazyLoading="true" displayOnClick=true>
+                    </drop-down>
+                </div>
+            </div>
+        </div>
+        <div class="btns-row">
+            <button-field (click)="doAction($event)" buttonType="custom" buttonClass="ncpbtn-default" buttonName="NCPBtn.submit" [isDisabled]="!this.userGroupMaintenanceFormGroup.valid"></button-field>
+        </div>
+    </div>
+</div>

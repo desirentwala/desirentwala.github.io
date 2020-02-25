@@ -1,0 +1,138 @@
+<div [formGroup]="postalCodeFormGroup" class="row radio-btn">
+    <div>
+        <div class="row">
+            <ncp-label elementLabel="NCPLabel.postalCode" elementId="zipCode" mandatoryFlag="true">
+            </ncp-label>
+            <text-box formControlName="zipCode" ngDefaultControl maxLength="10" acceptPattern="[A-Za-z0-9]"
+                elementLabel="NCPLabel.postalCode" mandatoryFlag="true">
+            </text-box>
+        </div>
+        <error-handler [elementControl]="postalCodeFormGroup.controls['zipCode']" acceptPattern="[A-Za-z0-9_]"
+            [customMessages]="{required: 'NCPLabelcustomMessages.pleaseEnterZipCode'}">
+        </error-handler>
+        <div class="row">
+            <ncp-label elementLabel="NCPLabel.zipName" elementId="zipName" mandatoryFlag="true">
+            </ncp-label>
+            <text-box formControlName="zipName" maxLength="40" acceptPattern="[A-Za-z0-9]"
+                ngDefaultControl elementLabel="NCPLabel.zipName" mandatoryFlag="true"></text-box>
+        </div>
+        <error-handler [elementControl]="postalCodeFormGroup.controls['zipName']" acceptPattern="[A-Za-z0-9-]"
+            [customMessages]="{required: 'NCPLabelcustomMessages.pleaseEnterZipName'}">
+        </error-handler>
+        <div class="row">
+            <ncp-label elementLabel="NCPLabel.country" elementId="countryCodeDesc" mandatoryFlag="true">
+            </ncp-label>
+            <drop-down elementId="countryCodeDesc" miscSubType="CTRY" miscType="MiscInfo" maxLength="25"
+                pickListFlag=true formControlName="countryCode" isCodeDesc=true 
+                [descControl]="postalCodeFormGroup.controls['countryCodeDesc']" displayOnClick=true ngDefaultControl
+                elementLabel="NCPLabel.country" changeId="countryCodeChangeId">
+            </drop-down>
+        </div>
+        <error-handler [elementControl]="postalCodeFormGroup.controls['countryCode']"
+            [customMessages]="{required: 'NCPPlaceHolder.pleaseSelectCountry'}">
+        </error-handler>
+        <div class="row">
+            <ncp-label elementLabel="NCPLabel.state" elementId="stateCodeDesc" mandatoryFlag="true">
+            </ncp-label>
+            <drop-down elementId="stateCodeDesc" miscSubType="STA" miscType="MiscInfo" maxLength="25" param1="{{countryParam}}"
+                pickListFlag=true formControlName="stateCode" isCodeDesc=true 
+                [descControl]="postalCodeFormGroup.controls['stateCodeDesc']" displayOnClick=true ngDefaultControl
+                elementLabel="NCPLabel.state" changeId="stateCodeChangeId">
+            </drop-down>
+        </div>
+        <error-handler [elementControl]="postalCodeFormGroup.controls['stateCode']"
+            [customMessages]="{required: 'NCPLabelcustomMessages.pleaseEnterState'}">
+        </error-handler>
+        <div class="row">
+            <ncp-label elementLabel="NCPLabel.district" elementId="districtCodeDesc" mandatoryFlag="true">
+            </ncp-label>
+            <drop-down elementId="districtCodeDesc" miscSubType="DIST" miscType="MiscInfo" maxLength="25" param1="{{stateParam}}"
+                pickListFlag=true formControlName="districtCode" isCodeDesc=true 
+                [descControl]="postalCodeFormGroup.controls['districtCodeDesc']" displayOnClick=true ngDefaultControl
+                elementLabel="NCPLabel.district" changeId="districtCodeChangeId">
+            </drop-down>
+        </div>
+        <error-handler [elementControl]="postalCodeFormGroup.controls['districtCode']"
+            [customMessages]="{required: 'NCPLabelcustomMessages.pleaseEnterDistrict'}">
+        </error-handler>
+        <div class="row">
+            <ncp-label elementLabel="NCPLabel.city" elementId="cityCodeDesc" mandatoryFlag="true">
+            </ncp-label>
+            <drop-down elementId="cityCodeDesc" miscSubType="CIT" miscType="MiscInfo" maxLength="25" pickListFlag=true param1="{{districtParam}}"
+                formControlName="cityCode" isCodeDesc=true
+                [descControl]="postalCodeFormGroup.controls['cityCodeDesc']" displayOnClick=true ngDefaultControl
+                elementLabel="NCPLabel.cityCode">
+            </drop-down>
+        </div>
+        <error-handler [elementControl]="postalCodeFormGroup.controls['cityCode']"
+            [customMessages]="{required: 'NCPLabelcustomMessages.pleaseEnterCity'}">
+        </error-handler>
+        <div class="row">
+            <ncp-label elementLabel="NCPLabel.area" elementId="zipArea" mandatoryFlag="true">
+            </ncp-label>
+            <text-box formControlName="zipArea" ngDefaultControl acceptPattern="[A-Za-z0-9]"
+                maxLength="25" elementLabel="NCPLabel.area" mandatoryFlag="true"></text-box>
+        </div>
+        <error-handler [elementControl]="postalCodeFormGroup.controls['zipArea']" acceptPattern="[A-Za-z0-9]"
+            [customMessages]="{required: 'NCPLabelcustomMessages.pleaseEnterZipCodeArea'}">
+        </error-handler>
+        <div class="row">
+            <ncp-label elementLabel="NCPLabel.addressline1" elementId="zipAddr1" mandatoryFlag="true">
+            </ncp-label>
+            <text-box formControlName="zipAddr1" ngDefaultControl acceptPattern="[A-Za-z0-9]"
+                maxLength="255" elementLabel="NCPLabel.addressline1" mandatoryFlag="true"></text-box>
+        </div>
+        <error-handler [elementControl]="postalCodeFormGroup.controls['zipAddr1']" acceptPattern="[A-Za-z0-9]"
+            [customMessages]="{required: 'NCPLabelcustomMessages.pleaseEnterZipCodeAddress1'}">
+        </error-handler>
+        <div class="row">
+            <ncp-label elementLabel="NCPLabel.addressline2" elementId="zipAddr2">
+            </ncp-label>
+            <text-box formControlName="zipAddr2" ngDefaultControl acceptPattern="[A-Za-z0-9]"
+                maxLength="255" elementLabel="NCPLabel.addressline2"></text-box>
+        </div>
+        <error-handler [elementControl]="postalCodeFormGroup.controls['zipAddr2']" acceptPattern="[A-Za-z0-9]"
+            [customMessages]="{required: 'NCPLabelcustomMessages.pleaseEnterZipCodeAddress2'}">
+        </error-handler>
+        <div class="row">
+            <ncp-label elementLabel="NCPLabel.addressline3" elementId="zipAddr3">
+            </ncp-label>
+            <text-box formControlName="zipAddr3" ngDefaultControl acceptPattern="[A-Za-z0-9]"
+                maxLength="255" elementLabel="NCPLabel.addressline3"></text-box>
+        </div>
+        <error-handler [elementControl]="postalCodeFormGroup.controls['zipAddr3']" acceptPattern="[A-Za-z0-9]"
+            [customMessages]="{required: 'NCPLabelcustomMessages.pleaseEnterZipCodeAddress3'}">
+        </error-handler>
+        <div class="row">
+            <ncp-label elementLabel="NCPLabel.addressline4" elementId="zipAddr4">
+            </ncp-label>
+            <text-box formControlName="zipAddr4" ngDefaultControl acceptPattern="[A-Za-z0-9]"
+                maxLength="255" elementLabel="NCPLabel.addressline4"></text-box>
+        </div>
+        <error-handler [elementControl]="postalCodeFormGroup.controls['zipAddr4']" acceptPattern="[A-Za-z0-9]"
+            [customMessages]="{required: 'NCPLabelcustomMessages.pleaseEnterZipCodeAddress4'}">
+        </error-handler>
+        <div class="row">
+            <ncp-label elementLabel="NCPLabel.addressline5" elementId="zipAddr5">
+            </ncp-label>
+            <text-box formControlName="zipAddr5" ngDefaultControl acceptPattern="[A-Za-z0-9]"
+                maxLength="255" elementLabel="NCPLabel.addressline5"></text-box>
+        </div>
+        <error-handler [elementControl]="postalCodeFormGroup.controls['zipAddr5']" acceptPattern="[A-Za-z0-9]"
+            [customMessages]="{required: 'NCPLabelcustomMessages.pleaseEnterZipCodeAddress5'}">
+        </error-handler>
+        <div class="row">
+            <ncp-label elementLabel="NCPLabel.timezone" elementId="timeZone">
+            </ncp-label>
+            <text-box formControlName="timeZone" ngDefaultControl acceptPattern="[A-Za-z0-9]"
+                maxLength="30" elementLabel="NCPLabel.timeZone"></text-box>
+        </div>
+        <error-handler [elementControl]="postalCodeFormGroup.controls['timeZone']" acceptPattern="[A-Za-z0-9]"
+            [customMessages]="{required: 'NCPLabelcustomMessages.pleaseEntertimeZone'}">
+        </error-handler>
+        <div class="btns-row">
+            <button-field (click)="doAction($event)" buttonType="custom" [isDisabled]="!this.postalCodeFormGroup.valid"
+                buttonClass="ncpbtn-default" buttonName="NCPBtn.submit"></button-field>
+        </div>
+    </div>
+</div>

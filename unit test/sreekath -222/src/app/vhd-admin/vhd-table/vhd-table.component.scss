@@ -1,0 +1,101 @@
+@media (min-width: 768px) {
+  .hide-under-mob {
+    display: none;
+  }
+
+  .desktop-version {
+    display: block;
+  }
+}
+
+@media (max-width: 768px) {
+  .hide-under-mob {
+    display: block;
+  }
+
+  .desktop-version {
+    display: none;
+  }
+}
+
+.tbody {
+  color: #4b5660;
+  font-size: var(--size-icon-10);
+}
+.thead{
+  color: #4b5660;
+  font-weight: bold;
+}
+.header {
+  height: 18px;
+  font-family: var(--ion-header-font);
+  color: var(--ion-color-medium-shade);
+}
+
+.table td {
+  max-width: 14rem;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  vertical-align: middle !important;
+}
+
+.speciesIcon {
+  margin: 0rem 0.2rem;
+  border-radius: 2rem;
+  padding: 0.5rem;
+  width: 2.2rem;
+  height: 2.2rem;
+  background: #ebebeb;
+}
+
+.petsImages {
+  width: 15rem !important;
+}
+.profile{
+  margin: 0rem .2rem;
+  border-radius: 2rem;
+  width: 2.2rem;
+  height: 2.2rem;
+  max-width: 2.2rem;
+  max-height: 2.2rem;
+}
+.profileIpad{
+  width: 5rem;
+  height: 5rem;
+  max-width: 5.5rem;
+  max-height: 3.5rem;
+}
+.emailstyle{
+  font-size: 1rem;
+  font-weight: bold;
+}
+.mobilestyle{
+  font-size: .8rem;
+}
+.nextOrPrevious{
+  cursor: pointer;
+  font-size: 1.5rem;
+  vertical-align: middle;
+}
+.editOrDelete{
+  cursor: pointer;
+}
+.elipsis{
+max-width: 14rem;
+white-space: nowrap;
+overflow: hidden;
+text-overflow: ellipsis;
+}
+.popover-ham {
+  font-size: 18px;
+  font-weight: 900;
+  color: #8a8a8a;
+  vertical-align: middle;
+  transform: rotate(90deg);
+}
+.popover-ham:hover {
+  cursor: pointer;
+  background: #e6e6e6;
+  color: #3a3a3a;
+}

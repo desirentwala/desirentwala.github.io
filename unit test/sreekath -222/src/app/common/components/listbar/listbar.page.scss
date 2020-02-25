@@ -1,0 +1,93 @@
+@import "../../../../theme/variables.scss";
+
+.bladge-cust {
+  padding-top: 2% !important;
+  border-radius: 0.66rem;
+  color: var(--ion-color-primary-contrast);
+}
+.icons {
+  font-size: var(--size-icon-20);
+}
+
+.iconPadding {
+  padding-top: 8%;
+}
+.text-img {
+  text-align: center;
+  background: var(--secondary-list-color);
+  width: 2.5rem;
+  height: 2.5rem;
+  color: var(--white-background);
+  font-size: 1.7rem;
+}
+.font-id {
+  font-size: .8rem;
+  font-weight: normal;
+  color: var(--ion-color-medium-contrast);
+}
+.name{
+  font-size: .9rem;
+  color: var(--ion-color-medium-shade);
+}
+.item{
+  height: 4.38rem;
+  vertical-align: middle;
+}
+.item:hover {
+  --background: var(--active-item-background) !important;
+}
+.col-height{
+  height: 3.8rem;
+  margin-top: .7rem;    
+}
+
+.listbar {
+  overflow-y: auto;
+  max-height: 100vh;
+}
+.vetImg {
+  width: 2.5rem;
+  height: 2.5rem;
+  min-width: 2.5rem;
+  min-height: 2.5rem;
+  color: var(--white-background);
+  font-size: 1.7rem;
+}
+.listcard {
+  --background: var(--list-background);
+}
+
+.highlight {
+  --background: var(--active-item-background) !important;
+}
+
+.search-input {
+  border: 1px solid var(--active-item-background);
+  border-radius: 0.2rem;
+  background: var(--white-background);
+  --padding-top: 5px !important;
+  --padding-bottom: 5px !important;
+  --padding-right: 5px !important;
+  --padding-right: 5px !important;
+}
+
+.btn-plus,
+.btn-search {
+  color: var(--ion-color-primary) !important;
+  font-size: 1.3rem;
+  padding: 0.4rem 0.3rem 0rem 0.3rem;
+}
+.ifNoData{
+  font-size: 1rem;
+  opacity: 0.6;
+  margin-top: 1rem;
+}
+/* iPad Pro 9.7 */
+@media only screen and (min-device-width: 768px) 
+                   and (max-device-width: 1024px)
+                   and (orientation: portrait)
+                   and (-webkit-min-device-pixel-ratio: 2) {
+  .name{
+    max-width: 9rem !important;
+  }
+}

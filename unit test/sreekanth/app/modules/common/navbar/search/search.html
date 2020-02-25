@@ -1,0 +1,83 @@
+<div class="col-sm-5 col-md-5 hidden-xs plr-sm-0 no-pad col-md-offset-1 col-sm-offset-0 col-xs-offset-0">
+  <div class="searchBar">
+    <div class="input-group row d-block m0">
+      
+      <div class="searchField col-md-12 col-sm-12 no-pad">
+        <!--Dropdown list-->
+        <div class="col-md-3 col-sm-3 p0">
+          <div class="input-group-btn search-panel">
+        <div class="dropdown">
+          <div class="mainSearch">
+                <span>
+                  <i class="fa iconMainSearchDD"></i>
+                  <span class="labelMainSearchDD">{{type | translate}}</span>
+                </span>
+                <i class="icon-arrow-d"></i>
+                <ul>
+                  <li (click)="setType('policy')">
+                    <i class="fa iconMainSearchDD"></i>
+                    <span class="labelMainSearchDD">{{'NCPTab.policy' | translate}}</span>
+                  </li>
+                  <li (click)="setType('quote')">
+                    <i class="fa iconMainSearchDD"></i>
+                    <span class="labelMainSearchDD">{{'NCPTab.quote' | translate}}</span>
+                  </li>
+                  <li (click)="setType('claim')">
+                    <i class="fa iconMainSearchDD"></i>
+                    <span class="labelMainSearchDD">{{'NCPLabel.claims' | translate}}</span>
+                  </li>
+                  <!--<li (click)="setType(customer)" >{{'NCPLabel.customer' | translate}}</li>-->
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!--search input field-->
+        <input type="hidden" name="search_param" value="all" id="search_param">
+        <input type="text" class="form-control col-md-8 col-sm-6" name="x" [formControl]="filterString" placeholder="{{ placeHolder | translate}}">
+     <!--search btn-->
+        <span class="searchBtnContainer col-sm-1 col-md-1 btnAlignField">
+        <button-field buttonClass="iconicBtn fa fa-search" buttonType="custom" (click)="searchFilterString();"></button-field>
+      </span>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- For Responsive -->
+<div class="mobSearchIcon visible-xs">
+  <input type="checkbox" id="toggle-1" />
+  <label for="toggle-1" class="search">
+    <i class="search-icon fa fa-search"></i>
+  </label>
+  <div class="search-box">
+    <div class="searchBar">
+      <div class="input-group d-block">
+        <div class="input-group-btn search-panel col-xs-3">
+          <div class="dropdown">
+            <div class="mainSearch">
+              <span>{{type | translate}}</span>
+              <i class="icon-arrow-d"></i>
+              <ul>
+              <li (click)="setType('policy')">{{'NCPTab.policy' | translate}}</li>
+              <li (click)="setType('quote')">{{'NCPTab.quote' | translate}}</li>
+              <li (click)="setType('claim')" >{{'NCPLabel.claims' | translate}}</li>
+                        <!--<li (click)="setType(customer)" >{{'NCPLabel.customer' | translate}}</li>-->
+            </ul>
+            </div>
+          </div>
+        </div>
+        <div class="searchField p0">
+          <input type="hidden" name="search_param" value="all" id="search_param">
+          <input type="text" class="form-control" name="x" [formControl]="filterString" placeholder="{{ placeHolder | translate}}">
+        </div>
+        <span class="col-xs-2 iconicBtnRTL searchBtnContainer">
+          <button class="iconicBtn">
+            <i class="fa fa-search"></i>
+          </button>
+        </span>
+      </div>
+    </div>
+  </div>
+</div>

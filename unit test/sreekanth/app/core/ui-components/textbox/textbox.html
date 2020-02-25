@@ -1,0 +1,141 @@
+<div *ngIf="!customFlag" ngClass="{{hasImageIcon || iconClass? 'hasImageIconContainer' : ''}}">
+    <div class="col-sm-6 col-md-5 col-xs-11 pr-sm-0" [id]="elementId" *ngIf="inputType !== 'file'">
+        <span class="input-holder">
+          <input
+              class="form-control"
+              [ngClass]="{'text-muted': disabledFlag}" 
+              [type]="inputType" 
+             [value]="value"                       
+              placeholder="{{ placeHolder | translate}}"
+              [ngStyle]="{'text-align': textAlign}"
+              (change)="changeText($event)"
+              (blur)="onTouched($event)" 
+              (input)="onInputText($event)" 
+              [attr.maxlength]="maxLength"
+              [class.invalid]="invalidFlag"
+              [formControl] ="elementControl"> 
+              <p class="mainFloatLabel" [class.floatLabel]="value">{{elementLabel | translate}}<span *ngIf="mandatoryFlag" class="aste">*</span></p>
+            <i class="floatBorder"></i>
+            <i [ngClass]="(invalidFlag && value || invalidFlag && !value)? 'fa fa-times-circle floatIcon warningIconColor' : (!invalidFlag && value)? 'fa fa-check-circle floatIcon successIconColor' :''"></i>
+        </span>
+    </div>
+    <div *ngIf="inputType === 'file'">
+        <div class="col-sm-6 col-md-5 col-xs-11 pr-sm-0 mr-sm-10" [id]="elementId">
+            <input class="form-control hiddenTextBox" 
+            [ngClass]="{'text-muted': disabledFlag}" 
+            [id]="'uploadFile'+ elementId + index"
+            [type]="inputType" 
+            placeholder="{{ placeHolder | translate}}"
+            [ngStyle]="{'text-align': textAlign}" 
+            (change)="changeText($event)" 
+            (blur)="onTouched($event)" 
+			
+            [class.invalid]="invalidFlag"
+                (input)="onInputText($event)">
+            <label [for]="'uploadFile'+ elementId + index">
+                <span [hidden]="!fileName">{{fileName}}</span>
+                <span [hidden]="!placeHolder || fileName">{{ placeHolder | translate}}</span>
+                <i title="Upload Document" class="uploadIconBtn fa fa-upload"></i>
+            </label>
+        </div>
+    </div>
+    <div *ngIf="iconClass" class="textBoxIcons componentIcons">
+        <i class="{{iconClass}}"></i>
+    </div>
+    <div *ngIf="hasImageIcon" class="textBoxImgIcon componentIcons" [ngClass]="customImageIcon">
+        <misc-img [src]="imgIconSrc"></misc-img>
+    </div>
+    <img *ngIf="loadingFlag" src="assets/img/loader.png" alt="" class="loader">
+    <div *ngIf="tooltipTitle" class="col-sm-1 col-md-1 col-xs-1 tooltip-align tooltip-mobile3">
+        <button *ngIf="tooltipTitle" 
+                type="button" 
+                class="btn btn-link info-tooltip" 
+                data-toggle="toggle" 
+                [tooltipPlacement]="tooltipPlacement"
+                [tooltip]="tooltipHTML"
+                [id]="elementId">
+            <i class="icon-tooltip" [id]="elementId"></i>
+            <tooltip-content #tooltipHTML [excludeId]="elementId">
+                <div innerHTML="{{tooltipTitle | translate}}"></div>
+            </tooltip-content>
+        </button>
+    </div>
+</div>
+
+<div *ngIf="customFlag" ngClass="{{hasImageIcon || iconClass ? 'hasImageIconContainer' : ''}}">
+
+    <div [ngClass]="textBoxClass" [id]="elementId" *ngIf="inputType !== 'file'">
+        <span class="input-holder">
+          <input
+              class="form-control"
+              [ngClass]="{'text-muted': disabledFlag}" 
+              [class]="textBoxInputClass"
+              [type]="inputType" 
+              [value]="value"                       
+              placeholder="{{ placeHolder | translate}}"
+              [ngStyle]="{'text-align': textAlign}"
+              (change)="changeText($event)"
+              (blur)="onTouched($event)" 
+              (input)="onInputText($event)" 
+              [attr.maxlength]="maxLength"
+              [class.invalid]="invalidFlag"
+                [formControl]="elementControl">
+            <p class="mainFloatLabel" [class.floatLabel]="value">{{elementLabel | translate}}
+                <span *ngIf="mandatoryFlag" class="aste">*</span>
+            </p>
+            <i class="floatBorder"></i>
+            <i [ngClass]="((invalidFlag && value) || (invalidFlag && !value))? 'fa fa-times-circle floatIcon warningIconColor' : (!invalidFlag && value)? 'fa fa-check-circle floatIcon successIconColor' :''"></i>
+        </span>
+        <div *ngIf="iconClass" class="textBoxIcons componentIcons">
+            <i class="{{iconClass}}"></i>
+        </div>
+
+        <div *ngIf="hasImageIcon" class="textBoxImgIcon componentIcons" [ngClass]="customImageIcon">
+            <misc-img [doExtractSVG]="true" (click)="onbuttonclick()" [src]="imgIconSrc"></misc-img>
+        </div>
+    </div>
+    <div *ngIf="inputType === 'file'">
+        <div [ngClass]="textBoxClass" [id]="elementId">
+            <input class="form-control hiddenTextBox" 
+            [ngClass]="{'text-muted': disabledFlag}" 
+            [class]="textBoxInputClass"
+            [id]="'uploadFile'+ elementId + index"
+            [type]="inputType" 
+            placeholder="{{ placeHolder | translate}}"
+            [ngStyle]="{'text-align': textAlign}" 
+            (change)="changeText($event)" 
+            (blur)="onTouched($event)" 
+            [class.invalid]="invalidFlag"
+            
+            (input)="onInputText($event)" >
+            <label [for]="'uploadFile'+ elementId + index">
+                <span [hidden]="!fileName">{{fileName}}</span>
+                <span [hidden]="!placeHolder || fileName">{{ placeHolder | translate}}</span>
+                <i title="Upload Document" class="uploadIconBtn fa fa-upload"></i>
+            </label>
+        </div>
+        <div *ngIf="iconClass" class="textBoxIcons componentIcons">
+            <i class="{{iconClass}}"></i>
+        </div>
+
+        <div *ngIf="hasImageIcon" class="textBoxImgIcon componentIcons" [ngClass]="customImageIcon">
+            <misc-img [doExtractSVG]="true" (click)="onbuttonclick()" [src]="imgIconSrc"></misc-img>
+        </div>
+    </div>
+
+    <img *ngIf="loadingFlag" src="assets/img/loader.png" alt="" class="loader">
+    <div *ngIf="tooltipTitle" class="col-sm-1 col-md-1 col-xs-1 tooltip-align tooltip-mobile3">
+    <button *ngIf="tooltipTitle" 
+                type="button" 
+                class="btn btn-link info-tooltip" 
+                data-toggle="toggle" 
+                [tooltipPlacement]="tooltipPlacement"
+                [tooltip]="tooltipHTML"
+                [id]="elementId">
+            <i class="icon-tooltip" [id]="elementId"></i>
+            <tooltip-content #tooltipHTML [excludeId]="elementId">
+                <div innerHTML="{{tooltipTitle | translate}}"></div>
+            </tooltip-content>
+        </button>
+    </div>
+</div>

@@ -1,0 +1,27 @@
+<div *ngIf="!customFlag">
+    <!--<ncp-label customFlag=true labelClass="col-sm-4 col-xs-12   col-md-4"></ncp-label>-->
+    <div class="col-md-11 col-sm-11 col-xs-11 subheadingContainer">
+        <span class="addper subHeading"><b>{{heading | translate}}</b></span>
+    </div>
+    <div *ngIf="tooltipTitle" class="col-sm-1 col-md-1 col-xs-1  tooltip-mobile3 tooltip-align">
+        <button type="button" class="btn btn-link info-tooltip" data-toggle="toggle" [tooltipPlacement]="tooltipPlacement" [tooltip]="tooltipHTML" [id]="elementId">
+            <i class="icon-tooltip" [id]="elementId"></i>
+            <tooltip-content #tooltipHTML [excludeId]="elementId">
+                <div innerHTML="{{tooltipTitle | translate}}"></div>
+            </tooltip-content>
+        </button>
+    </div>
+</div>
+<div *ngIf="customFlag">
+        <div class="addperHead" [ngClass]="subheadingCustomClass">
+            <span class="addper subHeading"><b>{{heading | translate}}</b></span>
+        </div>
+    <div *ngIf="tooltipTitle" class="col-sm-1 col-md-1 col-xs-1  tooltip-mobile3 tooltip-align">
+        <button type="button" class="btn btn-link info-tooltip" data-toggle="toggle" [tooltipPlacement]="tooltipPlacement" [tooltip]="tooltipHTML" [id]="elementId">
+            <i class="icon-tooltip" [id]="elementId"></i>
+            <tooltip-content #tooltipHTML [excludeId]="elementId">
+                <div innerHTML="{{tooltipTitle | translate}}"></div>
+            </tooltip-content>
+        </button>
+    </div>
+</div>

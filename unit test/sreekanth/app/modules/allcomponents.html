@@ -1,0 +1,139 @@
+<div *ngIf="b2bFlag" id="wrapper" class="BusinessContainer redBar">
+    <div class="container-fluid bg-fff">
+        <ncp-navbar></ncp-navbar>
+    </div>
+    <div class="container-fluid bodyBg">
+        <ncp-menubar></ncp-menubar>
+        <banner></banner>
+        <router-outlet></router-outlet>
+    </div>
+</div>
+<div *ngIf="b2cFlag" id="wrapper"  class="clientContainer">
+    <div class="container-fluid bg-fff">
+        <b2c-ncp-navbar></b2c-ncp-navbar>
+    </div>
+    <div class="container-fluid bodyBg">
+        <ncp-menubar></ncp-menubar>
+        <banner></banner>
+        <router-outlet></router-outlet>
+    </div>
+</div>
+<div *ngIf="b2b2cFlag" id="wrapper"  class="customerContainer">
+    <div class="container-fluid bg-fff">
+        <nav class="navbar navbar-default">
+            <div class="header-holder">
+                <div class="row rowWithNoMarginBottom">
+                    <b2b2c-ncp-header></b2b2c-ncp-header>
+                </div>
+            </div>
+        </nav>
+    </div>
+    <div class="container-fluid bodyBg">
+        <ncp-menubar></ncp-menubar>
+        <banner></banner>
+        <router-outlet></router-outlet>
+    </div>
+</div>
+<!--<div  id="wrapper">
+    <div class="container-fluid bodyBg">
+        <ncp-menubar></ncp-menubar>
+        <banner></banner>
+        <router-outlet></router-outlet>
+    </div>
+</div>
+<div *ngIf="b2b2cFlag" id="wrapper">
+    <div class="container-fluid bodyBg">
+        <ncp-menubar></ncp-menubar>
+        <banner></banner>
+        <router-outlet></router-outlet>
+    </div>
+</div>-->
+<div *ngIf="(b2bFlag || b2b2cFlag || b2cFlag)" id="wrapper">
+    <ncp-footer> </ncp-footer>
+</div>
+
+<div *ngIf="firstLogin" id="firstloginpage" class="customerContainer">
+    <div class="container-fluid bodyBg">
+        <firstlogin-page></firstlogin-page>
+        <router-outlet></router-outlet>
+    </div>
+</div>
+
+<!--<ncp-modal class="modalForm" #ChatBox [closeOnEscape]="false" [closeOnOutsideClick]="false" hideCloseButton="false" modalClass="modal-lg">
+    <modal-content>
+        <div class="row">
+            <h2>Chat</h2>
+            <div class="col-md-9 col-sm-9 col-xs-12">
+                <div class="chattingBox">
+
+                </div>
+            </div>
+            <div class="col-md-3 col-sm-3 col-xs-12 p0">
+                <div class="onlineUserListBox">
+                    <div class="row">
+                        <div class="col-md-11 col-sm-11 col-xs-11 p0">
+                            <h4>List 1</h4>
+                        </div>
+                        <div class="col-md-1 col-sm-1 col-xs-1 p0">
+                            <i class="icon-arrow-d"></i>
+                        </div>
+                    </div>
+                    <ul class="onlineUserList">
+                        <li>
+                            <div class="userName">XYZ</div>
+                            <span class="onlineIndicator"><i class="fa fa-circle"></i></span>
+                        </li>
+                        <li>
+                            <div class="userName">XYZ</div>
+                            <span class="onlineIndicator"><i class="fa fa-circle"></i></span>
+                        </li>
+                        <li>
+                            <div class="userName">XYZ</div>
+                            <span class="onlineIndicator"><i class="fa fa-circle"></i></span>
+                        </li>
+                    </ul>
+                </div>
+                <div class="onlineUserListBox">
+                    <div class="row">
+                        <div class="col-md-11 col-sm-11 col-xs-11 p0">
+                            <h4>List 1</h4>
+                        </div>
+                        <div class="col-md-1 col-sm-1 col-xs-1 p0">
+                            <i class="icon-arrow-d"></i>
+                        </div>
+                    </div>
+                    <ul class="onlineUserList">
+                        <li>
+                            <img src="assets/img/icon_profile.png" class="img-responsive UserImg" alt="">
+                            <div class="userName">XYZ</div>
+                            <span class="onlineIndicator"><i class="fa fa-circle"></i></span>
+                        </li>
+                        <li>
+                            <img src="assets/img/icon_profile.png" class="img-responsive UserImg" alt="">
+                            <div class="userName">XYZ</div>
+                            <span class="onlineIndicator"><i class="fa fa-circle"></i></span>
+                        </li>
+                        <li>
+                            <img src="assets/img/icon_profile.png" class="img-responsive UserImg" alt="">
+                            <div class="userName">XYZ</div>
+                            <span class="onlineIndicator"><i class="fa fa-circle"></i></span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+        </div>
+
+    </modal-content>
+    <modal-footer>
+        <div class="btns-row">
+            <div class="col-md-1 col-sm-2 col-xs-12 pr-md-0 pr-sm-0 pl-md-0 pl-sm-0 pull-right    p-xs-0">
+                <button type="submit" class="ncp-btn2">{{'NCPBtn.save' | translate}}</button>
+            </div>
+            <div class="col-md-2 col-sm-3 col-xs-12 pull-right pl-md-0 pl-sm-0 mb20   p-xs-0">
+                <button class="ncp-linkBtn" (click)="ChatBox.close()">{{'NCPBtn.close' | translate}}</button>
+            </div>
+        </div>
+    </modal-footer>
+    
+</ncp-modal>-->

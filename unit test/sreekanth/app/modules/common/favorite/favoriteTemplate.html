@@ -1,0 +1,65 @@
+<div *ngIf="allProductsFin.length>0">
+	<section class="product-panel">
+
+		<div class="row rowWithNoMarginBottom">
+			<div class="col-md-6 col-sm-6 col-xs-12 pl30 p-xs-0">
+				<!--<h3><i class="fa fa-delicious iconHeader"></i><span class="labelHeader">{{'NCPLabel.favouriteProducts'| translate}}</span></h3>-->
+				<misc-h3 iconClass="fa fa-delicious" [label]="label"></misc-h3>
+			</div>
+			<div class="col-md-6 col-sm-6 col-xs-12 pr30 p-xs-0">
+				<a class="anchorLink viewAllLink" (click)="viewAllProducts()"><i class="fa fa-external-link-square iconAnchorLink"></i><span class="labelAnchorLink">{{'NCPBtn.ViewAllProducts'| translate}}</span></a>
+			</div>
+		</div>
+
+
+		<div class="row">
+
+			<div class="w4p mt100 hidden-sm hidden-xs pull-left productPanelLeftArrow">
+				<div *ngIf="showNavButton">
+					<a (click)="prev()" class="prev glyphicon glyphicon-chevron-left"></a>
+				</div>
+			</div>
+			<div class="col-md-12 col-sm-12 col-xs-12 plr-xs-0 plr30 plr-sm-15">
+				<div *ngIf="showFavFlag">
+					<ncp-carousel (getOwl)="getOwlElement($event)" [numberOfColumns]='3' [dotsEach]='3' [slideBy]='3'>
+						<div *ngFor="let detail of allProductsFin">
+							<div class="sliderBlock">
+								<h3>
+									<div class="row mlr0-i">
+										<div class="pull-left pr10">
+											<i [class]="detail.classname">
+												</i>
+										</div>
+										<div class="col-md-10 col-sm-9 col-xs-8 p0 text-truncate">
+											<span class="labelHeader">{{detail.productName | translate}}</span>
+										</div>
+									</div>
+								</h3>
+								<p class="productDetails">
+									{{detail.productDescp | translate}}
+								</p>
+								<button class="ncpbtn-large mb10 " (click)="navigateGetQuote(detail.productCode)">
+																	<i [ngClass]="detail.classname" ></i>
+
+								<span class="labelButton">{{'NCPLabel.getQuote' | translate}}</span> 
+								<span class="fa fa-angle-right hidden-sm ml-xs-0"></span>
+							   </button>
+								<br class="clearfix">
+								<a class="link" (click)="navigateProductFullDetails(detail.productCode)"><i class="fa fa-hand-o-right iconAnchorLink"></i><span class="labelAnchorLink">{{'NCPLabel.findoutmore' | translate}}</span></a>
+							</div>
+						</div>
+					</ncp-carousel>
+				</div>
+			</div>
+
+			<div class="w4p mt100 hidden-sm hidden-xs pull-left productPanelRightArrow">
+				<div *ngIf="showNavButton">
+					<a (click)="next()" class="next glyphicon glyphicon-chevron-right"></a>
+				</div>
+				<!--<div (click)="next()">{{'NCPBtn.next' | translate}}</div>-->
+			</div>
+
+		</div>
+
+	</section>
+</div>

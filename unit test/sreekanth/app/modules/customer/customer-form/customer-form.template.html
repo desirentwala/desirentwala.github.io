@@ -1,0 +1,265 @@
+<div [formGroup]="customerFormGroup">
+
+  <div *ngIf="isError" class="alert alert-danger">
+    <ul *ngFor="let error of errors">
+      <li>
+        {{error.errCode}} - {{error.errDesc}}
+      </li>
+    </ul>
+  </div>
+  <div formGroupName="customerInfo" class="customer-border">
+    <tab-error [displayFlag]="isCustomer" errorMessage="NCPErrorMessage.pleaseCorrectErrorsBelow">
+    </tab-error>
+    <div class="row rowWithNoMarginBottom">
+        <!-- <div class="col-md-3 col-sm-3 col-xs-11 pull-xs-left pull-right">
+            <div class="row">
+
+                <div class="customerImgContainer">
+                    <img class="img-responsive userImage" [src]="imageSrc">
+                    <input *ngIf="showImg" type='file' (change)="imageUploaded($event)" class="iconicBtn customFileBtn" src="assets/img/icon_profile.png"/>
+                    <i *ngIf="showImg" class="iconicBtn customFileBtn fa fa-pencil" (click)="deletePhoto()"></i>
+                    <i *ngIf="showDeleteButton" class="iconicBtn customFileBtn fa fa-trash-o" (click)="deletePhoto()"></i>
+                    <i *ngIf="showSaveButton" class="iconicBtn customFileBtn fa fa-save" (click)="savePhoto()"></i>
+                </div>
+
+            </div>
+        </div> -->
+      <div class="col-md-3 col-sm-3 col-xs-12 pull-right pull-xs-left p0 pullLeftRTL">
+        <div class="row">
+          <div class="col-md-12 col-sm-12 col-xs-12 p0">
+            <img class="userImage img-responsive" [src]="imageSrc" alt="Customer Photo" />
+          </div>
+          <div class="customerImgContainer">
+            <!-- <input type='file' class="customFileBtn fa fa-pencil" (change)="imageUploaded($event)" /> -->
+            <input type='file' class="customFileBtn" (change)="imageUploaded($event)" />
+            <i class="fa fa-pencil iconicBtn customFileBtn"></i>
+          </div>
+          <!-- <div class="col-md-12 col-sm-12 col-xs-12 mt10"><input value="Remove Photo" type='button' (click)="deletePhoto()" /></div> -->
+        </div>
+      </div>
+      <div class="col-md-9 col-sm-9 col-xs-12 pl0">
+        <div class="row">
+          <ncp-label elementLabel="NCPLabel.policyHolderType"></ncp-label>
+          <button-radio buttonRadioId1="NCPLabel.individual" buttonRadioId2="NCPLabel.corporate" buttonValue1="I" buttonValue2="O"
+            connectorName="NCPLabel.or" elementId="policyHolderType" formControlName="policyHolderType" clickId="policyHolderTypeSelected"
+            customFlag=true buttonradioCustomClass="col-md-8 col-sm-8 col-xs-11 pr0" elementLabel="NCPLabel.policyHolderType">
+          </button-radio>
+        </div>
+
+        <div *ngIf=isHolderTypeIndividual>
+          <div class="row">
+            <ncp-label elementLabel="NCPLabel.IdentificationType" mandatoryFlag=true></ncp-label>
+            <drop-down elementId="IdentityType" customFlag=true dropdownClass="col-md-8 col-sm-8 col-xs-11 pr0" miscSubType="PATP" miscType="MiscInfo"
+              pickListFlag=true formControlName="identityTypeCode" isCodeDesc=true [descControl]="customerFormGroup.controls['customerInfo']['controls']['identityTypeDesc']"
+              ngDefaultControl elementLabel="NCPLabel.IdentificationType" mandatoryFlag=true displayOnClick=true>
+            </drop-down>
+          </div>
+
+          <div class="row">
+            <ncp-label elementLabel="NCPLabel.identityNo" mandatoryFlag=true></ncp-label>
+            <text-box [inputType]="text" formControlName=identityNo customFlag=true textBoxClass="col-md-8 col-sm-8 col-xs-11 pr0"  elementLabel="NCPLabel.identityNo" mandatoryFlag=true (change)="doCustomerRefresh()"></text-box>
+             <!--<div class="col-xs-2 col-md-1 col-sm-1 p0">
+                <i class="iconicBtn fa fa-refresh pull-right pullLeftRTL" (click)="doCustomerRefresh();"></i>
+             </div>-->
+          </div>
+          <div class="col-md-12 col-sm-12 col-xs-12">
+            <error-handler [elementControl]="customerFormGroup.controls['customerInfo']['controls']['identityNo']" [customMessages]="{required: 'NCPLabelcustomMessages.reqIdentityNo', maxlength: 'NCPLabelcustomMessages.maxIdentityNo'}">
+            </error-handler>
+          </div>
+          <div class="row">
+              <ncp-label elementLabel="NCPLabel.prefix" elementId="prefixLabel" mandatoryFlag="true">
+                </ncp-label>
+                <drop-down elementId="prefix" customFlag="true" dropdownClass="col-md-8 col-sm-8 col-xs-11 pr0 refreshTextRTL" 
+                formControlName="prefix"  isCodeDesc=true [dropdownItems]="prefixItems" [descControl]="customerFormGroup.controls['customerInfo']['controls']['prefixDesc']" displayOnClick=true elementLabel="NCPLabel.prefix" mandatoryFlag=true>
+            </drop-down>
+          </div>
+          <div class="row">
+            <ncp-label elementLabel="NCPLabel.firstName" mandatoryFlag=true></ncp-label>
+            <text-box [inputType]="text" formControlName=appFName customFlag=true textBoxClass="col-md-8 col-sm-8 col-xs-11 pr0" elementLabel="NCPLabel.firstName" mandatoryFlag=true></text-box>
+          </div>
+            <error-handler [elementControl]="customerFormGroup.controls['customerInfo']['controls']['appFName']" [customMessages]="{required: 'NCPLabelcustomMessages.holderFirstname', maxSize: 'NCPLabelcustomMessages.maxSizeholderFirstname', pattern: 'NCPLabelcustomMessages.validInput'}" errorCustomClass="col-md-8 col-sm-8 col-xs-11 pr0">
+            </error-handler>
+          <div class="row">
+            <ncp-label elementLabel="NCPLabel.lastName" mandatoryFlag=true></ncp-label>
+            <text-box [inputType]="text" formControlName=appLName customFlag=true textBoxClass="col-md-8 col-sm-8 col-xs-11 pr0" elementLabel="NCPLabel.lastName" mandatoryFlag=true></text-box>
+          </div>
+            <error-handler [elementControl]="customerFormGroup.controls['customerInfo']['controls']['appLName']" [customMessages]="{required: 'NCPLabelcustomMessages.holderLastname', maxSize: 'NCPLabelcustomMessages.maxSizeholderFirstname', pattern: 'NCPLabelcustomMessages.validInput'}" errorCustomClass="col-md-8 col-sm-8 col-xs-11 pr0">
+            </error-handler>
+          <div class="row">
+            <ncp-label elementLabel="NCPLabel.maritalStatus"></ncp-label>
+            <button-radio buttonRadioId1="NCPLabel.single" buttonRadioId2="NCPLabel.married" buttonValue1="I" buttonValue2="O" connectorName="NCPLabel.or"
+              elementId="maritalStatus" formControlName="maritalStatus" clickId="maritalStatusSelected" customFlag=true buttonradioCustomClass="col-md-8 col-sm-8 col-xs-11 pr0" elementLabel="NCPLabel.maritalStatus">
+            </button-radio>
+          </div>
+
+          <div class="row">
+            <ncp-label elementLabel="NCPLabel.dateOfBirth" mandatoryFlag=true></ncp-label>
+            <dateof-birth formControlName="DOB" [elementValue]="customerFormGroup.controls['customerInfo']['controls']['DOB'].value"
+              customFlag="true" Class="col-md-8 col-sm-8 col-xs-11 pr0" [ageControl]="customerFormGroup.controls['customerInfo']['controls']['age']"
+              ngDefaultControl elementLabel="NCPLabel.dateOfBirth" mandatoryFlag=true></dateof-birth>
+          </div>
+          <div class="col-md-12 col-sm-12 col-xs-12">
+            <error-handler [elementControl]="customerFormGroup.controls['customerInfo']['controls']['age']" [customMessages]="{minNumber: 'NCPLabelcustomMessages.minnumberAge'}">
+            </error-handler>
+          </div>
+
+
+
+        </div>
+
+        <div *ngIf=!isHolderTypeIndividual>
+          <div class="row">
+            <ncp-label elementLabel="NCPLabel.companyName" mandatoryFlag=true></ncp-label>
+            <text-box [inputType]="text" formControlName=companyName customFlag=true textBoxClass="col-md-8 col-sm-8 col-xs-11 pr0" elementLabel="NCPLabel.companyName" mandatoryFlag=true></text-box>
+          </div>
+          <div class="col-md-12 col-sm-12 col-xs-12">
+            <error-handler [elementControl]="customerFormGroup.controls['customerInfo']['controls']['companyName']" [customMessages]="{required: 'NCPLabelcustomMessages.reqcompanyName', maxSize: 'NCPLabelcustomMessages.maxSizecompanyName'}">
+            </error-handler>
+          </div>
+          <div class="row">
+            <ncp-label elementLabel="NCPLabel.companyRegistrationNumber" mandatoryFlag=true></ncp-label>
+            <text-box [inputType]="text" formControlName=companyRegNumber customFlag=true textBoxClass="col-md-8 col-sm-8 col-xs-11 pr0" elementLabel="NCPLabel.companyRegistrationNumber" mandatoryFlag=true></text-box>
+          </div>
+          <div class="col-md-12 col-sm-12 col-xs-12">
+            <error-handler [elementControl]="customerFormGroup.controls['customerInfo']['controls']['companyRegNumber']" [customMessages]="{required: 'NCPLabelcustomMessages.reqcompanyRegName', maxSize: 'NCPLabelcustomMessages.maxSizecompanyRegName'}">
+            </error-handler>
+          </div>
+
+          <div class="row">
+            <ncp-label elementLabel="NCPLabel.trade/Business" mandatoryFlag=true></ncp-label>
+            <drop-down elementId="tradeID" customFlag=true dropdownClass="col-md-8 col-sm-8 col-xs-11 pr0" miscSubType="IND" miscType="MiscInfo"
+              pickListFlag=true formControlName="occupationCode" isCodeDesc=true [descControl]="customerFormGroup.controls['customerInfo']['controls']['occupationDesc']"
+              ngDefaultControl elementLabel="NCPLabel.trade/Business" mandatoryFlag=true displayOnClick=true>
+            </drop-down>
+          </div>
+
+          <div class="row">
+            <ncp-label elementLabel="NCPLabel.contactPersonFirstName" mandatoryFlag=true></ncp-label>
+            <text-box [inputType]="text" formControlName=contactPersonFirstName customFlag=true textBoxClass="col-md-8 col-sm-8 col-xs-11 pr0" elementLabel="NCPLabel.contactPersonFirstName" mandatoryFlag=true></text-box>
+          </div>
+
+            <error-handler [elementControl]="customerFormGroup.controls['customerInfo']['controls']['contactPersonFirstName']" [customMessages]="{required: 'NCPLabelcustomMessages.holderFirstname', pattern: 'NCPLabelcustomMessages.validInput'}" errorCustomClass="col-md-8 col-sm-8 col-xs-11 pr0">
+            </error-handler>
+          <div class="row">
+            <ncp-label elementLabel="NCPLabel.contactPersonLastName" mandatoryFlag=true></ncp-label>
+            <text-box inputType="text" formControlName=contactPersonLastName customFlag=true textBoxClass="col-md-8 col-sm-8 col-xs-11 pr0" elementLabel="NCPLabel.contactPersonLastName" mandatoryFlag=true></text-box>
+          </div>
+            <error-handler [elementControl]="customerFormGroup.controls['customerInfo']['controls']['contactPersonLastName']" [customMessages]="{required: 'NCPLabelcustomMessages.holderLastname', pattern: 'NCPLabelcustomMessages.validInput'}" errorCustomClass="col-md-8 col-sm-8 col-xs-11 pr0">
+            </error-handler>
+
+        </div>
+
+
+        <div class="row">
+          <ncp-label elementLabel="NCPLabel.homePhone" mandatoryFlag=true></ncp-label>
+          <multicontact-number elementId="homePhone" showCodeFlag="true" textelementwidth="8" customFlag="true"
+            customNcpContactClass="col-md-8 col-sm-8 col-xs-11 pr0" dropElementWidth="4" formControlName="mobilePh" [elementControlhome]="customerFormGroup.controls['customerInfo']['controls']['homePh']"
+            [elementControloffice]="customerFormGroup.controls['customerInfo']['controls']['officePhone']" [elementControlfax]="customerFormGroup.controls['customerInfo']['controls']['fax']"
+            acceptPattern="^[0-9]*$" elementLabel="NCPLabel.homePhone" mandatoryFlag=true>
+          </multicontact-number>
+        </div>
+        <div class="col-md-12 col-sm-12 col-xs-12">
+          <error-handler [elementControl]="customerFormGroup.controls['customerInfo']['controls']['mobilePh']" [customMessages]="{required: 'NCPLabelcustomMessages.reqhomePh', maxlength: 'NCPLabelcustomMessages.maxSizeHomeno'}">
+          </error-handler>
+        </div>
+        <div class="row">
+          <ncp-label elementLabel="NCPLabel.emailId" mandatoryFlag=true></ncp-label>
+          <text-box [inputType]="text" formControlName=emailId customFlag=true textBoxClass="col-md-8 col-sm-8 col-xs-11 pr0" elementLabel="NCPLabel.emailId" mandatoryFlag=true></text-box>
+        </div>
+        <div class="col-md-12 col-sm-12 col-xs-12">
+          <error-handler [elementControl]="customerFormGroup.controls['customerInfo']['controls']['emailId']" [customMessages]="{required: 'NCPLabelcustomMessages.reqemailId', mailFormat: 'NCPLabelcustomMessages.mailformat'}">
+          </error-handler>
+        </div>
+        <div class="row">
+          <ncp-label elementLabel="NCPLabel.postalCode" mandatoryFlag=true></ncp-label>
+          <text-box formControlName=zipCd customFlag=true textBoxClass="col-md-7 col-sm-6 col-xs-9 refreshTextRTL" [acceptPattern]="zipCodePattern" (change)="doPostalCodeRefresh();" elementLabel="NCPLabel.postalCode" mandatoryFlag=true></text-box>
+          <div class="col-xs-2 col-md-1 col-sm-1 p0">
+              <i class="iconicBtn fa fa-refresh pull-right pullLeftRTL" (click)="doPostalCodeRefresh();"></i>
+          </div>
+        </div>
+        <div class="col-md-12 col-sm-12 col-xs-12">
+          <error-handler [elementControl]="customerFormGroup.controls['customerInfo']['controls']['zipCd']" [customMessages]="{required: 'NCPLabelcustomMessages.reqPostalCode', maxlength: 'NCPLabelcustomMessages.zipcodeshouldnotexceed6digits'}">
+          </error-handler>
+        </div>
+        <div class="row">
+          <ncp-label elementLabel="NCPLabel.apt/UnitNumber" mandatoryFlag=true></ncp-label>
+          <text-box [inputType]="text" formControlName=appUnitNumber customFlag=true textBoxClass="col-md-8 col-sm-8 col-xs-11 pr0" elementLabel="NCPLabel.apt/UnitNumber"  ></text-box>
+        </div>
+
+        <div class="row">
+          <ncp-label elementLabel="NCPLabel.building/Block/HouseNumber" mandatoryFlag=true></ncp-label>
+          <text-box [inputType]="text" formControlName=blockNumber customFlag=true textBoxClass="col-md-8 col-sm-8 col-xs-11 pr0" elementLabel="NCPLabel.building/Block/HouseNumber" ></text-box>
+        </div>
+        <div class="row">
+          <ncp-label elementLabel="NCPLabel.streetName"></ncp-label>
+          <text-box [inputType]="text" formControlName=address1 customFlag=true textBoxClass="col-md-8 col-sm-8 col-xs-11 pr0" elementLabel="NCPLabel.streetName"></text-box>
+        </div>
+
+        <div class="row">
+          <ncp-label elementLabel="NCPLabel.areaName"></ncp-label>
+          <text-box [inputType]="text" formControlName=address2 customFlag=true textBoxClass="col-md-8 col-sm-8 col-xs-11 pr0" elementLabel="NCPLabel.areaName"></text-box>
+        </div>
+
+        <div class="row">
+          <ncp-label elementLabel="NCPLabel.city"></ncp-label>
+          <!-- <text-box [inputType]="text" formControlName=cityDesc customFlag=true textBoxClass="col-md-8 col-sm-8 col-xs-11 pr0"></text-box> -->
+          <drop-down elementId="city" customFlag=true dropdownClass="col-md-8 col-sm-8 col-xs-11 pr0" miscSubType="CIT" miscType="MiscInfo"
+                pickListFlag=true formControlName="cityCode" isCodeDesc=true [descControl]="customerFormGroup.controls['customerInfo']['controls']['cityDesc']" displayOnClick=true
+                ngDefaultControl elementLabel="NCPLabel.city">
+              </drop-down>
+        </div>
+        <div class="row">
+          <ncp-label elementLabel="NCPLabel.country"></ncp-label>
+          <drop-down elementId="country" customFlag=true dropdownClass="col-md-8 col-sm-8 col-xs-11 pr0" miscSubType="CTRY" miscType="MiscInfo"
+            pickListFlag=true formControlName="countryCode" isCodeDesc=true [descControl]="customerFormGroup.controls['customerInfo']['controls']['countryDesc']" displayOnClick=true
+            ngDefaultControl elementLabel="NCPLabel.country">
+          </drop-down>
+        </div>
+      </div>
+
+      <div class="btns-row">
+        <!--<div *ngIf="enableUpdateButton">-->
+        <button-field buttonType="custom" buttonName="NCPBtn.add" buttonClass="ncpbtn-default w100p" (click)='addCustomer()' iconClass="fa fa-plus"></button-field>
+        <!--</div>-->
+      </div>
+    </div>
+
+
+    <ncp-modal [modalKey]="isAddCustomerModal" modalTitle="NCPModalTitle.addCustomer" modalClass="modal-lg" [closeOnEscape]="false" hideCloseButton="true"
+      [closeOnOutsideClick]="false">
+      <modal-content *ngIf=isHolderTypeIndividual>
+        <div class="row">
+          <span> A New Customer {{ this.customerFormGroup.controls['customerInfo'].value.appFName }} - {{ this.customerFormGroup.controls['customerInfo'].value.appLName
+            }} is created Successfully</span>
+        </div>
+      </modal-content>
+
+      <modal-content *ngIf=!isHolderTypeIndividual>
+        <div class="row">
+          <span> A New Customer {{ this.customerFormGroup.controls['customerInfo'].value.companyName }} is created Successfully</span>
+        </div>
+      </modal-content>
+
+      <modal-footer>
+        <div class="btns-row">
+          <button-field buttonType="custom" buttonName="NCPBtn.close" buttonClass="ncp-linkBtn w100p" (click)="isAddCustomerModal=false;navigateRouterLink('ncp/home')"
+            iconClass="fa fa-close"></button-field>
+        </div>
+      </modal-footer>
+    </ncp-modal>
+
+    <ncp-modal [modalKey]="isDuplicateCustomer" modalTitle="NCPModalTitle.duplicateCustomer" modalClass="modal-lg" [closeOnEscape]="false" hideCloseButton="true"
+      [closeOnOutsideClick]="false">
+      <modal-content>
+        <div class="row">
+          <span> {{"NCPLabel.customer"| translate}} {{ this.customerFormGroup.controls['customerInfo'].value.appFName }} - {{ this.customerFormGroup.controls['customerInfo'].value.appLName
+            }} {{"NCPLabel.updateOrNot"| translate}}</span>
+          <button-field buttonType="primary" buttonName="NCPBtn.no" buttonClass="ncp-linkBtn w100p" (click)="isDuplicateCustomer=false;navigateRouterLink('ncp/customer/addCustomer')"
+            iconClass="fa fa-close"></button-field>
+          <button-field buttonType="primary" buttonName="NCPBtn.yes" buttonClass="ncp-linkBtn w100p" (click)="updateCustomer();navigateRouterLink('ncp/home')" iconClass="fa fa-save"></button-field>
+        </div>
+      </modal-content>
+    </ncp-modal>
+
+  </div>
+</div>

@@ -1,0 +1,45 @@
+<div *ngIf="!customFlag" [ngClass]="readOnlyFlag? 'notAllowed' :' '" class="col-md-5 col-sm-6 col-xs-12 no-pad" [id]="elementId">
+    <div [ngClass]="readOnlyFlag? 'notAllowed' :' '" class="{{readOnlyFlag ? 'customDisabled' :' '}}" [formControl]="elementControl" ngDefaultControl>
+
+        <ncp-date-picker [options]="options" [formControl]="dobDate" ngDefaultControl datepickerClass="col-sm-5 col-md-5 col-xs-5 pr0 pl-xs-6"
+              customFlag=false [overwriteNonGregorianType]="overwriteNonGregorianType" [nonGregorianType]="nonGregorianType">
+            </ncp-date-picker>
+</div>
+
+<div class="col-sm-4 col-md-3 col-xs-3 age-align">
+    <input [ngClass]="'notAllowed'" class="form-control text-center" readonly [value]="age" type="number" id="elementID" placeholder="{{placeHolder | translate}}"
+        [formControl]="ageControl" (change)="setDate(age)" ngDefaultControl>
+</div>
+<div *ngIf="tooltipTitle" class="col-md-1 col-sm-1 hidden-xs tooltip-align tooltip-mobile3">
+    <button *ngIf="tooltipTitle" type="button" class="btn btn-link info-tooltip" data-toggle="toggle" [tooltipPlacement]="tooltipPlacement"
+        [tooltip]="tooltipHTML">
+        <i class="icon-tooltip"></i>
+        <tooltip-content #tooltipHTML>
+            <div innerHTML="{{tooltipTitle | translate}}"></div>
+        </tooltip-content>
+        </button>
+</div>
+</div>
+
+
+<div *ngIf="customFlag" [ngClass]="dobCustomClass" [ngClass]="readOnlyFlag? 'notAllowed' :' '" [id]="elementId">
+    <div class="{{readOnlyFlag ? 'customDisabled' :' '}}" [formControl]="elementControl" ngDefaultControl>
+        <ncp-date-picker [formControl]="dobDate" [options]="options" ngDefaultControl customFlag=false [datepickerClass]="datepickerClass"
+        [overwriteNonGregorianType]="overwriteNonGregorianType" [nonGregorianType]="nonGregorianType">
+            </ncp-date-picker>
+    </div>
+
+    <div class="col-sm-3 col-md-3 col-xs-3 age-align pull-right no-pad pl-xs-10">
+        <input [ngClass]="'notAllowed'" class="form-control text-center" readonly [value]="age" type="number" id="elementID" placeholder="{{placeHolder | translate}}"
+            [formControl]="ageControl" (change)="setDate(age)" ngDefaultControl>
+    </div>
+    <div *ngIf="tooltipTitle" class="col-md-1 col-sm-1 hidden-xs tooltip-align tooltip-mobile3">
+        <button *ngIf="tooltipTitle" type="button" class="btn btn-link info-tooltip" data-toggle="toggle" [tooltipPlacement]="tooltipPlacement"
+            [tooltip]="tooltipHTML">
+            <i class="icon-tooltip"></i>
+            <tooltip-content #tooltipHTML>
+                <div innerHTML="{{tooltipTitle | translate}}"></div>
+            </tooltip-content>
+            </button>
+    </div>
+</div>

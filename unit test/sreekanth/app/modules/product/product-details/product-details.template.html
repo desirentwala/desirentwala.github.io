@@ -1,0 +1,85 @@
+<div *ngIf="product" class="productfound">
+    <misc-h1 miscClass="customisedHeader" iconClass="product.classname" [label]="product.title"></misc-h1>
+    <div class="col-md-12 col-sm-12 col-xs-12 p0">
+        <div *ngIf="product.descriptions">
+            <p *ngFor="let description of product.descriptions">
+                {{description | translate}}
+            </p>
+        </div>
+        <div *ngIf="product.features">
+            <misc-h3 label="{{'NCPLabel.keyFeatures'| translate}}"></misc-h3>
+            <ol class="lsDisc" *ngIf="product.features.features">
+                <li *ngFor="let feature of product.features.features">
+                    <span>{{feature}}</span>
+                </li>
+            </ol>
+            <ol class="lsDisc" *ngIf="singleTrip">
+                <li>
+                    <span>{{'NCPLabel.singleTrip'| translate}}</span>
+                </li>
+                <ol class="lsDisc">
+                    <li *ngFor="let singleTrip of product.features.SingleTrip">
+                        <span>{{singleTrip}}</span>
+                    </li>
+                </ol>
+            </ol>
+            <div *ngIf="annualPlan">
+                <ol class="lsDisc">
+                    <li>
+                        <span>{{'NCPLabel.annualPlan'| translate}}</span>
+                    </li>
+                    <ol class="lsDisc">
+                        <li *ngFor="let annualPlan of product.features.AnnualPlan">
+                            <span>{{annualPlan}}</span>
+                        </li>
+                    </ol>
+                </ol>
+            </div>
+        </div>
+        <!--<div class="fs20 fs-xs-16">
+                    <button class="ncpbtn-large bt-dm mt10 tac" (click)="getQuote(product.productCode)">
+                                  <span class="fa fa-plane"></span>
+                                  <span  >{{'NCPLabel.getQuote'| translate}}</span>
+                                  <span class="fa fa-angle-right ar-aln"></span>
+                              </button>
+                </div>-->
+    </div>
+    <div class="col-md-12 col-sm-12 col-xs-12 p0">
+        <div *ngIf="product.coverages">
+            <misc-h3 label="{{'NCPLabel.coverages'| translate}}"></misc-h3>
+            <ol class="lsDisc">
+                <li *ngFor="let coverages of product.coverages">
+                    <span>{{coverages}}</span>
+                </li>
+            </ol>
+        </div>
+        <div *ngIf="product.exclusions">
+            <misc-h3 label="{{'NCPLabel.coverages'| translate}}"></misc-h3>
+            <ol class="lsDisc">
+                <li *ngFor="let exclusions of product.exclusions">
+                    <span>{{exclusions}}</span>
+                </li>
+            </ol>
+        </div>
+        <div class="productBtnsContainer">
+            <button (click)="getQuote(product.productCode)" class="ncpbtn-large">
+                <span class="iconicButton">
+                    <span [class]="product.classname"> </span>
+                </span>
+                <span>{{'NCPLabel.getQuote'| translate}}</span>
+                <span class="fa fa-angle-right ar-aln"></span>
+            </button>
+        </div>
+    </div>
+    <div *ngIf="product.relatedProducts.length > 0 &&  showRelatedProductFlag" class="col-md-4 col-sm-4">
+        <misc-h3 label="{{'NCPLabel.coverages'| translate}}"></misc-h3>
+        <div class="well1 well-wid">
+            <ul class="tac">
+                <li *ngFor="let relatedProduct of product.relatedProducts">
+                    <a *ngIf="b2cFlag || b2b2cFlag ? (b2cFlag ? relatedProduct.b2cFlag === 'true' : relatedProduct.b2b2cFlag === 'true') : true"
+                        class="as" (click)="goToRelatedProduct(relatedProduct.code)">{{relatedProduct.productTitle}}</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,131 @@
+<div class="userBlock">
+  <div *ngIf="showBellFlag" class="notificationbell">
+    <div class="messages-counter">
+      <div class="frame">
+        <span class="badge">{{newNotificationCount}}</span>
+        <i class="icon-bell" (click)="notificationModal.open();opennotificationModal()"></i>
+      </div>
+    </div>
+  </div>
+  <div *ngIf="userGroup" class="user-box col-sm-10 col-md-12">
+
+    <!-- <div class="dropdown open" (mouseleave)="userBoxFlag = 'false'; rotateFlag = 'false'"> -->
+    <div class="dropdown open">
+      <div [class.userBoxOnClick]="userBoxFlag === 'true'" (click)="userBoxFlag =='true'? userBoxFlag = 'false': userBoxFlag = 'true';rotateFlag =='true'? rotateFlag = 'false': rotateFlag = 'true'">
+        <a class="dropdown-toggle usr-dpd" title="{{loginUserName}}">
+          <span class="loggedUser">
+            <i class="fa fa-user iconUserDemoDD"></i>
+            <span class="labelUserDemoDD">{{loginUserName}}</span>
+          </span>
+          <i class="icon-arrow-d" [class.rotate]="rotateFlag === 'true'"></i>
+        </a>
+      </div>
+      <a (click)="logout()" class="userDropdownLink">
+        <i class="fa fa-sign-out iconUserDemoDD"></i>
+        <span class="labelUserDemoDD">{{'NCPLabel.logout' | translate}}</span>
+      </a>
+      <ul *ngIf="userBoxFlag === 'true'" class="dropdown-menu">
+        <li (click)="userBoxFlag = 'false'; openUserProfile(); " class="dropdownMenuList">
+          <a class="dropdownMenuListLink">
+            <i class="fa fa-user-circle iconUserDemoDD hiddenInRBT"></i>
+            <span class="labelUserDemoDD">{{'NCPLabel.profile' | translate}}</span>
+          </a>
+        </li>
+
+        <li (click)="userBoxFlag = 'false';openFAQ()" class="dropdownMenuList">
+          <a class="dropdownMenuListLink">
+            <i class="fa fa-info-circle iconUserDemoDD hiddenInRBT"></i>
+            <span class="labelUserDemoDD">{{'NCPLabel.portalUserGuide' | translate}}</span>
+          </a>
+        </li>
+        <li *ngIf="enableScreenConfigurator" (click)="userBoxFlag = 'false';openScreenConfigurator()" class="dropdownMenuList">
+          <a class="dropdownMenuListLink">
+            <i class="fa fa-info-circle iconUserDemoDD hiddenInRBT"></i>
+            <span class="labelUserDemoDD">{{'NCPLabel.screenConfigurator' | translate}}</span>
+          </a>
+        </li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<ncp-modal #notificationModal id="notificationOverlay" [closeOnOutsideClick]=false modalClass="modal-md" class="modalForm"
+  [class.visible]="mobileviewFlag === true" [closeOnEscape]="false" [hideCloseButton]="true" modalTitle="NCPLabel.notifications"
+  titleIcon="fa fa-bell">
+
+  <modal-content>
+
+    <ul>
+
+      <div *ngIf="latestTaskNotificationArray.length < 1 && latestEventNotificationArray.length < 1 && latestNotificationArray.length < 1" class="noNotificationBox">
+        <span>
+          <i class="fa fa-frown-o"></i>
+        </span>
+        <span>{{'NCPLabel.youDontHaveAnyNotificationsRightNow' | translate}}</span>
+      </div>
+      <li *ngFor="let notification of latestTaskNotificationArray;let i=index">
+        <div *ngIf="notification">
+          <span class="labelDisplay">{{notification?.title}}</span>
+          <span>is ending by </span>
+          <span class="labelDisplay">{{notification?.endDate}}</span>
+        </div>
+      </li>
+      <li *ngFor="let notification of latestEventNotificationArray;let i=index">
+        <div *ngIf="notification">
+          <span>EventID </span>
+          <span class="labelDisplay">{{notification?.taskID}}</span>
+          <span>is starting from </span>
+          <span class="labelDisplay">{{notification?.startDate}}</span>
+          <span>to </span>
+          <span class="labelDisplay">{{notification?.endDate}}</span>
+        </div>
+      </li>
+      <li *ngFor="let notification of latestNotificationArray;let i=index" class="notificationList" [ngClass]="{'checkedNotification': !notification.hasNotificationViewed}" >
+
+        <div [class.deleteNotification]="deleteFlag === notification.id" [class.showNotification]="deleteFlag !== notification.id">
+          <div class="row m0">
+            <div [ngClass]="notification.showDeletebtn ?'col-md-11 col-lg-11 col-sm-11 col-xs-10 notifDateContainer notifDateAlignRTL' : 'col-md-12 col-lg-12 col-sm-12 col-xs-12 notifDateContainer notifDateAlignRTL'" (click)="viewNotification(notification);notification.notificationType !== 'PAY' ? notificationModal.close() :''">
+              <div class="notifdate">
+                <i class="fa fa-calendar iconLabel"></i>
+                <span class="labelDisplay">{{notification.displayTime}}</span>
+              </div>
+              <div class="notifTitle">
+                <span class="labelDisplay">{{notification.title}}</span>
+              </div>
+            </div>
+            <div *ngIf="notification.showDeletebtn" class="col-md-1 col-lg-1 col-sm-1 col-xs-2 notifDateIconContainer" id="delete-click" (click)="deleteNotification(notification)">
+              <i class="notifDateIcon fa fa-trash"></i>
+            </div>
+          </div>
+        </div>
+        <div *ngIf="deleteFlag === notification.id" class="deleteContentBox">
+          <div class="row">
+            <div class="col-md-12 col-lg-12 col-sm-12 col-xs-12 p0">
+              <i class="fa fa-bell iconLabel"></i>
+              <span class="labelDisplay">{{'NCPLabel.notificationDeleted' | translate}}</span>
+            </div>
+          </div>
+          <div class="btnContainer">
+            <div class="col-md-2 col-sm-2 col-xs-3 p0">
+              <button-field buttonType="custom" buttonClass="customBtn" buttonName="NCPLabel.undo" iconClass="fa fa-undo" id="undo-confirm"
+                (click)="clickUndo(notification)"></button-field>
+            </div>
+            <div class="col-md-2 col-sm-2 col-xs-3 p0">
+              <button-field buttonType="custom" buttonClass="customBtn" buttonName="NCPLabel.ok" iconClass="fa fa-check" id="ok-confirm"
+                (click)="confirmDelete(notification)"></button-field>
+            </div>
+          </div>
+        </div>
+
+      </li>
+    </ul>
+  </modal-content>
+  <modal-footer>
+
+    <div class="btns-row">
+      <button-field buttonClass="ncp-linkBtn" buttonType="custom" (click)="notificationModal.close();closeNotification()" iconClass="fa fa-external-link-square" buttonName="NCPBtn.close"></button-field>
+      <button-field buttonClass="ncpbtn-default" buttonType="custom" (click)="notificationModal.close();showAllNotification()" iconClass="fa fa-external-link-square"
+        buttonName="NCPBtn.viewAllNotification"></button-field>
+    </div>
+  </modal-footer>
+</ncp-modal>

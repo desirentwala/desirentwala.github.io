@@ -1,0 +1,73 @@
+<div class="">
+  <div class="card-header">
+    <ul class="nav nav-justified">
+      <li [class.hide]="!doShowStepTitles" class="nav-item" *ngFor="let step of steps" [ngClass]="{'active': step.isActive, 'enabled': !step.isDisabled, 'disabled': step.isDisabled, 'completed': isCompleted}">
+        <a *ngIf="hasClickableStepTitles" (click)="goToStep(step)"></a>
+      </li>
+
+    </ul>
+    <div [class.hide]="!doShowProgressBar" class="progress">
+      <div [class.firstStepOfProgressbar]="!hasPrevStep" class="progress-bar progress-bar-striped" role="progressbar" [style.width]="this.progressValue + '%'"
+        aria-valuemin="0" aria-valuemax="100"></div>
+      <div class="transparentUpperLayer"></div>
+    </div>
+  </div>
+  <div class="topNavigatorContainer" [class.hide]="isCompleted" *ngIf="!navButtonPosition || navButtonPosition === 'top'">
+    <div *ngIf="helpBtnImageSrc" class="bottomHelpBtnPVT">
+      <button class="help-btn icon-btn">
+        <misc-img class="img-responsive" aria-hidden="true" [src]="helpBtnImageSrc"></misc-img>
+      </button>
+    </div>
+    <div class="topPreviousButton" *ngIf="!prevButtonTemplate && (navButtonPosition || ( !navButtonPosition && prevButtonPosition === 'top'))">
+      <i *ngIf="!prevBtnNavigatorImageSrc" class="fa fa-angle-left prevNavigator" (click)="previous()" aria-hidden="true" [class.hide]="!hasPrevStep || !activeStep.showPrev"></i>
+      <misc-img *ngIf="prevBtnNavigatorImageSrc" class="img-responsive prevNavigator" [src]="prevBtnNavigatorImageSrc" [class.hide]="!hasPrevStep || !activeStep.showPrev"
+        (click)="previous()"></misc-img>
+    </div>
+    <div class="topNextButton" *ngIf="!nextButtonTemplate && (navButtonPosition || ( !navButtonPosition && nextButtonPosition === 'top'))">
+      <button [class.hide]="!hasNextStep || !activeStep.showNext" (click)="next()" class="nextNavigator ncp-btn" [disabled]="!activeStep.isValid">
+        <span class="labelButton">{{activeStep.nextStepButtonName | translate}}</span>
+        <i class="fa fa-angle-right" aria-hidden="true"></i>
+      </button>
+      <button *ngIf="utils.config.getCustom('editorMode') && !activeStep.showNext" (click)="next()" class="nextNavigator ncp-btn"
+        [disabled]="!activeStep.isValid">
+        <span class="labelButton">{{activeStep.nextStepButtonName | translate}}</span>
+        <i class="fa fa-angle-right" aria-hidden="true"></i>
+      </button>
+
+    </div>
+    <button *ngIf="doShowCompleteBtn" type="button" class="btn btn-secondary pull-right" (click)="complete()" [disabled]="!activeStep.isValid"
+      [hidden]="hasNextStep">Done</button>
+  </div>
+  <div class="navigatorContainer">
+    <div class="contentCenter">
+      <ng-content></ng-content>
+    </div>
+
+  </div>
+  <div class="row bottomNavigatorContainerPVT" *ngIf="!navButtonPosition || navButtonPosition === 'bottom'" [class.hide]="isCompleted">
+    <div *ngIf="helpBtnImageSrc" class="bottomHelpBtnPVT">
+      <button class="help-btn icon-btn">
+        <misc-img class="img-responsive" aria-hidden="true" [src]="helpBtnImageSrc"></misc-img>
+      </button>
+    </div>
+    <div class="bottomPreviousBtnPVT" *ngIf="!prevButtonTemplate  && (navButtonPosition || ( !navButtonPosition && prevButtonPosition === 'bottom'))"
+      [class.hide]="!hasPrevStep || !activeStep.showPrev">
+      <i *ngIf="!prevBtnNavigatorImageSrc" class="fa fa-angle-left prevNavigator" (click)="previous()" aria-hidden="true"></i>
+      <misc-img *ngIf="prevBtnNavigatorImageSrc" class="img-responsive prevNavigator" [src]="prevBtnNavigatorImageSrc" (click)="previous()"></misc-img>
+    </div>
+    <div class="bottomNextBtnPVT p0" *ngIf="!nextButtonTemplate  && (navButtonPosition || ( !navButtonPosition && nextButtonPosition === 'bottom'))">
+      <button [class.hide]="!hasNextStep || !activeStep.showNext" (click)="next()" class="nextNavigator ncp-btn" [disabled]="!activeStep.isValid">
+        <span class="labelButton">{{activeStep.nextStepButtonName | translate}}</span>
+        <i class="fa fa-angle-right" aria-hidden="true"></i>
+      </button>
+      <button *ngIf="utils.config.getCustom('editorMode') && !activeStep.showNext" (click)="next()" class="nextNavigator ncp-btn"
+        [disabled]="!activeStep.isValid">
+        <span class="labelButton">{{activeStep.nextStepButtonName | translate}}</span>
+        <i class="fa fa-angle-right" aria-hidden="true"></i>
+      </button>
+
+    </div>
+    <button *ngIf="doShowCompleteBtn" type="button" class="btn btn-secondary pull-right" (click)="complete()" [disabled]="!activeStep.isValid"
+      [hidden]="hasNextStep">Done</button>
+  </div>
+</div>

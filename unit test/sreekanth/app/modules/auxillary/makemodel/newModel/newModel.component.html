@@ -1,0 +1,57 @@
+<div [formGroup]="modelFormGroup" class="customer-border">
+    <div *ngIf="isError" class="alert alert-danger">
+        <ul *ngFor="let error of errors">
+            <li>
+                {{error.errCode}} - {{error.errDesc}}
+            </li>
+        </ul>
+    </div>
+    <model-form [modelFormGroup]="modelFormGroup" (doClick)="addModelCreation()">
+        </model-form>
+
+    <ncp-modal [modalKey]="isAddModelModal" modalTitle="NCPModalTitle.addModel" modalClass="modal-lg"
+            [closeOnEscape]="false" hideCloseButton="true" [closeOnOutsideClick]="false">
+            <modal-content>
+                <div class="row">
+                    <span> {{'NCPLabel.modelCode' | translate}} {{this.modelFormGroup.get('modelCode').value}} {{'NCPLabel.hasbeencreatedsuccessfully' | translate}}</span>
+                </div>
+            </modal-content>
+
+            <modal-footer>
+                <div class="col-md-3 col-sm-3 col-xs-4 pull-right pl-md-0 mb20">
+                    <button-field buttonClass="ncp-linkBtn" buttonType="custom" (click)="isAddModelModal = false; navigateList()" buttonName="NCPBtn.close" iconClass="fa fa-close"></button-field>
+                </div>
+            </modal-footer>
+        </ncp-modal>
+    <!-- <div class="row rowWithNoMarginBottom">
+        <tab-error [displayFlag]="isCustomer" errorMessage="NCPErrorMessage.pleaseCorrectErrorsBelow">
+        </tab-error>
+        <div class="row">
+            <ncp-label elementLabel="NCPLabel.make" elementId="make" mandatoryFlag="true"></ncp-label>
+            <drop-down elementId="make" formControlName="makeCode" miscType="MotorMake"
+                pickListFlag=true displayCodeAndDesc=true [isCodeDesc]=true ngDefaultControl displayOnClick=true
+                elementLabel="NCPLabel.make" [descControl]="modelFormGroup.controls['makeCodeDesc']" mandatoryFlag="true">
+            </drop-down>
+        </div>
+        <div class="row">
+            <ncp-label elementLabel="NCPLabel.modelCode" elementId="modelCode" mandatoryFlag="true">
+            </ncp-label>
+            <text-box formControlName="modelCode" ngDefaultControl acceptPattern="[A-Za-z0-9_]" maxLength="4"
+                elementLabel="NCPLabel.modelCode">
+            </text-box>
+        </div>
+
+        <div class="row">
+            <ncp-label elementLabel="NCPLabel.modelCodeDescription" elementId="modelCodeDescription"
+                mandatoryFlag="true">
+            </ncp-label>
+            <text-box formControlName="modelCodeDesc" ngDefaultControl maxLength="256"
+                elementLabel="NCPLabel.modelCodeDescription">
+            </text-box>
+        </div>
+        <div class="btns-row">
+            <button-field buttonType="custom" buttonName="NCPBtn.add" buttonClass="ncpbtn-default w100p"
+                (click)='addModelCreation()' iconClass="fa fa-plus"></button-field>
+        </div>
+        
+    </div> -->

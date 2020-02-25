@@ -1,0 +1,207 @@
+@import "../../../theme/variables.scss";
+
+input[type="file"] {
+  display: none;
+}
+
+.container {
+  margin-top: 5.48rem;
+  width: 12rem;
+  height: 12rem;
+  border: 1px solid var(--ion-color-medium-tint);
+  position: relative;
+  border-radius: 5px;
+  padding-right: 0px !important;
+  padding-left: 0px !important;
+  text-align: -webkit-center !important;
+}
+.image {
+  opacity: 1;
+  display: block;
+  width: 100%;
+  height: 100%;
+  -webkit-transition: 0.5s ease;
+  transition: 0.5s ease;
+  -webkit-backface-visibility: hidden;
+  backface-visibility: hidden;
+  border-radius: 4px;
+}
+.input-image {
+  width: 12.5rem !important;
+  height: 12.5rem !important;
+}
+.upload-image>ion-icon {
+  font-size: var(--size-icon-40);
+  cursor: var(--cursor);
+}
+.middle {
+  transition: 0.5s ease;
+  opacity: 0;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  -ms-transform: translate(-50%, -50%);
+  text-align: center;
+}
+.active {
+  background: var(--ion-color-secondary);
+  color: var(--white-background);
+}
+.more-icon {
+  font-size: var(--size-icon-20);
+}
+.text {
+  color: #000;
+  font-size: 26px;
+}
+.text>label>i {
+  cursor: pointer;
+}
+.add-vet-card {
+  box-shadow: 0px 0px 5px #888888;
+}
+@media (max-width: 768px) {
+  .add-vet-card {
+    width: 100%;
+    margin: 30px;
+    position: relative;
+    top: -5vh;
+    background: var(--white-background);
+  }
+  .image-desktop {
+    display: none;
+  }
+  .image-mobile {
+    display: block;
+    height: 30vh;
+  }
+}
+@media (min-width: 768px) {
+  .image-desktop {
+    display: none;
+  }
+  .image-mobile {
+    display: block;
+    height: 30vh;
+  }
+  .add-vet-card {
+    width: 100%;
+    margin: 0px;
+    position: relative;
+    top: -5vh;
+    background: var(--white-background);
+    height: 100%;
+    overflow: auto;
+  }
+}
+@media (max-width: 1024px) {
+  .image-desktop {
+    display: none;
+  }
+  .image-mobile {
+    display: block;
+    height: 30vh;
+  }
+  .add-vet-card {
+    width: 100%;
+    margin: auto;
+    position: relative;
+    top: -5vh;
+    background: var(--white-background);
+  }
+  .image-mobile>img {
+    height: 35vh;
+    width: 100vw;
+  }
+}
+.select-dropdown {
+  border: 1px solid #dde1e6 !important;
+  background: var(--white-background) !important;
+  padding: 7px !important;
+}
+.create-btn {
+  width: 25%;
+}
+.showMore-card {
+  width: 2vw;
+  height: 16vh;
+  cursor: var(--cursor);
+}
+.showMore-card>ion-icon {
+  font-size: 30px;
+  padding-top: 2rem;
+  cursor: var(--cursor);
+}
+.toggle-align {
+  padding: var(--size-p2) var(--size-pr1);
+}
+.active {
+  background: var(--ion-color-secondary);
+}
+.active>img {
+  color: var(--white-background);
+}
+.species-card {
+  cursor: pointer;
+}
+
+// .navigation-card {
+//   width: 2rem;
+//   height: 7rem;
+// }
+// .iconSize {
+//   font-size: 1.5rem;
+// }
+// @media (min-width: 769px) {
+//   .species-card {
+//     width: 7rem !important;
+//     height: 7rem;
+//     & ion-card-content {
+//       padding-top: 3.3rem;
+//     }
+//   }
+//   .navigation-card {
+//     cursor: pointer;
+//     width: 2rem;
+//     height: 6.8rem;
+
+//     & ion-icon {
+//       font-size: 30px;
+//       margin-top: 5vh;
+//     }
+//   }
+// }
+// @media (width: 768px) {
+//   .species-card {
+//     width: 5rem !important;
+//     height: 7rem;
+//     & ion-card-content {
+//       padding-top: 3rem;
+//     }
+//   }
+//   .navigation-card>ion-icon {
+//     cursor: pointer;
+//     font-size: 30px;
+//     margin-top: 4vh;
+//   }
+// }
+// @media (width: 1024px) {
+//   .navigation-card>ion-icon {
+//     cursor: pointer;
+//     font-size: 30px;
+//     margin-top: 3vh;
+//   }
+// }
+.tick-icon {
+  float: left !important;
+  padding: 12px;
+  font-size: 20px;
+}
+
+.headers{
+  font-weight: bold;
+}
+.practiceName{
+  padding-top: 0px !important;
+}

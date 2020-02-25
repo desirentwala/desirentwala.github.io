@@ -1,0 +1,39 @@
+<div class="customer-border pt0">
+	<ul class="row radio-btn">
+		<li class="col-xs-12 col-sm-12 col-md-12 bb1 p0">
+			<div class="col-xs-12 col-sm-12 col-md-12 mtb10">	
+				<label class="text-left ">  
+					<input type="radio" id="1" name="carsList" value=""> 
+					<span class="fake-input"></span>
+					<span class="fake-label d-inline" for="1">{{'NCPLabel.myCarIsNotListed' | translate}}</span>
+				</label>
+			</div>
+		</li>
+		<li class="col-xs-12 col-sm-12 col-md-12 bb1 p0">
+			<div class="col-md-6 col-sm-6 col-xs-12 br1 mtb10 b-xs-0">	
+				<label class="text-left ">  
+					<input type="radio" id="2" name="carsList" value=""> 
+					<span class="fake-input"></span>
+					<span class="fake-label d-inline" for="2">2016 Audi A4 1.4 TDI TRONIC 89 4 DOOR SEDAN</span>
+				</label>
+			</div>
+			<div class="col-md-3 col-sm-3 col-xs-12 pr0 pr-xs-15 br1 mtb10 b-xs-0">
+				<label class="h-xs-30 h54 va-sup pt-xs-0 pb-xs-0">DT4 2.0 Litre Diesel</label>
+			</div>
+			<div class="col-md-3 col-sm-3 col-xs-12 pr0 pr-xs-15 mtb10">
+				<label class="h-xs-30 h54 va-sup pt-xs-0 pb-xs-0">7 Speed Auto Dual Calc</label>
+			</div>
+		</li>
+	</ul>
+</div>
+
+<div *ngIf="tooltipTitle" class="col-sm-1 col-md-1 col-xs-1  tooltip-align tooltip-mobile3">
+<button *ngIf="tooltipTitle" type="button" class="btn btn-link info-tooltip" data-toggle="toggle" [tooltipPlacement]="tooltipPlacement"
+            [tooltip]="tooltipHTML" [id]="elementId">
+			<i class="icon-tooltip" [id]="elementId"></i>
+            <tooltip-content #tooltipHTML [excludeId]="elementId">
+                    <div [innerHTML]="tooltipTitle"> </div>
+            	</tooltip-content>
+            </button>
+
+</div>

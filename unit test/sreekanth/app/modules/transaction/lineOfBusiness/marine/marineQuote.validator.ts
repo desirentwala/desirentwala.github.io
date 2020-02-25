@@ -1,0 +1,153 @@
+import { FormGroup, Validators } from '@angular/forms';
+import { EmailIdvalidators } from '../../../../core/ui-components/validators/emailid/emailid.validator';
+import { MaxSizeValidator } from '../../../../core/ui-components/validators/maxsize/maxsize.validator';
+import { MinNumberValidator } from '../../../../core/ui-components/validators/minnumber/minnumber.validator';
+
+export class MarineQuoteValidator {
+
+    marineQuoteFormGroup: FormGroup;
+    setMarineQuoteValidatorBasicDetails(marineQuoteForm: FormGroup) {
+        this.marineQuoteFormGroup = marineQuoteForm;
+        this.marineQuoteFormGroup.controls['policyInfo'].get('inceptionDt').setValidators(Validators.compose([Validators.required]));
+        this.marineQuoteFormGroup.controls['policyInfo'].get('inceptionDt').updateValueAndValidity();
+        this.marineQuoteFormGroup.controls['policyInfo'].get('expiryDt').setValidators(Validators.compose([Validators.required]));
+        this.marineQuoteFormGroup.controls['policyInfo'].get('expiryDt').updateValueAndValidity();
+        this.marineQuoteFormGroup.controls['policyInfo'].get('proposalDate').setValidators(Validators.compose([Validators.required]));
+        this.marineQuoteFormGroup.controls['policyInfo'].get('proposalDate').updateValueAndValidity();
+        this.marineQuoteFormGroup.controls['policyInfo'].get('effectiveDt').setValidators(Validators.compose([Validators.required]));
+        this.marineQuoteFormGroup.controls['policyInfo'].get('effectiveDt').updateValueAndValidity();
+        this.marineQuoteFormGroup.controls['policyInfo'].get('policyTerm').setValidators(Validators.compose([Validators.required]));
+        this.marineQuoteFormGroup.controls['policyInfo'].get('policyTerm').updateValueAndValidity();
+        this.marineQuoteFormGroup.controls['policyInfo'].get('siCurr').setValidators(Validators.compose([Validators.required]));
+        this.marineQuoteFormGroup.controls['policyInfo'].get('siCurr').updateValueAndValidity();
+        this.marineQuoteFormGroup.controls['policyInfo'].get('siCurrRt').setValidators(Validators.compose([Validators.required]));
+        this.marineQuoteFormGroup.controls['policyInfo'].get('siCurrRt').updateValueAndValidity();
+        this.marineQuoteFormGroup.controls['policyInfo'].get('PremCurr').setValidators(Validators.compose([Validators.required]));
+        this.marineQuoteFormGroup.controls['policyInfo'].get('PremCurr').updateValueAndValidity();
+        this.marineQuoteFormGroup.controls['policyInfo'].get('PremCurrRt').setValidators(Validators.compose([Validators.required]));
+        this.marineQuoteFormGroup.controls['policyInfo'].get('PremCurrRt').updateValueAndValidity();
+        return this.marineQuoteFormGroup;
+    }
+
+    setMarineQuoteCustomerInfoValidator(FHQuoteForm: FormGroup) {
+        this.marineQuoteFormGroup = FHQuoteForm;
+        this.marineQuoteFormGroup.controls['customerInfo'].get('zipCd').setValidators(Validators.compose([Validators.required]));
+        this.marineQuoteFormGroup.controls['customerInfo'].get('zipCd').updateValueAndValidity();
+        this.marineQuoteFormGroup.controls['customerInfo'].get('appUnitNumber').setValidators(Validators.compose([Validators.required]));
+        this.marineQuoteFormGroup.controls['customerInfo'].get('appUnitNumber').updateValueAndValidity();
+        this.marineQuoteFormGroup.controls['customerInfo'].get('blockNumber').setValidators(Validators.required);
+        this.marineQuoteFormGroup.controls['customerInfo'].get('blockNumber').updateValueAndValidity();
+        this.marineQuoteFormGroup.controls['customerInfo'].get('cityCode').setValidators(Validators.required);
+        this.marineQuoteFormGroup.controls['customerInfo'].get('cityCode').updateValueAndValidity();
+        this.marineQuoteFormGroup.controls['customerInfo'].get('cityDesc').setValidators(Validators.required);
+        this.marineQuoteFormGroup.controls['customerInfo'].get('cityDesc').updateValueAndValidity();
+        this.marineQuoteFormGroup.controls['customerInfo'].get('state').setValidators(Validators.required);
+        this.marineQuoteFormGroup.controls['customerInfo'].get('state').updateValueAndValidity();
+        this.marineQuoteFormGroup.controls['customerInfo'].get('stateDesc').setValidators(Validators.required);
+        this.marineQuoteFormGroup.controls['customerInfo'].get('stateDesc').updateValueAndValidity();
+        this.marineQuoteFormGroup.controls['customerInfo'].get('countryCode').setValidators(Validators.required);
+        this.marineQuoteFormGroup.controls['customerInfo'].get('countryCode').updateValueAndValidity();
+        this.marineQuoteFormGroup.controls['customerInfo'].get('countryDesc').setValidators(Validators.required);
+        this.marineQuoteFormGroup.controls['customerInfo'].get('countryDesc').updateValueAndValidity();
+        this.marineQuoteFormGroup.controls['customerInfo'].get('DOB').setValidators(Validators.required);
+        this.marineQuoteFormGroup.controls['customerInfo'].get('DOB').updateValueAndValidity();
+        this.marineQuoteFormGroup.controls['customerInfo'].get('mobilePh').setValidators(Validators.compose([MaxSizeValidator.maxSize(14), Validators.required]));
+        this.marineQuoteFormGroup.controls['customerInfo'].get('mobilePh').updateValueAndValidity();
+        this.marineQuoteFormGroup.controls['customerInfo'].get('emailId').setValidators(Validators.compose([EmailIdvalidators.mailFormat, Validators.required]));
+        this.marineQuoteFormGroup.controls['customerInfo'].get('emailId').updateValueAndValidity();
+        if (this.marineQuoteFormGroup.controls['customerInfo'].get('policyHolderType').value === 'O') {
+            this.marineQuoteFormGroup.controls['customerInfo'].get('companyName').setValidators(Validators.compose([Validators.required, MaxSizeValidator.maxSize(30)]));
+            this.marineQuoteFormGroup.controls['customerInfo'].get('companyName').updateValueAndValidity();
+            this.marineQuoteFormGroup.controls['customerInfo'].get('companyRegNumber').setValidators(Validators.compose([Validators.required]));
+            this.marineQuoteFormGroup.controls['customerInfo'].get('companyRegNumber').updateValueAndValidity();
+            this.marineQuoteFormGroup.controls['customerInfo'].get('identityNo').setValidators(null);
+            this.marineQuoteFormGroup.controls['customerInfo'].get('identityNo').setErrors(null);
+            this.marineQuoteFormGroup.controls['customerInfo'].get('identityNo').setValue(null);
+            this.marineQuoteFormGroup.controls['customerInfo'].get('identityNo').updateValueAndValidity();
+            this.marineQuoteFormGroup.controls['customerInfo'].get('prefix').setValidators(null);
+            this.marineQuoteFormGroup.controls['customerInfo'].get('prefix').setErrors(null);
+            this.marineQuoteFormGroup.controls['customerInfo'].get('prefix').setValue(null);
+            this.marineQuoteFormGroup.controls['customerInfo'].get('prefix').updateValueAndValidity();
+            this.marineQuoteFormGroup.controls['customerInfo'].get('appFName').setValidators(null);
+            this.marineQuoteFormGroup.controls['customerInfo'].get('appFName').setErrors(null);
+            this.marineQuoteFormGroup.controls['customerInfo'].get('appFName').setValue(null);
+            this.marineQuoteFormGroup.controls['customerInfo'].get('appFName').updateValueAndValidity();
+            this.marineQuoteFormGroup.controls['customerInfo'].get('appLName').setValidators(null);
+            this.marineQuoteFormGroup.controls['customerInfo'].get('appLName').setErrors(null);
+            this.marineQuoteFormGroup.controls['customerInfo'].get('appLName').setValue(null);
+            this.marineQuoteFormGroup.controls['customerInfo'].get('appLName').updateValueAndValidity();
+            this.marineQuoteFormGroup.controls['customerInfo'].get('gender').setValidators(null);
+            this.marineQuoteFormGroup.controls['customerInfo'].get('gender').setErrors(null);
+            this.marineQuoteFormGroup.controls['customerInfo'].get('gender').setValue(null);
+            this.marineQuoteFormGroup.controls['customerInfo'].get('gender').updateValueAndValidity();
+            this.marineQuoteFormGroup.controls['customerInfo'].get('age').setValidators(null);
+            this.marineQuoteFormGroup.controls['customerInfo'].get('age').setErrors(null);
+            this.marineQuoteFormGroup.controls['customerInfo'].get('age').setValue(null);
+            this.marineQuoteFormGroup.controls['customerInfo'].get('age').updateValueAndValidity();
+        } else {
+            this.marineQuoteFormGroup.controls['customerInfo'].get('companyRegNumber').setValidators(null);
+            this.marineQuoteFormGroup.controls['customerInfo'].get('companyRegNumber').setErrors(null);
+            this.marineQuoteFormGroup.controls['customerInfo'].get('companyRegNumber').setValue(null);
+            this.marineQuoteFormGroup.controls['customerInfo'].get('companyRegNumber').updateValueAndValidity();
+            this.marineQuoteFormGroup.controls['customerInfo'].get('companyName').setValidators(null);
+            this.marineQuoteFormGroup.controls['customerInfo'].get('companyName').setErrors(null);
+            this.marineQuoteFormGroup.controls['customerInfo'].get('companyName').setValue(null);
+            this.marineQuoteFormGroup.controls['customerInfo'].get('companyName').updateValueAndValidity();
+            this.marineQuoteFormGroup.controls['customerInfo'].get('empoyerCode').setValidators(null);
+            this.marineQuoteFormGroup.controls['customerInfo'].get('empoyerCode').setErrors(null);
+            this.marineQuoteFormGroup.controls['customerInfo'].get('empoyerCode').setValue(null);
+            this.marineQuoteFormGroup.controls['customerInfo'].get('empoyerCode').updateValueAndValidity();
+            this.marineQuoteFormGroup.controls['customerInfo'].get('employerCodeDesc').setValidators(null);
+            this.marineQuoteFormGroup.controls['customerInfo'].get('employerCodeDesc').setErrors(null);
+            this.marineQuoteFormGroup.controls['customerInfo'].get('employerCodeDesc').setValue(null);
+            this.marineQuoteFormGroup.controls['customerInfo'].get('employerCodeDesc').updateValueAndValidity();
+            this.marineQuoteFormGroup.controls['customerInfo'].get('household').setValidators(null);
+            this.marineQuoteFormGroup.controls['customerInfo'].get('household').setErrors(null);
+            this.marineQuoteFormGroup.controls['customerInfo'].get('household').setValue(null);
+            this.marineQuoteFormGroup.controls['customerInfo'].get('household').updateValueAndValidity();
+            this.marineQuoteFormGroup.controls['customerInfo'].get('householdDesc').setValidators(null);
+            this.marineQuoteFormGroup.controls['customerInfo'].get('householdDesc').setErrors(null);
+            this.marineQuoteFormGroup.controls['customerInfo'].get('householdDesc').setValue(null);
+            this.marineQuoteFormGroup.controls['customerInfo'].get('householdDesc').updateValueAndValidity();
+            this.marineQuoteFormGroup.controls['customerInfo'].get('prefix').setValidators(Validators.required);
+            this.marineQuoteFormGroup.controls['customerInfo'].get('prefix').updateValueAndValidity();
+            this.marineQuoteFormGroup.controls['customerInfo'].get('appFName').setValidators(Validators.compose([Validators.required, MaxSizeValidator.maxSize(30)]));
+            this.marineQuoteFormGroup.controls['customerInfo'].get('appFName').updateValueAndValidity();
+            this.marineQuoteFormGroup.controls['customerInfo'].get('appLName').setValidators(Validators.compose([Validators.required, MaxSizeValidator.maxSize(30)]));
+            this.marineQuoteFormGroup.controls['customerInfo'].get('appLName').updateValueAndValidity();
+            this.marineQuoteFormGroup.controls['customerInfo'].get('DOB').setValidators(Validators.compose([Validators.required]));
+            this.marineQuoteFormGroup.controls['customerInfo'].get('DOB').updateValueAndValidity();
+            this.marineQuoteFormGroup.controls['customerInfo'].get('age').setValidators(Validators.compose([Validators.required, MinNumberValidator.minNumber(18)]));
+            this.marineQuoteFormGroup.controls['customerInfo'].get('age').updateValueAndValidity();
+            this.marineQuoteFormGroup.controls['customerInfo'].get('identityNo').setValidators(Validators.compose([MaxSizeValidator.maxSize(20), Validators.required]));
+            this.marineQuoteFormGroup.controls['customerInfo'].get('identityNo').updateValueAndValidity();
+        }
+        return this.marineQuoteFormGroup;
+    }
+    clearMarineQuoteCustomerInfoValidator(insuredFormGroup: FormGroup) {
+        this.marineQuoteFormGroup = insuredFormGroup;
+        this.marineQuoteFormGroup.controls['customerInfo'].get('appFName').setValidators(null);
+        this.marineQuoteFormGroup.controls['customerInfo'].get('appFName').updateValueAndValidity();
+        this.marineQuoteFormGroup.controls['customerInfo'].get('appMName').setValidators(null);
+        this.marineQuoteFormGroup.controls['customerInfo'].get('appMName').updateValueAndValidity();
+        this.marineQuoteFormGroup.controls['customerInfo'].get('appLName').setValidators(null);
+        this.marineQuoteFormGroup.controls['customerInfo'].get('appLName').updateValueAndValidity();
+        this.marineQuoteFormGroup.controls['customerInfo'].get('identityNo').setValidators(null);
+        this.marineQuoteFormGroup.controls['customerInfo'].get('identityNo').updateValueAndValidity();
+        this.marineQuoteFormGroup.controls['customerInfo'].get('DOB').setValidators(null);
+        this.marineQuoteFormGroup.controls['customerInfo'].get('DOB').updateValueAndValidity();
+        this.marineQuoteFormGroup.controls['customerInfo'].get('zipCd').setValidators(null);
+        this.marineQuoteFormGroup.controls['customerInfo'].get('zipCd').updateValueAndValidity();
+        this.marineQuoteFormGroup.controls['customerInfo'].get('appUnitNumber').setValidators(null);
+        this.marineQuoteFormGroup.controls['customerInfo'].get('appUnitNumber').updateValueAndValidity();
+        this.marineQuoteFormGroup.controls['customerInfo'].get('blockNumber').setValidators(null);
+        this.marineQuoteFormGroup.controls['customerInfo'].get('blockNumber').updateValueAndValidity();
+        this.marineQuoteFormGroup.controls['customerInfo'].get('mobilePh').setValidators(null);
+        this.marineQuoteFormGroup.controls['customerInfo'].get('mobilePh').updateValueAndValidity();
+        this.marineQuoteFormGroup.controls['customerInfo'].get('emailId').setValidators(null);
+        this.marineQuoteFormGroup.controls['customerInfo'].get('emailId').updateValueAndValidity();
+        this.marineQuoteFormGroup.controls['customerInfo'].clearValidators();
+        this.marineQuoteFormGroup.controls['customerInfo'].updateValueAndValidity();
+        return this.marineQuoteFormGroup;
+    }
+}

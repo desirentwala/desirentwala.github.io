@@ -1,0 +1,6 @@
+export enum LinkType {
+    PRIVATE_SLOT = 'BOOKING_PRIVATE_SLOT',
+    INVITE_VET = 'ONBOARD_VET',
+    INVITE_PO = 'ONBOARD_PO',
+    INVITE_PA = 'ONBOARD_PA'
+};

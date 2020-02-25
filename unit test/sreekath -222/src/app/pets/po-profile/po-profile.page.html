@@ -1,0 +1,91 @@
+<ion-content>
+  <div class="back-card">
+    <div class="mobile-card-align">
+      <div class="row">
+        <!-- <div class="col-12">
+          <img src="./assets/imgs/mobile-logo.png" class="mobile-logo" alt="mobile-logo">
+        </div> -->
+        <div class=" col-md-12 col-sm-12 col-lg-6 content-card ">
+          <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12 desktop-logo">
+            <img class="home-logo" src="./assets/imgs/logo.png" alt="logo">
+          </div>
+          <h1 class="pl-4 text-left page-header">My profile</h1>
+          <hr class="horizontalLine">
+          <h2 class="pl-4 text-left page-header">Personal information</h2>
+          <div *ngIf="currentImage && !isMobile" class="container">
+            <img [src]="currentImage" class="image" alt="pet owner profile">
+            <div class="middle">
+              <div class="text">
+                <label for="userProfile" class="input-file">
+                  <ion-icon name="create"></ion-icon>
+                </label>
+                <input id="userProfile" accept='image/*' type="file" (change)="uploadPicture($event)" />
+              </div>
+            </div>
+          </div>
+          <div *ngIf="currentImage && isMobile" class="container">
+            <img class="image" [src]="currentImage" (click)="selectImage()">
+          </div>
+          <div *ngIf="!currentImage" class="container">
+            <label for="file-input" *ngIf="isMobile" class="input-file">
+              <div class="upload-image text-center p-4" (click)="selectImage()" >
+                <ion-icon name="camera"></ion-icon>
+                <p>Click here to upload photo</p>
+              </div>
+            </label>
+            <div *ngIf="!isMobile">
+              <label for="file-input">
+                <div class="upload-image text-center p-4">
+                  <ion-icon name="camera"></ion-icon>
+                  <p>Click here to upload photo</p>
+                </div>
+              </label>
+              <input id="file-input" accept='image/*' type="file" (change)="uploadPicture($event)" />
+            </div>
+          </div>
+          <!-- </div>
+  
+      <div class=" col-md-12 col-sm-12 col-lg-11 mt-2"> -->
+          <!-- user form profile form  contains the inputs which come from API exhisting users after LOGIN
+              they can edit and change and update their detrails-->
+          <form class="p-4" name="form" (ngSubmit)="updateProfile()" #userForm="ngForm" novalidate>
+            <div *ngIf="data">
+              <label position="stacked">Full name</label><i class="fas fa-asterisk form-asterisk"></i>
+              <input class="form-control pl-1" #firstNames="ngModel" name="firstName" type="text"
+                [(ngModel)]="data.firstName" [readonly]="readFormValue" required />
+              <div class="text-danger" *ngIf="firstNames.invalid && (firstNames.dirty || firstNames.touched)">
+                <small class="inline" *ngIf="firstNames.errors.required">Full name required.</small>
+              </div>
+
+              <label position="stacked">Email address</label><i class="fas fa-asterisk form-asterisk"></i>
+              <input class="form-control pl-1" #email="ngModel" name="email" type="text" [(ngModel)]="data.email"
+                readonly pattern="^(?!.*\.{2})[a-zA-Z0-9.-_]{1,64}@[a-zA-Z.-]{2,}[.]{1}[a-zA-Z]{2,}" required />
+              <!-- <div class="text-danger" *ngIf="email.invalid && (email.dirty || email.touched)">
+            <small class="inline" *ngIf="email.errors.pattern">Invalid Email Address.</small>
+            <small class="inline" *ngIf="email.errors.required">Eamil Address required.</small>
+          </div> -->
+
+              <label position="stacked">Phone no.</label><i class="fas fa-asterisk form-asterisk"></i>
+              <input class="form-control pl-1" #mobile="ngModel" name="mobile" type="text" [(ngModel)]="data.mobile"
+                minlength="10" maxlength="11" numbersOnly readonly required />
+              <!-- <div class="text-danger" *ngIf="mobile.invalid && (mobile.dirty || mobile.touched)">
+            <small class="inline" *ngIf="mobile.errors.required">Mobile Number required.</small>
+          </div> -->
+            </div>
+
+            <div class="row text-center p-2">
+              <ion-button class="create-btn editButon" expand="block" color="primary" (click)="editProfileEnable()">
+                Edit
+              </ion-button>
+              <ion-button class="create-btn editButon" expand="block" color="primary"
+                [disabled]="!(userForm.valid && isNameChanged)" (click)="updateProfile()">
+                Save
+              </ion-button>
+            </div>
+          </form>
+          <!-- form got ended-->
+        </div>
+      </div>
+    </div>
+  </div>
+</ion-content>

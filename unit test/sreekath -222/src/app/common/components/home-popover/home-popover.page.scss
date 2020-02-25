@@ -1,0 +1,23 @@
+@import '../../../../theme/variables.scss';
+
+.pop-img {
+    width: 1.7rem !important;
+    height: 1.5rem !important;
+    margin: auto;
+    border-radius: 30% !important;
+}
+
+.pop-text {
+    font-family: var(--ion-header-font);
+    font-size: 15px;
+    color: var(--ion-color-primary);
+}
+
+.active:hover {
+    background-color: #e5f2f7;
+}
+@media only screen and (max-device-width: 1024px) and (-webkit-min-device-pixel-ratio: 1) {
+    .pop-text {
+        font-size: 12px;
+    }
+}

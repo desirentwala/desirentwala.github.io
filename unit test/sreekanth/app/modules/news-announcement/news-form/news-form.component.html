@@ -1,0 +1,61 @@
+<div class="steps-section">
+    <div [formGroup]="newsFormGroup">
+        <modal-header class="d-block">
+            <div class="row">
+                <div class="col-md-11 col-sm-10 col-xs-10">
+                    <!--<h2><i class="fa fa-newspaper-o iconHeader"></i><span class="labelHeader">{{'NCPLabel.newsCreation'|translate}}</span></h2>-->
+                    <misc-h2 iconClass="fa fa-newspaper-o" [label]="label"></misc-h2>
+                </div>
+            </div>
+        </modal-header>
+        <tab-error [displayFlag]="mandatoryErrorFlag" errorMessage="NCPErrorMessage.PleaseFillTheMandatoryDetails">
+        </tab-error>
+            <div class="row">
+                <ncp-label elementLabel="NCPLabel.newsTitle" mandatoryFlag="true"></ncp-label>
+
+                <text-box [inputType]="text" formControlName=newsTitle elementLabel="NCPLabel.newsTitle" mandatoryFlag="true">
+                </text-box>
+                <error-handler [elementControl]="newsFormGroup.controls['newsTitle']">
+                </error-handler>
+            </div>
+            <div class="row">
+                <ncp-label elementLabel="NCPLabel.newsType" mandatoryFlag="true"></ncp-label>
+                <drop-down elementId="dropElementNewsType" placeHolder="NCPLabel.pleaseSelectType" [dropdownItems]="newsType" formControlName="newsTypeCode" isCodeDesc="true" [descControl]="newsFormGroup.controls['newsType']" displayOnClick="true" elementLabel="NCPLabel.newsType"></drop-down>
+                <error-handler [elementControl]="newsFormGroup.controls['newsType']">
+                </error-handler>
+            </div>
+            <div class="row">
+
+                <ncp-label elementLabel="NCPLabel.date" mandatoryFlag="true"></ncp-label>
+                    <ncp-date-picker [options]="NCPDatePickerNormalOptions" formControlName="creationDate" customFlag=true datepickerClass="col-xs-6 col-sm-3 col-md-2 pr0" ngDefaultControl elementLabel="NCPLabel.date" mandatoryFlag="true"> </ncp-date-picker>
+                    <error-handler [elementControl]="newsFormGroup.controls['creationDate']">
+                    </error-handler>
+            </div>
+            <div class="row">
+                <ncp-label elementLabel="NCPLabel.startDate" mandatoryFlag="true"></ncp-label>
+                <ncp-date-picker [options]="NCPDatePickerNormalOptions" customFlag=true datepickerClass="col-sm-3 col-md-2 col-xs-6 pr0" formControlName="startDate" ngDefaultControl elementLabel="NCPLabel.startDate" mandatoryFlag="true"> </ncp-date-picker>
+            </div>
+            <error-handler [elementControl]="newsFormGroup.controls['startDate']"> </error-handler>
+            <div class="row">
+                <ncp-label elementLabel="NCPLabel.endDate" mandatoryFlag="true"></ncp-label>
+                <ncp-date-picker [options]="NCPDatePickerNormalOptions" customFlag=true datepickerClass="col-sm-3 col-md-2 col-xs-6 pr0" formControlName="endDate" ngDefaultControl elementLabel="NCPLabel.endDate" mandatoryFlag="true"> </ncp-date-picker>
+            </div>
+            <error-handler [elementControl]="newsFormGroup.controls['endDate']"> </error-handler>
+            <div class="row">
+                <ncp-label elementLabel="NCPLabel.description" mandatoryFlag="true"></ncp-label>
+                <div [ngClass]="readOnlyFlag ? 'notAllowed' :' '" class="newsEditorBlock col-md-8 col-sm-8 col-xs-12 pr0">
+                    <ckeditor class="w100p" formControlName=newsDetails placeHolder='Type news Description here' textAreaRow="4" textAreaCol="6">
+                    </ckeditor>
+                    <div *ngIf="readOnlyFlag" [ngClass]="'showNotAllowed'"></div>
+                </div>
+                <error-handler [elementControl]="newsFormGroup.controls['newsDetails']">
+                </error-handler>
+            </div>
+    </div>
+<modal-footer>
+    <div class="btns-row">
+        <button-field (click)="doAction($event)" buttonType="custom" [iconClass]="iconClass" buttonClass="btn btn-primary pull-right w100p"
+            [buttonName]="buttonName"></button-field>
+    </div>
+</modal-footer>
+</div>

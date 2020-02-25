@@ -1,0 +1,39 @@
+<div class="filterac">
+	<div *ngIf="!hasCustomProperties">
+		<table class="sortable-theme-bootstrap">
+			<thead>
+				<tr>
+					<th *ngFor="let header of headerList">
+						<span class="labelHeader">{{header | translate}}</span>
+					</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr *ngFor="let object of tableData">
+					<td *ngFor="let mapping of mappingList">
+						{{object[mapping] | translate}}
+					</td>
+				</tr>
+			</tbody>
+		</table>
+	</div>
+	<div *ngIf="hasCustomProperties">
+		<table class="sortable-theme-bootstrap">
+			<thead>
+				<tr>
+					<th *ngFor="let header of headerList">
+						<span class="labelHeader">{{header | translate}}</span>
+					</th>
+				</tr>
+			</thead>
+			<tbody *ngFor="let tableObject of tableData">
+				<td [attr.colspan]="colspan">{{tableObject.name}}</td>
+				<tr *ngFor="let mapping of mappingList">
+					<td *ngFor="let object of tableObject[mapping]">
+						{{object | translate}}
+					</td>
+				</tr>
+			</tbody>
+		</table>
+	</div>
+</div>

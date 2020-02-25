@@ -1,0 +1,42 @@
+<ion-content>
+  <div class="back-card">
+    <div class="row mobile-card-align">
+      <!-- <div class="col-12">
+        <img src="../../../assets/imgs/mobile-logo.png" class="mobile-logo" alt="mobile-logo">
+      </div> -->
+      <div class="col-lg-6 col-md-12 col-sm-12 col-xs-12 content-card">
+        <!-- <ion-toolbar> -->
+          <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12 desktop-logo">
+            <img class="home-logo" src="./assets/imgs/logo.png" alt="logo">
+          </div>
+
+        <!-- </ion-toolbar> -->
+        <ion-item>
+          <h1 class="text-left page-header">Home page</h1>
+        </ion-item>
+        <ion-row *ngIf="petCount === 0" class="pt-4">
+          <div class="row">
+            <div class="col-12">
+              <ion-text>
+                <h3 class="header">Thank you for registering.</h3>
+              </ion-text>
+            </div>
+            <div class="col-12">
+              <ion-text>
+                <ion-label class="ml-3">Now let's add your pet details... </ion-label><br>
+              </ion-text>
+            </div>
+          </div>
+          <ion-col size="6" size-lg="6" size-md="6" size-sm="12" size-xs="12">
+            <ion-item lines="none">
+              <ion-text class="btn-next cursor" routerLink="/pets/new">
+                <ion-icon name="add" class="btn-add btn-action-m"></ion-icon>Add pet
+              </ion-text>
+            </ion-item>
+          </ion-col>
+        </ion-row>
+        <app-appointment-card *ngIf="isAppointments || petCount === 0" [appointments]="appointments"></app-appointment-card>
+      </div>
+    </div>
+  </div>
+</ion-content>

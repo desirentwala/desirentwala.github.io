@@ -1,0 +1,44 @@
+@import "../../../theme/variables.scss";
+
+.lock-icon {
+  font-size: var(--size-icon-80);
+  padding: 10px;
+}
+.otp-input {
+  text-align: center;
+}
+.resend-otp {
+  text-decoration: underline;
+}
+.otp-card {
+  -webkit-margin-start: 5% !important;
+  width: calc(95% - 5%) !important;
+}
+@media (min-width: 1033px) {
+  .otp-card {
+    -webkit-margin-start: 33% !important;
+    width: calc(100% - 65%) !important;
+  }
+}
+
+.signUpLogo {
+  img {
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    width: 50%;
+  }
+}
+
+// .sign-up-for-free{
+//   font-size: 26px;
+//   color: var(--ion-color-medium-shade);
+//   text-align: center;
+//   margin-top: -4px;
+//   margin-bottom: 0px;
+// }
+
+.signupLabel{
+  font-size: 11px;
+  color: cadetblue !important;
+}

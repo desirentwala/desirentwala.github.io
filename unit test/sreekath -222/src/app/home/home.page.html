@@ -1,0 +1,70 @@
+<ion-header>
+  <ion-toolbar class="top-header">
+      <ion-row>
+        <ion-col size="6" class="p-0 text-center">
+          <img class="home-logo-landing" src="./assets/imgs/logo.png" alt="logo">
+        </ion-col>
+        <ion-col size="6" class="p-0 align-self-center">
+          <div class="menu-btn">
+            <p class="auth-btn lg-nav-menu" (click)="settingsPopover($event)">Sign Up</p>
+            <p class="auth-btn lg-nav-menu" routerLink="/auth">Log In</p>
+          </div>
+          <div class="sm-nav-menu menu-btn" id="my-content" main>
+            <ion-buttons slot="end" autoHide="false">
+              <ion-menu-button side="end" autoHide="false"></ion-menu-button>
+            </ion-buttons>
+          </div>
+        </ion-col>
+      </ion-row>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="disable-background">
+  <div class="row">
+    <div class="col-md-6 home-content">
+      <div class="ion-padding ">
+        <h1 class="home-header">Less Stress. More Love.</h1>
+        <ion-label class="label">See your own vet in comfort of your home.</ion-label>
+        <h6 class="download" *ngIf='!isMobile'>Download our app</h6>
+        <ion-row *ngIf='!isMobile'>
+          <ion-img class="appstore" src="./assets/imgs/badge-download-on-the-app-store.png"
+            (click)="gotoMarket('APPLE')"></ion-img>
+          <ion-img class="googleplay ml-3" src="./assets/imgs/GooglePlayStore.svg" (click)="gotoMarket('GOOGLE')">
+          </ion-img>
+        </ion-row>
+      </div>
+    </div>
+  </div>
+</ion-content>
+<!--Home menu-->
+<ion-menu contentId="my-content" side="end" type="overlay">
+  <ion-toolbar class="top-header">
+    <ion-title class="text-right p-3" (click)="eventFromPopover()">x</ion-title>
+  </ion-toolbar>
+  <ion-content style="background: none;" class="home-signup">
+    <ion-label>Log in</ion-label>
+    <ion-list>
+      <ion-item lines="none" class="home-nav-item" (click)="eventFromPopover();navigateRegister('auth')">
+        <ion-col size="2.5">
+          <i class="fal fa-sign-in-alt fa-log"></i>
+        </ion-col>
+        <ion-label>Login</ion-label>
+      </ion-item>
+    </ion-list>
+    <ion-label>Sign up as</ion-label>
+    <ion-list>
+      <ion-item lines="none" class="home-nav-item pb-1" (click)="navigateRegister('PO')">
+        <ion-col size="2.5">
+          <i class="fal fa-dog fa-log"></i>
+        </ion-col>
+        <ion-label>I am a Pet Owner</ion-label>
+      </ion-item>
+      <ion-item lines="none" class="home-nav-item pb-1" (click)="navigateRegister('PA')">
+        <ion-col size="2.5">
+          <i class="fal fa-home-lg-alt fa-log"></i>
+        </ion-col>
+        <ion-label>I am a Practice Admin</ion-label>
+      </ion-item>
+    </ion-list>
+  </ion-content>
+</ion-menu>

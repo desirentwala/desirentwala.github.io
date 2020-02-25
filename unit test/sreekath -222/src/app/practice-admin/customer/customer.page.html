@@ -1,0 +1,20 @@
+<ion-content class="contentbg">
+  <div class="row">
+    <div class="col-lg-1 col-md-0 destop-view"></div>
+    <div class="ipad col-lg-3 col-md-4 bg-list list-height">
+      <div>
+        <img class="home-logo" src="./assets/imgs/logo.png" alt="logo">
+      </div>
+
+      <app-listbar *ngIf="isCustomerData" [data]="model" [flag]="flag" [header]="'All'"
+        (addNewMember)="addNewCustomer($event)" (selectedData)="viewCustomerInfo($event)"></app-listbar>
+    </div>
+    <div *ngIf="isNew" class="col-lg-8 col-md-8 col-sm-8 col-xs-8">
+      <app-invite-user></app-invite-user>
+    </div>
+
+    <div *ngIf="isView" class="col-lg-8 col-md-8 col-sm-12 col-xs-12">
+      <app-view-customer *ngIf="selectedCustomer" [customer]="selectedCustomer" [flag]="flag"></app-view-customer>
+    </div>
+  </div>
+</ion-content>

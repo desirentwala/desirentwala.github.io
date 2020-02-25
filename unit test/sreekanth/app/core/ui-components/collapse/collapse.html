@@ -1,0 +1,32 @@
+<div *ngIf="downArrowFlag === true" class="col-md-5 col-sm-6 col-xs-9 collapseContainer" ngClass="{{alignment==='center' ? 'centerAlignedCollapse col-xs-offset-0 col-md-offset-4 col-sm-offset-4' : ''}}" [class.leftAlignedCollapse]="alignment==='left'" [class.rightAlignedCollapse]="alignment==='right'" class="{{enableAddDelBtn ? 'addDeleteBtnContainer' : ''}}">
+
+        <span class="addselect" (click)="isCollapsed = !isCollapsed;toggle()">
+            <i  [class]="isCollapsed ? 'icon-arrow-d' : 'icon-arrow-d rotate'"></i>
+        </span>
+        <span class="addper" (click)="isCollapsed = !isCollapsed;toggle()">
+            <i ngClass="{{iconClass}} iconCollapse"></i>
+            <span class="labelCollapse">{{heading | translate}} {{displayValues}} </span>
+        </span>
+
+</div>
+<span *ngIf="enableAddDelBtn" class="pull-left collapseBtnAlignRTL">
+    <button class="iconicBtn defaultMarginBottom" (click)="add()">
+        <i class="fa fa-plus"></i>
+    </button>
+    <button *ngIf="disableDelBtn" (click)="deleteCollapse()" class="iconicBtn defaultMarginBottom">
+        <i class="fa fa-trash"></i>
+    </button>
+</span>
+<div *ngIf="tooltipTitle" class="col-sm-1 col-md-1 col-xs-1 tooltip-align tooltip-mobile3">
+    <button type="button" class="btn btn-link info-tooltip" data-toggle="toggle" [tooltipPlacement]="tooltipPlacement" [tooltip]="tooltipHTML" [id]="elementId">
+        <i class="icon-tooltip" [id]="elementId"></i>
+        <tooltip-content #tooltipHTML [excludeId]="elementId">
+            <div innerHTML="{{tooltipTitle | translate}}"></div>
+        </tooltip-content>
+    </button>
+</div>
+
+<div [attr.aria-expanded]="isExpanded" [attr.aria-hidden]="isCollapsed" [class.collapse]="isCollapse" [class.collapsing]="isCollapsing"
+    [class.hide]="isCollapsed" class="collapseContentContainer">
+    <ng-content></ng-content>
+</div>

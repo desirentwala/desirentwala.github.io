@@ -1,0 +1,213 @@
+<div class="steps-section" [formGroup]="campaignFormGroup">
+
+    <div class="bannerSection b0 mb20">
+        <div class="bannerImg">
+            <img src="assets/img/b2b_dashboard_banner.png" alt="" class="img-responsive">
+        </div>
+        <div class="bannerDetails pl0">
+            <div class="w100p">
+                <div class="col-md-10 col-sm-9 col-xs-12 p0">
+                    <h2><span class="pr5">{{ campaign.title }}</span><span>[ {{ campaign.code }} ]</span></h2>
+                </div>
+                <div class="col-md-2 col-sm-3 col-xs-8 campaignCountDown">
+                    <countdown units="Days | Hours | Minutes" [end]="campaign['endDate']"></countdown>
+                </div>
+
+                <div class="col-md-8 hidden-xs col-sm-8 bannerText ptb20">
+                    <p *ngIf="campaign['briefDesc']"><span class='theme-color pr10'>Campaign Description</span><span>{{campaign.briefDesc}}</span></p>
+                    <p *ngIf="campaign['businessType']"><span class='theme-color pr10'>Business Type</span><span>{{ util.businessTypeCodeMap[campaign.businessType] }}</span></p>
+                    <p *ngIf="campaign['discount']"><span class='theme-color pr10'>Incentives</span><span>{{ campaign.discount }}</span></p>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-9 col-sm-8 col-xs-12 pl0 pr30 pr-xs-0">
+            <p class="pb20"><span class="theme-color pr10">Campaign Validity :</span><span class="pr5">{{ campaign.startDate }}</span>
+                <span class="pr5">{{"NCPLabel.to" | translate}}</span><span>{{campaign.endDate}}</span>
+            </p>
+
+            <div class="row" *ngIf="campaign['overallProgress'] && campaign['myProgress']">
+                <div class="col-md-10 col-sm-11 col-xs-12 p0">
+                    <misc-h3 iconClass="" miscClass=""></misc-h3>
+                    <ncp-label elementLabel="NCPLabel.campaignTargetsProgress" customFlag=true labelClass="col-md-4 col-sm-4 col-xs-12"></ncp-label>
+                    <div class="progress">
+                        <div id="overallProgress_premium" class="progress-bar progress-bar-danger progress-bar-striped active" role="progressbar"
+                            style="">
+                            Overall Premium {{campaign['overallProgress']['premium']['value']}} / {{ campaign['overallProgress']['premium']['total']
+                            }}
+                        </div>
+                    </div>
+
+                    <div class="progress">
+                        <div id="overallProgress_policyCount" class="progress-bar progress-bar-success progress-bar-striped active" role="progressbar"
+                            style="">
+                            Overall Policy Count : {{campaign['overallProgress']['policyCount']['value']}} / {{ campaign['overallProgress']['policyCount']['total']
+                            }}
+                        </div>
+                    </div>
+
+                    <div class="progress">
+                        <div id="overallProgress_customerCount" class="progress-bar progress-bar-warning progress-bar-striped active" role="progressbar"
+                            style="">
+                            Overall Customer Count : {{campaign['overallProgress']['customerCount']['value']}} / {{ campaign['overallProgress']['customerCount']['total']
+                            }}
+                        </div>
+                    </div>
+                    <misc-h3 iconClass=""  miscClass="pt20"></misc-h3>
+                    <ncp-label elementLabel="NCPLabel.myTargetsProgress" customFlag=true labelClass="col-md-4 col-sm-4 col-xs-12"></ncp-label>
+                    <div class="progress">
+                        <div id="myProgress_premium" class="progress-bar progress-bar-danger progress-bar-striped active" role="progressbar" style="">
+                            Premium ( {{campaign['myProgress']['premium']['value'] ? campaign['myProgress']['premium']['value'] : 0 }} / {{ campaign['myProgress']['premium']['total']
+                            ? campaign['myProgress']['premium']['total'] : 0 }} )
+                        </div>
+                    </div>
+
+                    <div class="progress">
+                        <div id="myProgress_policyCount" class="progress-bar progress-bar-success progress-bar-striped active" role="progressbar"
+                            style="">
+                            Policy Count : {{campaign['myProgress']['policyCount']['value'] ? campaign['myProgress']['policyCount']['value'] : 0 }} /
+                            {{ campaign['myProgress']['policyCount']['total'] ? campaign['myProgress']['policyCount']['total']
+                            : 0}}
+                        </div>
+                    </div>
+
+                    <div class="progress">
+                        <div id="myProgress_customerCount" class="progress-bar progress-bar-warning progress-bar-striped active" role="progressbar"
+                            style="">
+                            Customer Count : {{campaign['myProgress']['customerCount']['value'] ? campaign['myProgress']['customerCount']['value'] :
+                            0 }} / {{ campaign['myProgress']['customerCount']['total'] ? campaign['myProgress']['customerCount']['total']
+                            : 0 }}
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+            <p class="paragraph" [innerHTML]="campaign['description']">
+            </p>
+
+
+            <misc-h5 iconClass="" [label]="'Email Promotion'" miscClass="pt10"></misc-h5>
+            <div class="row btnAlignField">
+                <!--<text-box ngDefaultControl placeHolder="Enter Email Address" customFlag=true textBoxClass="col-sm-6 col-md-5 col-xs-9 pr-sm-0 pl0"></text-box>-->
+                <div class="col-xs-3">
+                    <button-field buttonType="custom" buttonName="NCPLabel.emailId" buttonClass="ncpbtn-default ml-xs-5" (click)="emailTemplateModal=true"></button-field>
+                </div>
+
+            </div>
+            <misc-h5 iconClass="" [label]="'Terms and Condition'" miscClass="pt20"></misc-h5>
+            <p class="paragraph" [innerHTML]="campaign['termsAndConditions']"></p>
+        </div>
+        <div class="col-md-3 col-sm-4 col-xs-12 p0 pull-right">
+            <div class="left-nav-pro pro">
+                <ul>
+                    <li class="lbl-p">
+                        <misc-a (click)="doGetNoteDetails()">Campaign Document</misc-a>
+                    </li>
+                    <li class="lbl-p">
+                        <a href="javascript:void(0);">Campaign Statistics</a>
+                    </li>
+                    <li class="lbl-p">
+                        <a href="javascript:void(0);">Campaign Ratios</a>
+                    </li>
+                    <li class="lbl-p">
+                        <a href="javascript:void(0);">Timeline</a>
+                    </li>
+                </ul>
+            </div>
+            <misc-h4 iconClass="fa fa-tags" [label]="'Product portfolio'" miscClass="ptb20"></misc-h4>
+            <div class="lightBgContainer">
+                <ul>
+                    <li>
+                        <a href="javascript:void(0);">Issue Quote</a>
+                    </li>
+                    <li>
+                        <a href="javascript:void(0);">Policy Issued</a>
+                    </li>
+                    <li>
+                        <a href="javascript:void(0);">Pending Quotes</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <ncp-modal [modalKey]="emailTemplateModal" modalTitle="NCPModalTitle.emailCampaign" modalClass="modal-lg" [closeOnEscape]="false"
+        [closeOnOutsideClick]="false">
+        <modal-content>
+            <div formGroupName="emailCampaignInfo">
+                <div class="row">
+                    <ncp-label elementLabel="NCPLabel.to" mandatoryFlag="true"></ncp-label>
+                    <text-box elementId="toAddress" formControlName="toAddress" inputType="email" ngDefaultControl>
+                    </text-box>
+
+                </div>
+                <div class="row">
+                    <ncp-label elementLabel="NCPLabel.ccAddress" mandatoryFlag="true"></ncp-label>
+                    <text-box elementId="ccAddress" formControlName="ccAddress" inputType="email" ngDefaultControl>
+                    </text-box>
+                </div>
+                <div class="row">
+                    <ncp-label elementLabel="NCPLabel.subject" mandatoryFlag="true"></ncp-label>
+                    <text-box elementId="subject" formControlName="subject" inputType="text" ngDefaultControl>
+                    </text-box>
+                </div>
+                <div class="row">
+                    <ncp-label elementLabel="NCPLabel.incidentDescription" mandatoryFlag="true"></ncp-label>
+                    <text-area formControlName=reason textAreaRow="4" textAreaCol="6">
+                    </text-area>
+                </div>
+            </div>
+        </modal-content>
+        <modal-footer>
+            <div class="row">
+                <div class="col-md-3 col-sm-6"></div>
+                <button-field (click)="emailTemplateModal=false;" buttonName="NCPBtn.cancel">
+                </button-field>
+                <button-field [isDisabled]="" (click)="emailTemplateModal=false;emailSuccessModal=true" clickId="emailQuoteModalMailSend"
+                    buttonName="NCPBtn.send">
+                </button-field>
+            </div>
+        </modal-footer>
+    </ncp-modal>
+    <ncp-modal [modalKey]="emailSuccessModal" modalTitle="NCPModalTitle.sendMail" modalClass="modal-lg" [closeOnEscape]="false"
+        [closeOnOutsideClick]="false">
+        <modal-content>
+            <div class="row">
+                <span> Success </span>
+            </div>
+        </modal-content>
+        <modal-footer>
+            <div class="btns-row">
+                <button-field buttonType="custom" buttonClass="ncp-linkBtn" (click)="emailSuccessModal=false; navigateToHome()" buttonName="NCPBtn.close"
+                    iconClass="fa fa-close">
+                </button-field>
+            </div>
+        </modal-footer>
+    </ncp-modal>
+
+    <ncp-modal [modalKey]="attachmentModal" modalTitle="NCPModalTitle.campaignLeads" modalClass="modal-lg" [hideCloseButton]="true"
+        [closeOnEscape]="false" [closeOnOutsideClick]="false">
+        <modal-content>
+            <div *ngIf="this.campaignFormGroup['controls'].attachments['controls'].length > 0">
+                <div formArrayName="attachments" *ngFor="let temp of this.campaignFormGroup['controls'].attachments['controls']; let i=index;let last = last">
+                    <div class="row" [formGroupName]="i">
+                        <span>
+                            {{ this.campaignFormGroup.controls.attachments.value[i].fileName }}
+                            <button-field buttonType="custom" buttonName="NCPBtn.view" buttonClass="ncpbtn-default pull-right"></button-field>
+                        </span>
+                    </div>
+                </div>
+            </div>
+            <div *ngIf="this.campaignFormGroup['controls'].attachments['controls'].length === 0" class="red">
+                <p>{{'NCPLabel.noAttachmentFound'| translate}}</p>
+            </div>
+        </modal-content>
+        <modal-footer>
+            <div class="row">
+                <div class="col-md-3 col-sm-6"></div>
+                <button-field (click)="attachmentModal=false;" buttonName="NCPBtn.cancel">
+                </button-field>
+            </div>
+        </modal-footer>
+    </ncp-modal>
+</div>

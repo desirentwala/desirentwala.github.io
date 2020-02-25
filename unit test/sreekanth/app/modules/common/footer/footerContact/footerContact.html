@@ -1,0 +1,67 @@
+<div class="row">
+<div class="contacts">
+    <div class="col-md-6 col-sm-6 col-xs-12 contactsListContainer contactFloat">
+       <misc-h5 label="NCPLabel.contactus"></misc-h5>
+      <ul class="list-inline contactsList">
+      <li class="contactsListItems">
+		<span>
+		<i class="fa fa-phone iconFooter"></i>
+		<span class="labelFooter">{{'NCPLabel.telephone' | translate}}</span>
+		</span>
+		<a href="tel:{{['contactNumber']}}" class="labelAnchorLink"> {{brandingJson['contactNumber']}} </a>
+		</li>
+      <li class="contactsListItems">
+		<span>
+		<i class="fa fa-envelope iconFooter"></i>
+		<span class="labelFooter">{{'NCPLabel.emailfooter' | translate}}</span>
+		</span>
+		<a target="_blank" href="{{brandingJson['mailLink_url']}}" class="labelAnchorLink"> {{brandingJson['mailLink']}} </a>
+		</li>
+      </ul>
+    </div>
+  <div class="col-md-6 col-sm-4 socialMediaContainer">
+      <div class="socialRow">
+        <!--<span class="socialTitle"><i class="fa fa-address-book iconFooter"></i><span class="labelFooter"> {{'NCPLabel.connectwithus' | translate}}</span></span>-->
+        <span class="socialTitle">
+		<span class="labelFooter"> {{'NCPLabel.connectwithus' | translate}}</span>
+		</span>
+        <ul class="socialNetworks">
+        <li *ngFor="let socialNetwork of brandingJson['socialNetwork']" class="listItems">
+          <a href="{{socialNetwork.url}}" target="_blank" class="listItemsLink">
+		  <i class={{socialNetwork.icon}}></i>
+		  </a>
+		  </li>
+        </ul>
+    </div>
+  </div>
+</div>
+<div class="copyright">
+    <div class="col-md-6 col-sm-6 col-xs-12 copyrightContainer">
+    <ul *ngIf="brandingJson['privacyPolicy'] || brandingJson['termsAndCondition'] || brandingJson['copyRightCompany']" class="listContainer">
+      <li class="listItems" *ngIf="brandingJson['privacyPolicy'] ">
+        <a class="labelAnchorLink" href="{{brandingJson.privacyPolicy.url}}" target="_blank">
+		<i class="fa fa-lock iconAnchorLink"></i>
+          <span class="labelFooter">{{brandingJson.privacyPolicy.name | translate }}</span>
+		</a>
+		</li>
+      <li class="listItems" *ngIf="brandingJson['termsAndCondition']" (click)='gotToTermsAndConditions()'>
+        <a class="labelAnchorLink">
+	     	<i class="fa fa-pencil-square-o iconAnchorLink"></i>
+          <span class="labelFooter">{{brandingJson.termsAndCondition.name | translate }}</span>
+		</a>
+		</li>
+      <li class="listItems" *ngIf="brandingJson['copyRightCompany']">
+	     	<i class="fa fa-copyright"></i>
+        <span class="labelFooter">{{' '+ currentYear+' '}}</span>
+	    	<span *ngIf="!brandingJson['copyRightCompany']['url']">{{brandingJson.copyRightCompany.name}}</span>
+        <a *ngIf="brandingJson['copyRightCompany']['url']" href="{{brandingJson.copyRightCompany.url}}">{{brandingJson.copyRightCompany.name }}</a>
+      </li>
+      <li *ngIf="versionJson !== null" class="listItems pull-right" >
+	      <i class="labelFooter"></i>
+          <span class="labelFooter"> V.{{ versionJson }}</span>
+      </li>
+    </ul>
+  </div>
+</div>
+</div>
+<chatbot *ngIf="shared.doShowElement('showChatbot')"></chatbot>

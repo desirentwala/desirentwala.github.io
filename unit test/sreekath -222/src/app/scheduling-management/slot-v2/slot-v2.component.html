@@ -1,0 +1,99 @@
+<div class="ion-padding">
+  <div class="box" [class.opened]="value">
+    <form #slotForm="ngForm">
+      <div class="ion-padding border border-light showdow p-3 mb-5 bg-white addslot">
+        <div class="border-bottom">
+          <p class="Schedule-An-Appointm">Add slot</p>
+        </div>
+        <ion-radio-group>
+          <ion-label >Appointment type</ion-label>
+          <div class="row p-3">
+            <ion-radio mode="md" checked={{isPublicChecked}} value="public" (ionSelect)="isPrivate('public')">
+            </ion-radio>
+            <ion-label class="radio-label">Public</ion-label>
+            <ion-radio mode="md" checked={{isPrivateChecked}} value="private" (ionSelect)="isPrivate('private')">
+            </ion-radio>
+            <ion-label class="radio-label">Private</ion-label>
+          </div>
+        </ion-radio-group>
+        <ion-label>Choose a vet</ion-label><i class="fas fa-asterisk form-asterisk"></i>
+        <div>
+          <select class="vet-drop-down " #vet="ngModel" name="vets" placeholder="Select" [(ngModel)]="model.userId"
+            required (change)="vetSelection(model.userId)">
+            <option *ngFor="let vet of vetList" [value]="vet.id">
+              {{vet.firstName}} {{vet.lastName}}
+            </option>
+          </select>
+        </div>
+        <div >
+          <div class="pt-3">
+            <ion-label >Appointment type</ion-label><i class="fas fa-asterisk form-asterisk"></i>
+            <select class="vet-drop-down" #cost="ngModel" name="cost" placeholder="Select"
+              [(ngModel)]="model.practiceAppointmentTypeId" required>
+              <option *ngFor="let a of appointmentTypes" [value]="a.id">
+                {{a.appointmentType}} - £&nbsp;{{a.customerFee}}
+              </option>
+            </select>
+          </div>
+          <ion-row class="pt-3">
+            <ion-col  size="6" size-lg size-md size-sm no-padding>
+              <ion-label *ngIf="!model.isPrivate">Date From</ion-label><i class="fas fa-asterisk form-asterisk" *ngIf="!model.isPrivate"></i>
+              <ion-label *ngIf="model.isPrivate">Date </ion-label><i class="fas fa-asterisk form-asterisk" *ngIf="model.isPrivate"></i>
+              <ion-input type="date" [(ngModel)]="model.fromDate" class="date-time" (ngModelChange)="StartDateValidation($event)"
+                #calendar="ngModel" name="calendar" required [min]="today">
+                <ion-icon name="calendar" class="icon"></ion-icon>
+              </ion-input>
+              <div class="text-danger" *ngIf="isInvalid">
+                <small>Invalid date</small>
+              </div>
+            </ion-col>
+            <ion-col size="6" size-lg size-md size-sm no-padding *ngIf="!model.isPrivate">
+              <ion-label *ngIf="!model.isPrivate">TO</ion-label><i class="fas fa-asterisk form-asterisk" *ngIf="!model.isPrivate"></i>
+              <ion-input type="date" [(ngModel)]="model.toDate" class="date-time" (ngModelChange)="endDateValidation($event)"
+                #calendar="ngModel" name="calendar" required [min]="startDate">
+                <ion-icon name="calendar" class="icon"></ion-icon>
+              </ion-input>
+              <div class="text-danger" *ngIf="isInvalid">
+                <small>Invalid date</small>
+              </div>
+            </ion-col>
+          </ion-row>
+          <ion-row class="pt-3">
+            <ion-col size="6" size-lg size-md size-sm no-padding>
+              <ion-label>Appointment time</ion-label><i class="fas fa-asterisk form-asterisk"></i>
+              <ion-input type="time" [(ngModel)]="model.time" class="date-time" #timeCal="ngModel" name="timeCal"
+                min="09:00" max="20:00" required>
+                <ion-icon name="time" class="icon"></ion-icon>
+              </ion-input>
+            </ion-col>
+            <ion-col size="6" size-lg size-md size-sm no-padding>
+              <ion-label>Duration (minutes)</ion-label><i class="fas fa-asterisk form-asterisk"></i>
+              <div>
+                <select class="date-time" placeholder="Select" [(ngModel)]="model.duration" #timeSlot="ngModel"
+                  name="timeSlots" required>
+                  <option *ngFor="let minutes of timeslots">
+                    {{minutes}}
+                  </option>
+                </select>
+              </div>
+            </ion-col>
+          </ion-row>
+          <ion-row class="pt-3" *ngIf="!model.isPrivate" >
+            <ion-label >Day <i class="fas fa-asterisk form-asterisk"></i></ion-label>
+            <div *ngFor="let day of weekDays; let i = index">              
+              <ion-card class="day-card" [ngClass]="{'active':day.isActive === true ? true : false}"
+                (click)="onSelectDay(day,i)" title="{{day.value}}"> <strong class="day-card-text">{{day.value}}</strong> 
+              </ion-card>
+            </div>
+          </ion-row>
+        </div>
+        <div class="pt-2">
+          <button class="Rectangle" [disabled]="!(slotForm.valid) || isInvalid || selectedDays.length === 0"
+            (click)="createSlot(); value = false">Save
+          </button>
+          <button class="CANCEL" (click)="close();value = false">Cancel</button>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>

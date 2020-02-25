@@ -1,0 +1,36 @@
+<news-form [newsFormGroup]="newsFormGroup" label="NCPLabel.newsCreation" buttonName="ADD" (doClick)="addNewNews()" [mandatoryErrorFlag]="mandatoryErrorFlag"></news-form>
+
+<ncp-modal #newsAddedModelWindow [closeOnEscape]="false" [closeOnOutsideClick]="false" [hideCloseButton]="true" >
+    <modal-content>
+        <div class="row">
+        <misc-h5 [label]="'NCPLabel.newNewsAdded'" class="col-md-9 col-sm-9 col-xs-8"></misc-h5>
+            <!--<div class="col-md-3 col-sm-3 col-xs-4 pull-right pl-md-0 mb20">
+                <button-field buttonType="custom" buttonClass="ncp-linkBtn" (click)="closeAndNavigate()" buttonName="NCPBtn.close" iconClass="fa fa-close">
+                </button-field>
+            </div>-->
+        </div>
+    </modal-content>
+    <modal-footer>
+         <div class="btns-row">
+                <button-field buttonType="custom" buttonClass="ncp-linkBtn" (click)="closeAndNavigate()" buttonName="NCPBtn.close" iconClass="fa fa-close"></button-field>
+        </div>
+    </modal-footer>
+</ncp-modal>
+<ncp-modal #newsAddedModelWindowError [closeOnEscape]="false" [closeOnOutsideClick]="false" modalTitle="NCPLabel.createNews" titleIcon="fa fa-plus">
+
+    <modal-content>
+        <!--<h5>Warning!</h5>-->
+        <misc-h5 label="NCPErrorMessage.Error"></misc-h5>
+        <!--<h3>Please Fill All the Details</h3>-->
+        <misc-h3 label="NCPErrorMessage.PleaseFillTheMandatoryDetails"></misc-h3>
+
+    </modal-content>
+    <modal-footer>
+        <div class="btns-row">
+                <!--<button class="ncp-linkBtn" (click)="newsAddedModelWindowError.close()">{{'NCPBtn.close'|translate}}</button>-->
+                <button-field buttonType="custom" buttonClass="ncp-linkBtn" (click)="newsAddedModelWindowError.close()" buttonName="NCPBtn.close"
+                    iconClass="fa fa-close">
+                </button-field>
+        </div>
+    </modal-footer>
+</ncp-modal>

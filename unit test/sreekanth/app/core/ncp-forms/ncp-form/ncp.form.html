@@ -1,0 +1,9 @@
+<ng-container *ngIf="show && formElements && formElements.length > 0">
+    <ng-container *ngFor="let item of formElements; trackBy:item?.uniqueId">
+        <ncp-element [makeElementsDraggable]="makeElementsDraggable" [element]="item" [ncpForm]="formName">
+        </ncp-element>
+    </ng-container>
+    <ng-container *ngIf="eventArray && eventArray.length > 0">
+        <ncp-event [eventArray]="eventArray"></ncp-event>
+    </ng-container>
+</ng-container>

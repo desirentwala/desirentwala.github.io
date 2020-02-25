@@ -1,0 +1,130 @@
+<div>
+    <div class="row">
+        <ncp-label elementLabel="NCPLabel.title" mandatoryFlag=true></ncp-label>
+        <text-box [(ngModel)]="taskInfo.title" [disabledFlag]="isReadOnlyFlag" (ngModelChange)="doEnableAddUpdateButton();" elementLabel="NCPLabel.title"
+            mandatoryFlag=true customFlag=true textBoxClass="col-md-6 col-sm-7 col-xs-11 pr-sm-0"></text-box>
+    </div>
+    <div class="row">
+        <ncp-label elementLabel="NCPLabel.details"></ncp-label>
+        <text-area [(ngModel)]="taskInfo.details" [disabledFlag]="isReadOnlyFlag" elementLabel="NCPLabel.title" mandatoryFlag=true
+            customFlag=true textareaClass="col-md-6 col-sm-7 col-xs-11 pr-sm-0"></text-area>
+    </div>
+    <div class="row">
+        <ncp-label elementLabel="NCPLabel.uploadDoc"></ncp-label>
+        <div *ngFor="let temp of this.taskInfo.attachments; let i=index;let last = last">
+            <!-- <div *ngIf="this.taskType === 'EDIT'">
+
+                <span>{{i}}</span>
+                <span>{{temp.fileName}}</span>
+            </div>
+            <div *ngIf="this.taskType === 'NEW'">-->
+                <div *ngIf="i === 0">
+                    <text-box elementId="documentContent" ngDefaultControl [(ngModel)]="temp.fileName" changeId="documentContent" [index]="i+1"
+                        inputType="file" [disabledFlag]="isReadOnlyFlag" customFlag=true textBoxClass="col-sm-5 col-md-5 col-xs-7 pr-sm-0 taskFirstUploadTextBoxAlignRTL"></text-box>
+                </div>
+                <text-box *ngIf="i > 0" elementId="documentContent" customFlag=true textBoxClass="col-sm-5 col-md-5 col-xs-7 pr-sm-0 col-xs-offset-0 col-md-offset-4 col-sm-offset-4 col-lg-offset-4 mt10"
+                    ngDefaultControl [(ngModel)]="temp.fileName" changeId="documentContent" [index]="i+1" inputType="file" [disabledFlag]="isReadOnlyFlag" ></text-box>
+            <!-- <div class="pull-left btnAlignField" *ngIf="( i>0 || this.claimFNOLFormGroup.controls.attachments.controls.length > 1 ) && !isEnquiryFlag">
+
+            </div> 
+            </div>-->
+            <div class="btnAlignField pull-left d-flex uploadBtnAlignRTL" *ngIf="!isEnquiryFlag">
+                <button-field *ngIf="this.taskInfo.attachments.length > 1" buttonType="custom" buttonClass="ncpbtn-default fa fa-close ml5 mt-xs-0"
+                    (click)="deleteuploadDocument(i)" [class.mt10]="i > 0" elementId="deleteDocument"></button-field>
+                <button-field *ngIf="last" buttonType="custom" buttonClass="ncpbtn-default pull-left fa fa-plus ml5 mt-xs-0" (click)="addUploadDocument()"
+                    elementId="addDocument" [class.mt10]="i > 0" [class.ml15]="i > 0"></button-field>
+            </div>
+        </div>
+
+    </div>
+    <div class="row">
+        <ncp-label elementLabel="NCPLabel.priority"></ncp-label>
+        <radio-button [radioArray]="taskPriority" radioName="priority" elementId="priority" customFlag=true radioCustomClass="col-md-6 col-sm-7 col-xs-11"
+            horizontalflag=false [(ngModel)]="taskInfo.priority" tooltipTitle="NCPTooltip.taskPriority" elementLabel="NCPLabel.priority">
+        </radio-button>
+    </div>
+    <div class="row">
+        <ncp-label elementLabel="NCPLabel.responsiblePerson" mandatoryFlag=true></ncp-label>
+        <drop-down [(ngModel)]="taskInfo.responsiblePerson" displayOnClick=true multipleSelect="true" elementId="responsiblePerson"
+            [dropdownItems]="responsiblePersonsList" (ngModelChange)="doEnableAddUpdateButton();" ngDefaultControl elementLabel="NCPLabel.responsiblePerson"
+            mandatoryFlag=true customFlag=true dropdownClass="col-md-6 col-sm-7 col-xs-11 pr-sm-0">
+        </drop-down>
+    </div>
+    <div class="row">
+        <ncp-label elementLabel="NCPLabel.startDate" mandatoryFlag=true></ncp-label>
+        <ncp-date-picker [options]="NCPDatePickerNormalOptions" [(ngModel)]="taskInfo.startDate" ngDefaultControl customFlag=true
+            datepickerClass="col-xs-5 col-sm-3 col-md-3 pr-sm-0 mr-xs-15 taskDatePickerModalRTL" elementLabel="NCPLabel.startDate"
+            mandatoryFlag=true>
+        </ncp-date-picker>
+        <time-picker elementId="startTime" [(ngModel)]="taskInfo.startTime" (ngModelChange)="doEnableAddUpdateButton();" ngDefaultControl
+            customFlag=true timePickerClass="col-xs-5 col-sm-3 col-md-3 pr-sm-0 ml-xs-15 taskTimePickerModalRTL">
+        </time-picker>
+    </div>
+    <div class="row">
+        <ncp-label elementLabel="NCPLabel.endDate" mandatoryFlag=true></ncp-label>
+        <ncp-date-picker [options]="NCPDatePickerNormalOptions" [(ngModel)]="taskInfo.endDate" ngDefaultControl customFlag=true datepickerClass="col-xs-5 col-sm-3 col-md-3 pr-sm-0 mr-xs-15 taskDatePickerModalRTL"
+            elementLabel="NCPLabel.endDate" mandatoryFlag=true>
+        </ncp-date-picker>
+        <time-picker elementId="endTime" [(ngModel)]="taskInfo.endTime" (ngModelChange)="doEnableAddUpdateButton();" ngDefaultControl
+            customFlag=true timePickerClass="col-xs-5 col-sm-3 col-md-3 pr-sm-0 ml-xs-15 taskTimePickerModalRTL">
+        </time-picker>
+    </div>
+
+    <div class="row">
+        <ncp-label elementLabel="NCPLabel.dependentTask"></ncp-label>
+        <drop-down [(ngModel)]="taskInfo.dependentTask" multipleSelect="true" elementId="responsiblePerson" displayOnClick=true [dropdownItems]="dependentTaskList"
+            ngDefaultControl elementLabel="NCPLabel.dependentTask" customFlag=true dropdownClass="col-md-6 col-sm-7 col-xs-11 pr-sm-0">
+        </drop-down>
+    </div>
+
+    <div class="row">
+        <div *ngFor="let temp of this.taskInfo.notes; let i=index;let last = last">
+            <div *ngIf="i === 0">
+                <div class="row">
+                    <ncp-label elementLabel="NCPLabel.notes"></ncp-label>
+                    <text-area contenteditable="true" placeholder="Type Comments here" customFlag="true" textareaClass="col-sm-7 col-md-5 col-xs-11 pr0"
+                        [(ngModel)]=temp.comments elementLabel="NCPLabel.comments" mandatoryFlag=true textAreaRow="10"></text-area>
+                    <div class="btnAlignField pull-left d-flex uploadBtnAlignRTL" *ngIf="!isEnquiryFlag">
+                        <button-field *ngIf="this.taskInfo.notes.length > 1" buttonType="custom" buttonClass="ncpbtn-default fa fa-close ml5 mt-xs-0"
+                            (click)="deleteNotes(i)" [class.mt10]="i > 0" elementId="deleteNotes"></button-field>
+                        <button-field *ngIf="last" buttonType="custom" buttonClass="ncpbtn-default pull-left fa fa-plus ml5 mt-xs-0" (click)="addNotes()"
+                            elementId="addNotes" [class.mt10]="i > 0" [class.ml15]="i > 0"></button-field>
+                    </div>
+                </div>
+            </div>
+            <div *ngIf="i > 0">
+                <div class="row">
+                    <ncp-label elementLabel="NCPLabel.notes"></ncp-label>
+                    <text-area contenteditable="true" placeholder="Type Comments here" customFlag="true" textareaClass="col-sm-7 col-md-5 col-xs-11 pr0"
+                        [(ngModel)]=temp.comments elementLabel="NCPLabel.comments" mandatoryFlag=true textAreaRow="10"></text-area>
+                    <div class="btnAlignField pull-left d-flex uploadBtnAlignRTL" *ngIf="!isEnquiryFlag">
+                        <button-field *ngIf="this.taskInfo.notes.length > 1" buttonType="custom" buttonClass="ncpbtn-default fa fa-close ml5 mt-xs-0"
+                            (click)="deleteNotes(i)" [class.mt10]="i > 0" elementId="deleteNotes"></button-field>
+                        <button-field *ngIf="last" buttonType="custom" buttonClass="ncpbtn-default pull-left fa fa-plus ml5 mt-xs-0" (click)="addNotes()"
+                            elementId="addNotes" [class.mt10]="i > 0" [class.ml15]="i > 0"></button-field>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+
+    <div class="row" *ngIf="this.taskType !== 'NEW'">
+        <ncp-label elementLabel="NCPLabel.status"></ncp-label>
+        <radio-button [radioArray]="taskStatus" radioName="status" elementId="status" customFlag=true radioCustomClass="col-md-6 col-sm-7 col-xs-12"
+            horizontalflag=false [(ngModel)]="taskInfo.status" elementLabel="NCPLabel.status">
+        </radio-button>
+    </div>
+    <div class="btns-row" *ngIf="this.taskType === 'NEW'">
+        <button type="button" class="ncpbtn-default ml-sm-10 mt-xs-0" (click)="addTask()" [disabled]="isdisable">Add Task</button>
+        <button type="button" class="btn btn-outline-secondary mt-xs-10 w-xs-100p" (click)="addEventModalclose()">Cancel</button>
+    </div>
+    <div class="btns-row" *ngIf="this.taskType === 'EDIT'">
+        <button type="button" class="ncpbtn-default ml-sm-10 mt-xs-0" (click)="updateTask()" [disabled]="isdisable">Update Task</button>
+        <button type="button" class="btn btn-outline-secondary" (click)="addEventModalclose()">Cancel</button>
+    </div>
+    <div class="btns-row" *ngIf="this.taskType === 'VIEW'">
+        <button-field buttonType="custom" buttonClass="ncp-linkBtn w100p" (click)="addEventModalclose()" buttonName="Cancel"></button-field>
+    </div>
+</div>

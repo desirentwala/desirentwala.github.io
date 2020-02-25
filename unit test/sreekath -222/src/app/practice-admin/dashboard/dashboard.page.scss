@@ -1,0 +1,28 @@
+@media (min-width: 468px){
+  .dashboard{
+    margin-top: 20px !important;
+  }
+}
+@media (min-width: 1024px) {
+    .card-content {
+        height: 20vh;
+        max-height: 20vh !important;
+        overflow: auto;
+    }
+}
+
+.destop-view {
+    display: none;
+  }
+@media (min-width:992px) {
+    .destop-view {
+      display: block;
+    }
+  }
+
+  @media (min-width:1025px) {
+    .destop-view {
+      display: block;
+      margin-right: -1.9rem;
+    }
+  }

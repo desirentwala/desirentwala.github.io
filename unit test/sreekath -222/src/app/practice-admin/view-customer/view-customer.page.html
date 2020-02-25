@@ -1,0 +1,89 @@
+<ion-row>
+  <ion-col class="iPad-screen pl-0" size="7">
+    <ion-item lines="none" class="ion-no-padding">
+      <h1 class="text-left page-header">{{customer?.firstName}}
+      <em class="fal fa-edit editOrDelete h5 pr-1" title="Edit" (click)="editCustomer()"></em></h1>
+    </ion-item>
+  </ion-col>
+  <ion-col class="iPad-profile" size="5">
+    <ion-list>
+      <ion-item class="ion-no-padding" lines="none">
+        <!-- <div *ngIf="!customer.profilePic">
+          <img class="pet-img rounded-circle" src="./assets/user-avatar.svg" alt="profile photo">
+        </div> -->
+        <!-- <ion-avatar slot="start" *ngIf="customer.profilePic">
+          <img [src]="customer.profilePic" alt="">
+        </ion-avatar> -->
+        <ion-label class="ml-2">
+          <p title="{{customer?.firstName}}" class="cusname">{{customer?.firstName}}</p>
+          <i style="font-size: 10px;" class="fas fa-envelope"></i><span title="{{customer?.email}}"
+            class="ml-1">{{customer?.email}}</span> <br>
+          <i style="font-size: 10px;" class="fas fa-phone-alt"></i> <span class="ml-1">{{customer?.mobile}}</span>
+        </ion-label>
+      </ion-item>
+    </ion-list>
+  </ion-col>
+</ion-row>
+<ion-label>Pet owner has...
+  <button class="Rectangle float-right mr-2" (click)="addPet()">Add new pet</button>
+</ion-label>
+<ion-row class="w-100">
+  <!-- MAX_PET: max number of pets to be displayed -->
+  <ion-col class="pl-0" size="{{colSize}}" *ngFor="let pet of petData | slice:0:MAX_PET;let i = index">
+    <ion-card id="{{i}}" class="pet-card text-center pl-0 ml-0">
+      <em class="fal fa-edit actions p-1" title="Edit" (click)="editPet(pet)"></em>
+      <em class="far fa-trash-alt p-1" title="Delete pet" (click)="delete(pet)"></em>
+      <ion-card-header (click)="onSelect(pet)" class="pt-1 pb-0">
+        <div *ngIf="!pet.profilePic">
+          <img class="pet-img rounded-circle mx-auto" src="../../../assets/imgs/default-dog.png" alt="pet-image">
+        </div>
+        <div *ngIf="pet.profilePic">
+          <img class="pet-img rounded-circle mx-auto" src="{{basePath}}storage/download/{{pet.profilePic}}"
+            alt="profile photo">
+        </div>
+        <p class="wrap-text mb-0">{{pet.petName}}</p>
+      </ion-card-header>
+      <div [ngClass]="{'active-card':selectedPet.id === pet.id ? true : false}"></div>
+    </ion-card>
+  </ion-col>
+
+  <!-- show less species -->
+  <ion-col class="pl-0" size="2" *ngIf="(MAX_PET > petData?.length && petData?.length > 3)">
+    <ion-card (click)="showLessPets()" class="pet-card text-center pl-0 ml-0">
+      <ion-card-header class="less-card">
+        <div class="mx-auto">
+          <ion-label class="less-txt">Less</ion-label>
+          <div class="p-1">
+            <i class="fas fa-caret-up fa-size"></i>
+          </div>
+        </div>
+      </ion-card-header>
+    </ion-card>
+  </ion-col>
+
+  <!-- show more species -->
+  <ion-col class="pl-0" size="2" *ngIf="petData?.length > MAX_PET ">
+    <ion-card (click)="showMorePets()" class="pet-card text-center pl-0 ml-0">
+      <ion-card-header class="more-card">
+        <div class="mx-auto">
+          <ion-label class="more-txt">More</ion-label>
+          <div class="p-1">
+            <i class="fas fa-caret-down fa-size"></i>
+          </div>
+        </div>
+      </ion-card-header>
+    </ion-card>
+  </ion-col>
+
+  <!-- <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12 pc">
+    <ion-card *ngIf="isBook" class="w-100 ion-padding card-book" (click)="navigateToAppointment(selectedPet)">
+      <p class="m-0">Book a new</p>
+      <p class="btn-book m-0">Appointment to {{selectedPet.petName}}</p>
+    </ion-card>
+  </div> -->
+</ion-row>
+
+<div>
+  <app-table *ngIf="bookingData" [bookingdata]="bookingData" [flag]="flag" [header]="header" [menuItems]="menuItems">
+  </app-table>
+</div>

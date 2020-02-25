@@ -1,0 +1,151 @@
+<ncp-modal [modalKey]="paymentMod" modalClass="modal-md" hideCloseButton=true [closeOnOutsideClick]='false' [closeOnEscape]='false'>
+    <modal-content>
+        <div class="row" *ngIf="paymentStatus==='YES'">
+            <div class="col-md-12 col-sm-12 col-xs-12 text-center fwb mb10 fs16">
+                <span>{{'NCPLabel.paymentDetails'|translate}}</span>
+            </div>
+            <div class="col-md-12 col-sm-12 col-xs-12">
+                <div class="row fs16">
+                    <div class="col-md-6 col-sm-6 col-xs-6 text-right">{{'NCPLabel.paymentReferenceNo'|translate}}</div>
+                    <div class="col-md-6 col-sm-6 col-xs-6 theme-color"><span> : </span>{{paymentRefNo}}</div>
+                </div>
+                <div class="row fs16">
+                    <div class="col-md-6 col-sm-6 col-xs-6 text-right">{{'NCPLabel.paymentStatus'|translate}}</div>
+                    <div class="col-md-6 col-sm-6 col-xs-6 theme-color"><span> : </span>{{'NCPLabel.success'|translate}}</div>
+                </div>
+                <div class="row fs16" *ngIf="isThePolicyCreated==='YES'">
+                    <div class="col-md-6 col-sm-6 col-xs-6 text-right">{{'NCPLabel.thePolicyCreated' | translate}}</div>
+                    <div class="col-md-6 col-sm-6 col-xs-6 theme-color"><span> : </span>{{policyNo}}</div>
+                </div>
+                <div class="row fs16" *ngIf="alreadyPolicyCreated==='YES'">
+                    <div class="col-md-6 col-sm-6 col-xs-6 col-lg-offset-4"><span class="text-center">{{'NCPLabel.alreadyPolicyCreated' | translate}}</span></div>
+                </div>
+                <div class="row fs16" *ngIf="alreadyPolicyCreated==='YES' || isThePolicyCreated==='YES'">
+                    <div class="col-lg-4 col-md-4 col-xs-4 col-lg-offset-4">
+                        <button type="button" class="ncp-btn m0" (click)="redirectToHomePage()">{{ 'NCPLabel.redirectToHomePage' | translate}}</button>
+                    </div>
+                </div>
+            </div>
+            <div *ngIf="loading === 'yes'" class="col-md-12 col-sm-12 col-xs-12 text-center mt20 fs16">
+                <label class="pl0 pb10 theme-color">{{'NCPLabel.postingInitiatedPleasewait' | translate}}</label>
+            </div>
+            <div *ngIf="batchPostedInfo" class="col-md-12 col-sm-12 col-xs-12 text-center fs16">
+                <label class="pl0 pb10 theme-color">{{'NCPLabel.postingBatchPolicies' | translate}}</label>
+            </div>
+            <div *ngIf="loading === 'yes' && (!postPaymentJson || !batchPostedInfo)" class="col-md-12 col-sm-12 col-xs-12">
+                <ncp-loader loading='yes' loaderType='DOTS'></ncp-loader>
+            </div>
+        </div>
+        <div class="row" *ngIf="paymentStatus==='NO'">
+            <div class="col-md-12 col-sm-12 col-xs-12 text-center fwb mb10 fs16">
+                <span>{{'NCPLabel.paymentDetails' | translate}}</span>
+
+            </div>
+            <div class="col-md-12 col-sm-12 col-xs-12">
+                <div class="row fs16">
+                    <div class="col-md-6 col-sm-6 col-xs-6 text-right">{{'NCPLabel.paymentReferenceNo'|translate}}</div>
+                    <div class="col-md-6 col-sm-6 col-xs-6 theme-color">{{paymentRefNo}}</div>
+                </div>
+                <div class="row fs16">
+                    <div class="col-md-6 col-sm-6 col-xs-6 text-right">{{'NCPLabel.paymentStatus'|translate}}</div>
+                    <div class="col-md-6 col-sm-6 col-xs-6 theme-color">{{'NCPLabel.fail'|translate}}</div>
+                </div>
+                <div class="col-lg-4 col-md-4 col-xs-4 col-lg-offset-4">
+                        <button type="button" class="ncp-btn m0" (click)="redirectToHomePage()">{{ 'NCPLabel.redirectToHomePage' | translate}}</button>
+                </div>
+            </div>
+            <div *ngIf="!postPaymentJson && !batchPostedInfo" class="col-md-12 col-sm-12 col-xs-12 text-center fs16">
+                <label class="pl0 pb10 theme-color">{{'NCPLabel.gettingQuotationPleasewait' | translate}}</label>
+            </div>
+            <div *ngIf="batchPostedInfo" class="col-md-12 col-sm-12 col-xs-12 text-center fs16">
+                <label class="pl0 pb10 theme-color">{{'NCPLabel.postingBatchPolicies' | translate}}</label>
+            </div>
+            <div *ngIf="!postPaymentJson || !batchPostedInfo" class="col-md-12 col-sm-12 col-xs-12">
+                <ncp-loader loading='yes' loaderType='DOTS'></ncp-loader>
+            </div>
+        </div>
+        <div class="row" *ngIf="paymentStatus==='REQ'">
+            <div class="col-md-12 col-sm-12 col-xs-12 text-center fwb mb10 fs16">
+                <span>{{'NCPLabel.paymentDetails' | translate}}</span>
+
+            </div>
+            <div class="col-md-12 col-sm-12 col-xs-12">
+                <div class="row fs16">
+                    <div class="col-md-6 col-sm-6 col-xs-6 text-right">{{'NCPLabel.paymentReferenceNo'|translate}}</div>
+                    <div class="col-md-6 col-sm-6 col-xs-6 theme-color">{{paymentRefNo}}</div>
+                </div>
+                <div class="row fs16">
+                    <div class="col-md-6 col-sm-6 col-xs-6 text-right">{{'NCPLabel.paymentStatus'|translate}}</div>
+                    <div class="col-md-6 col-sm-6 col-xs-6 theme-color">{{'NCPLabel.pending'|translate}}</div>
+                </div>
+            </div>
+            <div *ngIf="!postPaymentJson && !batchPostedInfo" class="col-md-12 col-sm-12 col-xs-12 text-center fs16">
+                <label class="pl0 pb10 theme-color">{{'NCPLabel.gettingQuotationPleasewait' | translate}}</label>
+            </div>
+            <div *ngIf="batchPostedInfo" class="col-md-12 col-sm-12 col-xs-12 text-center fs16">
+                <label class="pl0 pb10 theme-color">{{'NCPLabel.postingBatchPolicies' | translate}}</label>
+            </div>
+            <div *ngIf="!postPaymentJson || !batchPostedInfo" class="col-md-12 col-sm-12 col-xs-12">
+                <ncp-loader loading='yes' loaderType='DOTS'></ncp-loader>
+            </div>
+        </div>
+        <div class="row" *ngIf="paymentStatus==='ERR'">
+            <div class="row fs16" *ngIf="paymentRefNo">
+                <div class="col-md-6 col-sm-6 col-xs-6 text-right">{{'NCPLabel.paymentReferenceNo'|translate}}</div>
+                <div class="col-md-6 col-sm-6 col-xs-6 theme-color">{{paymentRefNo}}</div>
+            </div>
+            <div class="col-md-12 col-sm-12 col-xs-12 text-center fwb mb10 fs16">
+                <label class="pl0 pb10">{{'NCPLabel.invalidRefNo' | translate}}</label>
+            </div>
+            <div class="col-md-12 col-sm-12 col-xs-12 text-center fwb mb10 fs16">
+                <label class="pl0 pb10">{{'NCPLabel.cantGetQuote' | translate}}</label>
+            </div>
+            <div class="col-lg-4 col-md-4 col-xs-4 col-lg-offset-4">
+                <button type="button" class="ncp-btn m0" (click)="redirectToHomePage()">{{ 'NCPLabel.redirectToHomePage' | translate}}</button>
+            </div>
+        </div>
+
+        <div class="row" *ngIf="postPaymentJson && postPaymentJson?.policyInfo?.status ==='PC'">
+            <div class="col-md-12 col-sm-12 col-xs-12 fs16">
+                <label class="pl0 pb10">{{'NCPModalTitle.credit' | translate}}</label>
+            </div>
+            <div class="col-md-12 col-sm-12 col-xs-12 pb10 fs16">
+                <span>{{'NCPLabel.quoteAcceptedDesc'|translate}}</span>
+                <span class="theme-color">{{ postPaymentJson?.policyInfo?.policyNo }}</span>
+                <span>{{'NCPLabel.andYourDocsSentTo' | translate}}</span>
+                <span class="theme-color">{{postPaymentJson?.customerInfo?.emailId}}</span>
+            </div>
+            <div *ngIf="postPaymentJson?.policyInfo?.source ==='B2B'" class="col-md-12 col-sm-12 col-xs-12 fs16">
+                <label class="pl0 ">{{'NCPLabel.documentMessageDispaly'| translate}}</label>
+            </div>
+            <div class="col-md-12 col-sm-12 col-xs-12">
+                <label class="pl0 ">{{'NCPLabel.pleaseConatctUs'| translate}}</label>
+            </div>
+        </div>
+        <div class="row" *ngIf="postPaymentJson && postPaymentJson?.policyInfo?.status ==='QT'">
+            <div class="col-md-12 col-sm-12 col-xs-12 fs16">
+                <label class="pl0 pb10">{{'NCPModalTitle.policyFailure' | translate}}</label>
+            </div>
+            <div class="col-md-12 col-sm-12 col-xs-12 pb10 fs16">
+                <span>{{'NCPLabel.processingpayment'|translate}} </span>
+                <span class="theme-color">{{postPaymentJson.customerInfo?.emailId}} </span>
+                <span>{{'NCPLabel.contactanyissue'|translate}}</span>
+                <span>{{'NCPLabel.takenoteofquoteno' | translate}}</span>
+                <span class="theme-color"> {{(postPaymentJson.policyInfo?.quoteNo)}}</span>
+            </div>
+            <div class="col-md-12 col-sm-12 col-xs-12">
+                <label class="pl0 ">{{'NCPLabel.pleaseConatctUs'| translate}}</label>
+            </div>
+        </div>
+        <div *ngIf="batchPostedInfo">
+            <div class="row">
+                <ncp-label elementLabel="NCPLabel.paymentSuccess"></ncp-label>
+            </div>
+        </div>
+
+    </modal-content>
+    <modal-footer *ngIf="postPaymentJson|| batchPostedInfo">
+        <button-field buttonClass="ncp-linkBtn" buttonType="custom" (click)="paymentMod = false; navigateToHome()" buttonName="NCPBtn.close"
+            iconClass=""></button-field>
+    </modal-footer>
+</ncp-modal>

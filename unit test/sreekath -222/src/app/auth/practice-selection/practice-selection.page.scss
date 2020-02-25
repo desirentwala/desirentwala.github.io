@@ -1,0 +1,222 @@
+.vetList {
+  border: 1px solid var(--ion-color-medium);
+  border-radius: 4px;
+}
+.search-item {
+  cursor: var(--cursor);
+}
+.search-item:hover {
+  color: var(--ion-color-primary);
+}
+.practice-card {
+  width: calc(95% - 45%) !important;
+  font-family: var(--ion-default-font);
+  font-weight: bold;
+  font-stretch: normal;
+  font-style: normal;
+  line-height: normal;
+  letter-spacing: normal;
+  margin: auto;
+}
+.create-btn {
+  width: 25%;
+}
+
+input[type="file"] {
+    display: none;
+  }
+  .container {
+    margin-top: 2rem;
+    width: 10rem;
+    height: 10rem;
+    border: 1px solid var(--ion-color-medium-tint);
+    position: relative;
+    border-radius: 5px;
+    padding-right: 0px !important;
+    padding-left: 0px !important;
+    text-align: -webkit-center !important;
+  }
+  @media (max-width: 762px) {
+    .container {
+      width: fit-content;
+    }
+  }
+  
+  .active {
+    background: var(--ion-color-secondary);
+    color: var(--white-background);
+  }
+  .image {
+    opacity: 1;
+    display: block;
+    width: 100%;
+    height: 100%;
+    -webkit-transition: 0.5s ease;
+    transition: 0.5s ease;
+    -webkit-backface-visibility: hidden;
+    backface-visibility: hidden;
+    border-radius: 4px;
+  }
+  .input-image{
+    width: 10rem !important;
+    height: 10rem !important;
+  }
+  .upload-image>ion-icon {
+    font-size: var(--size-icon-40);
+    cursor: var(--cursor);
+  }
+  
+  .middle {
+    transition: 0.5s ease;
+    opacity: 0;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    -ms-transform: translate(-50%, -50%);
+    text-align: center;
+  }
+  
+  
+  // .navigation-card > ion-icon {
+  //   font-size: 30px;
+  //   margin-top: 4vh;
+  // }
+  
+  .text {
+    color: #000;
+    font-size: 26px;
+  }
+  .text > label > i {
+    cursor: pointer;
+  }
+  
+  .select-dropdown {
+    border: 1px solid #dde1e6 !important;
+    background: var(--white-background) !important;
+    padding: 7px !important;
+  }
+  
+  
+  @media (max-width: 762px) {
+    .image-desktop {
+      display: none;
+    }
+    .image-mobile {
+      display: block;
+    }
+    .practice-card {
+      width: calc(100% - 0%) !important;
+      font-family: var(--ion-default-font);
+      font-weight: bold;
+      font-stretch: normal;
+      font-style: normal;
+      line-height: normal;
+      letter-spacing: normal;
+      margin: auto;
+    }
+  }
+  @media (min-width: 762px) {
+    .image-desktop {
+      display: block;
+    }
+    .image-mobile {
+      display: none;
+    }
+  }
+  .species-card {
+    cursor: pointer;
+  }
+  
+  // .species-card {
+  //   width: 6rem;
+  //   height: 7rem;
+  // }
+  // .navigation-card {
+  //   width: 2rem;
+  //   height: 7rem;
+  // }
+  // .iconSize {
+  //   font-size: 1.5rem;
+  // }
+  
+  // @media (max-width: 762px) {
+  //   .species-card {
+  //     width: 3.5rem;
+  //     height: 4.5rem;
+  //     & ion-card-content {
+  //       padding-top: 1rem !important;
+  //     }
+  //   }
+  //   .navigation-card {
+  //     width: 2rem;
+  //     height: 4.5rem;
+  //     & ion-icon {
+  //       font-size: 30px;
+  //       margin-top: 3vh;
+  //     }
+  //   }
+  // }
+  
+  // @media (min-width: 762px) {
+  //   .species-card {
+  //     & ion-card-content {
+  //       padding-top: 3.5rem;
+  //     }
+  //   }
+  //   .navigation-card {
+  //     width: 2rem;
+  //     height: 6.8rem;
+  //     & ion-icon {
+  //       font-size: 30px;
+  //       margin-top: 5vh;
+  //     }
+  //   }
+  // }
+  @media (width: 768px) {
+    .practice-card {
+      width: calc(95% - 25%) !important;
+    }
+    // .navigation-card > ion-icon {
+    //   font-size: 30px;
+    //   margin-top: 4vh;
+    // }
+    .slide-col {
+      max-width: calc(calc(3 / var(--ion-grid-columns, 12)) * 100%) !important;
+    }
+  }
+  
+  @media (width: 1024px) {
+    .practice-card {
+      width: calc(95% - 25%) !important;
+    }
+    // .navigation-card > ion-icon {
+    //   font-size: 30px;
+    //   margin-top: 3vh;
+    // }
+    .slide-col {
+      max-width: calc(calc(3 / var(--ion-grid-columns, 12)) * 70%) !important;
+    }
+  }
+  .tick-icon {
+    float: left !important;
+    padding: 12px;
+    font-size: 20px;
+  }
+  @media(max-width:762px){
+    .tick-icon {
+      float: left !important;
+      padding: 5px;
+    }
+  }
+  
+  @media (min-width: 768px) and (max-width: 1024px) and (orientation: landscape)  {
+    .practice-card {
+      width: calc(95% - 25%) !important;
+    }
+  }
+
+  .ifNoData{
+    opacity: 0.6;
+    font-size: 1rem;
+  }

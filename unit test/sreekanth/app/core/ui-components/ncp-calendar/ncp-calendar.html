@@ -1,0 +1,438 @@
+<div class="calendarComponent">
+    <div class="row">
+        <div class="col-md-4 col-sm-4 col-xs-12 pl0 p-xs-0">
+            <div class="calendarBtnGroup1">
+                <button-field buttonType="custom" buttonClass="fa fa-caret-left ncpbtn-default" mwlCalendarPreviousView [view]="view" [(viewDate)]="viewDate" (viewDateChange)="activeDayIsOpen = false" buttonName=""></button-field>
+                <button-field buttonType="custom" buttonClass="ncpbtn-default" mwlCalendarToday [(viewDate)]="viewDate" buttonName="NCPBtn.today"></button-field>
+                <button-field buttonType="custom" buttonClass="fa fa-caret-right ncpbtn-default" mwlCalendarNextView [view]="view" [(viewDate)]="viewDate" (viewDateChange)="activeDayIsOpen = false" buttonName=""></button-field>
+            </div>
+        </div>
+        <div class="col-md-4 col-sm-4 col-xs-12 eventBlock">
+                <button-field buttonType="custom" buttonClass="ncpbtn-default" buttonName="NCPBtn.events" (click)="viewEventsModalOpen()"></button-field>
+                <button-field buttonType="custom" buttonClass="ncpbtn-default" buttonName="NCPBtn.tasks" (click)="viewTasksModalOpen()"></button-field>
+        </div>
+        <div class="col-md-4 col-sm-4 col-xs-12 pr0 p-xs-0">
+            <div class="calendarBtnGroup2">
+                <button-field buttonType="custom" buttonClass="ncpbtn-default" (click)="view = 'day'" [class.active]="view === 'day'" buttonName="NCPBtn.day"></button-field>
+                <button-field buttonType="custom" buttonClass="ncpbtn-default" (click)="view = 'week'" [class.active]="view === 'week'" buttonName="NCPBtn.week"></button-field>
+                <button-field buttonType="custom" buttonClass="ncpbtn-default" (click)="view = 'month'" [class.active]="view === 'month'"
+                    buttonName="NCPBtn.month"></button-field>
+            </div>
+        </div>
+    </div>
+    <misc-h6 label="{{viewDate | calendarDate:(view + 'ViewTitle'):'en'}}" miscClass="text-center fwb"></misc-h6>
+    <div *ngIf="events; else loading" class="row">
+        <div [ngSwitch]="view" class="col-md-12 col-sm-12 col-xs-12 p0">
+            <mwl-calendar-month-view *ngSwitchCase="'month'" [viewDate]="viewDate" [events]="events" [locale]="locale" [refresh]="refresh" [activeDayIsOpen]="activeDayIsOpen"
+                (dayClicked)="dayClicked($event.day)" (eventClicked)="handleEvent('Clicked', $event.event)" (eventTimesChanged)="eventTimesChanged($event)"
+                [cellTemplate]="monthCellTemplate">
+            </mwl-calendar-month-view>
+            <mwl-calendar-week-view *ngSwitchCase="'week'" [viewDate]="viewDate" [events]="events" [locale]="locale" [refresh]="refresh" (eventClicked)="handleEvent('Clicked', $event.event)"
+                (eventTimesChanged)="eventTimesChanged($event)" [headerTemplate]="weekHeaderTemplate">
+            </mwl-calendar-week-view>
+            <mwl-calendar-day-view *ngSwitchCase="'day'" [viewDate]="viewDate" [events]="events" [locale]="locale" [refresh]="refresh" (eventClicked)="handleEvent('Clicked', $event.event)"
+                (eventTimesChanged)="eventTimesChanged($event)" [hourSegmentTemplate]="dayHourSegmentTemplate">
+            </mwl-calendar-day-view>
+        </div>
+    </div>
+</div>
+<h3 *ngIf="showAllEvents">
+    Edit events
+    <!--<button class="btn btn-primary pull-right" (click)="addEvent()">
+        Add new
+      </button>-->
+    <div class="clearfix"></div>
+</h3>
+
+<table *ngIf="showAllEvents" class="table table-bordered">
+
+    <thead>
+        <tr>
+                <th *ngFor="let header of showAllTableDetails"
+                [attr.data-title]="header | translate">
+                <span class="labelHeader">{{header | translate}}</span>
+        </tr>
+    </thead>
+
+    <tr *ngFor="let event of events; let index = index">
+        <td>
+            <text-box [(ngModel)]="event.title" (keyup)="refresh.next()"></text-box>
+        </td>
+        <td>
+            <input type="color" [(ngModel)]="event.color.primary" (change)="refresh.next()">
+        </td>
+        <td>
+            <ncp-calendar-utils-date-time-picker [(ngModel)]="event.start" (ngModelChange)="refresh.next()" placeholder="Not set">
+            </ncp-calendar-utils-date-time-picker>
+        </td>
+        <td>
+            <ncp-calendar-utils-date-time-picker [(ngModel)]="event.end" (ngModelChange)="refresh.next()" placeholder="Not set">
+            </ncp-calendar-utils-date-time-picker>
+        </td>
+        <td>
+            <button class="btn btn-danger" (click)="events.splice(index, 1); refresh.next()">
+                Delete
+            </button>
+        </td>
+    </tr>
+</table>
+<ncp-modal #modalContent modalClass="modal-lg" modalTitle="" titleIcon="glyphicon glyphicon-wrench confed">
+    <modal-content>
+        <div>
+            Action:
+            <pre>{{ modalData?.action }}</pre>
+        </div>
+        <div>
+            Event:
+            <pre>{{ modalData?.event | json }}</pre>
+        </div>
+    </modal-content>
+    <modal-footer>
+        <div class="btns-row">
+            <button type="button" class="btn btn-outline-secondary" (click)="modalContent.close()">OK</button>
+        </div>
+    </modal-footer>
+</ncp-modal>
+<ncp-modal #viewEditEventModal modalClass="modal-lg" modalTitle="" titleIcon="glyphicon glyphicon-wrench confed" hideCloseButton="true"
+    [closeOnEscape]="false" [closeOnOutsideClick]="false">
+    <modal-content>
+
+        <div class="row">
+            <ul *ngIf = 'isTaskFlag' class="nav nav-tabs mb20" role="tablist">  
+                <li [ngClass]="{'active ': isTaskFlag }" class="np col-md-12 col-sm-12 col-xs-12 no-pad">
+                    <a (click)="openTaskDetail()" aria-controls="tab-1" class="btn" data-toggle="tab" role="tab" aria-expanded="true">
+                        <i class="fa fa-tasks iconHeader" aria-hidden="true"></i>
+                        <span class="labelHeader">{{'NCPLabel.task' | translate}}</span>
+                    </a>
+                </li> 
+            </ul>
+            <ul *ngIf = 'isEventFlag' class="nav nav-tabs mb20" role="tablist">                                
+                    <li [ngClass]="{'active ': isEventFlag }" class="np col-md-12 col-sm-12  col-xs-12 no-pad">
+                        <a (click)="openEventDetail()" aria-controls="tab-2" class="btn" data-toggle="tab" role="tab" aria-expanded="true">
+                            <i class="fa fa-calendar iconHeader" aria-hidden="true"></i>
+                            <span class="labelHeader">{{'NCPLabel.event' | translate}}</span>
+                        </a>
+                    </li>
+                </ul>
+
+            <div class="tab-content mb0 radio-btn" *ngIf="isTaskFlag">
+                <ncp-task [(ngModel)]="taskInfo" (taskType)="taskType" (ngModelChange)="refresh.next()" changeId="taskInfo"></ncp-task>
+            </div>
+            <div class="filterac" *ngIf="isEventFlag">
+
+                <table class="calendarEventTable">
+                    <thead>
+                        <tr>
+                                <th *ngFor="let header of editTableDetails"
+                                [attr.data-title]="header | translate">
+                                <span class="labelHeader">{{header | translate}}</span>
+                        </tr>
+                    </thead>
+
+                    <tbody *ngIf="editableEvent.hasOwnProperty('length') && editableEvent.length > 0">
+                        <tr>
+                            <td [attr.data-title]="'Title'">
+                                <input type="text" class="form-control" [(ngModel)]="editableEvent[0].title" (keyup)="refresh.next()">
+                            </td>
+
+                            <td [attr.data-title]="'Primary color'">
+                                <input type="color" [(ngModel)]="editableEvent[0].color.primary" (change)="refresh.next()">
+                            </td>
+                            <td [attr.data-title]="'Starts at'">
+                                <ncp-calendar-utils-date-time-picker [(ngModel)]="editableEvent[0].start" (ngModelChange)="refresh.next()" placeholder="Not set">
+                                </ncp-calendar-utils-date-time-picker>
+                            </td>
+                            <td [attr.data-title]="'Ends at'">
+                                <ncp-calendar-utils-date-time-picker [(ngModel)]="editableEvent[0].end" (ngModelChange)="refresh.next()" placeholder="Not set">
+                                </ncp-calendar-utils-date-time-picker>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+                <div class="row">
+                    <div *ngFor="let temp of this.taskInfo.notes; let i=index;let last = last">
+                        <div *ngIf="i === 0">
+                            <div class="row">
+                                <ncp-label elementLabel="NCPLabel.notes"></ncp-label>
+                                <text-area contenteditable="true" placeholder="Type Comments here" customFlag="true" textareaClass="col-sm-7 col-md-5 col-xs-11 pr0"
+                                    [(ngModel)]=temp.comments elementLabel="NCPLabel.comments" mandatoryFlag=true textAreaRow="10"></text-area>
+                                <div class="btnAlignField pull-left d-flex uploadBtnAlignRTL" *ngIf="!isEnquiryFlag">
+                                    <button-field *ngIf="this.taskInfo.notes.length > 1" buttonType="custom" buttonClass="ncpbtn-default fa fa-close ml5 mt-xs-0"
+                                        (click)="deleteNotes(i)" [class.mt10]="i > 0" elementId="deleteNotes"></button-field>
+                                    <button-field *ngIf="last" buttonType="custom" buttonClass="ncpbtn-default pull-left fa fa-plus ml5 mt-xs-0" (click)="addNotes()"
+                                        elementId="addNotes" [class.mt10]="i > 0" [class.ml15]="i > 0"></button-field>
+                                </div>
+                            </div>
+                        </div>
+                        <div *ngIf="i > 0">
+                            <div class="row">
+                                <ncp-label elementLabel="NCPLabel.notes"></ncp-label>
+                                <text-area contenteditable="true" placeholder="Type Comments here" customFlag="true" textareaClass="col-sm-7 col-md-5 col-xs-11 pr0"
+                                    [(ngModel)]=temp.comments elementLabel="NCPLabel.comments" mandatoryFlag=true textAreaRow="10"></text-area>
+                                <div class="btnAlignField pull-left d-flex uploadBtnAlignRTL" *ngIf="!isEnquiryFlag">
+                                    <button-field *ngIf="this.taskInfo.notes.length > 1" buttonType="custom" buttonClass="ncpbtn-default fa fa-close ml5 mt-xs-0"
+                                        (click)="deleteNotes(i)" [class.mt10]="i > 0" elementId="deleteNotes"></button-field>
+                                    <button-field *ngIf="last" buttonType="custom" buttonClass="ncpbtn-default pull-left fa fa-plus ml5 mt-xs-0" (click)="addNotes()"
+                                        elementId="addNotes" [class.mt10]="i > 0" [class.ml15]="i > 0"></button-field>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+
+                </div>
+                <div class="btns-row">
+                    <button-field buttonType="custom" buttonClass="ncp-linkBtn w100p" buttonName="NCPBtn.Cancel" (click)="viewEditEventModal.close()"></button-field>
+                    <button-field buttonType="custom" buttonClass="ncpbtn-default" (click)="updateEvent();viewEditEventModal.close()" buttonName="NCPBtn.save"></button-field>
+                </div>
+            </div>
+        </div>
+    </modal-content>
+    <modal-footer>
+
+    </modal-footer>
+</ncp-modal>
+<ncp-modal #addEventModal modalClass="modal-lg" modalTitle="" titleIcon="glyphicon glyphicon-wrench confed" hideCloseButton="true"
+    [closeOnEscape]="false" [closeOnOutsideClick]="false">
+    <modal-content>
+        <div class="row">
+            <ul class="nav nav-tabs mb20" role="tablist">
+                <li [ngClass]="{'active ': isEventFlag }" class="np col-md-6 col-sm-6  col-xs-6 no-pad">
+                    <a (click)="openEventDetail()" aria-controls="tab-2" class="btn" data-toggle="tab" role="tab" aria-expanded="true">
+                        <i class="fa fa-calendar iconHeader" aria-hidden="true"></i>
+                        <span class="labelHeader">{{'NCPLabel.event' | translate}}</span>
+                    </a>
+                </li>
+                <li [ngClass]="{'active ': isTaskFlag }" class="np col-md-6 col-sm-6 col-xs-6 no-pad">
+                    <a (click)="openTaskDetail()" aria-controls="tab-1" class="btn" data-toggle="tab" role="tab" aria-expanded="true">
+                        <i class="fa fa-tasks iconHeader" aria-hidden="true"></i>
+                        <span class="labelHeader">{{'NCPLabel.task' | translate}}</span>
+                    </a>
+                </li>
+            </ul>
+
+            <div class="tab-content mb0 radio-btn" *ngIf="isTaskFlag">
+                <ncp-task [(ngModel)]="taskInfo" (taskType)="taskType" (ngModelChange)="refresh.next()" changeId="taskInfo"></ncp-task>
+            </div>
+            <div class="filterac" *ngIf="isEventFlag">
+                <table class="calendarEventTable">
+                    <thead>
+                        <tr>
+                            <th *ngFor="let header of tableDetails"
+                            [attr.data-title]="header | translate">
+                            <span class="labelHeader">{{header | translate}}</span>
+                        </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td [attr.data-title]="'Title'">
+                                <text-box customFlag=true textBoxClass="col-md-12 col-sm-12 col-xs-12 plr0" [(ngModel)]="newEvent.title" (keyup)="refresh.next()"></text-box>
+                            </td>
+
+                            <td [attr.data-title]="'Primary color'">
+                                <input type="color" [(ngModel)]="newEvent.color.primary" (change)="refresh.next()">
+                            </td>
+                            <td [attr.data-title]="'Starts at'">
+                                <ncp-calendar-utils-date-time-picker [(ngModel)]="newEvent.start" (ngModelChange)="refresh.next()" placeholder="Not set">
+                                </ncp-calendar-utils-date-time-picker>
+                            </td>
+                            <td [attr.data-title]="'Ends at'">
+                                <ncp-calendar-utils-date-time-picker [(ngModel)]="newEvent.end" (ngModelChange)="refresh.next()" placeholder="Not set">
+                                </ncp-calendar-utils-date-time-picker>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+                <div class="row">
+                    <div *ngFor="let temp of this.taskInfo.notes; let i=index;let last = last">
+                        <div *ngIf="i === 0">
+                            <div class="row">
+                                <ncp-label elementLabel="NCPLabel.notes"></ncp-label>
+                                <text-area contenteditable="true" placeholder="Type Comments here" customFlag="true" textareaClass="col-sm-7 col-md-5 col-xs-11 pr0"
+                                    [(ngModel)]=temp.comments elementLabel="NCPLabel.comments" mandatoryFlag=true textAreaRow="10"></text-area>
+                                <div class="btnAlignField pull-left d-flex uploadBtnAlignRTL" *ngIf="!isEnquiryFlag">
+                                    <button-field *ngIf="this.taskInfo.notes.length > 1" buttonType="custom" buttonClass="ncpbtn-default fa fa-close ml5 mt-xs-0"
+                                        (click)="deleteNotes(i)" [class.mt10]="i > 0" elementId="deleteNotes"></button-field>
+                                    <button-field *ngIf="last" buttonType="custom" buttonClass="ncpbtn-default pull-left fa fa-plus ml5 mt-xs-0" (click)="addNotes()"
+                                        elementId="addNotes" [class.mt10]="i > 0" [class.ml15]="i > 0"></button-field>
+                                </div>
+                            </div>
+                        </div>
+                        <div *ngIf="i > 0">
+                            <div class="row">
+                                <ncp-label elementLabel="NCPLabel.notes"></ncp-label>
+                                <text-area contenteditable="true" placeholder="Type Comments here" customFlag="true" textareaClass="col-sm-7 col-md-5 col-xs-11 pr0"
+                                    [(ngModel)]=temp.comments elementLabel="NCPLabel.comments" mandatoryFlag=true textAreaRow="10"></text-area>
+                                <div class="btnAlignField pull-left d-flex uploadBtnAlignRTL" *ngIf="!isEnquiryFlag">
+                                    <button-field *ngIf="this.taskInfo.notes.length > 1" buttonType="custom" buttonClass="ncpbtn-default fa fa-close ml5 mt-xs-0"
+                                        (click)="deleteNotes(i)" [class.mt10]="i > 0" elementId="deleteNotes"></button-field>
+                                    <button-field *ngIf="last" buttonType="custom" buttonClass="ncpbtn-default pull-left fa fa-plus ml5 mt-xs-0" (click)="addNotes()"
+                                        elementId="addNotes" [class.mt10]="i > 0" [class.ml15]="i > 0"></button-field>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+
+                </div>
+                <div class="btns-row">
+                    <button-field buttonType="custom" buttonClass="ncp-linkBtn w100p" buttonName="NCPBtn.Cancel" (click)="addEventModalclose();"></button-field>
+                    <button-field buttonType="custom" buttonClass="ncpbtn-default" buttonName="NCPBtn.add" (click)="addEvent()"></button-field>
+                </div>
+            </div>
+        </div>
+
+
+
+
+    </modal-content>
+    <modal-footer>
+
+    </modal-footer>
+</ncp-modal>
+<context-menu #basicMenu>
+    <ng-template contextMenuItem (execute)="openAddEventModal($event.item)">
+        Add Event/Task
+    </ng-template>
+</context-menu>
+<ng-template #monthCellTemplate let-day="day" let-openDay="openDay" let-locale="locale" let-tooltipPlacement="tooltipPlacement"
+    let-highlightDay="highlightDay" let-unhighlightDay="unhighlightDay" let-eventClicked="eventClicked">
+    <div class="fill-height" [contextMenu]="basicMenu" [contextMenuSubject]="day.date">
+        <div class="cal-cell-top">
+            <span class="cal-day-badge" *ngIf="day.badgeTotal > 0">{{ day.badgeTotal }}</span>
+            <span class="cal-day-number">{{ day.date | calendarDate:'monthViewDayNumber':locale }}</span>
+            <div class="cal-events">
+                <div class="cal-event" *ngFor="let event of day.events" [style.backgroundColor]="event.color.primary" [ngClass]="event?.cssClass"
+                    (mouseenter)="highlightDay.emit({event: event})" (mouseleave)="unhighlightDay.emit({event: event})" [mwlCalendarTooltip]="event.title | calendarEventTitle:'monthTooltip':event"
+                    [tooltipPlacement]="tooltipPlacement" (click)="$event.stopPropagation(); eventClicked.emit({event: event})">
+                </div>
+            </div>
+        </div>
+    </div>
+</ng-template>
+
+<ng-template #weekHeaderTemplate let-days="days" let-locale="locale" let-dayHeaderClicked="dayHeaderClicked">
+    <div class="cal-day-headers">
+        <div class="cal-header" *ngFor="let day of days" [class.cal-past]="day.isPast" [class.cal-today]="day.isToday" [class.cal-future]="day.isFuture"
+            [class.cal-weekend]="day.isWeekend" [class.cal-drag-over]="day.dragOver" (click)="dayHeaderClicked.emit({day: day})"
+            [contextMenu]="basicMenu" [contextMenuSubject]="day.date">
+            <b>{{ day.date | calendarDate:'weekViewColumnHeader':locale }}</b>
+            <br>
+            <span>{{ day.date | calendarDate:'weekViewColumnSubHeader':locale }}</span>
+        </div>
+    </div>
+</ng-template>
+
+<ng-template #dayHourSegmentTemplate let-segment="segment" let-locale="locale">
+    <div class="cal-hour-segment" [ngClass]="segment.cssClass" [contextMenu]="basicMenu" [contextMenuSubject]="segment.date">
+        <div [hidden]="!segment.isStart" class="cal-time">
+            {{ segment.date | calendarDate:'dayViewHour':locale }}
+        </div>
+    </div>
+</ng-template>
+<ncp-modal #viewTasksModal modalClass="modal-lg" modalTitle="List of Tasks" titleIcon="glyphicon glyphicon-th-list confed"
+    hideCloseButton="true" [closeOnEscape]="false" [closeOnOutsideClick]="false">
+    <modal-content>
+        <div class="row">
+            <div class="filterac" *ngIf="existingTaskList?.length > 0">
+                <table>
+                    <thead>
+                        <tr>
+                            <th><span class="labelHeader">{{'NCPLabel.TaskId' | translate}} </span></th>
+                            <th><span class="labelHeader"> {{'NCPLabel.TaskName' | translate}}</span></th>
+                            <th><span class="labelHeader"> {{'NCPLabel.deadline' | translate}}</span></th>
+                            <th><span class="labelHeader"> {{'NCPLabel.CreatedBy' | translate}} </span> </th>
+                            <th><span class="labelHeader"> {{'NCPLabel.ResponsiblePerson' | translate}} </span> </th>
+                            <th><span class="labelHeader"> {{'NCPLabel.status' | translate}} </span> </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let task of existingTaskList; let i = index;" id="tabhide">
+                            <td>
+                                <a class="link" (click)="openReferenceTaskWindow(task?.taskID)"><span> {{ task?.taskID }}
+                                        </span></a>
+                            </td>
+                            <td>
+                                <span> {{ task?.details.title }} </span>
+                            </td>
+                            <td>
+                                <span> {{ task?.endDate }} </span>
+                            </td>
+                            <td>
+
+                                <i class="fa fa-user iconCreatedByUser"></i>
+                                <span class="labelCreatedByUser"> {{ task?.operatorID }} </span>
+
+
+
+                            </td>
+                            <td>
+
+                                <div *ngFor="let responsiblePerson of task?.details?.responsiblePerson; let i = index;"><i
+                                        class="fa fa-user iconResponsiblePerson"></i><span class="labelResponsiblePerson"> {{
+                                        responsiblePerson?.desc }} </span></div>
+
+
+
+                            </td>
+                            <td>
+                                <span> {{ task?.details?.status }} </span>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </modal-content>
+    <modal-footer>
+        <div class="btns-row">
+            <button-field buttonType="custom" buttonClass="ncp-linkBtn w100p" buttonName="NCPBtn.Cancel" (click)="viewTasksModal.close()"></button-field>
+            <button-field buttonType="custom" buttonClass="ncpbtn-default" (click)="showMoreRecords()" buttonName="NCPBtn.showMore"></button-field>
+        </div>
+    </modal-footer>
+</ncp-modal>
+
+<ncp-modal #viewEventsModal modalClass="modal-lg" modalTitle="List of Events" titleIcon="glyphicon glyphicon-th-list confed"
+    hideCloseButton="true" [closeOnEscape]="false" [closeOnOutsideClick]="false">
+    <modal-content>
+        <div class="row">
+            <div class="filterac" *ngIf="existingEventList?.length > 0">
+                <table>
+                    <thead>
+                        <tr>
+                            <th><span class="labelHeader">{{'NCPLabel.eventID' | translate}} </span></th>
+                            <th><span class="labelHeader"> {{'NCPLabel.eventName' | translate}}</span></th>
+                            <th><span class="labelHeader"> {{'NCPLabel.deadline' | translate}}</span></th>
+                            <th><span class="labelHeader"> {{'NCPLabel.CreatedBy' | translate}} </span> </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let task of existingEventList; let i = index;" id="tabhide">
+                            <td>
+                                <a class="link" (click)="openReferenceEventWindow(task?.taskID)"><span> {{ task?.meta?.taskID
+                                        }}
+                                    </span></a>
+                            </td>
+                            <td>
+                                <span> {{ task?.title }} </span>
+                            </td>
+                            <td>
+                                <span> {{ task?.end }} </span>
+                            </td>
+                            <td>
+                                <i class="fa fa-user iconCreatedByUser"></i>
+                                <span class="labelCreatedByUser"> {{ task?.operatorID }} </span>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </modal-content>
+    <modal-footer>
+        <div class="btns-row">
+            <button-field buttonType="custom" buttonClass="ncp-linkBtn w100p" buttonName="NCPBtn.Cancel" (click)="viewEventsModal.close()"></button-field>
+        </div>
+    </modal-footer>
+</ncp-modal>

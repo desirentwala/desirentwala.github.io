@@ -1,0 +1,5 @@
+<ion-list>
+  <ion-list *ngFor="let menu of menuArr">
+    <ion-item class="cursor" (click)="menuItemClick(menu)">{{menu.action}}</ion-item>
+  </ion-list>
+</ion-list>

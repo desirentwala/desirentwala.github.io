@@ -1,0 +1,27 @@
+<div *ngIf="sessionFlag">
+    <section class="b2b2cProductPageContent">
+            <div class="row">
+                <div *ngFor="let product of products" class="col-md-4 col-sm-6 col-xs-12 pl0">
+                    <div class="prodBox b0 pull-left">
+                        <misc-h2 label="{{product.name}}" miscClass="text-truncate w90p mt0 pull-left"></misc-h2>
+                        <!--<div class="mb10">
+                            <span class="fs25 fs-xs-20 theme-color"><i class=""></i></span><span class="fs25 fs-xs-20 text-truncate ml5 va-m w90p">{{product.name | translate}}</span>
+                        </div>-->
+                        <div class="{{product.imageName}} ht150 mb10 pull-left w100p"></div>
+                        <div class="col-md-12 col-sm-12 col-xs-12 p0">
+                            <p class="theme-color w100p pull-left">{{product.mainProductDesc | translate}}</p>
+                            <button-field buttonType="custom" buttonName="NCPBtn.getQuote" buttonClass="ncpbtn-large pull-left" (click)="getQuote(product.code)" iconClass="fa fa-paper-plane-o"></button-field>
+                            <a class="anchor-link col-md-5 col-sm-5 col-xs-5 pull-right mt10 pr0 text-right" (click)="gotoProduct(product.lobCode)">{{'NCPLabel.findoutmore'| translate}}</a>
+                            <div class="bb1 mtb10 w100p  pull-left"></div>
+                            <div *ngFor="let subProduct of product.subProducts" class="mb5 col-md-6 col-sm-6 pl0">
+                                <a class="anchor-link" (click)="gotoProductDetails(subProduct.code,product.lobCode)">
+                                    {{subProduct.name | translate}}<i class="fa fa-angle-right ml5"></i> 
+                                </a>
+                            </div>
+                            <span class=" col-md-6 col-sm-6 pr0"><a class="anchor-link pull-right" (click)="gotoProduct(product.lobCode)">{{product.viewAllText | translate}}</a></span>
+                        </div>
+                        </div>
+                </div>
+            </div>
+    </section>
+</div>

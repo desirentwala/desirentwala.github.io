@@ -1,0 +1,33 @@
+.success-card {
+  margin: 0px;
+  padding: 10px;
+  position: relative;
+  min-height: 100vh;
+}
+.success-card > ion-icon {
+  font-size: 6rem;
+}
+.success-ion {
+  color: #4b5660;
+  position: relative;
+  top: 30%;
+}
+
+.Oval {
+  position: relative;
+  margin: auto;
+  width: 100px;
+  border-radius: 50%;
+  height: 100px;
+  background-color: rgba(78, 180, 0, 0.25);
+}
+
+@media (max-width: 762px) {
+  .success-card > ion-title {
+    font-size: 13px;
+  }
+  .appt-success {
+    font-size: 22px;
+  }
+}
+

@@ -1,0 +1,14 @@
+<div *ngIf="!customFlag" class="col-md-5 col-sm-6 col-xs-11 pr-sm-0">
+    <ion-range-slider [type]="type" [formControl]="elementControl" [min]="min" [max]="max" [from]="from" [to]="to"
+        [from_min]="from_min" [from_max]="from_max" [from_shadow]="from_shadow" [to_min]="to_min" [to_max]="to_max"
+        [to_shadow]="to_shadow" [grid]="grid" [grid_num]="grid_num" [prefix]=" prefix" [postfix]=" postfix" [step]="step"
+        [decorate_both]="decorate_both" [disable]="isDisabled" [values]="values" (onFinish)="afterValueChanges($event)" 
+        ngDefaultControl></ion-range-slider>
+</div>
+<div *ngIf="customFlag" [ngClass]="rangeSliderCustomClass">
+        <ion-range-slider [type]="type" [formControl]="elementControl" [min]="min" [max]="max" [from]="from" [to]="to"
+            [from_min]="from_min" [from_max]="from_max" [from_shadow]="from_shadow" [to_min]="to_min" [to_max]="to_max"
+            [to_shadow]="to_shadow" [grid]="grid" [grid_num]="grid_num" [prefix]=" prefix" [postfix]=" postfix"
+        [decorate_both]="decorate_both" [disable]="isDisabled" [values]="values" [step]="step" 
+            (onFinish)="afterValueChanges($event)" ngDefaultControl></ion-range-slider>
+</div>

@@ -1,0 +1,42 @@
+{
+    "data": [
+        {
+            "id": 6,
+            "userId": 12,
+            "petName": "Max",
+            "speciesId": 1,
+            "practiceId": 2,
+            "breed": "Breed1",
+            "gender": "Male",
+            "dob": "2015-01-01",
+            "profilePic": "PE_6.jpg",
+            "neutered": false,
+            "deceased": false,
+            "hide": false,
+            "active": true,
+            "insured": null,
+            "insurenceProvider": null,
+            "createdOn": "2019-12-18T22:46:39.000Z",
+            "updatedOn": null
+        },
+        {
+            "id": 7,
+            "userId": 12,
+            "petName": "Puppy",
+            "speciesId": 2,
+            "practiceId": 2,
+            "breed": "Cat1",
+            "gender": "Female",
+            "dob": "2015-01-01",
+            "profilePic": "PE_7.jpg",
+            "neutered": true,
+            "deceased": false,
+            "hide": false,
+            "active": true,
+            "insured": null,
+            "insurenceProvider": null,
+            "createdOn": "2019-12-18T22:47:59.000Z",
+            "updatedOn": null
+        }
+    ]
+}

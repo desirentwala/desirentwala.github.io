@@ -1,0 +1,287 @@
+<div *ngIf="showSearch==='Y'">
+
+    <div class="col-md-3 col-sm-12 col-xs-12  conf">
+        <input class="forconf" [(ngModel)]="searchId" placeholder="{{'NCPBtn.search' | translate}}">
+    </div>
+</div>
+
+<div style="clear:both;"></div>
+<div class="filterac">
+    <table>
+        <thead>
+            <tr>
+                <th *ngFor="let header of tableDetails;let i = index" [class]="selectedClass(header.mapping)" (click)="changeSorting(header.mapping);this.rotateFlag === i ? this.rotateFlag='':this.rotateFlag=i;"
+                    [attr.data-title]="header.header | translate">
+
+                    <span class="labelHeader">{{header.header | translate}}</span>
+                    <i class="icon-arrow-d indexicon" [class.rotate]="rotateFlag === i"></i>
+                </th>
+                <th *ngIf="isActionFlag" class="actionCol">
+                    <span class="labelHeader">{{'NCPLabel.Action' | translate}}</span>
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            <!--orderBy pipe should  follow searchBy pipe to avoid filter sorting Issue-->
+            <tr *ngFor="let object of tableData  | searchBy : searchId : tableDetails | orderBy : convertSorting(); let rowIndex=index" id="tabhide">
+                <td *ngFor="let mappings of tableDetails; let i=index" [attr.data-title]="mappings.header | translate">                   
+                        <ng-container *ngIf="mappings.fieldConfig;else displaySameData">
+							<ng-template [ngIf]="mappings.fieldConfig.keyField">
+                                <span> {{object['policyNo']}}-{{object['policyEndtNo']}}</span>
+							</ng-template>
+							<ng-template [ngIf]="mappings.fieldConfig.pipeTransformRequired">
+								<misc-display [type]="mappings.fieldConfig.type" [dateDisplayType]="mappings.fieldConfig.dateDisplayType"
+								[label]="object[mappings.mapping]" [joinString]="mappings.fieldConfig.joinString? mappings.fieldConfig.joinString :''">
+								</misc-display>
+							</ng-template>
+						</ng-container>
+						<ng-template #displaySameData>
+								<span>{{object[mappings.mapping]}}</span>
+						</ng-template>
+                </td>
+
+                <td class="actionCol">
+
+                    <span>
+                        <i class="fa fa-gear showPopover indexrecus" tooltipPlacement="left" [tooltip]="renewalModalTooltip" [tooltipHide]="tooltipHide"
+                            tooltipClick=true [id]="'renewTooltip'+rowIndex"></i>
+                    </span>
+                    <tooltip-content #renewalModalTooltip [excludeId]="'renewTooltip'+rowIndex">
+                        <h3 class="popover-title">&nbsp;
+                            <a class="close" (click)="tooltipHide = renewalModalTooltip.hide()">
+                                <i class="icon-alert"></i>
+                            </a>
+                        </h3>
+                        <div class="popover-content">
+                            <div>
+                                <ul>
+                                    <li>
+                                        <a (click)="doActionClickRow(object,'SEN_NOT'); tooltipHide = renewalModalTooltip.hide()">
+                                            <i class="fa fa-pencil-square-o iconToolTip"></i>
+                                            <span class="labelToolTip">{{'NCPLabel.sendRenewalNotice' | translate}}</span>
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a (click)="doActionClickRow(object,'PRE_TEMP'); tooltipHide = renewalModalTooltip.hide()">
+                                            <i class="fa fa-pencil-square-o iconToolTip"></i>
+                                            <span class="labelToolTip">{{'NCPLabel.viewRenewalNotice' | translate}}</span>
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a (click)="doActionClickRow(object,'REN_WOC'); tooltipHide = renewalModalTooltip.hide()">
+                                            <i class="fa fa-eye iconToolTip"></i>
+                                            <span class="labelToolTip">{{'NCPLabel.renewWithoutChanges' | translate}}</span>
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a (click)="doActionClickRow(object,'REN_WC'); tooltipHide = renewalModalTooltip.hide()">
+                                            <i class="fa fa-pencil-square-o iconToolTip"></i>
+                                            <span class="labelToolTip">{{'NCPLabel.renewWithChanges' | translate}}</span>
+                                        </a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </tooltip-content>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+
+<ncp-modal [modalKey]="errorModal" [hideCloseButton]="true" [closeOnEscape]="false" [closeOnOutsideClick]="false">
+    <modal-header class="">
+        <div class="row">
+        </div>
+    </modal-header>
+    <modal-content>
+        <div *ngIf="isError">
+            <ul *ngFor="let error of errors" class="alert alert-danger">
+                <li>
+                    {{error.errDesc}}
+                </li>
+            </ul>
+        </div>
+    </modal-content>
+    <modal-footer>
+        <div class="btns-row mt10">
+                <button-field buttonType="custom" buttonClass="ncp-linkBtn mb10" buttonName="NCPBtn.close" (click)="errorModal = false;" data-dismiss="modal">
+            </button-field>
+        </div>
+    </modal-footer>
+</ncp-modal>
+    <ncp-modal [modalKey]="previewTemplateModal" [hideCloseButton]="true" [closeOnEscape]="false" [closeOnOutsideClick]="false" modalClass="modal-lg">
+    <modal-header class="">
+        <div class="row">
+            <div>
+                <misc-h2 [label]="'NCPLabel.renewalNotice'">
+                </misc-h2>
+            </div>
+        </div>
+    </modal-header>
+    <modal-content>
+        <misc-div [htmlString]="previewTemplateData" miscClass="b1">
+        </misc-div>
+    </modal-content>
+    <modal-footer>
+        <div class="btns-row mt10">
+                <button-field buttonType="custom" buttonClass="ncp-linkBtn mb10" buttonName="NCPBtn.close" (click)="previewTemplateModal = false;" data-dismiss="modal">
+            </button-field>
+        </div>
+    </modal-footer>
+</ncp-modal>
+    <ncp-modal [modalKey]="renewalNoticeModal" [hideCloseButton]="true" [closeOnEscape]="false" [closeOnOutsideClick]="false" modalClass="modal-md">
+    <modal-header class="">
+        <div class="row">
+            <div>
+                <misc-h2 [label]="'NCPLabel.renewalNoticeSentSuccessfully'">
+                </misc-h2>
+            </div>
+        </div>
+    </modal-header>
+    <modal-footer>
+        <div class="btns-row mt10">
+                <button-field buttonType="custom" buttonClass="ncp-linkBtn mb10" buttonName="NCPBtn.close" (click)="renewalNoticeModal = false;" data-dismiss="modal">
+            </button-field>
+        </div>
+    </modal-footer>
+</ncp-modal>
+<!-- <ncp-modal [modalKey]="renewalWithoutChangesModalView" [closeOnEscape]="false" [closeOnOutsideClick]="false" modalClass="modal-lg">
+        <modal-header class="">
+            <div class="row">
+                <div *ngIf="!renewalPostedFlag" class="col-md-12 col-sm-12 col-xs-12 p0">
+                    <misc-h2 [label]="'NCPLabel.policyRenewalWithoutChangesFor'">
+                        <b>{{renewalPolicyDetailsWithoutChanges?.policyInfo?.policyNo}}</b>
+                    </misc-h2>
+                </div>
+                <div *ngIf="renewalPostedFlag && !isRenewalError" class="col-md-12 col-sm-12 col-xs-12 p0">
+                    <misc-h2><span>Policy <b>{{renewalPolicyDetailsWithoutChanges?.policyInfo?.policyNo}}</b> posted successfully</span></misc-h2>
+                </div>
+            </div>
+        </modal-header>
+        <modal-content>
+            <div *ngIf="isRenewalError">
+                <ul *ngFor="let error of errors" class="alert alert-danger">
+                    <li>
+                        {{error.errDesc}}
+                    </li>
+                </ul>
+            </div>
+            <div *ngIf="!renewalPostedFlag">
+                <table class="normalTable">
+                    <tbody>
+                        <tr>
+                            <td>{{'NCPLabel.policyPeriod' | translate}}</td>
+                            <td>{{ renewalPolicyDetailsWithoutChanges?.policyInfo?.inceptionDate }} {{'NCPLabel.to' | translate}} {{ renewalPolicyDetailsWithoutChanges?.policyInfo?.expiryDate }}
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>{{"NCPLabel.premium" | translate}}</td>
+                            <td>{{ renewalPolicyDetailsWithoutChanges?.summaryInfo?.netPremiumPrime}}</td>
+                        </tr>
+                    </tbody>
+                </table>
+                <div class="row">
+                    <div class="col-md-12 col-sm-12 col-xs-12 p0">
+                        <button-field buttonType="custom" buttonClass="ncp-btn w-xs-100p mb-xs-15" buttonName="NCPBtn.confirmOnCredit" (click)="renewalPosting(false)" data-dismiss="modal">
+                        </button-field>
+                        <button-field buttonType="custom" buttonClass="ncp-btn w-xs-100p mb-xs-15" buttonName="NCPBtn.confirm&PayNow" (click)="renewalPosting(true)" data-dismiss="modal">
+                        </button-field>
+                    </div>
+                </div>
+            </div>
+        </modal-content>
+        <modal-footer>
+            <div class="btns-row mt10">
+                <button-field buttonType="custom" buttonClass="ncp-linkBtn mb10" buttonName="NCPBtn.close" (click)="renewalWithoutChangesModalView = false;" data-dismiss="modal">
+                </button-field>
+            </div>
+        </modal-footer>
+    </ncp-modal> -->
+<ncp-modal [modalKey]="documentViewModal" [closeOnEscape]="false" [closeOnOutsideClick]="false">
+    <modal-header class="">
+        <misc-h2 [label]="'NCPLabel.documentInformation'"></misc-h2>
+    </modal-header>
+
+    <modal-content>
+        <misc-h4 miscClass="mt0" [label]="'NCPLabel.listOfDocument'"></misc-h4>
+        <div class="filterac">
+            <table>
+                <thead>
+                    <tr>
+                        <th>
+                            <span>{{ 'NCPLabel.documentName' | translate }}</span>
+                        </th>
+                        <th class="text-center">
+                            <span>{{ 'NCPLabel.Action' | translate }}</span>
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let info of documentInfo; let i = index">
+                        <td *ngIf="info.dispatchType==='PRINT' || info.dispatchType==='PDF'|| info.dispatchType==='PREVIEW'">
+                            <span class="displayAsLabel">{{info.documentDesc}}</span>
+                        </td>
+                            <td *ngIf="info.dispatchType==='PRINT' || info.dispatchType==='PDF'|| info.dispatchType==='PREVIEW'" (click)="documentView(i)" class="text-center" [attr.data-title]="info.documentDesc">
+                            <button-field buttonType="custom" buttonClass="ncpbtn-default ml-sm-10 mt-xs-0" buttonName="NCPBtn.viewFile">
+                            </button-field>
+                        </td>
+                    </tr>
+
+                </tbody>
+            </table>
+            <div class="popupLabel">
+                <!--<label>{{ 'NCPLabel.popup' | translate }}</label>-->
+                <ncp-label elementLabel="NCPLabel.popup" customFlag=true labelClass="col-md-12 col-sm-12 col-lg-12 col-xs-12 text-center"></ncp-label>
+            </div>
+        </div>
+
+    </modal-content>
+    <modal-footer>
+        <div class="btns-row mt10">
+                <button-field buttonType="custom" buttonClass="ncp-linkBtn mb10" buttonName="NCPBtn.close" (click)="documentViewModal = false;" data-dismiss="modal">
+            </button-field>
+        </div>
+    </modal-footer>
+</ncp-modal>
+<ncp-modal [modalKey]="abandonPolicyModal" [closeOnEscape]="false" [closeOnOutsideClick]="false" modalClass="modal-md" [hideCloseButton]="true">
+    <modal-content>
+        <div class="row mt15 mt-xs-10">
+            <div class="col-xs-12 p0">
+                <misc-span class="d-block">{{'NCPLabel.yourPolicySuccessfullyAbandoned' | translate}}</misc-span>
+            </div>
+        </div>
+    </modal-content>
+    <modal-footer>
+        <div class="btns-row mt10">
+            <button-field buttonClass="ncp-linkBtn" buttonType="custom" (click)="abandonPolicyModal=false" buttonName="NCPBtn.Close"></button-field>
+        </div>
+    </modal-footer>
+</ncp-modal>
+<ncp-modal [modalKey]="timelineModal" [closeOnEscape]="false" [closeOnOutsideClick]="false" modalClass="modal-lg" [hideCloseButton]="true">
+    <modal-header class="">
+        <div class="row">
+            <div class="col-md-11 col-sm-11 col-xs-10 label-col">
+                <!--<h2>{{'NCPLabel.timelineFor' | translate}} {{ ' '}} {{timelineKey}} </h2>-->
+                <misc-h2 label="NCPLabel.timelineFor">
+                    <misc-span>{{ ' '}} {{timelineKey}}</misc-span>
+                </misc-h2>
+            </div>
+            <div class="col-md-1 col-sm-1 col-xs-2 pull-right">
+                <button class="close" (click)="doCloseTimelineModal()" type="button" aria-label="Close">
+                    <span aria-hidden="true">×</span>
+                </button>
+
+                <!--<button buttonType="custom" (click)="doCloseTimelineModal()" buttonName="Close" class="ncp-linkBtn">X</button>-->
+            </div>
+        </div>
+    </modal-header>
+    <modal-content>
+        <time-line [eventData]="eventData" [eventKey]="eventKey" [productCd]="eventProdCd" (viewProd)="doView();"></time-line>
+    </modal-content>
+    <!--<modal-footer>
+                <div class="col-md-3 col-sm-3 col-xs-12 pull-right pl-md-0 mb20">
+                    <button class="ncp-linkBtn" buttonType="custom" (click)="doCloseTimelineModal()" buttonName="Close">{{'NCPBtn.Close'| translate}}</button>
+                </div>
+            </modal-footer>-->
+</ncp-modal>

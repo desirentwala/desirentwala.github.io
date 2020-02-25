@@ -1,0 +1,37 @@
+<div *ngIf="!customFlag">
+        <div class="col-sm-6 col-md-5 col-xs-11 pr-sm-0" [id]="elementId">
+                <div class="col-xs-12 col-sm-12 no-pad">
+                        <input class="form-control amountField" (input)="onInputText($event)" [value]="amountValue" (focus)="getActualValue()" (blur)="formatAmount()" [formControl]="elementControl"
+                        placeholder="{{placeHolder | translate}}" (change)="changeText($event)">
+                        <p class="mainFloatLabel" [class.floatLabel]="value">{{elementLabel | translate}}<span *ngIf="mandatoryFlag" class="aste">*</span></p>
+                        <i class="floatBorder"></i>
+                       <i [ngClass]="(invalidFlag && value || invalidFlag && !value)? 'fa fa-times-circle floatIcon warningIconColor' : (!invalidFlag && value)? 'fa fa-check-circle floatIcon successIconColor' :''"></i>
+                        <div *ngIf="tooltipTitle" class="col-md-1 col-sm-1 tooltip-align tooltip-mobile3">
+                                <button *ngIf="tooltipTitle" type="button" class="btn btn-link info-tooltip" data-toggle="toggle" [tooltipPlacement]="tooltipPlacement"
+                                        [tooltip]="tooltipHTML" [id]="elementId">
+                                        <i class="icon-tooltip" [id]="elementId"></i>
+                                        <tooltip-content #tooltipHTML [excludeId]="elementId">
+                                <div innerHTML="{{tooltipTitle | translate}}"></div>
+                                </tooltip-content>
+                                </button>
+                        </div>
+                </div>
+        </div>
+</div>
+
+<div *ngIf="customFlag" [id]="elementId" [ngClass]="amountClass">
+        <input class="form-control amountField" (input)="onInputText($event)" (focus)="getActualValue()" (blur)="formatAmount()" [value]="amountValue" [formControl]="elementControl"
+        placeholder="{{placeHolder | translate}}" (change)="changeText($event)">
+        <p class="mainFloatLabel" [class.floatLabel]="value">{{elementLabel | translate}}<span *ngIf="mandatoryFlag" class="aste">*</span></p>
+        <i class="floatBorder"></i>
+       <i [ngClass]="(invalidFlag && value || invalidFlag && !value)? 'fa fa-times-circle floatIcon warningIconColor' : (!invalidFlag && value)? 'fa fa-check-circle floatIcon successIconColor' :''"></i>
+        <div *ngIf="tooltipTitle" class="col-sm-1 col-md-1 col-xs-1 tooltip-align tooltip-mobile3">
+                <button *ngIf="tooltipTitle" type="button" class="btn btn-link info-tooltip" data-toggle="toggle" [tooltipPlacement]="tooltipPlacement"
+                        [tooltip]="tooltipHTML" [id]="elementId">
+                        <i class="icon-tooltip" [id]="elementId"></i>
+                        <tooltip-content #tooltipHTML [excludeId]="elementId">
+                <div innerHTML="{{tooltipTitle | translate}}"></div>
+        </tooltip-content>
+        </button>
+        </div>
+</div>

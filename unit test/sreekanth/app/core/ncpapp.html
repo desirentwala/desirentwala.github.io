@@ -1,0 +1,72 @@
+<title>{{appTitle}}</title>
+<link rel="icon" type="image/x-icon" href="appIcon">
+<ncp-loader [loaderType]="loaderType"></ncp-loader>
+<ncp-theme></ncp-theme>
+<router-outlet></router-outlet>
+
+<ncp-modal [modalKey]="idleState" [hideCloseButton]="true" [closeOnEscape]="false" [closeOnOutsideClick]="false" modalClass="modal-sm">
+    <modal-content>
+        <div class="row" *ngIf="!countdownForTimeOut">
+            <div class="col-md-12 col-sm-12 col-xs-12 label-col">
+                <ncp-label elementLabel="NCPLabel.applicationIsIdle" elementId="Name"></ncp-label>
+            </div>
+        </div>
+        <div class="row" *ngIf="countdownForTimeOut">
+            <div class="col-md-12 col-sm-12 col-xs-12">
+                <!--<span class="text-left d-inlineBlock mr5">{{NCPLabel.yourSessionWillBeExpireIn | translate}}</span>-->
+                <ncp-label customFlag=true labelClass="timeoutLabel" elementLabel="NCPLabel.yourSessionWillBeExpireIn" elementId="Name"></ncp-label>
+                <div class="timeBadge">
+                    <span class="badge">{{countdownForTimeOut}}</span>
+                </div>
+                <!--<span class="text-left d-inlineBlock ml5">{{NCPLabel.seconds | translate}}</span>-->
+
+                <ncp-label customFlag=true labelClass="timeoutLabel" elementLabel="NCPLabel.seconds" elementId="Name"></ncp-label>
+            </div>
+        </div>
+    </modal-content>
+</ncp-modal>
+
+<ncp-modal [modalKey]="displayOfflineModal" [hideCloseButton]="true" [closeOnEscape]="false" [closeOnOutsideClick]="false"
+    modalClass="modal-sm">
+    <modal-header>
+            <misc-h1 label="NCPLabel.networkError" iconClass="fa fa-exclamation-triangle" miscClass="red text-center"></misc-h1>
+            <!-- <ncp-label elementLabel="NCPLabel.pleaseCheckTheNetworkConnection" elementId="Name"></ncp-label> -->
+    </modal-header>
+    <modal-content>
+        <div class="row">
+            <misc-h3 label="NCPLabel.pleaseCheckTheNetworkConnection" miscClass="text-center"></misc-h3>
+            <!-- <ncp-label elementLabel="NCPLabel.pleaseCheckTheNetworkConnection" elementId="Name"></ncp-label> -->
+        </div>
+        <div class="row" *ngIf="countDown">
+            <div class="col-md-11 col-sm-12 col-xs-12">
+                <!--<span class="text-left d-inlineBlock mr5">{{NCPLabel.yourSessionWillBeExpireIn | translate}}</span>-->
+                <ncp-label customFlag=true labelClass="timeoutLabel" elementLabel="NCPLabel.applicationWillTimeOutIn" elementId="Name"></ncp-label>
+                <div class="timeBadge">
+                    <span class="badge">{{countDown | async}}</span>
+                </div>
+                <!--<span class="text-left d-inlineBlock ml5">{{NCPLabel.seconds | translate}}</span>-->
+
+                <ncp-label customFlag=true labelClass="timeoutLabel" elementLabel="NCPLabel.seconds" elementId="Name"></ncp-label>
+            </div>
+        </div>
+    </modal-content>
+</ncp-modal>
+
+<ncp-modal [modalKey]="displaySessionExpiredModal" [hideCloseButton]="true" [closeOnEscape]="false" [closeOnOutsideClick]="false"
+    modalClass="modal-md" >
+    <modal-header>
+            <misc-h1 label="NCPLabel.applicationTimedOut" iconClass="fa fa-exclamation-triangle" miscClass="red text-center"></misc-h1>
+            <!-- <ncp-label elementLabel="NCPLabel.pleaseCheckTheNetworkConnection" elementId="Name"></ncp-label> -->
+    </modal-header>
+    <modal-content>
+        <div class="row w100p text-center">
+            <!-- <span class="">Please click below button to reload!</span> -->
+            <misc-h3 label="NCPLabel.pleaseClickBelowButtonToReload" miscClass="d-block fs18 mb10"></misc-h3>
+            <i class="fa fa-refresh reloadBtn fa-rotate-90" (click)="reloadApplication()"></i>
+            <!-- <div class="col-md-12">
+                <ncp-label elementLabel="NCPLabel.pleaseclick" elementId="Name"></ncp-label>
+            </div> -->
+        </div>
+    </modal-content>
+</ncp-modal>
+<ncp-walkthrough-element [hasCustomSwitch]="util.hasWalkthroughCustomSwitch" [doShow]="util.showHideWalkthroughControl.value" [walkthroughInput]="util.walkthroughInput && util.obj.keys(util.walkthroughInput).length > 0? util.walkthroughInput[util.obj.keys(util.walkthroughInput)[util.initWalkthroughKey]] : {}"></ncp-walkthrough-element>

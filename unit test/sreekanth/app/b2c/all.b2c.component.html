@@ -1,0 +1,13 @@
+<div *ngIf="sessionFlag" id="wrapper"  class="clientContainer">
+    <div class="container-fluid bg-fff">
+        <b2c-ncp-navbar></b2c-ncp-navbar>
+    </div>
+    <div class="container-fluid bodyBg">
+        <ncp-menubar></ncp-menubar>
+        <banner></banner>
+        <router-outlet></router-outlet>
+    </div>
+</div>
+<div *ngIf="sessionFlag" id="wrapper">
+    <ncp-footer> </ncp-footer>
+</div>

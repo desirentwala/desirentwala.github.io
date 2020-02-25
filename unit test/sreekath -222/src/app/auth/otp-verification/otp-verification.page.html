@@ -1,0 +1,32 @@
+<ion-content class="disable-background ion-padding">
+    <ion-card class="otp-card ion-padding">
+        <ion-item-divider class="pb-3">
+            <div class="signUpLogo">
+                <img src="./assets/imgs/logo.png" alt="Logo">
+            </div>
+        </ion-item-divider>
+        <div class="mx-auto text-center pt-3">
+            <h1 class="auth-header">Verify account</h1>
+        </div>
+        <ion-card-content class="text-center">
+            <ion-icon class="lock-icon" name="lock"></ion-icon>
+            <p>Please enter the verification code we sent to</p>
+            <p>{{model.mobile}}</p>
+            <p>{{model.email}}</p>
+            <form #otpVerificationForm="ngForm">
+                <!-- start: forlooping otpinputs -->
+                <input type="numeric" class="form-control otp-input"
+                    oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');" name="otp"
+                    [(ngModel)]="otpOutput" maxlength="6" required />
+                <p class="p-3">
+                    I didn't receive a code. <span class="resend-otp"><a class="text-primary cursor"
+                            [ngClass]="{ 'isDisable': timeLeft > 0 }" (click)="resendotp()">Resend code</a></span>
+                </p>
+                <!-- end: forlooping otpinputs -->
+                <ion-button [disabled]="!(otpVerificationForm.valid) || timeLeft === 0" (click)="verifyotp()">
+                    <p class="pt-1 submit-btn-txt" slot="start">Verify {{timeLeft}}</p>
+                </ion-button>
+            </form>
+        </ion-card-content>
+    </ion-card>
+</ion-content>

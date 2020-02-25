@@ -1,0 +1,22 @@
+<ion-content>
+  <div class="row">
+    <div class="col-3 settings-card">
+      <h3 class="text-left p-2">Practice settings</h3>
+      <ul class="settings-list" *ngFor="let menu of menuItems; let ind = index">
+        <li (click)="selecteByRoute(menu.route, ind)" [class.active]="activeIndex === ind" class="mt-3"><i
+            class="{{menu.icon}} mr-2"></i>{{menu.route}}</li>
+      </ul>
+    </div>
+    <div class="col-9 table-card ">
+      <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12 desktop-logo">
+        <img class="home-logo" src="./assets/imgs/logo.png" alt="logo">
+      </div>
+      <ion-item>
+        <h1 class="page-header">Appointment type(s)</h1>
+      </ion-item>
+      <div class="table-content">
+        <app-appt-type-table *ngIf="apptTypes" [apptTypes]="apptTypes"></app-appt-type-table>
+      </div>
+    </div>
+  </div>
+</ion-content>

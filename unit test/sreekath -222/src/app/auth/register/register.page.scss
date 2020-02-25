@@ -1,0 +1,135 @@
+@import "../../../theme/variables.scss";
+
+@mixin bordered($color, $width) {
+  border-bottom: $width solid $color;
+}
+
+@media (min-width: 380px) {
+  ion-card {
+    -webkit-margin-start: 5% !important;
+    width: calc(95% - 5%) !important;
+    margin: 0;
+    position: absolute;
+    top: 50%;
+    -ms-transform: translateY(-50%);
+    transform: translateY(-50%);
+  }
+}
+ion-card {
+  -webkit-margin-start: 5% !important;
+  width: calc(95% - 5%) !important;
+  font-family: var(--ion-default-font);
+  font-weight: bold;
+  font-stretch: normal;
+  font-style: normal;
+  line-height: normal;
+  letter-spacing: normal;
+}
+hr.horizontalLine {
+  border-top: 1px solid #aeaeae;
+  margin: 20px 0rem;
+}
+.signupLabel{
+  font-size: 11px;
+  color: cadetblue !important;
+}
+.signUpLogo{
+  img{
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    width: 50%;
+    
+  }
+  }
+  .register{
+    color: var(--white-background);
+    font-family: var(--ion-default-font);
+  }
+label{
+  font-family: var(--ion-default-font);
+  font-size: 14px;
+  color: var(--ion-color-dark);
+}
+#country_code{
+  padding: 5px;
+}
+
+.privacy-conditions{
+  margin-top: 15px;
+  ion-label{
+    margin-left:10px;
+  }
+}
+
+.sign-in-button{
+  border-radius: 3px;
+  background-color: var(--ion-color-primary);
+  font-size: 16px;
+  color: var(--ion-color-primary-contrast);
+  width: 160px;
+  height: 40px;
+}
+  
+@media (min-width: 480px) and (max-width: 900px){
+  ion-card {
+  -webkit-margin-start: 5% !important;
+    width: calc(95% - 5%) !important;
+    margin: 0;
+    position: absolute;
+    top: 50%;
+    -ms-transform: translateY(-50%);
+    transform: translateY(-50%);
+  }
+}
+
+@media (min-width: 768px) {
+  .mobile-no{
+    padding-left: 0px;
+  }
+}
+
+@media (min-width: 1025px) {
+  ion-card {
+    -webkit-margin-start: 33% !important;
+    width: calc(100% - 64%) !important;
+  }
+}
+.label-p{
+  padding: 0px 0px 3px 10px !important;
+}
+.register-card{
+  padding: 30px;
+}
+/* portrait */
+@media only screen 
+  and (min-device-width: 380px) 
+  and (max-device-width: 400px) 
+  and (orientation: portrait) 
+  and (-webkit-min-device-pixel-ratio: 1) {
+    .register-card{
+      top: 60vh;
+    }
+}
+/* portrait */
+@media only screen 
+  and (min-device-width: 400px) 
+  and (max-device-width: 480px) 
+  and (orientation: portrait) 
+  and (-webkit-min-device-pixel-ratio: 1) {
+    .register-card{
+      top: 55vh;
+    }
+}
+/* Landscape */
+@media only screen 
+  and (max-device-width: 1023px) 
+  and (max-device-height: 767px) 
+  and (orientation: landscape) 
+  and (-webkit-min-device-pixel-ratio: 1) {
+    .register-card{
+      top: 5%;
+    -ms-transform: none;
+    transform: none;
+    }
+}

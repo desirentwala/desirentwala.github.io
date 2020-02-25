@@ -1,0 +1,22 @@
+<ion-content class="contentbg">
+  <div class="row mr-0">
+    <div class="col-lg-1 col-md-0 destop-view"></div>
+    <div class="col-lg-3 col-md-4 ipad bg-list list-height">
+      <div>
+        <img class="home-logo" src="./assets/imgs/logo.png" alt="logo">
+      </div>
+      <!-- Vet list searchable component -->
+      <app-listbar *ngIf="isPracticeList" [data]="practiceList" [header]="'See All Practice'"
+        (selectedData)="selectedPractice($event)" (addNewMember)="addNewPractice()">
+      </app-listbar>
+    </div>
+    <div *ngIf="isPractice" class="col-lg-8 col-md-8">
+      <!-- practice details component -->
+      <app-practicer-details *ngIf="selectedPracticeData" [selectedPracticeData]="selectedPracticeData"></app-practicer-details>
+    </div>
+    <div *ngIf="isNew" class="col-lg-8 col-md-8">
+      <!-- adding new practicer component -->
+      <app-add-new-practicer (newPracticer)="getAllPractices()"></app-add-new-practicer>
+    </div>
+  </div>
+</ion-content>

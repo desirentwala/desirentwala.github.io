@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8" />
+  <title>Vet Help Direct</title>
+
+  <base href="/" />
+
+  <meta name="viewport"
+    content="viewport-fit=cover, width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <meta name="format-detection" content="telephone=no" />
+  <meta name="msapplication-tap-highlight" content="no" />
+
+  <!-- Css Import For The Application -->
+  <link rel="icon" type="image/png" href="assets/icon/favicon.png" />
+  <link rel="stylesheet" href="./assets/css/bootstrap.min.css">
+  <link href="./assets/css/bootstrap4.min.css" rel="stylesheet">
+  <link href="./assets/css/angular-calendar.css" rel="stylesheet">
+  <link href="./assets/css/flatpickr.css" rel="stylesheet">
+  <link rel="stylesheet" href="./assets/fonts/fontawesome-pro-5.12.0-web/css/all.css">
+  <!-- add to homescreen for ios -->
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+
+  <!-- Fav Icons for Application -->
+<link rel="apple-touch-icon" sizes="57x57" href="./assets/favicon/apple-icon-57x57.png">
+<link rel="apple-touch-icon" sizes="60x60" href="./assets/favicon/apple-icon-60x60.png">
+<link rel="apple-touch-icon" sizes="72x72" href="./assets/favicon/apple-icon-72x72.png">
+<link rel="apple-touch-icon" sizes="76x76" href="./assets/favicon/apple-icon-76x76.png">
+<link rel="apple-touch-icon" sizes="114x114" href="./assets/favicon/apple-icon-114x114.png">
+<link rel="apple-touch-icon" sizes="120x120" href="./assets/favicon/apple-icon-120x120.png">
+<link rel="apple-touch-icon" sizes="144x144" href="./assets/favicon/apple-icon-144x144.png">
+<link rel="apple-touch-icon" sizes="152x152" href="./assets/favicon/apple-icon-152x152.png">
+<link rel="apple-touch-icon" sizes="180x180" href="./assets/favicon/apple-icon-180x180.png">
+<link rel="icon" type="image/png" sizes="192x192"  href="./assets/favicon/android-icon-192x192.png">
+<link rel="icon" type="image/png" sizes="32x32" href="./assets/favicon/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="96x96" href="./assets/favicon/favicon-96x96.png">
+<link rel="icon" type="image/png" sizes="16x16" href="./assets/favicon/favicon-16x16.png">
+<meta name="msapplication-TileColor" content="#ffffff">
+<meta name="msapplication-TileImage" content="./assets/favicon/ms-icon-144x144.png">
+<meta name="theme-color" content="#ffffff">
+
+
+
+</head>
+
+<body>
+  <app-root></app-root>
+
+  <!-- Required Js Import For The Application -->
+  <script src="./assets/js/jquery-3.2.1.slim.min.js"></script>
+  <script src="./assets/js/es5-sham.js"></script>
+  <script src="./assets/js/popper.min.js"></script>
+  <script src="./assets/js/bootstrap.min.js"></script>
+
+  <!-- scripts for Invoice PDF generation -->
+  <script src="./assets/js/jsPDF/jspdf.min.js"></script>
+  <script src="./assets/js/jsPDF/jspdf.plugin.autotable.js"></script>
+  <script src="./assets/js/jsPDF/jsPdf_Plugins.js"></script>
+  <script src="https://js.stripe.com/v3/"></script>
+  <script type="text/javascript">
+    var stripe = Stripe('pk_test_tbMzN9nPvIyZBEggtq3Zmbsd00T1nrmL6Q'); // use your test publishable key
+  </script>
+  
+</body>
+
+</html>

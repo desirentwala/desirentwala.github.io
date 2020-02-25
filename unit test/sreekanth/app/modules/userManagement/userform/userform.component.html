@@ -1,0 +1,261 @@
+<div [formGroup]="userMaintenanceFormGroup" class="row radio-btn">
+    <div>
+        <div class="row">
+            <ncp-label elementLabel="NCPLabel.UserID" elementId="UserID " mandatoryFlag="true">
+            </ncp-label>
+            <div *ngIf="!isChecked">
+                <text-box formControlName="user_id" ngDefaultControl elementLabel="NCPLabel.UserID" mandatoryFlag="true">
+                </text-box>
+            </div>
+            <div *ngIf="isChecked">
+                <drop-down elementId="UserID" formControlName="user_id" [dropdownItems]="userIDItems" [pickListFlag]=false [descControl]="userMaintenanceFormGroup.controls['user_id']"
+                    [displayOnClick]=false ngDefaultControl elementLabel="NCPLabel.UserID" mandatoryFlag="true" isCodeDesc=true (click)="getUser($event)">
+                </drop-down>
+            </div>
+            <div *ngIf="isadsConfig">
+                <check-box elementId="adsConfig" checkBoxClass="pr100" itemLabel="NCPLabel.adsConfig" alignment="right" (change)="getAdsConfig()" ngDefaultControl></check-box>
+            </div>
+        </div>
+        <error-handler [elementControl]="userMaintenanceFormGroup.controls['user_id']" [customMessages]="{required: 'NCPLabelcustomMessages.pleaseEnterUserId', minlength:'NCPLabelcustomMessages.UserIdshouldbegreaterthan5'}">
+        </error-handler>
+        <div class="row">
+            <ncp-label elementLabel="NCPLabel.displayName" elementId="Name" mandatoryFlag="true">
+            </ncp-label>
+            <text-box formControlName="user_name" inputType="text" ngDefaultControl elementLabel="NCPLabel.displayName" mandatoryFlag="true"></text-box>
+        </div>
+        <error-handler [elementControl]="userMaintenanceFormGroup.controls['user_name']" [customMessages]="{required: 'NCPLabelcustomMessages.pleaseEnterUserName'}">
+        </error-handler>
+        <div class="row">
+            <ncp-label elementLabel="NCPLabel.roleId" elementId="roleId" mandatoryFlag="true"></ncp-label>
+            <drop-down elementId="roleId" formControlName="roleId" miscType="ROLEID" pickListFlag=true displayCodeAndDesc=true
+                isCodeDesc=true [descControl]="userMaintenanceFormGroup.controls['roleId_desc']"
+                displayOnClick=true ngDefaultControl elementLabel="NCPLabel.roleId" mandatoryFlag="true">
+            </drop-down>
+        </div>
+        <div class="row">
+            <ncp-label elementLabel="NCPLabel.userProfileGroup" elementId="UserProfileGroup" mandatoryFlag="true"></ncp-label>
+            <drop-down elementId="user_prf_group_code" formControlName="user_prf_group_code" miscType="MiscInfo" pickListFlag=true miscSubType="PRFGP"
+                 isCodeDesc=true [descControl]="userMaintenanceFormGroup.controls['user_prf_group_desc']"
+                displayOnClick=true ngDefaultControl elementLabel="NCPLabel.userProfileGroup" mandatoryFlag="true">
+            </drop-down>
+        </div>
+        <error-handler [elementControl]="userMaintenanceFormGroup.controls['user_prf_group_code']" [customMessages]="{required: 'NCPLabelcustomMessages.userProfileGroupMandatory'}">
+        </error-handler>
+        <div *ngIf="userMaintenanceFormGroup.controls['roleId'].value !== 'CST'">
+            <div class="row">
+                <ncp-label elementLabel="NCPLabel.userBranch" elementId="UserBranch" mandatoryFlag="true"></ncp-label>
+                <drop-down elementId="user_branch" formControlName="user_branch" miscType="BranchGroup" pickListFlag=true
+                    elementId="UserBranch" isCodeDesc=true param1="{{currentUserBranch}}" displayCodeAndDesc=true [descControl]="userMaintenanceFormGroup.controls['user_branch_desc']"
+                    displayOnClick=true ngDefaultControl elementLabel="NCPLabel.userBranch" mandatoryFlag="true">
+                </drop-down>
+            </div>
+        </div>
+        <error-handler [elementControl]="userMaintenanceFormGroup.controls['user_branch']" [customMessages]="{required: 'NCPLabelcustomMessages.userBranchMandatory'}">
+        </error-handler>
+        <div *ngIf="userMaintenanceFormGroup.controls['roleId'].value !== 'CST' && userMaintenanceFormGroup.controls['roleId'].value !== 'ADM' ">
+            <div class="row">
+                <ncp-label elementLabel="NCPLabel.UserGroup" elementId="UserGroup" [mandatoryFlag]="false"></ncp-label>
+                <drop-down elementId="user_group_code" changeId="userGroupChangeId" formControlName="user_group_code"
+                    pickListFlag=true elementId="UserGroup" isCodeDesc=true miscType="UserGroup" [param1Control]="userMaintenanceFormGroup.controls['user_branch']"
+                    [descControl]="userMaintenanceFormGroup.controls['user_group_desc']" displayOnClick=true displayCodeAndDesc=true
+                    ngDefaultControl elementLabel="NCPLabel.userGroup" mandatoryFlag="false" multipleSelect=true>
+                </drop-down>
+            </div>
+        </div>
+        <div formArrayName="userGroupPermission" *ngFor="let user_permission of userMaintenanceFormGroup.get('userGroupPermission')['controls']; let i = index;">
+            <div [formGroupName]="i">
+                <div class="row">
+                    <div class="col-xs-12 col-sm-4 col-md-4 col-lg-4 labelAlign">
+                        <ncp-label elementLabel="NCPLabel.userGroupPermission" customFlag = true labelClass="text-right d-inlineBlock"></ncp-label>
+                        <ncp-label elementLabel="{{userMaintenanceFormGroup.get('user_group_code').value[i].code}}" mandatoryFlag="false" customFlag = true labelClass="text-right d-inlineBlock ml-5"></ncp-label>
+                    </div>
+                    <drop-down pickListFlag=true formControlName="userGroupPermission" isCodeDesc=true miscSubType="UGPERM" miscType="MiscInfo" displayCodeAndDesc=true
+                        isLazyLoading=true displayOnClick=true ngDefaultControl elementLabel="NCPLabel.userGroupPermission" mandatoryFlag="false"
+                        multipleSelect=true>
+                    </drop-down>
+                </div>
+            </div>
+        </div>
+        <div *ngIf="userMaintenanceFormGroup.controls['roleId'].value !== 'CST' && userMaintenanceFormGroup.controls['roleId'].value !== 'ADM'">
+            <div class="row">
+                <ncp-label elementLabel="NCPLabel.userPermissions" mandatoryFlag="false"></ncp-label>
+                <drop-down formControlName="userPermissions" pickListFlag=true isCodeDesc=true miscSubType="PERMID" miscType="MiscInfo"
+                    displayCodeAndDesc=true isLazyLoading=true displayOnClick=true ngDefaultControl elementLabel="NCPLabel.userPermissions"
+                    mandatoryFlag="false" multipleSelect=true>
+                </drop-down>
+            </div>
+        </div>
+        <div *ngIf="userMaintenanceFormGroup.controls['roleId'].value !=='ADM'">
+            <div class="row">
+                <ncp-label elementLabel="NCPLabel.channelType" elementId="Channeltype" [mandatoryFlag]="userMaintenanceFormGroup.controls['roleId'].value !=='ADM'">
+                </ncp-label>
+                <drop-down elementId="channel_type_code" formControlName="channel_type_code" miscSubType="CHID" miscType="MiscInfo" elementId="Channeltype"
+                    pickListFlag=true isCodeDesc=true [descControl]="userMaintenanceFormGroup.controls['channel_type_desc']" ngDefaultControl
+                    displayOnClick=true elementLabel="NCPLabel.channelType" mandatoryFlag="true" isLazyLoading=true [param1]="userMaintenanceFormGroup.controls['roleId'].value ==='CST' ? 'CST':'AGT'">
+                </drop-down>
+            </div>
+        </div>
+        <error-handler [elementControl]="userMaintenanceFormGroup.controls['channel_type_code']" [customMessages]="{required: 'NCPLabelcustomMessages.channelTypeMandatory'}">
+        </error-handler>
+        <div  *ngIf="userMaintenanceFormGroup.controls['channel_type_code'].value && userMaintenanceFormGroup.controls['roleId'].value !== 'ADM' && userMaintenanceFormGroup.controls['roleId'].value !== 'CST'" class="row btnAlignField">
+            <ncp-label elementLabel="NCPLabel.PartyId" elementId="UserPartyId" [mandatoryFlag]="userMaintenanceFormGroup.controls['roleId'].value !=='ADM' && userMaintenanceFormGroup.controls['roleId'].value !=='CST'"></ncp-label>
+            <text-box formControlName="user_party_id" customFlag="true" textBoxClass="col-sm-6 col-md-4 col-xs-10 pr-sm-0 mr-sm-15 mr-md-48 pr-xs-10 userPartyIdAlignRTL"
+                ngDefaultControl elementLabel="NCPLabel.PartyId" mandatoryFlag="true" (change)="doActionProcess($event)">
+            </text-box>
+            <button-field (click)="doActionProcess($event)" buttonType="custom" buttonClass="iconicBtn fa fa-refresh">
+            </button-field>
+        </div>
+        <div  *ngIf="userMaintenanceFormGroup.controls['channel_type_code'].value && userMaintenanceFormGroup.controls['roleId'].value === 'CST'" class="row btnAlignField">
+            <ncp-label elementLabel="NCPLabel.clientId" elementId="clientId" [mandatoryFlag]="userMaintenanceFormGroup.controls['roleId'].value ==='CST'"></ncp-label>
+            <text-box formControlName="client_party_id" customFlag="true" textBoxClass="col-sm-6 col-md-4 col-xs-10 pr-sm-0 mr-sm-15 mr-md-48 pr-xs-10 userPartyIdAlignRTL"
+                ngDefaultControl elementLabel="NCPLabel.clientId" (change)="doActionProcess($event)" [mandatoryFlag]="userMaintenanceFormGroup.controls['roleId'].value ==='CST'">
+            </text-box>
+            <button-field (click)="doActionProcess($event)" buttonType="custom" buttonClass="iconicBtn fa fa-refresh">
+            </button-field>
+        </div>
+        <error-handler [elementControl]="userMaintenanceFormGroup.controls['client_party_id']" [customMessages]="{required :'NCPLabel.validClientId'}">
+        </error-handler>
+        <div *ngIf="userMaintenanceFormGroup.controls['channel_type_code'].value === 'AG' && (userMaintenanceFormGroup.controls['roleId'].value !== 'ADM' && userMaintenanceFormGroup.controls['roleId'].value !== 'CST')">
+            <div class="row">
+                <ncp-label elementLabel="NCPLabel.firstName" elementId="firstName" [mandatoryFlag]="userMaintenanceFormGroup.controls['roleId'].value !=='ADM' && userMaintenanceFormGroup.controls['roleId'].value !=='CST'" ></ncp-label>
+                <text-box formControlName="firstName" ngDefaultControl elementLabel="NCPLabel.firstName" mandatoryFlag="true" [disabledFlag]=true>
+                </text-box>
+            </div>
+            <div class="row">
+                <ncp-label elementLabel="NCPLabel.policyHolderMiddleName" elementId="middleName">
+                </ncp-label>
+                <text-box formControlName="middleName" ngDefaultControl elementLabel="NCPLabel.policyHolderMiddleName" [disabledFlag]=true>
+                </text-box>
+            </div>
+            <div class="row">
+                <ncp-label elementLabel="NCPLabel.lastName" elementId="lastName" [mandatoryFlag]="userMaintenanceFormGroup.controls['roleId'].value !=='ADM' && userMaintenanceFormGroup.controls['roleId'].value !=='CST'">
+                </ncp-label>
+                <text-box formControlName="lastName" ngDefaultControl elementLabel="NCPLabel.lastName" mandatoryFlag="true" [disabledFlag]=true>
+                </text-box>
+            </div>
+        </div>
+        <div *ngIf="userMaintenanceFormGroup.controls['channel_type_code'].value=='AO'">
+            <div class="row">
+                <ncp-label elementLabel="NCPLabel.fullName" elementId="fullName" mandatoryFlag="true"></ncp-label>
+                <text-box formControlName="fullName" ngDefaultControl elementLabel="NCPLabel.fullName" mandatoryFlag="true" [disabledFlag]=true>
+                </text-box>
+            </div>
+            <error-handler [elementControl]="userMaintenanceFormGroup.controls['fullName']" [customMessages]="{required: 'NCPLabelcustomMessages.fullNameMandatory'}">
+            </error-handler>
+        </div>
+        <div class="row">
+            <ncp-label elementLabel="NCPLabel.country" elementId="userlanguage" mandatoryFlag="true">
+            </ncp-label>
+            <drop-down elementId="user_lang_code" formControlName="country_code" miscSubType="CTRY" miscType="MiscInfo" elementId="userlanguage"
+                pickListFlag=true isCodeDesc=true [descControl]="userMaintenanceFormGroup.controls['country_desc']" ngDefaultControl
+                displayOnClick=true elementLabel="NCPLabel.country" mandatoryFlag="true">
+            </drop-down>
+        </div>
+        <div class="row">
+            <ncp-label elementLabel="NCPLabel.Language" elementId="userlanguage" mandatoryFlag="true">
+            </ncp-label>
+            <drop-down elementId="user_lang_code" formControlName="user_lang_code" miscSubType="LANG" miscType="MiscInfo" elementId="userlanguage"
+                pickListFlag=true isCodeDesc=true [descControl]="userMaintenanceFormGroup.controls['user_lang_desc']" ngDefaultControl
+                displayOnClick=true elementLabel="NCPLabel.Language" mandatoryFlag="true">
+            </drop-down>
+        </div>
+        <div class="row">
+            <ncp-label elementLabel="NCPLabel.status" elementId="userstatus" mandatoryFlag="true">
+            </ncp-label>
+            <radio-button [radioArray]="userstatus" [type]="switchbutton" radioName="user_status" elementId="user_status" horizontalflag=true
+                formControlName="user_status" ngDefaultControl elementLabel="NCPLabel.status" mandatoryFlag="true">
+            </radio-button>
+        </div>
+        <error-handler [elementControl]="userMaintenanceFormGroup.controls['user_status']" [customMessages]="{required: 'NCPLabelcustomMessages.pleaseEnterUserStatus'}">
+        </error-handler>
+        <div *ngIf="userMaintenanceFormGroup.controls['roleId'].value !== 'CST' && userMaintenanceFormGroup.controls['roleId'].value !== 'ADM'">
+            <div class="row">
+                <ncp-label elementLabel="NCPLabel.agencycode" elementId="agencycode">
+                </ncp-label>
+                <text-box formControlName="user_agency_code" ngDefaultControl elementLabel="NCPLabel.agencycode">
+                </text-box>
+            </div>
+        </div>
+        <div *ngIf="userMaintenanceFormGroup.controls['roleId'].value !== 'CST'">
+            <div class="row">
+                <ncp-label elementLabel="NCPLabel.parentUserID" elementId="parentUserId"></ncp-label>
+                <drop-down elementId="parentUserID" formControlName="parent_user_id" miscType="ParentBranchUsers"
+                    [displayCodeAndDesc]=true [multipleSelect]=true pickListFlag=true isCodeDesc=true [descControl]="userMaintenanceFormGroup.controls['parent_user_name']"
+                    displayOnClick=true [param1Control]="userMaintenanceFormGroup.controls['user_branch']" [param2Control]="userMaintenanceFormGroup.controls['roleId']"  
+                    [param3Control]="userMaintenanceFormGroup.controls['user_id']" elementLabel="NCPLabel.parentUserID">
+                </drop-down>
+            </div>
+        </div>
+        <div *ngIf="userMaintenanceFormGroup.controls['roleId'].value !== 'CST' && userMaintenanceFormGroup.controls['roleId'].value !== 'ADM'">
+            <div class="row">
+                <ncp-label elementLabel="NCPLabel.Productlist" elementId="productlist"></ncp-label>
+                <drop-down elementId="product_list" formControlName="product_list" elementId="productlist" miscType="ProductInfo"
+                    multipleSelect=true pickListFlag=true displayOnClick=true elementLabel="NCPLabel.Productlist">
+                </drop-down>
+            </div>
+        </div>
+        <div class="row">
+            <ncp-label elementLabel="NCPLabel.Validdate" mandatoryFlag="true"></ncp-label>
+            <div class="col-md-5 col-sm-6 col-xs-6 userValidDateAlignRTL">
+                <div class="col-xs-12 col-sm-8 col-md-5 no-pad">
+                    <ncp-date-picker [options]="NCPDatePickerNormalOptions" formControlName="user_valid_from" ngDefaultControl elementLabel="NCPLabel.Validdate"
+                        mandatoryFlag="true">
+                    </ncp-date-picker>
+                </div>
+                <ncp-label labelClass="col-md-2 col-sm-2 col-xs-12 toLabel" customFlag=true elementLabel="NCPLabel.to"></ncp-label>
+                <div class="col-xs-12 col-sm-8 col-md-5 no-pad date-align mt-sm-10 mt-xs-5">
+                    <ncp-date-picker [options]="NCPDatePickerNormalOptions" formControlName="user_expiry_date" ngDefaultControl>
+                    </ncp-date-picker>
+                </div>
+            </div>
+        </div>
+        <div *ngIf="userMaintenanceFormGroup.controls['channel_type_code'].value=='AG' && userMaintenanceFormGroup.controls['roleId'].value !== 'CST' && userMaintenanceFormGroup.controls['roleId'].value !== 'ADM'">
+            <div class="row">
+                <ncp-label elementLabel="NCPLabel.currency" elementId="CurrencyType"></ncp-label>
+                <drop-down elementId="currency_code" formControlName="currency_code" miscType="Currency" pickListFlag=true elementId="CurrencyType"
+                    isCodeDesc=true [descControl]="userMaintenanceFormGroup.controls['currency_desc']" ngDefaultControl displayOnClick=true
+                    elementLabel="NCPLabel.currency">
+                </drop-down>
+            </div>
+            <div *ngIf="userMaintenanceFormGroup.controls['roleId'].value !== 'CST' && userMaintenanceFormGroup.controls['roleId'].value !== 'ADM'">
+                <div class="row">
+                    <ncp-label elementLabel="NCPLabel.creditLimit" elementId="CreditLimit"></ncp-label>
+                    <amount-field formControlName="creditLimitAmount" [currencyCode]="currencyCode" [symbolDisplay]="'false'"
+                        ngDefaultControl elementLabel="NCPLabel.creditLimit">
+                    </amount-field>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <ncp-label elementLabel="NCPLabel.Email" elementId="useremail" mandatoryFlag="true">
+            </ncp-label>
+            <text-box formControlName="user_email" onCopy="return false" onDrag="return false" onDrop="return false" onPaste="return false"
+                autocomplete=off ngDefaultControl elementLabel="NCPLabel.Email" mandatoryFlag="true">
+            </text-box>
+        </div>
+        <error-handler [elementControl]="userMaintenanceFormGroup.controls['user_email']" [showErrorOnBlur]=true [customMessages]="{required: 'NCPLabelcustomMessages.pleaseEnterYourEmailid',mailFormat:'NCPLabelcustomMessages.pleaseEnterValidEmailId'}">
+        </error-handler>
+        <div class="row">
+            <ncp-label elementLabel="NCPLabel.ConfirmEmail" elementId="confirmemail" mandatoryFlag="true">
+            </ncp-label>
+            <text-box formControlName="confirm_email" onCopy="return false" onDrag="return false" onDrop="return false" onPaste="return false"
+                autocomplete=off ngDefaultControl elementLabel="NCPLabel.ConfirmEmail" mandatoryFlag="true">
+            </text-box>
+        </div>
+        <error-handler [elementControl]="userMaintenanceFormGroup.controls['confirm_email']" [showErrorOnBlur]=true [customMessages]="{required: 'NCPLabelcustomMessages.pleaseEnterconfirmemail', mismatch: 'NCPLabelcustomMessages.emailmismatch'}">
+        </error-handler>
+        <div class="row">
+            <ncp-label elementLabel="NCPLabel.mobilePhone" elementId="saveMobile">
+            </ncp-label>
+
+            <contact-number elementId="user_mobile" showCodeFlag="true" acceptPattern="^[0-9]*$" textElementWidth="8" dropElementWidth="4"
+                formControlName="user_mobile" ngDefaultControl elementLabel="NCPLabel.mobilePhone">
+            </contact-number>
+        </div>
+        <error-handler [elementControl]="userMaintenanceFormGroup.controls['user_mobile']" [customMessages]="{maxlength:'NCPLabelcustomMessages.pleaseEnter15Digitvalidmobilenumber'}">
+        </error-handler>
+        <div class="btns-row">
+            <button-field (click)="doAction($event)" buttonType="custom" buttonClass="ncpbtn-default" buttonName="NCPBtn.submit" [isDisabled]="!this.userMaintenanceFormGroup.valid"></button-field>
+        </div>
+    </div>
+</div>

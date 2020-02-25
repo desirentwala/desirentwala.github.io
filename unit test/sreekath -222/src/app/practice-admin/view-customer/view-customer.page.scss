@@ -1,0 +1,57 @@
+@media (width: 768px) {
+  .ipad-device {
+    top: 6vh !important;
+  }
+  .card-book {
+    width: 40vh !important;
+  }
+  .iPad-screen {
+    display: none !important;
+  }
+  .iPad-profile {
+    display: block !important;
+  }
+  .pet-card {
+    width: 6.5rem !important;
+  }
+}
+@media (min-width: 1200px) {
+  .iPad-profile {
+    padding-left: 5vw !important;
+  }
+}
+
+.cusname {
+  font-size: 16px;
+  font-weight: 800;
+  // padding-left: 12px;
+  color: #4e4949;
+}
+.btn-book {
+  font-size: 16px;
+  font-weight: 600;
+}
+
+.card-book {
+  white-space: initial !important;
+  word-wrap: break-word !important;
+}
+
+.pet-img {
+  // width: 80px;
+  // height: 75px;
+  width: 70px;
+  height: 70px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+.actions{
+  margin-left: 3rem;
+}
+.pc {
+  padding-right: 3rem !important;
+}
+
+.customer-table {
+  padding: 1rem !important;
+}

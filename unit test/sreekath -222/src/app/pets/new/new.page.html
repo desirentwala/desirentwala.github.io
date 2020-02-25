@@ -1,0 +1,232 @@
+<ion-content>
+  <div class="back-card">
+    <div class="row mobile-card-align">
+      <div class="col-lg-6 col-md-12 col-sm-12 col-xs-12 content-card">
+        <!-- <ion-toolbar> -->
+        <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12 desktop-logo">
+          <img class="home-logo" src="./assets/imgs/logo.png" alt="logo">
+        </div>
+        <!-- </ion-toolbar> -->
+        <!-- <div class="pl-3">
+        <div class="mdl-card__supporting-text">
+          <div class="mdl-stepper-horizontal-alternative" (click)="backtoStep1()">
+            <div class="mdl-stepper-step active-step " [ngClass]="{'step-done':addPracticeDetails ? true : false}">
+              <div class="mdl-stepper-circle"><span>1</span></div>
+              <div class="mdl-stepper-title">Select practice</div>
+              <div class="mdl-stepper-bar-left"></div>
+              <div class="mdl-stepper-bar-right"></div>
+            </div>
+            <div class="mdl-stepper-step " [ngClass]="{'active-step editable-step':addPracticeDetails ? true : false}">
+              <div class="mdl-stepper-circle"><span>2</span></div>
+              <div class="mdl-stepper-title">Pet details</div>
+
+              <div class="mdl-stepper-bar-left"></div>
+              <div class="mdl-stepper-bar-right"></div>
+            </div>
+          </div>
+        </div>
+
+      </div> -->
+        <!-- form for add/edit pet -->
+        <ion-item *ngIf="addPracticeDetails">
+          <h1 class="text-left page-header">{{heading}}</h1>
+        </ion-item>
+        <form *ngIf="addPracticeDetails" #petForm="ngForm" class="pl-3">
+          <!-- <p class="text-left">Lorem ipsum dolor sit amet consectetur adipisicing elit. Quaerat, sequi ullam eum iure
+          voluptates voluptatum! Culpa</p> -->
+          <div class="row">
+            <!-- pet name input -->
+            <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12 pt-0">
+              <label class="pt-0" for="petName">Pet name</label><i class="fas fa-asterisk form-asterisk"></i>
+              <input type="text" id="petName" class="form-control" placeholder="Pet name" #petNm="ngModel"
+                name="petName"  [(ngModel)]="pet.petName" maxlength="28" required>
+              <div class="text-danger " *ngIf="petNm.invalid && (petNm.dirty || petNm.touched)">
+                Pet name is required.
+              </div>
+              <!-- DOB -->
+              <label for="dob">Date of birth</label><i class="fas fa-asterisk form-asterisk"></i>
+              <input type="date" id="dob" class="form-control" placeholder="Approx date " #dob="ngModel"
+                name="Date Of Birth" [(ngModel)]="pet.dob" onkeydown="return false" [max]="presentDate"
+                (change)="dateValidation($event)" required>
+              <div class="text-danger " *ngIf="dob.invalid && (dob.dirty || dob.touched)">
+                Date of birth is required.
+              </div>
+              <div class="text-danger " *ngIf="isInvalid && dob.valid">
+                Invalid date
+              </div>
+              <!-- gender -->
+              <div>
+                <label for="gender">Gender</label><i class="fas fa-asterisk form-asterisk"></i>
+              </div>
+              <div class="mobile-view">
+                <ion-select placeholder="Select gender" class="select-dropdown" name="gender" #gdr="ngModel"
+                  [(ngModel)]="pet.gender" (ionBlur)="validateGender($event)" (ionFocus)="validateGender($event)">
+                  <ion-select-option *ngFor="let gender of genderList" value="{{ gender }}" ngDefaultControl>
+                    {{gender}}
+                  </ion-select-option>
+                </ion-select>
+              </div>
+              <div class="desktop-view">
+                <select placeholder="Select gender" class="select-dropdown w-100" name="gender" #gdr="ngModel"
+                  [(ngModel)]="pet.gender" (click)="validateGender($event)">
+                  <option *ngFor="let gender of genderList" ngDefaultControl>
+                    {{gender}}
+                  </option>
+                </select>
+              </div>
+              <div class="text-danger " *ngIf="isGender">
+                  Gender is required
+              </div>
+            </div>
+            <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12 pt-3">
+              <!-- pet profile pic -->
+              <div *ngIf="imgUrl && !isMobile" class="container">
+                <img [src]="imgUrl" class="image" alt="pet profile">
+                <div class="middle">
+                  <div class="text">
+                    <label for="petImage" class="input-file">
+                      <ion-icon name="create"></ion-icon>
+                    </label>
+                    <input id="petImage" accept='image/*' type="file" (change)="petPicUpdate($event)" />
+                  </div>
+                </div>
+              </div>
+              <div *ngIf="imgUrl && isMobile" class="container">
+                <img class="image" [src]="imgUrl" (click)="selectImage()">
+              </div>
+              <div *ngIf="!imgUrl" class="container">
+                <div class="camera-align">
+                  <label for="file-input" *ngIf="isMobile" class="input-file">
+                    <div class="upload-image text-center p-4" (click)="selectImage()">
+                      <i class="fa fa-camera fa-2x"></i>
+                      <p class="pt-2">Click here to upload photo</p>
+                    </div>
+                  </label>
+                  <div *ngIf="!isMobile">
+                    <label for="file-input">
+                      <div class="upload-image text-center p-4 ">
+                        <i class="fa fa-camera fa-2x"></i>
+                        <p>Click here to upload photo</p>
+                      </div>
+                    </label>
+                    <input id="file-input" accept='image/*' type="file" (change)="petPicUpdate($event)" />
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- species -->
+          <label for="speciesList">I have a...</label>
+          <div id="speciesList">
+            <div class="top-content">
+              <div class=" m-auto">
+                <ion-row>
+                  <ion-col size="1.5" *ngIf="from !== 0 ">
+                    <ion-card class="navigation-card" (click)="onPrevious()">
+                      <i class="fas fa-chevron-left"></i>
+                    </ion-card>
+                  </ion-col>
+                  <ion-col size="3" *ngFor="let species of speciesArray; let i = index">
+                    <ion-card class="species-card" [ngClass]="{'active':activeIndex === i ? true : false}"
+                      (click)="selectedSpecies(species,i)" title="{{species.speciesName}}">
+                      <i [ngClass]='{"isDisplay": activeIndex === i? false: true}'  class="far fa-check tick-icon"></i>
+                      <ion-card-content></ion-card-content>
+                      <i class="{{species.species.iconName}} ion-float-end iconSize text-right p-2"></i>
+                    </ion-card>
+                  </ion-col>
+                  <ion-col size="1.5" *ngIf="initialImages < speciesList.length">
+                    <ion-card class="navigation-card" (click)="onNext()">
+                      <i class="fas fa-chevron-right"></i>
+                    </ion-card>
+                  </ion-col>
+                </ion-row>
+              </div>
+
+            </div>
+          </div>
+          <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12 p-0">
+            <!-- breed -->
+            <label for="breed">Pet breed</label>
+            <input id="breed" class="form-control" placeholder="Eg. Bulldog" #brd="ngModel" name="breed" type="text"
+              maxlength="50" [(ngModel)]="pet.breed">
+
+          </div>
+
+          <div class="row">
+            <!-- nuetured -->
+            <div class="p-3 d-flex flex-row">
+              <div class="my-auto">
+                <label class="pt-0">My pet is neutered</label>
+              </div>
+              <div class="my-auto">
+                <ion-toggle (ionChange)="neutered(pet.neutered)" mode="md" class="toggle-align" #nuetrd="ngModel" name="Nuetured"
+                  [(ngModel)]="pet.neutered"></ion-toggle>
+              </div>
+            </div>
+          </div>
+          <div class="text-right pt-2">
+            <ion-button class="create-btn" color="primary"
+              [disabled]="!(petForm.valid) || !pet.gender || pet.speciesId === undefined || isInvalid"
+              (click)="createPet()" style="text-transform: none;">
+              {{heading === 'Please edit your pet’s details'? 'Update' : 'Add pet'}}
+            </ion-button>
+          </div>
+        </form>
+
+        <!-- practice slection only based on name -->
+       <!-- <div *ngIf="!addPracticeDetails" class="pl-3">
+          <ion-item class="add-pet-head">
+            <h1 class="text-left page-header">Add a new pet</h1>
+          </ion-item>
+          <p class="pt-3">With which vet practice is your pet registered?</p>
+
+          <ion-input class="vetList pl-2" placeholder="Search by entering practice name"
+            (ionInput)="search($event.target.value)" [(ngModel)]="practice" [disabled]="disablePractice ? '' : null">
+          </ion-input>
+          <ion-list *ngIf="searchResults" class="vetList">
+            <ion-item class="search-item" *ngFor="let vet of vets">
+              <ion-row class="w-100" (click)="hideList(vet)">
+                <ion-col size="7">{{vet.practiceName}}</ion-col>
+                <ion-col size="5" class="text-right">{{vet.address}}</ion-col>
+              </ion-row>
+            </ion-item>
+            <div *ngIf="vets.length === 0" class="ifNoData ml-3">Sorry! no result found</div>
+          </ion-list>
+          <div class="text-right pt-2">
+            <ion-button class="create-btn" color="primary" [disabled]="!practice || !isNextBtn"
+              (click)="navigatetoCreate()">
+              Next
+            </ion-button>
+          </div>
+        </div> -->
+        <!--searching practice based on name and postal code-->
+         <div *ngIf="!addPracticeDetails" class="pl-3">
+          <ion-item class="add-pet-head">
+            <h1 class="text-left page-header">Add a new pet</h1>
+          </ion-item>
+          <p class="pt-3">With which vet practice is your pet registered?</p>
+
+          <ion-input class="vetList pl-2" placeholder="Search by entering practice name"
+          (input)="onSearchChange($event.target.value)" [(ngModel)]="practice" [disabled]="disablePractice ? '' : null">
+          </ion-input>
+          <ion-list *ngIf="searchResults" class="vetList">
+            <ion-item class="search-item" *ngFor="let vet of vetDetails">
+              <ion-row class="w-100" (click)="hideList(vet)">
+                <ion-col size="7">{{vet.practiceName}}</ion-col>
+                <ion-col size="5" class="text-right">{{vet.postCode}}</ion-col>
+              </ion-row>
+            </ion-item>
+            <div *ngIf="vetDetails.length === 0" class="ifNoData ml-3">Sorry! no result found</div>
+          </ion-list>
+          <div class="text-right pt-2">
+            <ion-button class="create-btn" color="primary" [disabled]="!practice || !isNextBtn"
+              (click)="navigatetoCreate()">
+              Next
+            </ion-button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</ion-content>

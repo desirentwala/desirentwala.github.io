@@ -1,0 +1,57 @@
+<div class="row">
+  <div class="col-md-5">
+      <h1 class="page-header">Calendar of availability</h1>
+      <!-- <span class="scheduled">Scheduled</span> -->
+  </div>
+  <!-- <div class="col-md-7">
+    <ul class="legend float-right">
+      <span class="booked"></span> <li>Booked <br/>appt.</li>
+      <span class="unconfirmed"></span> <li> Unconfirmed <br/>appt.</li>
+      <span class="confirmed"></span> <li>Confirmed <br/>appt.</li>
+      <span class="unconfirmed"><span class="star">*</span></span> <li>Private <br/>appt.</li>
+  </ul>
+</div> -->
+  
+</div>
+<!-- Previous and Next week view in calendar starts here col-md-12 col-lg-12 justify-content-center-->
+<!-- <div class="row ">
+  <div class="col-md-8 col-lg-8">
+    <div class="float-right">
+      <div class="pt-3 inline" mwlCalendarPreviousView [view]="view" [(viewDate)]="viewDate"
+        (click)='calendarEventChange(viewDate)' (viewDateChange)="activeDayIsOpen = false">
+        <em class="fa fa-angle-left"></em>
+      </div>
+      <div class="ml-4 inline">
+        <h5>{{ viewDate | calendarDate:(view + 'ViewTitle'):'en' }}</h5>
+      </div>
+      <div class="ml-3 pt-3 inline" mwlCalendarNextView [view]="view" [(viewDate)]="viewDate"
+        (click)='calendarEventChange(viewDate)' (viewDateChange)="activeDayIsOpen = false">
+        <em class="fa fa-angle-right"></em>
+      </div>
+    </div>
+    </div>
+      <div class="col-md-4 col-lg-4">
+        <button class="Rectangle ml-1 mt-1" (click)="createAppointment()">
+          <img src="../../../assets/icon/c.svg" class="C" alt="Slot Icon"/> &nbsp; Add slot
+        </button>
+        <button class="Rectangle mt-1" (click)="editVet()">Edit vet info</button>
+      </div>
+</div> -->
+<!-- Previous and Next week view in calendar ends here -->
+
+<!-- Calendar display basis on view - Month / Week / Day starts here -->
+<!-- <div [ngSwitch]="view">
+  <mwl-calendar-week-view *ngSwitchCase="CalendarView.Week" [viewDate]="viewDate" 
+  [events]="calendarData" [refresh]="refresh" [excludeDays]="excludeDays"
+  [dayStartHour]="day.start" [dayEndHour]="day.end"
+  (eventClicked)="handleEvent('Clicked', $event.event)"
+  (hourSegmentClicked)="handleHoursEvent(clickedDate = $event.date)">
+  </mwl-calendar-week-view>
+</div> -->
+<!-- Calendar display basis on view - Month / Week / Day ends here -->
+
+<!-- <app-slot *ngIf="selectedSlot" [slot]="selectedSlot" [vetList]="vetList"
+  (slotsDataEmit)="eventSlotData($event)"></app-slot> -->
+  
+  <!-- (eventTimesChanged)="eventTimesChanged($event)"
+  (eventClicked)="handleEvent('Clicked', $event.event)" -->

@@ -1,0 +1,352 @@
+<ion-content>
+  <div class="row">
+    <div class="col-lg-6 col-md-12 col-sm-12 col-xs-12 content-card desktop">
+      <div class="pl-3">
+        <img class="home-logo pl-1" src="./assets/imgs/logo.png" alt="logo">
+      </div>
+      <div class="pl-3">
+        <h1 class="text-left mt-1 page-header">My profile</h1>
+        <hr class="horizontalLine">
+      </div>
+      <div class="row" class="col-lg-6 col-md-12 col-sm-12 col-xs-12">
+        <h4 class="page-sub-header">Practice information</h4>
+      </div>
+      <!-- form for add new -->
+      <form class="m-auto ion-padding pt-0" #profileForm="ngForm">
+        <!--(ngSubmit)="updateProfile()"-->
+        <div *ngIf="model" class="row">
+          <!-- pet name input -->
+          <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
+            <label for="practiceName">Practice name</label><i class="fas fa-asterisk form-asterisk"></i>
+            <input type="text" id="practiceName" class="form-control" placeholder="Practice Name" #praName="ngModel"
+              maxlength="50" name="practiceName" type="text" [(ngModel)]="model.practiceName" readonly
+              required>
+            <div class="text-danger" *ngIf="praName.invalid && (praName.dirty || praName.touched)">
+              <small class="inline" *ngIf="praName.errors.required">Practice name is required.</small>
+            </div>
+            <div class="row">
+              <div class="col-sm-4">
+                <label for="groupName">Prefix</label>
+                <input type="text" id="groupName" class="form-control" placeholder="Prefix" #prefixName="ngModel"
+                  name="prefixName" type="text" [(ngModel)]="model.prefix" readonly>
+              </div>
+              <div class="col-sm-8">
+                <label for="groupName">Group name</label>
+                <input type="text" id="groupName" class="form-control" placeholder="Group name" #grpName="ngModel"
+                  name="groupName" type="text" [(ngModel)]="model.tag" readonly>
+              </div>
+            </div>
+            <!-- <label for="groupName">Group name</label>
+            <input type="text" id="groupName" class="form-control" placeholder="Group name" #grpName="ngModel"
+              name="groupName" type="text" [(ngModel)]="model.tag" readonly> -->
+
+            <label for="phoneNo">Phone no.</label><i class="fas fa-asterisk form-asterisk"></i>
+            <input type="text" id="phoneNo" class="form-control" placeholder="Contact number" #phoneNum="ngModel" appPhoneNumber
+              minlength="10" maxlength="11" name="phoneNo" numbersOnly [(ngModel)]="model.phoneNo" readonly required>
+          </div>
+          <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12 pt-3">
+            <!-- profile pic -->
+            <div *ngIf="imgUrl && !isMobile" class="container">
+              <img [src]="imgUrl" class="image" alt="Profile photo">
+              <div class="middle">
+                <div class="text">
+                  <label for="userProfile" class="input-file">
+                    <ion-icon name="create"></ion-icon>
+                  </label>
+                  <input id="userProfile" accept='image/*' type="file" (change)="profilePicUpdate($event)" />
+                </div>
+              </div>
+            </div>
+            <div *ngIf="imgUrl && isMobile" class="container">
+              <img class="image" [src]="imgUrl" (click)="selectImage()" alt="Profile photo">
+            </div>
+            <div *ngIf="!imgUrl" class="container">
+              <label for="file-input" *ngIf="isMobile" class="input-file">
+                <div class="upload-image text-center p-4" (click)="selectImage()">
+                  <ion-icon name="camera"></ion-icon>
+                  <p>Click here to upload logo</p>
+                </div>
+              </label>
+              <div *ngIf="!isMobile">
+                <label for="file-input">
+                  <div class="upload-image text-center p-4">
+                    <ion-icon name="camera"></ion-icon>
+                    <p>Click here to upload logo</p>
+                  </div>
+                </label>
+                <input id="file-input" accept='image/*' type="file" (change)="profilePicUpdate($event)" />
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
+            <label for="email">Email address</label><i class="fas fa-asterisk form-asterisk"></i>
+            <input type="text" id="email" class="form-control" placeholder="Email sddress" #emailiD="ngModel"
+              pattern="^(?!.*\.{2})[a-zA-Z0-9.-_]{1,64}@[a-zA-Z.-]{2,}[.]{1}[a-zA-Z]{2,}" name="email" type="text"
+              [(ngModel)]="model.email" readonly required>
+            <!-- <div class="text-danger" *ngIf="emailiD.invalid && ( emailiD.touched)">
+              <small class="inline" *ngIf="emailiD.errors.required">Email address is required.</small>
+            </div> -->
+          </div>
+          <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
+            <label for="website">Website</label>
+            <input type="text" id="website" class="form-control" placeholder="Website" #websi="ngModel" name="website"
+              maxlength="75" type="text" [(ngModel)]="model.website" [readonly]="readFormValue">
+          </div>
+        </div>
+
+        <!-- species -->
+        <label for="speciesList">We see...</label><i class="fas fa-asterisk form-asterisk"></i>
+        <div id="speciesList">
+          <div class="top-content">
+            <div class="container-fluid m-auto">
+              <ion-row class="w-100">
+                <ion-col size="1" *ngIf="from !== 0">
+                  <ion-card class="navigation-card" (click)="onPrevious()">
+                    <i class="fas fa-chevron-left"></i>
+                  </ion-card>
+                </ion-col>
+                <ion-col size="2.5" *ngFor="let species of speciesArray; let i = index"
+                  [ngClass]="{'isDisable':readFormValue || species.isEditable}">
+                  <ion-card class="species-card" title="{{species.speciesName}}" (click)="selectedSpecies(species,i)"
+                    [ngClass]="{'active':species.isActive === true ? true : false}">
+                    <em [ngClass]='{"isDisplay": species.isActive === true? false: true}' class="far fa-check tick-icon"></em>
+                    <ion-card-content></ion-card-content>
+                    <em class="{{species.iconName}} ion-float-end iconSize text-right p-2"></em>
+                  </ion-card>
+                </ion-col>
+                <ion-col size="1" *ngIf="initialImages < speciesList.length">
+                  <ion-card class="navigation-card" (click)="onNext()">
+                    <i class="fas fa-chevron-right"></i>
+                  </ion-card>
+                </ion-col>
+              </ion-row>
+            </div>
+          </div>
+        </div>
+        <!--Practice address detailes -->
+        <h4>Practice address</h4>
+        <div *ngIf="model" class="row">
+          <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
+            <label for="address1">Address line 1</label><i class="fas fa-asterisk form-asterisk"></i>
+            <input id="address1" class="form-control" placeholder="Address line 1" #addres1="ngModel" name="address1"
+              maxlength="100" type="text" [(ngModel)]="model.address1" [readonly]="readFormValue" required>
+            <div class="text-danger" *ngIf="addres1.invalid && (addres1.dirty || addres1.touched)">
+              <small class="inline" *ngIf="addres1.errors.required">Address line 1 is required.</small>
+            </div>
+          </div>
+          <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
+            <label for="address2">Address line 2</label>
+            <input id="address2" class="form-control" placeholder="Address line 2 " #addres2="ngModel" name="address2"
+              maxlength="100" type="text" [(ngModel)]="model.address2" [readonly]="readFormValue">
+          </div>
+        </div>
+        <div *ngIf="model" class="row">
+          <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
+            <label for="country">City</label><i class="fas fa-asterisk form-asterisk"></i>
+            <input id="country" class="form-control" placeholder="City " #country="ngModel" name="country" type="text"
+              maxlength="50" [(ngModel)]="model.country" [readonly]="readFormValue" required>
+            <div class="text-danger" *ngIf="country.invalid && (country.dirty || country.touched)">
+              <small class="inline" *ngIf="country.errors.required">City is required.</small>
+            </div>
+          </div>
+          <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
+            <label for="pincode">Postcode</label><i class="fas fa-asterisk form-asterisk"></i>
+            <input id="pincode" class="form-control" placeholder="Postcode" #pin="ngModel" name="pincode" type="text"
+              maxlength="10"
+              pattern="^([A-Za-z][A-Ha-hJ-Yj-y]?[0-9][A-Za-z0-9]? ?[0-9][A-Za-z]{2}|[Gg][Ii][Rr] ?0[Aa]{2})$"
+              [(ngModel)]="model.postCode" [readonly]="readFormValue" required>
+            <div class="text-danger" *ngIf="pin.invalid && ( pin.touched)">
+              <small class="inline" *ngIf="pin.errors?.required">Postcode required.</small>
+              <small class="inline" *ngIf="pin.errors?.pattern">Invalid postcode.</small>
+            </div>
+          </div>
+        </div>
+
+        <br>
+        <div class="row col-12 text-center">
+          <ion-button class="create-btn editButon" expand="block" color="primary" (click)="editProfileEnable()">
+            Edit
+          </ion-button>
+          <ion-button class="create-btn editButon" expand="block" color="primary" (click)="updateProfile()"
+            [disabled]="!(profileForm.valid && isEdit) || selectedSpeciess.length === 0">
+            Save
+          </ion-button>
+        </div>
+      </form>
+    </div>
+    <div class="col-lg-11 col-md-12 col-sm-12 col-xs-12 content-card ipadPro">
+      <div class="pl-3">
+        <img class="home-logo pl-1" src="./assets/imgs/logo.png" alt="logo">
+      </div>
+      <div class="pl-3">
+        <h1 class="text-left mt-1">My profile</h1>
+      </div>
+      <div class="row" class="col-lg-6 col-md-12 col-sm-12 col-xs-12">
+        <h4>Practice information</h4>
+      </div>
+      <!-- form for add new -->
+      <form class="m-auto ion-padding pt-0" #profileForm="ngForm">
+        <!--(ngSubmit)="updateProfile()"-->
+        <div *ngIf="model" class="row">
+          <!-- pet name input -->
+          <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
+            <label for="practiceName">Practice name</label><i class="fas fa-asterisk form-asterisk"></i>
+            <input type="text" id="practiceName" class="form-control" placeholder="Practice Name" #praName="ngModel"
+              maxlength="50" name="practiceName" type="text" [(ngModel)]="model.practiceName" readonly required>
+            <div class="text-danger" *ngIf="praName.invalid && (praName.dirty || praName.touched)">
+              <small class="inline" *ngIf="praName.errors.required">Practice name is required.</small>
+            </div>
+            <div class="row">
+              <div class="col-sm-4">
+                <label for="groupName">Prefix</label>
+                <input type="text" id="groupName" class="form-control" placeholder="Prefix" #prefixName="ngModel"
+                  name="prefixName" type="text" [(ngModel)]="model.prefix" readonly>
+              </div>
+              <div class="col-sm-8">
+                <label for="groupName">Group name</label>
+                <input type="text" id="groupName" class="form-control" placeholder="Group name" #grpName="ngModel"
+                  name="groupName" type="text" [(ngModel)]="model.tag" readonly>
+              </div>
+            </div>
+            <!-- <label for="groupName">Group name</label>
+            <input type="text" id="groupName" class="form-control" placeholder="Group name" #grpName="ngModel"
+              name="groupName" type="text" [(ngModel)]="model.tag" readonly> -->
+
+            <label for="phoneNo">Phone no.</label><i class="fas fa-asterisk form-asterisk"></i>
+            <input type="text" id="phoneNo" class="form-control" placeholder="Contact number" #phoneNum="ngModel" appPhoneNumber
+              minlength="10" maxlength="11" name="phoneNo" numbersOnly [(ngModel)]="model.phoneNo" readonly required>
+          </div>
+          <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12 pt-3">
+            <!-- profile pic -->
+            <div *ngIf="imgUrl && !isMobile" class="container">
+              <img [src]="imgUrl" class="image" alt="Profile photo">
+              <div class="middle">
+                <div class="text">
+                  <label for="userProfile" class="input-file">
+                    <ion-icon name="create"></ion-icon>
+                  </label>
+                  <input id="userProfile" accept='image/*' type="file" (change)="profilePicUpdate($event)" />
+                </div>
+              </div>
+            </div>
+            <div *ngIf="imgUrl && isMobile" class="container">
+              <img class="image" [src]="imgUrl" (click)="selectImage()" alt="Profile photo">
+            </div>
+            <div *ngIf="!imgUrl" class="container">
+              <label for="file-input" *ngIf="isMobile" class="input-file">
+                <div class="upload-image text-center p-4" (click)="selectImage()">
+                  <ion-icon name="camera"></ion-icon>
+                  <p>Click here to upload photo</p>
+                </div>
+              </label>
+              <div *ngIf="!isMobile">
+                <label for="file-input">
+                  <div class="upload-image text-center p-4">
+                    <ion-icon name="camera"></ion-icon>
+                    <p>Click here to upload photo</p>
+                  </div>
+                </label>
+                <input id="file-input" accept='image/*' type="file" (change)="profilePicUpdate($event)" />
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
+            <label for="email">Email address</label><i class="fas fa-asterisk form-asterisk"></i>
+            <input type="text" id="email" class="form-control" placeholder="Email sddress" #emailiD="ngModel"
+              pattern="^(?!.*\.{2})[a-zA-Z0-9.-_]{1,64}@[a-zA-Z.-]{2,}[.]{1}[a-zA-Z]{2,}" name="email" type="text"
+              [(ngModel)]="model.email" readonly required>
+          </div>
+          <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
+            <label for="website">Website</label>
+            <input type="text" id="website" class="form-control" placeholder="Website" #websi="ngModel" name="website"
+              maxlength="75" type="text" [(ngModel)]="model.website" [readonly]="readFormValue">
+          </div>
+        </div>
+
+        <!-- species -->
+        <label for="speciesList">We see...</label><i class="fas fa-asterisk form-asterisk"></i>
+        <div id="speciesList">
+          <div class="top-content">
+            <div class="container-fluid m-auto">
+              <ion-row class="w-100">
+                <ion-col size="1" *ngIf="from !== 0">
+                  <ion-card class="navigation-card" (click)="onPrevious()">
+                    <i class="fas fa-chevron-left"></i>
+                  </ion-card>
+                </ion-col>
+                <ion-col size="2.5" *ngFor="let species of speciesArray; let i = index"
+                  [ngClass]="{'isDisable':readFormValue || species.isEditable}">
+                  <ion-card class="species-card" title="{{species.speciesName}}" (click)="selectedSpecies(species,i)"
+                    [ngClass]="{'active':species.isActive === true ? true : false}">
+                    <em [ngClass]='{"isDisplay": species.isActive === true? false: true}' class="far fa-check tick-icon"></em>
+                    <ion-card-content></ion-card-content>
+                    <em class="{{species.iconName}} ion-float-end iconSize text-right p-2"></em>
+                  </ion-card>
+                </ion-col>
+                <ion-col size="1" *ngIf="initialImages < speciesList.length">
+                  <ion-card class="navigation-card" (click)="onNext()">
+                    <i class="fas fa-chevron-right"></i>
+                  </ion-card>
+                </ion-col>
+              </ion-row>
+            </div>
+          </div>
+        </div>
+        <!--Practice address detailes -->
+        <h4>Practice address</h4>
+        <div *ngIf="model" class="row">
+          <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
+            <label for="address1">Address line 1</label><i class="fas fa-asterisk form-asterisk"></i>
+            <input id="address1" class="form-control" placeholder="Address line 1" #addres1="ngModel" name="address1"
+              maxlength="100" type="text" [(ngModel)]="model.address1" [readonly]="readFormValue" required>
+            <div class="text-danger" *ngIf="addres1.invalid && (addres1.dirty || addres1.touched)">
+              <small class="inline" *ngIf="addres1.errors.required">Address line 1 is required.</small>
+            </div>
+          </div>
+          <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
+            <label for="address2">Address line 2</label>
+            <input id="address2" class="form-control" placeholder="Address line 2 " #addres2="ngModel" name="address2"
+              maxlength="100" type="text" [(ngModel)]="model.address2" [readonly]="readFormValue">
+          </div>
+        </div>
+        <div *ngIf="model" class="row">
+          <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
+            <label for="country">City</label><i class="fas fa-asterisk form-asterisk"></i>
+            <input id="country" class="form-control" placeholder="City " #country="ngModel" name="country" type="text"
+              maxlength="50" [(ngModel)]="model.country" [readonly]="readFormValue" required>
+            <div class="text-danger" *ngIf="country.invalid && (country.dirty || country.touched)">
+              <small class="inline" *ngIf="country.errors.required">City is required.</small>
+            </div>
+          </div>
+          <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
+            <label for="pincode">Postcode</label><i class="fas fa-asterisk form-asterisk"></i>
+            <input id="pincode" class="form-control" placeholder="Postcode" #pin="ngModel" name="pincode" type="text"
+              maxlength="10"
+              pattern="^([A-Za-z][A-Ha-hJ-Yj-y]?[0-9][A-Za-z0-9]? ?[0-9][A-Za-z]{2}|[Gg][Ii][Rr] ?0[Aa]{2})$"
+              [(ngModel)]="model.postCode" [readonly]="readFormValue" required>
+            <div class="text-danger" *ngIf="pin.invalid && ( pin.touched)">
+              <small class="inline" *ngIf="pin.errors?.required">Postcode required.</small>
+              <small class="inline" *ngIf="pin.errors?.pattern">Invalid postcode.</small>
+            </div>
+          </div>
+        </div>
+
+        <br>
+        <div class="row col-12 text-center">
+          <ion-button class="create-btn editButon" expand="block" color="primary" (click)="editProfileEnable()">
+            Edit
+          </ion-button>
+          <ion-button class="create-btn editButon" expand="block" color="primary" (click)="updateProfile()"
+            [disabled]="!(profileForm.valid && isEdit) || selectedSpeciess.length === 0">
+            Save
+          </ion-button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+</ion-content>

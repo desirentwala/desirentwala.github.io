@@ -1,0 +1,134 @@
+<div class="steps-section radio-btn">
+	<div class="row">
+		<div class="col-md-3 col-sm-4 col-xs-12 productPageLeftArea">
+			<misc-h4 iconClass="fa fa-star" [label]="'NCPLabel.yourfavorites'"></misc-h4>
+			<div class="left-nav">
+				<ul class="leftNavListContainer">
+					<li *ngFor="let detail of yourfav" class="leftNavList">
+						<span title="{{detail}}">
+							<span class="labelDisplay">{{detail | translate}}</span>
+						</span>
+						<button type="button" (click)="doRemoveFromFavoriteList(detail)" class="btn btn-default">
+							<span class="closeX">X</span>{{remove | translate}} </button>
+						<br>
+					</li>
+				</ul>
+			</div>
+
+			<!-- Product Catogories temp removed from the product page-->
+
+			<misc-h4 iconClass="fa fa-tags" [label]="'NCPLabel.productCategories'"></misc-h4>
+			<div *ngFor="let detail of lob" class="left-nav-pro pro">
+				<ul  class="leftNavListContainer">
+					<li class="lbl-p">
+						<label>
+							<input type="checkbox" class="customCheckbox" [checked]="productCategoryCheckedArray[detail.businessType]" (change)="productCategoryCheckedArray[detail.businessType]=!productCategoryCheckedArray[detail.businessType]; isproductCategoriescheked = true">
+							<span class="fake-input"></span>
+							<span class="fake-label">
+								<span class="iconLabel">
+									<i [class]="detail.classname"></i>
+								</span>
+								<span class="labelDisplay">{{detail.businessType | translate}}</span>
+							</span>
+						</label>
+					</li>
+				</ul>
+			</div>
+		</div>
+		<div class="col-md-9 col-sm-8 col-xs-12 productPageRightArea prodMainRTL">
+			<!--Sort by feature is diabled temp.-->
+
+			<div class="row">
+				<div class="col-md-6 col-sm-5 col-xs-12 pl0 prodHeaderRTL">
+					<misc-h4 iconClass="fa fa-delicious" [label]="'NCPLabel.products'"></misc-h4>
+				</div>
+				<div class="col-md-2 col-sm-3 col-xs-6 pr0 labelAlign">
+					<label class="cursor">
+						<i class="fa fa-sort iconLabel"></i>
+						<span class="displayAsLabel">{{'NCPLabel.sortby' | translate}}</span>
+					</label>
+				</div>
+				<div class="col-md-4 col-sm-4 col-xs-6 pr0 pull-md-left pull-sm-right prodSortByDDRTL" (change)="onChange($event.target.value)">
+					<select class="form-control form-cont-dust">
+						<option value="1">{{'NCPLabel.mostpopular' | translate}} </option>
+						<option value="2">{{'NCPLabel.mostviewed' | translate}}</option>
+					</select>
+					<i class="floatBorder"></i>
+				</div>
+			</div>
+			<ng-container *ngIf="isproductCategoriescheked">
+				<div *ngFor="let detail of mostPopular">
+					<div *ngIf="detail && productCategoryCheckedArray[detail.businessType]" class="productfound">
+						<a (click)="navigateProductFullDetails(detail.productCode)">
+							<misc-h4 iconClass="{{detail.classname}}" [label]="detail.productName"></misc-h4>
+						</a>
+						<p>{{detail.productDescp | translate}}</p>
+						<misc-h5 [label]="detail.productDescp1"></misc-h5>
+						<misc-h5 [label]="detail.productDescp2"></misc-h5>
+						<a class="anchor-link" (click)="navigateProductFullDetails(detail.productCode)">{{'NCPLabel.findoutmore' | translate}}</a>
+						<hr class="style8">
+						<div class="productBtnsContainer">
+
+							<button (click)="getQuote(detail.productCode)" class="ncpbtn-large">
+								<span [class]="detail.classname"> </span>
+								<span>{{'NCPLabel.getQuote'| translate}}</span>
+								<span class="fa fa-angle-right ar-aln"></span>
+							</button>
+							<div *ngIf="localstorage.get('NCP.Favorite.user').indexOf(detail.productName) !== -1" class="customBtnContainer ">
+								<button-field buttonType="custom" isDisabled="true" buttonClass="btn btn-default customBtn" iconClass="glyphicon glyphicon-star-empty iconicButton"
+								buttonName="NCPBtn.savedtofavorite">
+								</button-field>
+							</div>
+							<div *ngIf="localstorage.get('NCP.Favorite.user').indexOf(detail.productName) == -1" class="customBtnContainer">
+								<button-field buttonType="custom" (click)="addToFavorite(detail.productName,detail.pId)" buttonClass="btn btn-default customBtn"
+								iconClass="glyphicon glyphicon-star-empty iconicButton" buttonName="NCPBtn.saveasfavorite">
+								</button-field>
+							</div>
+						</div>
+					</div>
+				</div>
+			</ng-container>
+			<ng-container *ngIf="!isproductCategoriescheked">
+				<div *ngFor="let detail of mostPopular">
+					<div *ngIf="detail && productCategoryCheckedArray[detail.businessType]" class="col-md-12 productfound">
+						<a (click)="navigateProductFullDetails(detail.productCode);">
+							<misc-h4 iconClass="detail.classname" [label]="detail.productName"></misc-h4>
+						</a>
+						<p>{{detail.productDescp | translate}}</p>
+						<misc-h5 [label]="detail.productDescp1"></misc-h5>
+						<misc-h5 [label]="detail.productDescp2"></misc-h5>
+						<hr class="style8">
+						<button (click)="getQuote(detail.productCode)" class="ncpbtn-large">
+							<span [class]="detail.classname"> </span>
+							<span>{{'NCPLabel.getQuote'| translate}}</span>
+							<span class="fa fa-angle-right ar-aln"></span>
+						</button>
+						<a class="hide anchor-link" (click)="navigateProductFullDetails(detail.productCode)">{{'NCPLabel.findoutmore' | translate}}</a>
+
+						<div *ngIf="localstorage.get('NCP.Favorite.user').indexOf(detail.productName) !== -1" class="customBtnContainer ">
+							<button-field buttonType="custom" isDisabled="true" buttonClass="btn btn-default customBtn" iconClass="glyphicon glyphicon-star-empty iconicButton"
+							buttonName="NCPBtn.savedtofavorite">
+							</button-field>
+						</div>
+						<div *ngIf="localstorage.get('NCP.Favorite.user').indexOf(detail.productName) == -1" class="customBtnContainer">
+							<button-field buttonType="custom" (click)="addToFavorite(detail.productName,detail.pId)" buttonClass="btn btn-default customBtn"
+							iconClass="glyphicon glyphicon-star-empty iconicButton" buttonName="NCPBtn.saveasfavorite">
+							</button-field>
+						</div>
+			
+
+
+					</div>
+				</div>
+			</ng-container>
+			
+
+
+		</div>
+	</div>
+	<!--<div class="btns-row text-right mt40 pull-xs-left">
+		<div class="col-md-3 col-sm-4 col-xs-12 pull-right mb20 pr0 plr-xs-0">
+			<button type="button" class="ncp-btn w-xs-100p">{{'NCPBtn.ViewAllProducts' | translate}}</button>
+		</div>
+	</div>-->
+</div>

@@ -1,0 +1,15 @@
+<div *ngIf="shared.doShowElement('showBreadCrumb')">
+    <ul class="breadcrumb" *ngIf="trailurl">
+        <li *ngFor="let url of trailurl; let last = last" [ngClass]="{'active': last}" class="pageList">
+            <!-- disable link of last item -->
+            <a role="button" *ngIf="!last && url" (click)="navigate(url.redirectUrl)" class="pageListLink">
+                <i *ngIf="!disableIcons" class="{{url.iconClass}} iconBreadCrumb"></i>
+                <span class="labelBreadCrumb">{{url.name | translate}}</span>
+            </a>
+            <a *ngIf="last  && url" class="pageListLink">
+                <i *ngIf="!disableIcons" class="{{url.iconClass}} iconBreadCrumb" (click)="navigate(url.redirectUrl)"></i>
+                <span class="labelBreadCrumb">{{url.name | translate}}</span>
+            </a>
+        </li>
+    </ul>
+</div>

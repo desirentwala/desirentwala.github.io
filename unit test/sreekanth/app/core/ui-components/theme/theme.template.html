@@ -1,0 +1,18 @@
+
+<div *ngIf="isThemeDisplay" class="sh-side-options">
+        <i class="fa fa-cog themeChangeIcon"></i>
+        <div class="themeChangeOptions">
+            <span>
+                <button class="ncp-linkBtn" style="border: 1px solid #036; font-family: Proxima Nova Condensed Regular,Arial Narrow,Sans-serif; font-size: 7px; color: #fff; background: #036;"type="button" data-dismiss="modal" (click)="changeTheme('royalBlueTheme')">Royal Blue</button>
+            </span>
+            <span>
+                <button class="ncp-linkBtn" style="border: 1px solid #b31b34; font-family: FSMe FSMeBold Arial sans-serif; font-size: 7px; color: #fff; background: #b31b34;"type="button" data-dismiss="modal" (click)="changeTheme('crimsonTheme')">Crimson Red</button>
+            </span>
+            <span>
+            <button class="ncp-linkBtn" style="background-color: #6785c1; border-radius: 3px; border: 1px solid #6785c1;     font-family: inherit;
+            font-size: 15px;
+            color: #373a3c;
+            height: 35px;"type="button" data-dismiss="modal" (click)="changeTheme('defaultStyle');">Default</button>
+            </span>
+        </div>
+    </div>

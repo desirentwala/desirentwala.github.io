@@ -1,0 +1,72 @@
+<div ngIF="products">
+    <section>
+        <div class="row">
+            <span class="ml15 fs30">{{'NCPBreadCrumb.products' | translate}}</span>
+        </div>
+
+        <div class="step-content"></div>
+
+        <div class="row">
+            <div class="col-md-4 col-sm-5">
+                <div class="mb20">
+                    <p class="b2c-product-head p10">
+                       {{'NCPLabel.selectproductcategory'| translate}}
+                    </p>
+                    <a *ngIf="LOBName==='TRAVEL'" class="b2c-product-name p5">
+                        <span class="fs20 mr27 ml10"><i class="fa fa-plane"></i></span>{{'NCPLabel.travelProducts'| translate}}
+                    </a>
+                   
+                <a *ngIf="LOBName==='FIREHOME'" class="b2c-product-name p5">
+                    <span class="fs20 mr25 ml10"><i class="fa fa-home"></i></span>Home Products
+                </a>
+               <a *ngIf="LOBName==='MOTOR'" class="b2c-product-name p5">
+                    <span class="fs20 mr25 ml10"><i class="fa fa-paw"></i></span>Motor Products
+                </a>
+                    <a *ngIf="LOBName==='PERSONALACCIDENT'" class="b2c-product-name p5">
+                    <span class="fs20 mr25 ml10"><i class="fa fa-heart"></i></span>Personal Accident
+                </a>
+                </div>
+            </div>
+
+            <div class="col-md-8 col-sm-7 mb20">
+                <div *ngFor="let product of products;let i= index">
+
+                    <div *ngIf="i<1" class="mb10">
+                        <div class="b1 p25 fff">
+                            <div>
+                                <p class="fs-xs-25 fs30">{{product.name}}</p>
+                            </div>
+                            <div>
+                                <p ><span>{{product.desc  | translate}}</span></p>
+                            </div>
+                            <button class="ncpbtn-default" (click)="getQuote(product.code)">
+                        <span class="mr10">{{'NCPLabel.getQuote' | translate}}</span>
+                        <span class="fa fa-angle-right fa-lg"></span>
+                    </button>
+                            <a class="anchor-link ml10" (click)="gotoProductDetails(product.code)">{{'NCPLabel.findoutmore' | translate}}</a>
+                        </div>
+                    </div>
+
+                    <div *ngIf="i>0">
+                        <div>
+                            <div class="col-md-6 col-sm-12   mt-sm-10">
+                                <div class="p25 b1">
+                                    <div>
+                                        <p class="fs22">{{product.name}}</p>
+                                    </div>
+                                    <div>
+                                        <button class="ncpbtn-default" (click)="getQuote(product.code)">
+                                <span class="mr10">{{'NCPLabel.getQuote' | translate}}</span>
+                                <span class="fa fa-angle-right fa-lg"></span>
+                            </button>
+                                        <a class="anchor-link ml10" (click)="gotoProductDetails(product.code)">{{'NCPLabel.findoutmore'|translate}}</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</div>

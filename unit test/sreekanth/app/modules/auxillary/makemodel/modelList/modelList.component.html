@@ -1,0 +1,133 @@
+<ncp-label></ncp-label>
+<div class="setting-icon">
+  <a data-toggle="modal" (click)="searchModel.open()" class="filterimg">
+    <i class="settingsIcon fa filterIcon"></i>
+  </a>
+</div>
+
+<div *ngIf="ModelCreationDetailsTableData && ModelCreationDetailsTableData.length > 0"
+  class="col-md-3 col-sm-12 col-xs-12  conf">
+  <input class="forconf" [(ngModel)]="searchId" placeholder="{{'NCPBtn.search'| translate}}">
+</div>
+<div style="clear:both;"></div>
+<div class="filterac col-xs-12 col-md-12 col-sm-12 p0">
+  <div *ngIf="setTableFlag">
+    <table class="sortable-theme-bootstrap">
+      <thead>
+        <tr>
+          <th *ngFor="let header of tableDetails;let i=index" [class]="selectedClass(header.mapping)" (click)="changeSorting(header.mapping);(this.rotateFlag === i) ? this.rotateFlag='':this.rotateFlag=i;"
+            [attr.data-title]="header.header | translate">
+            <span class="labelHeader">{{header.header | translate}}</span>
+            <i class="icon-arrow-d indexicon" [class.rotate]="rotateFlag === i"></i>
+          </th>
+          <th class="actionCol">
+            <span class="labelHeader">{{'NCPLabel.Action' | translate}}</span>
+          </th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr
+          *ngFor="let object of ModelCreationDetailsTableData| searchBy : searchId : tableDetails | orderBy : convertSorting(); let rowIndex=index">
+          <td *ngFor="let mappings of tableDetails" [attr.data-title]="mappings.header | translate">
+            <span> {{object[mappings.mapping]}}</span>
+          </td>
+          <td class="actionCol">
+            <span>
+              <i class="fa fa-gear showPopover indexrecus" tooltipPlacement="left" [tooltip]="myTooltip"
+                [tooltipHide]="tooltipHide" tooltipClick=true [id]="'custListTooltip'+rowIndex"></i>
+            </span>
+            <tooltip-content #myTooltip [excludeId]="'custListTooltip'+rowIndex">
+              <h3 class="popover-title">&nbsp;
+                <a class="close" (click)="tooltipHide = myTooltip.hide()">
+                  <i class="icon-alert"></i>
+                </a>
+              </h3>
+              <div class="popover-content">
+                <div>
+                  <ul>
+
+                    <li>
+                      <a (click)="editModelDetail(object.modelCode); tooltipHide = myTooltip.hide()">
+                        <i class="fa fa-pencil iconAnchorLink"></i>
+                        <span class="labelAnchorLink">{{'NCPLabel.editModel' | translate}}</span>
+                      </a>
+                    </li>
+                    <li>
+                      <a (click)="getValueobject(object.modelCode,object.makeCode); tooltipHide = myTooltip.hide()">
+                        <i class=" iconToolTip"></i>
+                        <span class="labelToolTip">{{'NCPLabel.deleteModel' | translate}}</span>
+                      </a>
+                    </li>
+                  </ul>
+                </div>
+              </div>
+            </tooltip-content>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+    <div *ngIf="ModelCreationDetailsTableData.length == 0">
+      <span class="badge">{{'NCPLabel.noRecordsFound' | translate}}</span>
+    </div>
+    <div *ngIf="ModelCreationDetailsTableData && ModelCreationDetailsTableData.length > 0 && viewMore">
+      <div class="col-centered mtb20">
+        <button-field buttonType="custom" buttonName="NCPBtn.showMore" buttonClass="ncpbtn-default text-capitalize"
+          (click)='doViewMore()' iconClass="fa fa-arrow-down">
+        </button-field>
+      </div>
+    </div>
+  </div>
+</div>
+<ncp-modal #modelDeleteModel [closeOnEscape]="false" [closeOnOutsideClick]="false" class="modalForm"
+  modalClass="modal-md" modalTitle="NCPLabel.confirmDeletion" titleIcon="">
+  <modal-content>
+    <div class="btns-row">
+      <button-field buttonType="custom" buttonClass="ncp-btn w100p" iconClass="fa fa-check" buttonName="NCPBtn.yes"
+        (click)="deleteModelDetail(modelCodeValue,makeCodeValue);modelDeleteModel.close();">
+      </button-field>
+      <button-field buttonType="custom" buttonClass="ncp-btn w100p" iconClass="fa fa-close " buttonName="NCPBtn.no"
+        (click)="navigateModelList();modelDeleteModel.close();">
+      </button-field>
+    </div>
+  </modal-content>
+</ncp-modal>
+<ncp-modal modalClass="modal-lg" #searchModel [closeOnEscape]="false" [closeOnOutsideClick]="false"
+  modalTitle="NCPLabel.filterTableContent" titleIcon="glyphicon glyphicon-wrench confed">
+  <modal-content>
+    <div [formGroup]="modelListFormGroup">
+      <div class="row">
+        <ncp-label elementLabel="NCPLabel.makeCode" elementId="makeCode">
+        </ncp-label>
+        <text-box formControlName="makeCode" ngDefaultControl acceptPattern="[a-zA-Z0-9]" maxLength="6"
+          elementLabel="NCPLabel.makeCode">
+        </text-box>
+      </div>
+      <div class="row">
+        <ncp-label elementLabel="NCPLabel.modelCode" elementId="modelCode">
+        </ncp-label>
+        <text-box formControlName="modelCode" inputType="text" ngDefaultControl acceptPattern="[A-Za-z0-9]"
+          maxLength="6" elementLabel="NCPLabel.modelCode">
+        </text-box>
+      </div>
+      <div class="row">
+        <ncp-label elementLabel="NCPLabel.modelCodeDescription" elementId="modelCodeDesc">
+        </ncp-label>
+        <text-box formControlName="modelCodeDesc" inputType="text" acceptPattern="[A-Za-z0-9]" maxLength="256"
+          ngDefaultControl elementLabel="NCPLabel.modelCodeDescription"></text-box>
+      </div>
+    </div>
+  </modal-content>
+  <modal-footer>
+    <div class="btns-row">
+      <button-field buttonType="custom" buttonClass="ncp-linkBtn w100p mt-xs-10" iconClass="fa fa-close"
+        buttonName="NCPBtn.close" (click)="searchModel.close();">
+      </button-field>
+      <button-field buttonType="custom" buttonClass="ncpbtn-default" iconClass="fa fa-eraser" buttonName="NCPBtn.clear"
+        (click)="modelListFormGroup.reset();">
+      </button-field>
+      <button-field buttonType="custom" buttonClass="ncpbtn-default" iconClass="fa fa-filter" buttonName="NCPBtn.filter"
+        (click)="searchModel.close(); filterModels()">
+      </button-field>
+    </div>
+  </modal-footer>
+</ncp-modal>

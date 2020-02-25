@@ -1,0 +1,293 @@
+<ion-content>
+  <div class="back-card">
+    <div class="row mobile-card-align">
+      <!-- <div class="col-12">
+        <img src="../../../assets/imgs/mobile-logo.png" class="mobile-logo" alt="mobile-logo">
+      </div> -->
+      <div class="col-lg-6 col-md-12 col-sm-12 col-xs-12 content-card contentbg">
+        <!-- <ion-toolbar> -->
+        <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12 desktop-logo">
+          <img class="home-logo" src="./assets/imgs/logo.png" alt="logo">
+        </div>
+        <!-- </ion-toolbar> -->
+        <ion-item>
+          <h1 class="text-left page-header">{{bookingHead}} an appointment</h1>
+        </ion-item>
+
+        <div class="pl-3 pt-3">
+          <div id="label">
+            <!-- <ion-label class="pt-2 app-label" for="label">Please choose your pet?</ion-label> -->
+            <div id="petData">
+              <div *ngIf="!isMobile">
+                <div class="row ">
+
+                  <!-- MAX_PET: max number of pets to be displayed -->
+                  <div class="col-md-3 col-sm-12 col-xs-12 pt-2"
+                    *ngFor="let pet of petData | slice:0:MAX_PET;let i = index">
+                    <ion-card [ngClass]="{ 'cursor-disabled': isEditable === false ? true : false }"
+                      (click)="selectedPet(pet)" id="{{i}}" class="app-pet-card pet-card text-center">
+                      <ion-card-header class="pt-1 pb-0 pet-app-header">
+                        <div *ngIf="!pet.profilePic">
+                          <img class="pet-img rounded-circle mx-auto" src="../../../assets/imgs/default-dog.png"
+                            alt="pet-image">
+                        </div>
+                        <div *ngIf="pet.profilePic">
+                          <img class="pet-img rounded-circle mx-auto"
+                            src="{{basePath}}storage/download/{{pet.profilePic}}" alt="">
+                        </div>
+                        <p class="wrap-text">{{pet.petName}}</p>
+                      </ion-card-header>
+                      <div [ngClass]="{'active-card':activePetId === pet.id ? true : false}"></div>
+                    </ion-card>
+                  </div>
+
+                  <!-- show less species -->
+                  <div class="col-md-3 col-sm-12 col-xs-12 pt-2" *ngIf="(MAX_PET > petData?.length) && MAX_PET > 3">
+                    <ion-card (click)="showLessPets()" class="app-pet-card pet-card text-center">
+                      <ion-card-header class="less-card">
+                        <div class="mx-auto">
+                          <ion-label class="less-txt">Less</ion-label>
+                          <div class="p-1">
+                            <i class="fas fa-caret-up fa-size"></i>
+                          </div>
+                        </div>
+                      </ion-card-header>
+                    </ion-card>
+                  </div>
+
+                  <!-- show more species -->
+                  <div class="col-md-3 col-sm-12 col-xs-12 pt-2" *ngIf="MAX_PET < petData?.length">
+                    <ion-card (click)="showMorePets()" class="app-pet-card pet-card text-center">
+                      <ion-card-header class="more-card">
+                        <div class="mx-auto">
+                          <ion-label class="more-txt">More</ion-label>
+                          <div class="p-1">
+                            <i class="fas fa-caret-down fa-size"></i>
+                          </div>
+                        </div>
+                      </ion-card-header>
+                    </ion-card>
+                  </div>
+                </div>
+              </div>
+              <!-- Slider for Mobile -->
+              <div *ngIf="isMobile">
+                <ion-slides pager="false" [options]="slideOpts">
+                  <ion-slide *ngFor="let pet of petData ;let i = index">
+                    <ion-card [ngClass]="{ 'cursor-disabled': isEditable === false ? true : false }"
+                      (click)="selectedPet(pet)" id="{{i}}" class="app-pet-card pet-card text-center">
+                      <ion-card-header class="pt-1 pb-0 pet-app-header">
+                        <div *ngIf="!pet.profilePic">
+                          <img class="pet-img rounded-circle mx-auto" src="../../../assets/imgs/default-dog.png"
+                            alt="pet-image">
+                        </div>
+                        <div *ngIf="pet.profilePic">
+                          <img class="pet-img rounded-circle mx-auto"
+                            src="{{basePath}}storage/download/{{pet.profilePic}}" alt="">
+                        </div>
+                        <p class="wrap-text">{{pet.petName}}</p>
+                      </ion-card-header>
+                      <div [ngClass]="{'active-card':activePetId === pet.id ? true : false}"></div>
+                    </ion-card>
+                  </ion-slide>
+                </ion-slides>
+              </div>
+              <!-- </div> -->
+            </div>
+          </div>
+
+          <div *ngIf="editBooking && previousAppoiment !== undefined">
+            <ion-label class="pt-2 app-label">Previous appointment </ion-label>
+            <div class="desktop-previous-appt">
+              <ion-card style="margin-inline-start:0px">
+                <div class="appointmentCard pb-0 fontFamily">
+                  <ion-item lines="none">
+                    <ion-row class="w-100">
+                      <ion-col size="12" class="appointment-description">
+                        <table class="table table-striped slot-table-view" aria-describedby="slots-table">
+                          <thead>
+                            <tr>
+                              <th class="slot-header pb-1" id="slot">Time slot</th>
+                              <th class="slot-header pb-1" id="name">Veterinarian</th>
+                              <th class="slot-header pb-1" id="price">Duration</th>
+                              <th class="slot-header pb-1" id="">Status</th>
+                            </tr>
+                          </thead>
+                          <tbody>
+                            <tr>
+                              <td>{{previousAppoiment.appointmentDate}} - {{previousAppoiment.time}}</td>
+                              <td> {{previousAppoiment.vet}} </td>
+                              <td> {{previousAppoiment.duration}} </td>
+                              <td> {{previousAppoiment.status}} </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </ion-col>
+                    </ion-row>
+                  </ion-item>
+                </div>
+              </ion-card>
+            </div>
+            <div class="mobile-previous-appt">
+              <ion-card style="margin-inline-start:0px">
+                <div class="appointmentCard pb-0 fontFamily">
+                  <ion-item lines="none">
+                    <ion-row class="w-100">
+                      <ion-col size="12" class="appointment-description">
+                        <p>Time slot: {{previousAppoiment.appointmentDate}} - {{previousAppoiment.time}}</p>
+                        <p>Veterinarian: {{previousAppoiment.vet}}</p>
+                        <p>Duration: {{previousAppoiment.duration}}</p>
+                        <p>Status: {{previousAppoiment.status}}</p>
+                      </ion-col>
+                    </ion-row>
+                  </ion-item>
+                </div>
+              </ion-card>
+            </div>
+          </div>
+
+          <div *ngIf="privateSlot !== undefined">
+            <p></p>
+            <ion-label class="pt-2 app-label">Private slot from {{privateSlot.practice?.practiceName}} </ion-label>
+            <div>
+              <table class="table table-striped slot-table-view" aria-describedby="slots-table">
+                <thead>
+                  <tr>
+                    <th class="slot-header pb-1" id="slot">Time slot</th>
+                    <th class="slot-header pb-1" id="name">Veterinarian</th>
+                    <th class="slot-header pb-1" id="price">Price</th>
+                    <th class="slot-header pb-1" id=""></th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr (click)="slotSelection(privateSlot)">
+                    <td>
+                      <ion-text>
+                        {{privateSlot.Appon}} - {{privateSlot.time}} <br>
+                        {{privateSlot.practiceAppointmentType.appointmentType}}
+                      </ion-text>
+                      <!-- <div class="slot">
+                      <ion-text class="slot-txt">{{privateSlot.duration}}</ion-text>
+                    </div> -->
+                    </td>
+                    <td>{{privateSlot.user.firstName}}</td>
+                    <td>£ {{privateSlot.practiceAppointmentType.customerFee}}</td>
+                    <td class="margin-vertical text-right">
+                      <ion-button color="primary" class="cursor" (click)="bookPrivateSlot()">Book now</ion-button>
+
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <ion-card *ngIf="privateSlot !== undefined" class="ml-0 slot-card-view ion-padding">
+            <ion-row>
+              <!-- <ion-label class="pt-2 app-label">Private slot from {{privateSlot.practice.practiceName}} </ion-label> -->
+              <ion-col size="12">
+                <ion-label>With {{privateSlot.user.firstName}} of
+                  {{privateSlot.practiceAppointmentType.appointmentType}}</ion-label>&nbsp;
+                <ion-label> at {{privateSlot.Appon}} - {{privateSlot.time}} <br>
+                </ion-label>&nbsp;
+                <ion-label>for £ {{privateSlot.practiceAppointmentType.customerFee}}</ion-label>
+              </ion-col>
+              <!-- <ion-col size="3">
+                <ion-label color="primary" (click)="bookPrivateSlot()">Book now</ion-label>
+              </ion-col> -->
+              <div class="col-12 text-right">
+                <ion-button color="primary" class="book-btn" (click)="bookPrivateSlot()">Book now</ion-button>
+              </div>
+            </ion-row>
+          </ion-card>
+
+
+          <div *ngIf="isShow">
+            <p></p>
+            <ion-label class="pt-2 app-label">Please select an appointment date and time </ion-label>
+            <div>
+              <div class="calendar ml-0">
+                <input type="date" class="form-control" name="slotDate" id="slotDate" placeholder="Choose date"
+                  [(ngModel)]="selectedDate" [min]="today" (change)="dateValidation($event);" onkeydown="return false">
+                <div class="text-danger" *ngIf="isInvalid">
+                  <small>Invalid date</small>
+                </div>
+              </div>
+
+              <!-- <ion-col size="3" size-lg size-md size-sm size-xs>
+                <ion-segment class="segment-selection" color="primary" (ionChange)="filterSlots($event.target.value)">
+                  <ion-segment-button>
+                    <ion-label>AllDay</ion-label>
+                  </ion-segment-button>
+                  <ion-segment-button>
+                    <ion-label>AM</ion-label>
+                  </ion-segment-button>
+                  <ion-segment-button>
+                    <ion-label>PM</ion-label>
+                  </ion-segment-button>
+                </ion-segment>
+              </ion-col> -->
+              <!-- </ion-row> -->
+              <div class="pt-3">
+                <table class="table table-striped slot-table-view" aria-describedby="slots-table">
+                  <thead>
+                    <tr>
+                      <th class="slot-header pb-1" id="slot">Time slot</th>
+                      <th class="slot-header pb-1" id="name">Veterinarian</th>
+                      <th class="slot-header pb-1" id="price">Price</th>
+                      <th class="slot-header pb-1" id=""></th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr *ngFor="let data of appointmentslots;" (click)="slotSelection(data)"
+                      [class.active]="data.slotId === activeSlot">
+                      <td>
+                        <ion-text>{{data.slot}}</ion-text>
+                        <div class="slot">
+                          <ion-text class="slot-txt">{{data.duration}}</ion-text>
+                        </div>
+                      </td>
+                      <td>{{data.vet}}</td>
+                      <td>£&nbsp;{{data.price}}</td>
+                      <td class="margin-vertical text-right cursor">
+                        <ion-button color="primary" (click)="bookAppointment(data)">
+                          {{bookingHead !== 'Edit' ? 'Book now' : 'Confirm now'}}</ion-button>
+                      </td>
+                    </tr>
+                    <tr *ngIf="appointmentslots.length === 0" class="text-center">
+                      <td colspan="3">No slots available.!</td>
+                    </tr>
+                  </tbody>
+                </table>
+
+                <ion-card class="ml-0 slot-card-view ion-padding" *ngFor="let data of appointmentslots">
+                  <ion-row>
+                    <!-- <ion-col size="6"> -->
+                    <div class="pt-1 pr-1 pb-1">
+                      <ion-label>With {{data.vet}}</ion-label>&nbsp;
+                      <ion-label>at {{data.slot}}</ion-label>
+                    </div>
+                    <div class="pt-1 pr-1">
+                      <ion-label>of {{data.duration}}</ion-label>&nbsp;
+                      <ion-label>for £&nbsp;{{data.price}}</ion-label>
+                    </div>
+                    <div class="col-12 text-right">
+                      <ion-button color="primary" class="book-btn" (click)="bookAppointment(data)">
+                        {{bookingHead !== 'Edit' ? 'Book now' : 'Confirm now'}}</ion-button>
+                    </div>
+                  </ion-row>
+                </ion-card>
+                <ion-card class="slot-card-view ion-padding" *ngIf="appointmentslots.length === 0">
+                  <div class="pt-2 pb-2 text-center">
+                    <ion-label>No slots available.!</ion-label>
+                  </div>
+                </ion-card>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</ion-content>

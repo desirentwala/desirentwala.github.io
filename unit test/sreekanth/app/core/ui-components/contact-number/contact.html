@@ -1,0 +1,33 @@
+<div [id]="elementId" *ngIf="!customFlag" class="col-md-5 col-sm-6 col-xs-11 pr-sm-0" >
+  <p class="mainFloatLabel floatLabel">{{elementLabel | translate}}<span *ngIf="mandatoryFlag" class="aste">*</span></p>
+  <div class="col-md-3 col-xs-4 col-sm-4 pt0 pr15 pb0 pl0 pr-sm-15 contactAlignRTL">
+    <drop-down [elementId]="elementId" [class.ng-invalid]="invalidFlag" [class.ng-valid]="!invalidFlag" [formControl]="dropElementControl" [placeHolder]="placeHolder" pickListFlag="true" miscType="MiscInfo" miscSubType="MOBCD" [hideArrowFlag]="hideArrowFlag"
+      [showCodeFlag]="showCodeFlag" [displayOnClick]="displayOnClick" [typeAheadSearch]="typeAheadSearch" [elementValue]="dropElementControl.value" (click)="changeValue()" class="contact-no" customFlag=true [isLazyLoading]="isLazyLoading"
+      [lazyLoadingOffsetValue]="lazyLoadingOffsetValue" [initialItemsNumber]="initialItemsNumber" [displayOnlyCode]="doDisplayCountryCode"></drop-down>
+  </div>
+  <div class="col-md-9 col-xs-8 col-sm-8 no-pad">
+    <text-box class="inputType mobile-number" [class.ng-invalid]="invalidFlag" [maxLength]="maxLength" [class.ng-valid]="!invalidFlag"  [formControl]="textElementControl" customFlag=true [elementValue]="textElementControl.value" placeHolder="{{placeHolder | translate}}"
+      (click)="changeValue()" [acceptPattern]="acceptPattern" [changeId]="changeId" [disabledFlag]="isEnquiryFlag" (onBlur)="formatInput($event)"></text-box>
+  </div>
+</div>
+
+<div [id]="elementId" *ngIf="customFlag" [ngClass]="contactClass" >
+  <div class="col-md-3 col-xs-4 col-sm-4 pt0 pr15 pb0 pl0 pr-sm-15 contactAlignRTL">
+    <drop-down [elementId]="elementId" [class.ng-invalid]="invalidFlag" [class.ng-valid]="!invalidFlag" [formControl]="dropElementControl" [placeHolder]="placeHolder" pickListFlag="true" miscType="MiscInfo" miscSubType="MOBCD" [hideArrowFlag]="hideArrowFlag"
+      [showCodeFlag]="showCodeFlag" [displayOnClick]="displayOnClick" [typeAheadSearch]="typeAheadSearch" [elementValue]="dropElementControl.value" (click)="changeValue()" class="contact-no" customFlag=true [isLazyLoading]="isLazyLoading"
+      [lazyLoadingOffsetValue]="lazyLoadingOffsetValue" [initialItemsNumber]="initialItemsNumber" [displayOnlyCode]="doDisplayCountryCode"></drop-down>
+  </div>
+  <div class="col-md-9 col-xs-8 col-sm-8 no-pad">
+    <text-box class="inputType mobile-number" [class.ng-invalid]="invalidFlag" [maxLength]="maxLength" [class.ng-valid]="!invalidFlag"  [formControl]="textElementControl" customFlag=true [elementValue]="textElementControl.value" placeHolder="{{placeHolder | translate}}"
+      (click)="changeValue()" [acceptPattern]="acceptPattern" (onBlur)="formatInput($event)"></text-box>
+  </div>
+</div>
+<div *ngIf="tooltipTitle" class="col-sm-1 col-md-1 col-xs-1 tooltip-mobile3">
+  <button  type="button" class="btn btn-link info-tooltip" data-toggle="toggle" [tooltipPlacement]="tooltipPlacement"
+    [tooltip]="tooltipHTML" [id]="elementId">
+    <i class="icon-tooltip" [id]="elementId"></i>
+    <tooltip-content #tooltipHTML [excludeId]="elementId">
+                <div innerHTML="{{tooltipTitle | translate}}"></div>
+        </tooltip-content>
+        </button>
+</div>

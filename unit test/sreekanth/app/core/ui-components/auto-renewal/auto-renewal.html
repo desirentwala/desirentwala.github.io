@@ -1,0 +1,87 @@
+<div [formGroup]="renewalPlanControl">
+    <div class="row">
+        <ncp-label elementLabel="NCPLabel.applicableAutoRenewal"></ncp-label>
+        <radio-button [radioArray]="isAutoRenewalApplicableRadioArray" radioName="isAutoRenewalApplicable" elementId="isAutoRenewalApplicable"
+            horizontalflag=false formControlName="isAutoRenewalApplicable" elementLabel="NCPLabel.applicableAutoRenewal">
+        </radio-button>
+    </div>
+    <div *ngIf="renewalPlanControl.value.isAutoRenewalApplicable==='Y'">
+     <!--  <div class="row">
+            <ncp-label elementLabel="NCPLabel.instructionType"></ncp-label>
+            <radio-button [radioArray]="instructionTypeRadioArray" radioName="instructionType" elementId="instructionType" customFlag=true
+                radioCustomClass="col-md-5 col-sm-6 col-xs-11 pr-sm-0" horizontalflag=false formControlName="instructionType">
+            </radio-button>
+        </div>
+        <error-handler [elementControl]="renewalPlanControl['controls']['instructionType']" [customMessages]="{required: 'NCPErrorMessage.pleaseSelectInstructionType'}">
+        </error-handler> -->
+        <div class="bt1 bb1 pl0 mt10 pt10" >
+            <div class="row">
+                <ncp-label elementLabel="NCPLabel.issuingBank"></ncp-label>
+                <text-box  elementId="issuingBank" formControlName="issuingBankName" elementLabel="NCPLabel.issuingBank"
+                    ngDefaultControl></text-box>
+              <!--  <drop-down *ngIf="renewalPlanControl.value.instructionType === 'EP'" elementId="issuingBank" formControlName="issuingBankCode"
+                    miscType="MiscInfo" [pickListFlag]=true isCodeDesc=true [displayOnClick]=true miscSubType="DRBK" [descControl]="renewalPlanControl['controls']['issuingBankName']"
+                    ngDefaultControl>
+                </drop-down> -->
+            </div>
+            <error-handler [elementControl]="renewalPlanControl['controls']['issuingBankName']" [customMessages]="{required: 'NCPErrorMessage.pleaseSelectBank'}">
+            </error-handler>
+            <div class="row">
+                <ncp-label elementLabel="NCPLabel.creditCardNumber"></ncp-label>
+                <div class="col-md-5 col-xs-11 col-sm-6 pr-sm-0">
+                    <div class="col-md-3 col-sm-3 col-xs-3 pl0 pr5 creditCardNoFirstBlockAlignRTL">
+                        <input type="text" class="form-control" datatype="NUMBER" maxlength="4" [formControl]="cardControl1" onkeypress='return event.charCode >= 48 && event.charCode <= 57'>
+                        <p class="mainFloatLabel floatLabel">{{'NCPLabel.creditCardNumber'| translate}}</p>
+                        <i class="floatBorder"></i>
+                        <i ng-reflect-ng-class="fa fa-check-circle floatIcon s" class="fa fa-check-circle floatIcon successIconColor"></i>
+                    </div>
+                    <div class="col-md-3 col-sm-3 col-xs-3 pl0 pr5">
+                        <input type="text" id="card2" class="form-control" datatype="NUMBER" maxlength="4" data-opt="noValue" [formControl]="cardControl2" onkeypress='return event.charCode >= 48 && event.charCode <= 57'>
+                        <i class="floatBorder"></i>
+                        <i ng-reflect-ng-class="fa fa-check-circle floatIcon s" class="fa fa-check-circle floatIcon successIconColor"></i>
+                    </div>
+                    <div class="col-md-3 col-sm-3 col-xs-3 pl0 pr5">
+                        <input type="text" id="card3" class="form-control" datatype="NUMBER" maxlength="4" data-opt="noValue" [formControl]="cardControl3" onkeypress='return event.charCode >= 48 && event.charCode <= 57'>
+                        <i class="floatBorder"></i>
+                        <i ng-reflect-ng-class="fa fa-check-circle floatIcon s" class="fa fa-check-circle floatIcon successIconColor"></i>
+                    </div>
+                    <div class="col-md-3 col-sm-3 col-xs-3 plr0 creditCardNoLastBlockAlignRTL">
+                        <input type="text" id="card4" class="form-control" datatype="NUMBER" maxlength="4" data-opt="noValue" [formControl]="cardControl4" onkeypress='return event.charCode >= 48 && event.charCode <= 57'>
+                        <i class="floatBorder"></i>
+                        <i ng-reflect-ng-class="fa fa-check-circle floatIcon s" class="fa fa-check-circle floatIcon successIconColor"></i>
+                    </div>
+
+
+                </div>
+            </div>
+            <error-handler [elementControl]="renewalPlanControl['controls']['creditCardNo']" [customMessages]="{required: 'NCPErrorMessage.pleaseEnterCreditCard'}">
+            </error-handler>
+            <div class="row">
+                <ncp-label elementLabel="NCPLabel.typeOfCard"></ncp-label>
+                <radio-button [radioArray]="typeOfCardRadioArray" radioName="cardType" elementId="cardType" customFlag=true radioCustomClass="col-md-5 col-sm-6 col-xs-11 pr-sm-0"
+                    horizontalflag=false formControlName="cardType" elementLabel="NCPLabel.typeOfCard">
+                </radio-button>
+            </div>
+            <error-handler [elementControl]="renewalPlanControl['controls']['cardType']" [customMessages]="{required: 'NCPErrorMessage.pleaseSelectCardType', invalidCardNumber: 'NCPErrorMessage.pleaseEnterValidNumber'}" [showErrorOnBlur]=false>
+            </error-handler>
+            <div class="row">
+                <ncp-label elementLabel="NCPLabel.expiryDate"></ncp-label>
+                <div class="col-sm-6 col-md-5 col-xs-11 pr-sm-0">
+                    <p class="mainFloatLabel floatLabel">{{'NCPLabel.expiryDate'| translate}}</p>
+                    <div class="col-sm-6 col-md-6 col-xs-6 pr-xs-0 pl-md-0 pl-sm-0 creditCardYearAlignRTL" ngDefaultControl>
+                        <select id="elementID" formControlName="cardExpiryMonth" class="form-control jcf-select customSelect ">
+                            <option *ngFor="let year of years">{{year}}</option>
+                        </select>
+                    </div>
+                    <div class="col-sm-6 col-md-6 col-xs-6 pr-xs-0 pr-md-0 pr-sm-0 pull-xs-right creditCardMonthAlignRTL" ngDefaultControl>
+                        <select id="cardExpiryYear" formControlName="cardExpiryYear" class="form-control jcf-select customSelect ">
+                            <option *ngFor="let month of months">{{month}}</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+            <error-handler [elementControl]="renewalPlanControl['controls']['cardExpiryYear']" [customMessages]="{required: 'NCPErrorMessage.pleaseSelectExpiryDate'}">
+            </error-handler>
+        </div>
+    </div>
+</div>

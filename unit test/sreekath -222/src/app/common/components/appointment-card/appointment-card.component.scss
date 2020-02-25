@@ -1,0 +1,353 @@
+@import "../../../../theme/variables.scss";
+
+$border: 10px;
+$border-8: 8px;
+$border-1: 1px;
+
+.appointmentDate {
+  border: $border-1 solid var(--active-item-background);
+  width: 4.5rem;
+  height: 4.5rem;
+  padding: .5rem;
+}
+
+.date {
+  font-size: 2.25rem;
+  font-weight: bold;
+  font-stretch: normal;
+  font-style: normal;
+  line-height: normal;
+  letter-spacing: normal;
+  margin-top: -0.3rem;
+}
+
+.date-box {
+  padding: 0px !important;
+}
+
+.appointmentCard {
+  border-radius: $border;
+  padding: 20px 0px 30px 0px;
+}
+
+.viewDetails {
+  color: var(--ion-color-primary);
+  cursor: pointer;
+}
+
+.viewDetails:hover {
+  color: var(--ion-color-primary);
+  text-decoration: underline;
+}
+
+.videoCall {
+  background: var(--secondary-video-color);
+  max-width: 22.6rem !important;
+  height: 5rem;
+  padding-top: .6rem;
+}
+
+.videoCall:hover {
+  background: var(--secondary-videohover-color);
+}
+
+.info {
+  color: var(--ion-color-primary);
+}
+
+.header {
+  font-size: 20px;
+  font-weight: bold;
+  font-stretch: normal;
+  font-style: normal;
+  line-height: normal;
+  letter-spacing: normal;
+  margin: 20px 0px 10px 0px;
+}
+
+.iconImg {
+  margin-bottom: -0.2rem;
+  margin-right: 0.5rem;
+}
+
+.medium {
+  font-weight: normal;
+  color: var(--gunmetal);
+}
+
+.low {
+  font-weight: bold;
+  color: var(--ion-color-dark);
+}
+
+.edit {
+  color: var(--ion-color-nav-primary);
+  cursor: var(--cursor);
+  font-size: 16px;
+}
+
+.previovs {
+  color: var(--gunmetal) !important;
+}
+
+.opacity {
+  opacity: 0.5;
+}
+
+.fontFamily {
+  font-family: ProximaNova;
+}
+
+.destop-view {
+  display: block !important;
+}
+
+.mobile-view {
+  display: none !important;
+}
+
+@media (max-width: 762px) {
+  .destop-view {
+    display: none !important;
+  }
+
+  .mobile-view {
+    display: block !important;
+  }
+}
+
+@media (max-width: 480px) {
+  .appointment-status {
+    font-size: 16px;
+    font-weight: bold;
+    color: var(--ion-color-medium-shade);
+  }
+  .edit{
+    font-size: 13px;
+  }
+  .upcoming-month {
+    margin-top: -6px;
+    font-size: 16px;
+    font-weight: bold;
+    color: var(--gunmetal);
+  }
+
+  .upcoming-date {
+    font-size: 36px;
+    font-weight: bold;
+    color: var(--gunmetal);
+  }
+
+  .upcoming-time {
+    font-size: 16px;
+    color: var(--ion-color-medium-shade);
+    white-space: pre-line !important;
+  }
+
+  .upcoming-appointment-with {
+    font-size: 16px;
+    font-weight: bold;
+    color: var(--ion-color-dark);
+    white-space: pre-line !important;
+  }
+
+  .previous-time {
+    opacity: 0.5;
+    font-size: 16px;
+    color: var(--ion-color-medium-shade);
+  }
+
+  .previous-appointment-with {
+    opacity: 0.5;
+    font-size: 16px;
+    font-weight: bold;
+    color: var(--ion-color-dark);
+    white-space: pre-line !important;
+  }
+
+  .previous-date {
+    opacity: 0.5;
+    font-size: 36px;
+    font-weight: bold;
+    color: var(--ion-color-medium-shade);
+  }
+
+  .previous-month {
+    margin-top: -6px;
+    opacity: 0.5;
+    font-size: 16px;
+    font-weight: bold;
+    color: var(--ion-color-medium-shade);
+  }
+
+  .appointment-description {
+    margin-left: 17px;
+  }
+
+  .appointmentCard {
+    padding-left: 0px;
+
+    .appointmentDate {
+      width: 3.5rem;
+      height: 3.5rem;
+
+      .previous-date {
+        font-size: 25px;
+        font-weight: bold;
+      }
+
+      .upcoming-date {
+        font-size: 25px;
+        font-weight: bold;
+        color: var(--gunmetal);
+      }
+    }
+  }
+}
+
+@media (width: 1024px) {
+  .appointmentCard {
+    .appointmentDate {
+      width: 4rem;
+      height: 4rem;
+      margin-left: -5px;
+
+      .previous-date {
+        font-size: 30px;
+      }
+
+      .upcoming-date {
+        font-size: 30px;
+      }
+    }
+  }
+}
+
+.verySmallDevice {
+  display: none !important;
+  cursor: pointer;
+}
+
+@media (max-width: 762px) {
+  .verySmallDevice {
+    display: block !important;
+    cursor: pointer;
+  }
+
+  .videoCall {
+    background: var(--secondary-video-color);
+    max-width: 19rem !important;
+    height: 3.7rem;
+    padding-top: 0rem;
+  }
+
+  .fontsize {
+    font-size: 16px !important;
+  }
+
+  .icon {
+    font-size: 1.5rem !important;
+  }
+
+  .mediumDevices {
+    display: none !important;
+    cursor: pointer;
+  }
+}
+
+@media (max-width: 360px) {
+  .videoCall {
+    background: var(--secondary-video-color);
+    // width: 19rem !important;
+    height: 3rem;
+    padding-top: 0rem;
+  }
+
+  .fontsize {
+    font-size: 13px !important;
+  }
+}
+@media (max-width: 360px) {
+  .appointmentCard {
+    padding-left: 0px;
+
+    .appointmentDate {
+      width: 3rem;
+      height: 3rem;
+      margin-left: -5px;
+      padding: 0.3rem;
+
+      .previous-date {
+        font-size: 25px;
+      }
+
+      .upcoming-date {
+        font-size: 25px;
+      }
+    }
+  }
+
+  .upcoming-time {
+    font-size: 13px;
+    color: var(--ion-color-medium-shade);
+    white-space: pre-line !important;
+  }
+
+  .appointment-description {
+    margin-left: 13px;
+  }
+.edit{
+  font-size: 13px;
+}
+  .appointment-status {
+    font-size: 13px;
+  }
+
+  .upcoming-month {
+    font-size: 13px;
+  }
+
+  .upcoming-date {
+    font-size: 36px;
+  }
+
+  .upcoming-time {
+    font-size: 13px;
+  }
+
+  .upcoming-appointment-with {
+    font-size: 13px;
+  }
+
+  .previous-time {
+    font-size: 13px;
+  }
+
+  .previous-appointment-with {
+    font-size: 13px;
+  }
+
+  .previous-month {
+    font-size: 13px;
+  }
+}
+
+.month {
+  text-transform: uppercase;
+}
+
+.icon {
+  font-size: 2rem;
+}
+
+.no-data {
+  text-align: center;
+  font-family: var(--ion-header-font);
+  color: var(--ion-color-medium-tint);
+}
+
+@media (max-width: 1024px) and (orientation: portrait) {
+  .appointmentCard{
+    padding-top: 0px !important;
+  }
+}

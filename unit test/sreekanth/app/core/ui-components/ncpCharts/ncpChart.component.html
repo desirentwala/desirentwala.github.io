@@ -1,0 +1,84 @@
+<section class="widgetContainer">
+  <div class="widgetPannel" [class.widthClass]="widthClass">
+    <div class="panel-title w100p pull-left" (mouseleave)="toggleMenu=false;">
+      <div class="col-md-9 col-sm-9 col-xs-12 pl0 chartHeaderPad">
+        <misc-h2 label="{{titleHeader}}" iconClass="fa fa-delicious" *ngIf=titleHeader></misc-h2>
+      </div>
+
+      <!--<h3 class="pull-left mt10 mb0"><i class="fa fa-delicious iconHeader"></i><span class="labelHeader">{{titleHeader | translate}}</span></h3>-->
+      <div class="btn-group pull-right" *ngIf="showUtilityButton">
+        <div class="setting-icon pull-left">
+          <a type="button" (click)="generateCsv();" class="filterimg">
+            <i class="settingsIcon fa downloadIcon"></i>
+          </a>
+        </div>
+        <div class="setting-icon pull-left">
+          <a type="button" (click)="toggleMenu =!toggleMenu" class="filterimg">
+            <i class="settingsIcon fa navIcon"></i>
+          </a>
+        </div>
+        <!--<a type="button" (click)="generateCsv();"  class="ncp-btn1 btn-1 btn-1a fs22 lh20 p5 text-center"><i class="fa fa-download"></i></a>
+                <a type="button" (click)="toggleMenu =!toggleMenu"  class="ncp-btn1 btn-1 btn-1a fs22 lh20 p5 text-center"><i class="fa fa-stack-exchange"></i></a>-->
+
+        <ul [class.d-none]="!toggleMenu" [class.menuList]="toggleMenu" (click)="toggleMenu =!toggleMenu">
+          <li class="li-item" (click)="showLegend = !showLegend"><span class="labelNcpChartDD">Toggle Legend</span></li>
+          <!--<li class="li-item" (click)="timeline = !timeline" *ngIf="type === 'Line' || type === 'Area'"><span class="labelNcpChartDD">Timeline view</span></li> -->
+          <li class="li-item" (click)="autoScale = !autoScale" *ngIf="type === 'Line' || type === 'Area'"><span class="labelNcpChartDD">Auto scale</span></li>
+          <li class="li-item" (click)="type = 'BarVerticalGrouped'" *ngIf="multi && multi.length > 0 && type != 'BarVerticalGrouped'"><span class="labelNcpChartDD">Vertical Bar graph</span></li>
+          <li class="li-item" (click)="type = 'BarHorizontalGrouped'" *ngIf="multi && multi.length > 0 && type != 'BarHorizontalGrouped'"><span class="labelNcpChartDD">Horizontal Bar graph</span></li>
+          <li class="li-item" (click)="type = 'Line'" *ngIf="multi && multi.length > 0 && type != 'Line'"><span class="labelNcpChartDD">Line graph</span></li>
+          <li class="li-item" (click)="type = 'Area'" *ngIf="multi && multi.length > 0 && type != 'Area'"><span class="labelNcpChartDD">Area graph</span></li>
+          <li class="li-item" (click)="type = 'Pie'" *ngIf="single && single.length > 0 && type != 'Pie'"><span class="labelNcpChartDD">Pie graph</span></li>
+          <li class="li-item" (click)="type = 'PieAdvanced'" *ngIf="single && single.length > 0 && type != 'PieAdvanced'"><span class="labelNcpChartDD">Advanced Pie graph</span></li>
+          <li class="li-item" (click)="type = 'BarVertical'" *ngIf="single && single.length > 0 && type != 'BarVertical'"><span class="labelNcpChartDD">Vertical Bar graph</span></li>
+          <li class="li-item" (click)="type = 'BarHorizontal'" *ngIf="single && single.length > 0 && type != 'BarHorizontal'"><span class="labelNcpChartDD">Horizontal Bar graph</span></li>
+          <!--<li class="li-item" (click)="type = 'PieGrid'" *ngIf="single && single.length > 1 && type != 'PieGrid'" ><span class="labelNcpChartDD">Pie Grid</span></li>-->
+          <li class="li-item" (click)="explodeSlices = !explodeSlices" *ngIf="type =='Pie'"><span class="labelNcpChartDD">Explode Slices</span></li>
+          <li class="li-item" (click)="showLabels = !showLabels" *ngIf="type =='Pie'"><span class="labelNcpChartDD">Show Labels</span></li>
+        </ul>
+      </div>
+    </div>
+    <div class="panel-body chartContainer pull-left">
+      <div class="row">
+        <a type="button" *ngIf="isDepthGraph" (click)="goBack();" class="pull-left backBtn ml15">
+          <i class="glyphicon glyphicon-menu-left lh-initial"></i>
+        </a>
+      </div>
+      <ngx-charts-bar-vertical *ngIf="type === 'BarVertical'" [scheme]="colorScheme" [results]="single" [gradient]="gradient" [xAxis]="showXAxis"
+        [yAxis]="showYAxis" [legend]="showLegend" [showXAxisLabel]="showXAxisLabel" [showYAxisLabel]="showYAxisLabel" [xAxisLabel]="xAxisLabel | translate"
+        [yAxisLabel]="yAxisLabel | translate" [view]="barView" (select)="select($event)">
+      </ngx-charts-bar-vertical>
+      <ngx-charts-bar-horizontal *ngIf="type === 'BarHorizontal'" [view]="barView" [scheme]="colorScheme" [results]="single" [gradient]="gradient"
+        [xAxis]="showXAxis" [yAxis]="showYAxis" [legend]="showLegend" [showXAxisLabel]="showXAxisLabel" [showYAxisLabel]="showYAxisLabel"
+        [xAxisLabel]="xAxisLabel | translate" [yAxisLabel]="yAxisLabel | translate" (select)="select($event)">
+      </ngx-charts-bar-horizontal>
+      <ngx-charts-bar-vertical-2d *ngIf="type === 'BarVerticalGrouped'" [scheme]="colorScheme" [results]="multi" [gradient]="gradient"
+        [xAxis]="showXAxis" [yAxis]="showYAxis" [legend]="showLegend" [showXAxisLabel]="showXAxisLabel" [showYAxisLabel]="showYAxisLabel"
+        [xAxisLabel]="xAxisLabel  | translate" [yAxisLabel]="yAxisLabel | translate" [view]="barView" (select)="select($event)">
+      </ngx-charts-bar-vertical-2d>
+      <ngx-charts-bar-horizontal-2d *ngIf="type === 'BarHorizontalGrouped'" [view]="barView" [scheme]="colorScheme" [results]="multi"
+        [gradient]="gradient" [xAxis]="showXAxis" [yAxis]="showYAxis" [legend]="showLegend" [showXAxisLabel]="showXAxisLabel"
+        [showYAxisLabel]="showYAxisLabel" [xAxisLabel]="xAxisLabel | translate" [yAxisLabel]="yAxisLabel | translate" (select)="select($event)">
+      </ngx-charts-bar-horizontal-2d>
+      <ngx-charts-pie-chart *ngIf="type === 'Pie'" [scheme]="colorScheme" [view]="pieView" [results]="single" [legend]="showLegend"
+        [explodeSlices]="explodeSlices" [labels]="showLabels" [gradient]="gradient" (select)="select($event)">
+      </ngx-charts-pie-chart>
+      <ngx-charts-advanced-pie-chart *ngIf="type === 'PieAdvanced'" [view]="barView" [scheme]="colorScheme" [results]="single"
+        [gradient]="gradient" (select)="select($event)">
+      </ngx-charts-advanced-pie-chart>
+      <ngx-charts-pie-grid *ngIf="type === 'PieGrid'" [scheme]="colorScheme" [results]="single" (select)="select($event)">
+      </ngx-charts-pie-grid>
+      <ngx-charts-line-chart *ngIf="type === 'Line'" [view]="barView" [scheme]="colorScheme" [results]="multi" [gradient]="gradient"
+        [xAxis]="showXAxis" [yAxis]="showYAxis" [legend]="showLegend" [showXAxisLabel]="showXAxisLabel" [showYAxisLabel]="showYAxisLabel"
+        [xAxisLabel]="xAxisLabel | translate" [yAxisLabel]="yAxisLabel | translate" [autoScale]="autoScale" [timeline]="timeline" (select)="select($event)">
+      </ngx-charts-line-chart>
+      <ngx-charts-area-chart *ngIf="type === 'Area'" [view]="barView" [timeline]="timeline" [scheme]="colorScheme" [results]="multi"
+        [gradient]="gradient" [xAxis]="showXAxis" [yAxis]="showYAxis" [legend]="showLegend" [showXAxisLabel]="showXAxisLabel"
+        [showYAxisLabel]="showYAxisLabel" [xAxisLabel]="xAxisLabel | translate" [yAxisLabel]="yAxisLabel | translate" [autoScale]="autoScale" (select)="select($event)">
+      </ngx-charts-area-chart>
+      <ngx-charts-number-card *ngIf="type === 'NumberCard'" [view]="numberCardView" cardColor="#6785c1" bandColor="#3d5b99" textColor="#ffffff"
+        [scheme]="colorScheme" [results]="single" (select)="select($event)">
+      </ngx-charts-number-card>
+    </div>
+  </div>
+</section>

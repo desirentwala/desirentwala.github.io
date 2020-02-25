@@ -1,0 +1,187 @@
+<!-- <ion-toolbar class="top-header"></ion-toolbar> -->
+<ion-content class="disable-background">
+  <ion-card class="ion-padding mt-4 mb-2 register-card">
+    <div class="signUpLogo">
+      <i class="fa fa-times float-right fa-1x" (click)="onCloseSignup()" style="cursor: pointer;"></i>
+      <img src="./assets/imgs/logo.png" alt="Logo">
+    </div>
+    <hr class="horizontalLine">
+    <div class="ion-text-center">
+      <h1 class="auth-header">Register your practice</h1>
+      <ion-text class="signupLabel">Video consultations for animals under your care</ion-text>
+    </div>
+
+    <!-- form start -->
+    <form class=" m-auto pl-2 pr-2" #practiceRegistrationForm="ngForm">
+      <label>Please enter your practice details:</label>
+      <div class="row">
+        <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
+          <label for="practiceName" class="label-top">Vet practice name</label><i class="fas fa-asterisk form-asterisk"></i>
+          <input type="text" id="practiceName" class="form-control" placeholder="Vet practice name" #praName="ngModel" maxlength="50"
+            name="practiceName" type="text" [(ngModel)]="model.practiceName" tabindex="2" required>
+          <div class="text-danger" *ngIf="praName.invalid && (praName.dirty || praName.touched)">
+            <small class="inline" *ngIf="praName.errors.required">Vet practice name required.</small>
+          </div>
+
+          <label for="phoneNo">Phone no.</label><i class="fas fa-asterisk form-asterisk"></i>
+          <input type="text" id="phoneNo" class="form-control" placeholder="Contact number" #phoneNum="ngModel" appPhoneNumber
+            name="phoneNo" minlength="10" maxlength="11" [(ngModel)]="model.phoneNo" tabindex="2" numbersOnly required>
+          <div class="text-danger" *ngIf="phoneNum.invalid && (phoneNum.touched)">
+            <small class="inline" *ngIf="phoneNum.errors?.required">Phone number required.</small>
+          </div>
+
+          <label for="email">Email address</label><i class="fas fa-asterisk form-asterisk"></i>
+          <input type="text" id="email" class="form-control" placeholder="Email address" #emailiD="ngModel" preventWhiteSpace
+            pattern="^(?!.*\.{2})[a-zA-Z0-9.-_]{1,64}@[a-zA-Z.-]{2,}[.]{1}[a-zA-Z]{2,}" name="email" type="text" [(ngModel)]="model.email"
+            tabindex="3" required [disabled]="isDisabled">
+          <div class="text-danger" *ngIf="emailiD.invalid && ( emailiD.touched)">
+            <small class="inline" *ngIf="emailiD.errors?.required">Email address required.</small>
+            <small class="inline" *ngIf="emailiD.errors?.pattern">Invalid email address.</small>
+          </div>
+        </div>
+
+        <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
+          <!-- profile pic -->
+          <label class="pt-0"></label>
+          <div *ngIf="imgUrl && !isMobile" class="container cursor">
+            <img [src]="imgUrl" alt="Profile picture" class="image">
+            <div class="middle">
+              <div class="text">
+                <label for="file-input" class="input-file">
+                  <ion-icon name="create"></ion-icon>
+                </label>
+                <input id="file-input" accept='image/*' type="file" (change)="profilePicUpdate($event)" />
+              </div>
+            </div>
+          </div>
+          <div *ngIf="imgUrl && isMobile" class="container">
+            <img class="image" [src]="imgUrl" (click)="takePicture($event)" alt="Profile picture">
+          </div>
+          <div *ngIf="!imgUrl" class="container cursor">
+            <label for="file-input"  *ngIf="isMobile" class="input-file">
+              <div class="upload-image text-center" (click)="takePicture($event)">
+                <ion-icon name="camera"></ion-icon>
+                <p>Click here to upload logo</p>
+              </div>
+            </label>
+            <div *ngIf="!isMobile">
+              <label for="file-input" class="input-file">
+                <div class="upload-image text-center p-4">
+                  <ion-icon name="camera"></ion-icon>
+                  <p>Click here to upload logo</p>
+                </div>
+              </label>
+              <input id="file-input" accept='image/*' type="file" (change)="profilePicUpdate($event.target.files)" />
+            </div>
+          </div>
+
+          <label for="website">Website</label>
+          <input type="text" id="website" class="form-control" placeholder="Website" #websi="ngModel" name="website" maxlength="75"
+            type="text" [(ngModel)]="model.website" tabindex="4">
+        </div>
+      </div>
+
+       <!-- field for Password -->
+       <div class="row">
+          <div class="col-md-6 col-sm-12 col-xs-12">
+            <label>Password</label><i class="fas fa-asterisk form-asterisk"></i>
+            <div class="show-password w-100">
+              <input [type]="passwordShow?'text':'password'" placeholder="Password" class="form-control"
+                pattern='^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])[\w~@#$%^&*+=`|{}:;!.?\"()\[\]-]{8,16}$' id="password" [(ngModel)]="model.password"
+                name="pswd" #pswd="ngModel" autocomplete="off" (keyup)="passwordMatchValidator()" tabindex="5" minlength="8" maxlength="16" required/>
+              <ion-icon class="eye-icon" [name]="passwordShow?'eye':'eye-off'" (click)='changePasswordType()'>
+              </ion-icon>
+              <div class="text-danger" *ngIf="pswd.invalid && ( pswd.touched)">
+                <small class="inline" *ngIf="pswd.errors?.required">Password required.</small>
+                <small class="inline" *ngIf="pswd.errors?.pattern">Min 8 characters, 1 uppercase, 1 lowercase and 1 number.</small>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-6 col-sm-12 col-xs-12">
+            <label>Confirm password</label><i class="fas fa-asterisk form-asterisk"></i>
+            <div class="show-password w-100">
+              <input [type]="confirmPasswordShow ? 'text' : 'password'" placeholder="Confirm password"
+                [(ngModel)]="model.confirmPassword" class="form-control" type="password" minlength="8" maxlength="16"  onpaste="return false"
+                autocomplete="new-password" name="cpswd" #cpswd="ngModel" (keyup)="passwordMatchValidator()" tabindex="6" required/>
+              <div class="text-danger" *ngIf="cpswd.invalid && (cpswd.touched)">
+                <small class="inline" *ngIf="cpswd.errors?.required">Confirm password required.</small>
+              </div>
+              <div class="text-danger">
+                <small class="inline" *ngIf="missmatch">Passwords are not matching.</small>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      <!-- species -->
+      <label for="speciesList">What species you treat?</label><i class="fas fa-asterisk form-asterisk"></i>
+      <div class="inner-card m-auto">
+        <ion-row class="w-100">
+          <ion-col size="1.5" *ngIf=" from !== 0 ">
+            <ion-card class="navigation-card" (click)="onPrevious()">
+              <i class="fas fa-chevron-left"></i>
+            </ion-card>
+          </ion-col>
+          <ion-col size="3" *ngFor="let species of speciesArray; let i = index">
+            <ion-card class="species-card" [ngClass]="{'active':species.isActive === true ? true : false}"
+              (click)="selectedSpecies(species,i)" title="{{species.speciesName}}">
+              <em [ngClass]='{"isDisplay": species.isActive === true? false: true}' class="far fa-check tick-icon"></em>
+              <ion-card-content></ion-card-content>
+              <em class="{{species.iconName}} ion-float-end iconSize text-right p-2"></em>
+            </ion-card>
+          </ion-col>
+          <ion-col size="1.5" *ngIf="initialImages < speciesList.length">
+            <ion-card class="navigation-card" (click)="onNext()">
+              <i class="fas fa-chevron-right"></i>
+            </ion-card>
+          </ion-col>
+        </ion-row>
+      </div>
+
+      <!--Practice address detailes -->
+      <label>Practice address</label>
+      <div *ngIf="model" class="row">
+        <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
+          <label for="address1">Address line 1</label><i class="fas fa-asterisk form-asterisk"></i>
+          <input id="address1" class="form-control" placeholder="Address line 1" #addres1="ngModel" name="address1" maxlength="100"
+            type="text" [(ngModel)]="model.address1" tabindex="7" required>
+          <div class="text-danger" *ngIf="addres1.invalid && (addres1.dirty || addres1.touched)">
+            <small class="inline" *ngIf="addres1.errors.required">Address line 1 required.</small>
+          </div>
+        </div>
+          <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
+          <label for="address2">Address line 2</label>
+          <input id="address2" class="form-control" placeholder="Address line 2 " #addres2="ngModel" name="address2" maxlength="100"
+            type="text" [(ngModel)]="model.address2" tabindex="8">
+        </div>
+      </div>
+      <div *ngIf="model" class="row">
+        <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
+          <label for="country">City</label><i class="fas fa-asterisk form-asterisk"></i>
+          <input id="country" class="form-control" placeholder="City " #country="ngModel" name="country" type="text" maxlength="50"
+            [(ngModel)]="model.country" tabindex="9" required>
+          <div class="text-danger" *ngIf="country.invalid && (country.dirty || country.touched)">
+            <small class="inline" *ngIf="country.errors.required">City required.</small>
+          </div>
+        </div>
+        <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
+          <label for="postcode">Postcode</label><i class="fas fa-asterisk form-asterisk"></i>
+          <input id="postcode" class="form-control" placeholder="Postcode" #pin="ngModel" name="postcode" type="text" maxlength="10"
+            pattern="^([A-Za-z][A-Ha-hJ-Yj-y]?[0-9][A-Za-z0-9]? ?[0-9][A-Za-z]{2}|[Gg][Ii][Rr] ?0[Aa]{2})$" [(ngModel)]="model.postCode" tabindex="10" required>
+          <div class="text-danger" *ngIf="pin.invalid && ( pin.touched)">
+            <small class="inline" *ngIf="pin.errors?.required">Postcode required.</small>
+            <small class="inline" *ngIf="pin.errors?.pattern">Invalid postcode.</small>
+          </div>
+        </div>
+      </div>
+        <div class="mt-4 text-right">
+          <ion-button [disabled]="!((practiceRegistrationForm.valid) && (selectedSpeciess.length > 0))"
+            (click)="registerPractice()">
+            <p class="pt-3 submit-btn-txt" slot="start">Register</p>
+            <i class="far fa-long-arrow-right pl-2"></i>
+            </ion-button>
+        </div>
+    </form>
+    <!-- form ends -->
+  </ion-card>
+</ion-content>

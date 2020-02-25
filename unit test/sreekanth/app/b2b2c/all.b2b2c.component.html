@@ -1,0 +1,20 @@
+<div *ngIf="b2b2cFlag" id="wrapper"  class="customerContainer">
+    <div class="container-fluid bg-fff">
+        <nav class="navbar navbar-default">
+            <div class="header-holder">
+                <div class="row">
+                    <b2b2c-ncp-header></b2b2c-ncp-header>
+                </div>
+            </div>
+        </nav>
+    </div>
+    <div class="container-fluid bodyBg">
+        <ncp-menubar></ncp-menubar>
+        <!--<bread-crumb></bread-crumb>-->
+        <banner></banner>
+        <router-outlet></router-outlet>
+    </div>
+</div>
+<div *ngIf="b2b2cFlag" id="wrapper">
+    <ncp-footer> </ncp-footer>
+</div>

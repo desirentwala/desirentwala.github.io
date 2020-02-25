@@ -1,0 +1,96 @@
+<ion-content class="contentbg">
+  <div class="row">
+    <div class="col-lg-1 col-md-1 destop-view"></div>
+    <div class="col-lg-11 col-md-11 col-sm-12 col-xs-12 pl-0">
+      <div class="pl-4">
+        <img class="home-logo pl-1" src="./assets/imgs/logo.png" alt="logo">
+      </div>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-md-1 col-lg-1 destop-view"></div>
+    <div class="col-lg-11 col-md-12 col-sm-12 col-xs-12 dashboard">
+      <ion-item style="--padding-start: .8rem;">
+        <h1 class="text-left mt-0 mb-0 page-header">Dashboard</h1>
+      </ion-item>
+      <div class="row">
+        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+          <div class="row">
+            <!-- <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
+              <ion-card class="ion-padding">
+                <ion-item class="d-flex justify-content-between">
+                  <ion-label class="ion-text-wrap">Today's Appointments</ion-label>
+                  <h5 class="number">30</h5>
+                </ion-item>
+                <div class="card-content">
+                  <ion-row class="d-flex justify-content-between" *ngFor="let list of vetAppointment">
+                    <ion-label color="primary" class="ion-text-wrap pt-1">{{list.vet}}</ion-label>
+                    <ion-label class="pt-1">{{list.noAppointment}}</ion-label>
+                  </ion-row>
+                </div>
+              </ion-card>
+            </div> -->
+            <!-- <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
+              <ion-card class="ion-padding">
+                <ion-item class="d-flex justify-content-between">
+                  <ion-label class="ion-text-wrap">Action Item's</ion-label>
+                  <h5 class="number">45</h5>
+                </ion-item>
+                <div class="card-content">
+                  <ion-row class="d-flex justify-content-between" *ngFor="let item of items">
+                    <ion-label color="primary" class="ion-text-wrap pt-1">{{item.action}}</ion-label>
+                    <ion-label class="ion-text-wrap pt-1">{{item.count}}</ion-label>
+                  </ion-row>
+                </div>
+              </ion-card>
+            </div> -->
+            <div class="col-lg-8 col-md-8 col-sm-12 col-xs-12">
+              <ion-card>
+                <ion-item>
+                  <ion-label>Quick links</ion-label>
+                </ion-item>
+                <ul>
+                  <li class="pt-1 cursor" *ngFor="let href of links">
+                    <ion-label color="primary" class="ion-text-wrap text-left" (click)="quickNavigation(href.path)">
+                      {{href.link}}</ion-label>
+                  </li>
+                </ul>
+              </ion-card>
+            </div>
+            <!-- <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
+                <ion-card class="ion-padding">
+                  <ion-item class="d-flex justify-content-between">
+                    <ion-label class="ion-text-wrap">Today's Appointments</ion-label>
+                    <h5 class="number">30</h5>
+                  </ion-item>
+                  <div class="card-content">
+                    <ion-row class="d-flex justify-content-between" *ngFor="let list of vetAppointment">
+                      <ion-label color="primary" class="ion-text-wrap pt-1">{{list.vet}}</ion-label>
+                      <ion-label class="pt-1">{{list.noAppointment}}</ion-label>
+                    </ion-row>
+                  </div>
+                </ion-card>
+              </div> -->
+          </div>
+        </div>
+        <!-- <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
+          <ion-card>
+            <ion-item>
+              <ion-label>Notifications</ion-label>
+            </ion-item>
+            <ul>
+              <li class="pt-1" *ngFor="let note of notifications">
+                <ion-label class="text-left">{{note.event}}</ion-label>
+                <div class="d-flex">
+                  <ion-text *ngIf="note.schedule" color="primary">View Details</ion-text>
+                  <ion-text *ngIf="note.cancellation" color="primary">Initiate Refund</ion-text>
+                </div>
+              </li>
+            </ul>
+          </ion-card>
+        </div> -->
+      </div>
+    </div>
+  </div>
+</ion-content>

@@ -1,0 +1,80 @@
+<div [formGroup]="branchMaintenanceFormGroup" class="row radio-btn">
+    <div>
+        <div class="row">
+            <ncp-label elementLabel="NCPLabel.BranchID" elementId="BranchID " mandatoryFlag="true">
+            </ncp-label>
+            <text-box formControlName="branch_id" ngDefaultControl acceptPattern="[A-Za-z0-9_]" maxLength="5" elementLabel="NCPLabel.BranchID" mandatoryFlag="true">
+            </text-box>
+        </div>
+        <error-handler [elementControl]="branchMaintenanceFormGroup.controls['branch_id']" [customMessages]="{required: 'NCPLabelcustomMessages.pleaseEnterBranchId', minlength:'NCPLabelcustomMessages.BranchIdshouldbegreaterthan1'}">
+        </error-handler>
+        <div class="row">
+            <ncp-label elementLabel="NCPLabel.BranchDesc" elementId="BranchDesc" mandatoryFlag="true">
+            </ncp-label>
+            <text-box formControlName="branch_desc" inputType="text" acceptPattern="[A-Za-z0-9-]" maxLength="20" ngDefaultControl elementLabel="NCPLabel.BranchDesc" mandatoryFlag="true"></text-box>
+        </div>
+        <error-handler [elementControl]="branchMaintenanceFormGroup.controls['branch_desc']" [customMessages]="{required: 'NCPLabelcustomMessages.pleaseEnterBranchDesc'}"> 
+        </error-handler>
+        <div class="row">
+            <ncp-label elementLabel="NCPLabel.location" elementId="location" mandatoryFlag="true">
+            </ncp-label>
+            <text-box formControlName="branch_loc" inputType="text" ngDefaultControl elementLabel="NCPLabel.location" mandatoryFlag="true"></text-box>
+        </div>
+        <error-handler [elementControl]="branchMaintenanceFormGroup.controls['branch_loc']" acceptPattern="[A-Za-z0-9]" maxLength="20" [customMessages]="{required: 'NCPLabelcustomMessages.pleaseEnterBranchLocation'}">
+        </error-handler>
+        <div class="row">
+            <ncp-label elementLabel="NCPLabel.parentBranchID" elementId="parentBranchID"></ncp-label>
+            <drop-down elementId="parent_branch_id" formControlName="parent_branch_id" miscType="BranchGroup" param1="{{userBranchCode}}" elementId="parentBranchID"
+                pickListFlag=true displayCodeAndDesc=true [isCodeDesc] =true [descControl]="branchMaintenanceFormGroup['controls']['parent_branch_desc']"
+                chnageId="parentBranchId" ngDefaultControl displayOnClick=true elementLabel="NCPLabel.parentBranchID" mandatoryFlag="false">
+            </drop-down>
+        </div>
+        <div class="row">
+            <ncp-label elementLabel="NCPLabel.addressline1" elementId="addressline1" mandatoryFlag="true">
+            </ncp-label>
+            <text-box formControlName="address1" inputType="text" ngDefaultControl acceptPattern="[A-Za-z0-9]"  maxLength="50" elementLabel="NCPLabel.addressline1" mandatoryFlag="true"></text-box>
+        </div>
+        <error-handler [elementControl]="branchMaintenanceFormGroup.controls['address1']" [customMessages]="{required: 'NCPLabelcustomMessages.pleaseEnterBranchAddress1'}">
+        </error-handler>
+        <div class="row">
+            <ncp-label elementLabel="NCPLabel.addressline2" elementId="addressline2">
+            </ncp-label>
+            <text-box formControlName="address2" inputType="text" ngDefaultControl acceptPattern="[A-Za-z0-9_-/,]" maxLength="50" elementLabel="NCPLabel.addressline2"></text-box>
+        </div>
+        <div class="row">
+            <ncp-label elementLabel="NCPLabel.city" elementId="city" mandatoryFlag="true">
+            </ncp-label>
+            <text-box formControlName="city" inputType="text" acceptPattern="[A-Za-z]" ngDefaultControl maxLength="30" elementLabel="NCPLabel.city" mandatoryFlag="true"></text-box>
+        </div>
+        <error-handler [elementControl]="branchMaintenanceFormGroup.controls['city']" [customMessages]="{required: 'NCPLabelcustomMessages.pleaseEnterBranchCity'}">
+        </error-handler>
+        <div class="row">
+            <ncp-label elementLabel="NCPLabel.state" elementId="state" mandatoryFlag="true">
+            </ncp-label>
+            <text-box formControlName="state" inputType="text" ngDefaultControl acceptPattern="[A-Za-z]" maxLength="30" elementLabel="NCPLabel.state" mandatoryFlag="true"></text-box>
+        </div>
+        <error-handler [elementControl]="branchMaintenanceFormGroup.controls['state']" [customMessages]="{required: 'NCPLabelcustomMessages.pleaseEnterBranchState'}">
+        </error-handler>
+        <div class="row">
+            <ncp-label elementLabel="NCPLabel.postalCode" elementId="pin" mandatoryFlag="true">
+            </ncp-label>
+            <text-box formControlName="pin" inputType="text" acceptPattern="[0-9]" maxLength="6" ngDefaultControl elementLabel="NCPLabel.postalCode"
+                mandatoryFlag="true"></text-box>
+        </div>
+        <error-handler [elementControl]="branchMaintenanceFormGroup.controls['pin']" [customMessages]="{required: 'NCPLabelcustomMessages.pleaseEnterBranchPostalCode'}">
+        </error-handler>
+        <div class="row">
+            <ncp-label elementLabel="NCPLabel.country" elementId="country" mandatoryFlag="true">
+            </ncp-label>
+            <drop-down elementId="country" miscSubType="CTRY" miscType="MiscInfo" pickListFlag=true formControlName="country" isCodeDesc=true
+                [descControl]="branchMaintenanceFormGroup.controls['country_desc']"
+                displayOnClick=true ngDefaultControl elementLabel="NCPLabel.country">
+            </drop-down>
+        </div>
+        <error-handler [elementControl]="branchMaintenanceFormGroup.controls['country']" [customMessages]="{required: 'NCPLabelcustomMessages.pleaseEnterBranchCountry'}">
+        </error-handler>
+        <div class="btns-row">
+            <button-field (click)="doAction($event)" buttonType="custom" [isDisabled]="!this.branchMaintenanceFormGroup.valid" buttonClass="ncpbtn-default" buttonName="NCPBtn.submit"></button-field>
+        </div>
+    </div>
+</div>

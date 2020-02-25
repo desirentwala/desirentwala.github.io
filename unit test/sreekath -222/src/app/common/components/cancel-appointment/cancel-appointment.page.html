@@ -1,0 +1,17 @@
+<div class="box" [class.opened]="value">
+  <ion-card class="h-100 ion-padding cancelBooking">
+    <div class="text-center">
+      <ion-icon class="trash-icon" name="trash"></ion-icon>
+      <p class="modal-title">Are you sure you want to cancel the appointment?</p>
+    </div>
+    <div class="pt-2">
+      <label for="comments">Cancellation reason</label>
+      <textarea class="form-control" name="comments" [(ngModel)]="comments" id="comments" cols="50" rows="5"></textarea>
+    </div>
+    <div class="text-center pt-2">
+      <ion-button class="ion-primary action-btn" (click)="cancelBooking(); ">Yes
+      </ion-button>
+      <ion-button class="ion-primary action-btn" (click)="value = false">No</ion-button>
+    </div>
+  </ion-card>
+</div>

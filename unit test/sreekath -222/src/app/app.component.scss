@@ -1,0 +1,18 @@
+.icon{
+    margin-right: 2px;
+}
+img{
+    max-width: none;
+    width: 9vh !important;
+}
+
+@media screen and (max-width: 375px) {
+    .mobile{
+        display: block;
+    }
+  }
+  @media screen and (min-width: 1200px) {
+    .mobile{
+        display: none;
+    }
+  }

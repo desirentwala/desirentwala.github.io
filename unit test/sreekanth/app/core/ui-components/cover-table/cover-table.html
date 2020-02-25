@@ -1,0 +1,228 @@
+<div style="clear:both;">
+</div>
+<div *ngIf="plans.length>0">
+    <div *ngFor="let plan of plans; let i = index;" class="col-sm-12 col-md-12 col-xs-12 item coverTablePab">
+        <div [class.hide]="favPlansFlag">
+            <div *ngFor="let cvgGrp of cvgGroups; let j = index;let evenFlag = even; let oddFlag = odd;">
+                <div *ngIf="cvgGrp.cvgGrpCode !==filterByCoverageGrpCode" class="pri-list row col-sm-12" [class.planeven]="evenFlag && !plan.isPlanSelected" [class.planodd]="oddFlag && !plan.isPlanSelected" [class.planselectedeven]="evenFlag && plan.isPlanSelected" [class.planselectedodd]="oddFlag && plan.isPlanSelected">
+                    <div class="col-xs-12 col-md-12 col-sm-12 plantable-align" (click)="toggleDisplayCoverages(cvgGrp.cvgGrpCode);this.rotateFlag === j ? this.rotateFlag='':this.rotateFlag=j;">
+                        <h5 class="col-md-11 col-sm-11 col-xs-11 plantableHeader">{{cvgGrp.cvgGrpDesc | translate}}</h5>
+                        <i class="icon-arrow-d plantableIcon" [class.rotate]="rotateFlag === j"></i>
+                    </div>
+                    <div [class.hide]="!(isCollapsedTr && cvgGrp.cvgGrpCode===coverageGroupCode)" class="filterac btnAlignField coverTable">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th *ngFor="let header of tableDetails;let i = index" [class]="selectedClass(header.mapping)" [attr.data-title]="header.header | translate">
+                                        <span class="labelDisplay">{{header.header | translate}}</span>
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody *ngFor="let object of plan.planDetails; let k=index" [class.hide]="!(object.coverageGrpCode === coverageGroupCode)" [ngClass]="object.recalcFlag ? '' :'coverTableDisabledBg'">
+                                <tr id="tabhide">
+                                    <td *ngFor="let mappings of tableDetails;" [attr.data-title]="mappings.header | translate">
+                                        <span *ngIf="mappings.mapping != 'covgPrm' && mappings.mapping != 'covgSi' && mappings.mapping != 'recalcFlag' && mappings.mapping != 'remarks' && mappings.mapping != 'oldCovgSi' && mappings.mapping != 'userSIValue' && mappings.mapping != 'isCoverageDeleted'">{{object[mappings.mapping]}}</span>
+                                        <span *ngIf="mappings.mapping === 'oldCovgSi'" class="fullWidthInTable">
+                                            <amount-field [(ngModel)]="object.oldCovgSi" disabled symbolDisplay="true" customFlag=true ngDefaultControl></amount-field>
+                                        </span>
+                                        <span *ngIf="mappings.mapping === 'userSIValue' && !object.disableUserSIValue" class="fullWidthInTable">
+                                            <amount-field [(ngModel)]="object.userSIValue" [disabled]="this.tableControl.disabled" (change)="updateTableControlValues(object);"
+                                                symbolDisplay="true" customFlag=true ngDefaultControl></amount-field>
+                                        </span>
+                                        <span *ngIf="mappings.mapping === 'userSIValue' && object.disableUserSIValue" class="fullWidthInTable">
+                                            <amount-field [(ngModel)]="object.userSIValue" disabled symbolDisplay="true" customFlag=true ngDefaultControl></amount-field>
+                                        </span>
+                                        <span *ngIf="mappings.mapping === 'covgSi' && !object.disableCovgSi" class="fullWidthInTable">
+                                            <amount-field [(ngModel)]="object.covgSi" [disabled]="this.tableControl.disabled" (change)="updateTableControlValues(object);"
+                                                symbolDisplay="true" customFlag=true ngDefaultControl></amount-field>
+                                        </span>
+                                        <span *ngIf="mappings.mapping === 'covgSi' && object.disableCovgSi" class="fullWidthInTable">
+                                            <amount-field [(ngModel)]="object.covgSi" disabled symbolDisplay="true" customFlag=true ngDefaultControl></amount-field>
+                                        </span>
+                                        <span *ngIf="mappings.mapping === 'covgPrm'" class="fullWidthInTable">
+                                            <amount-field [(ngModel)]="object.covgPrm" disabled symbolDisplay="true" customFlag=true ngDefaultControl></amount-field>
+                                        </span>
+                                        <div *ngIf="mappings.mapping === 'viewDEF'">
+                                            <button-field (click)="openCoverageLoadingModal(object)" buttonType="custom" buttonClass="ncpbtn-default fa fa-pencil"></button-field>
+                                            <ng-container *ngFor="let item of object.coverageLoadingInfo; let coverageIndex=index; trackBy:item?.uniqueId">
+                                                <span *ngIf="item.limitType === 'VIA' && coverageIndex===0" class="fullWidthInTable">
+                                                    <amount-field [(ngModel)]="item.limitAmount" disabled symbolDisplay="true" customFlag=true ngDefaultControl></amount-field>
+                                                </span>
+                                                <span *ngIf="item.limitType === 'VIP' && coverageIndex===0" class="col-md-8 col-sm-8 col-xs-8 p0">
+                                                    <text-box inputType="text" disabled [(ngModel)]="item.limitPercent" maxLength="3" acceptPattern="^[0-9]*$" maxValue="100"
+                                                        textAlign="right" customFlag=true textBoxClass="col-md-10 col-sm-10 col-xs-3 p0"></text-box>
+                                                    <span class="percentageSymbol">%</span>
+                                                </span>
+                                                <span *ngIf="item.limitType === 'NOD' && coverageIndex===0">
+                                                    <text-box inputType="text" disabled [(ngModel)]="item.limitCount" customFlag=true></text-box>
+                                                </span>
+                                            </ng-container>
+                                        </div>
+                                        <span *ngIf="!adddeletecovflag && mappings.mapping === 'recalcFlag' && !object.disableRecalcFlag">
+                                            <check-box elementId="recalcFlag" [disabled]="this.tableControl.disabled" [(ngModel)]="object.recalcFlag" (click)="updateDetails(object,object.recalcFlag);"
+                                                alignment="right"></check-box>
+                                        </span>
+                                        <span *ngIf="!adddeletecovflag && mappings.mapping === 'recalcFlag' && object.disableRecalcFlag">
+                                            <check-box elementId="recalcFlag" disabled [(ngModel)]="object.recalcFlag" alignment="right"></check-box>
+                                        </span>
+                                        <span *ngIf="adddeletecovflag && mappings.mapping === 'recalcFlag'">
+                                            <check-box elementId="recalcFlag" disabled [(ngModel)]="object.recalcFlag" alignment="right"></check-box>
+                                        </span>
+                                        <span *ngIf="mappings.mapping === 'isCoverageDeleted'">
+                                            <check-box elementId="isCoverageDeleted" [(ngModel)]="object.isCoverageDeleted" [disabled]="this.tableControl.disabled" (click)="updateDetails(object,object.isCoverageDeleted);"
+                                                alignment="right"></check-box>
+                                        </span>
+                                        <span *ngIf="mappings.mapping==='remarks' && object.recalcFlag && !enquiryMode &&!object.remarksDropdownFlag ">
+                                            <text-box inputType="text" [(ngModel)]="object.remarks" [disabled]="this.tableControl.disabled" (change)="updateTableControlValues(object);"
+                                                customFlag=true></text-box>
+                                        </span>
+                                        <span *ngIf="mappings.mapping === 'remarks' && (!object.recalcFlag || enquiryMode)&& !object.remarksDropdownFlag">
+                                            <text-box inputType="text" disabled [(ngModel)]="object.remarks" customFlag=true ngDefaultControl></text-box>
+                                        </span>
+                                        <!-- <span *ngIf="mappings.mapping === 'remarks' && object.recalcFlag && !enquiryMode&& !object.remarksDropdownFlag && object.remarksDescDisplayFlag">
+                                            <text-box inputType="text" disabled [(ngModel)]="object.remarksDesc" customFlag=true ngDefaultControl></text-box>
+                                        </span>
+                                        <span *ngIf="mappings.mapping === 'remarks' && (!object.recalcFlag || enquiryMode)&& !object.remarksDropdownFlag && object.remarksDescDisplayFlag">
+                                            <text-box inputType="text" disabled [(ngModel)]="object.remarksDesc" customFlag=true ngDefaultControl></text-box>
+                                        </span> -->
+                                        <!-- <div [formGroup]="remarksFormGroup"> -->
+                                            <span *ngIf="mappings.mapping==='remarks' && object.recalcFlag && !enquiryMode && object.remarksDropdownFlag ">
+                                                <!-- <span>{{object.remarksDesc}}</span> -->
+                                                <button-field (click)="openRemarksModal(object)" buttonType="custom" buttonClass="ncpbtn-default fa fa-pencil"></button-field>
+                                               
+                                                <text-box *ngIf="object.remarksDesc" inputType="text" disabled [(ngModel)]="object.remarksDesc" customFlag=true ngDefaultControl></text-box>
+                                                <!-- <span>{{object.remarksDesc}}</span>
+                                                <drop-down elementId="{{object.covgCd}}" [disabled]="this.tableControl.disabled" formControlName="remarks" miscType="Party"
+                                                    [param1]="object.remarksRoleId" pickListFlag=true customFlag=true dropdownClass="col-md-12 col-sm-12 col-xs-11 p0"
+                                                    changeId="remarksId" sharedValue="{{object.covgCd}}" enableIndex=true isCodeDesc=true
+                                                    [descControl]="remarksFormGroup.controls['remarksDesc']" ngDefaultControl
+                                                    displayOnClick=true isLazyLoading=true>
+                                                </drop-down> -->
+                                            </span>
+                                        <!-- </div> -->
+                                        <span *ngIf="mappings.mapping === 'remarks' && (!object.recalcFlag || enquiryMode) && object.remarksDropdownFlag">
+                                            <text-box inputType="text" disabled [(ngModel)]="object.remarksDesc" customFlag=true ngDefaultControl></text-box>
+                                        </span>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <ncp-modal modalTitle="{{planDetailsObject.covgCd}} - {{planDetailsObject.covgDesc}}" [modalKey]="coverageLoadingModalFlag" modalClass="modal-md" hideCloseButton="true" [closeOnEscape]="false" [closeOnOutsideClick]="false">
+        <modal-header>
+            <div *ngIf="isError" class="alert alert-danger pull-left w100p">
+                <ul>
+                    <li>
+                        {{errDesc | translate}}
+                    </li>
+                </ul>
+            </div>
+        </modal-header>
+
+        <modal-content>
+
+            <div *ngIf="!enquiryMode && !this.tableControl.disabled" class="row" [formGroup]="defFormGroup">
+                <ncp-label elementLabel="NCPLabel.defCodeDesc"></ncp-label>
+                <drop-down  elementId="defCodeElementId" formControlName="defCode" miscType="DEFL" pickListFlag=true customFlag=true dropdownClass="col-md-6 col-sm-6 col-xs-11 p-sm-0" isCodeDesc=true [descControl]="defFormGroup.controls['defCodeDesc']" ngDefaultControl
+                    displayOnClick=true [param1Control]="sectionClass" [param2Control]="coverageCode" [productCode]="productCode" isLazyLoading=true changeId="defCodeSelected">
+                </drop-down>
+            </div>
+
+            <div *ngIf="planDetailsObject.coverageLoadingInfo && planDetailsObject.coverageLoadingInfo.length>0" class="filterac">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>
+                                <span class="labelDisplay">{{'NCPLabel.def' | translate}}</span>
+                            </th>
+                            <th>
+                                <span class="labelDisplay">{{'NCPLabel.type' | translate}}</span>
+                            </th>
+                            <th>
+                                <span class="labelDisplay">{{'NCPLabel.value' | translate}}</span>
+                            </th>
+                            <th *ngIf="!enquiryMode && !this.tableControl.disabled" [attr.data-title]="'NCPBtn.delete' | translate">
+                                <span class="labelDisplay"></span>
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody *ngFor="let coverageLoadingObject of planDetailsObject.coverageLoadingInfo; let i=index">
+                        <tr>
+                            <td [attr.data-title]="'NCPLabel.def' | translate">{{coverageLoadingObject.loadDesc}}</td>
+                            <td [attr.data-title]="'NCPLabel.type' | translate">{{coverageLoadingObject.limitType}}</td>
+                            <td [attr.data-title]="'NCPLabel.value' | translate">
+                                <span *ngIf="coverageLoadingObject.limitType === 'VIA' && !enquiryMode" class="fullWidthInTable">
+                                    <amount-field [(ngModel)]="coverageLoadingObject.limitAmount" [disabled]="this.tableControl.disabled" symbolDisplay="true"
+                                        customFlag=true ngDefaultControl></amount-field>
+                                </span>
+                                <span *ngIf="coverageLoadingObject.limitType === 'VIA' && enquiryMode" class="fullWidthInTable">
+                                    <amount-field [(ngModel)]="coverageLoadingObject.limitAmount" disabled symbolDisplay="true" customFlag=true ngDefaultControl></amount-field>
+                                </span>
+                                <span *ngIf="coverageLoadingObject.limitType === 'VIP' && !enquiryMode">
+                                    <text-box inputType="text" [(ngModel)]="coverageLoadingObject.limitPercent" maxLength="3" maxValue="100" acceptPattern="^[0-9]*$"
+                                        textAlign="right" customFlag=true textBoxClass="col-md-11 col-sm-11 col-xs-11 p0" [disabled]="this.tableControl.disabled"></text-box>
+                                    <span class="percentageSymbol">%</span>
+                                </span>
+                                <span *ngIf="coverageLoadingObject.limitType === 'VIP' && enquiryMode">
+                                    <text-box inputType="text" disabled [(ngModel)]="coverageLoadingObject.limitPercent" maxLength="3" acceptPattern="^[0-9]*$"
+                                        customFlag=true maxValue="100" textAlign="right" textBoxClass="col-md-11 col-sm-11 col-xs-11 p0"></text-box>
+                                    <span class="percentageSymbol">%</span>
+                                </span>
+                                <span *ngIf="coverageLoadingObject.limitType === 'NOD' && !enquiryMode">
+                                    <text-box inputType="text" [(ngModel)]="coverageLoadingObject.limitCount" customFlag=true [disabled]="this.tableControl.disabled"></text-box>
+                                </span>
+                                <span *ngIf="coverageLoadingObject.limitType === 'NOD' && enquiryMode">
+                                    <text-box inputType="text" disabled [(ngModel)]="coverageLoadingObject.limitCount" customFlag=true></text-box>
+                                </span>
+                            </td>
+                            <td *ngIf="!enquiryMode && !this.tableControl.disabled" [attr.data-title]="'NCPBtn.delete' | translate">
+                                <button-field (click)="deleteDEFCode(i)" buttonType="custom" buttonClass="iconicBtn defaultMarginBottom fa fa-trash"></button-field>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </modal-content>
+        <modal-footer>
+            <div class="btns-row">
+                <button-field buttonType="custom" buttonClass="ncp-linkBtn w100p mt-xs-10" iconClass="fa fa-close" buttonName="NCPBtn.close" (click)="closeCoverageLoadingModal()">
+                </button-field>
+            </div>
+        </modal-footer>
+    </ncp-modal>
+    <ncp-modal modalTitle="{{planDetailsObject.covgCd}} - {{planDetailsObject.covgDesc}}" [modalKey]="remarksModalFlag" modalClass="modal-md" hideCloseButton="true" [closeOnEscape]="false" [closeOnOutsideClick]="false">
+        <modal-header>
+            <div *ngIf="isError" class="alert alert-danger pull-left w100p">
+                <ul>
+                    <li>
+                        {{errDesc | translate}}
+                    </li>
+                </ul>
+            </div>
+        </modal-header>
+
+        <modal-content>
+
+            <div *ngIf="!enquiryMode && !this.tableControl.disabled"  [formGroup]="remarksFormGroup">
+                <ncp-label elementLabel="NCPLabel.serviceProviders"></ncp-label>    
+                <drop-down elementId="{{planDetailsObject.covgCd}}" [disabled]="this.tableControl.disabled" formControlName="remarks" miscType="Party"
+                        [param1]="planDetailsObject.remarksRoleId" pickListFlag=true customFlag=true dropdownClass="col-md-6 col-sm-6 col-xs-11 p-sm-0"
+                        changeId="remarksId" sharedValue="{{planDetailsObject.covgCd}}" enableIndex=true isCodeDesc=true
+                        [descControl]="remarksFormGroup.controls['remarksDesc']" ngDefaultControl
+                        displayOnClick=true isLazyLoading=true>
+                    </drop-down>
+            </div>
+        </modal-content>
+        <modal-footer>
+            <div class="btns-row">
+                <button-field buttonType="custom" buttonClass="ncp-linkBtn w100p mt-xs-10" iconClass="fa fa-close" buttonName="NCPBtn.close" (click)="closeRemarksModal()">
+                </button-field>
+            </div>
+        </modal-footer>
+    </ncp-modal>
+</div>

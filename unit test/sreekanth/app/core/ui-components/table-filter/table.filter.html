@@ -1,0 +1,102 @@
+<div *ngIf="showSearch==='Y'">
+
+	<div class="col-md-3 col-sm-12 col-xs-12  conf">
+		<input class="forconf" [(ngModel)]="searchId" placeholder="{{'NCPBtn.search' | translate}}">
+	</div>
+</div>
+
+<div style="clear:both;"></div>
+
+<div class="filterac">
+	<table class="">
+		<thead>
+			<tr>
+				<th *ngFor="let header of tableDetails;let i=index" [class]="selectedClass(header.mapping)"  
+				(click)="changeSorting(header.mapping);(this.rotateFlag === i) ? this.rotateFlag='':this.rotateFlag=i;"
+				[attr.data-title]="header.header | translate">
+				<span class="labelHeader">{{header.header | translate }}</span>
+					<i class="icon-arrow-d indexicon" [class.rotate]="rotateFlag === i" ></i>
+				</th>
+				<th *ngIf="isActionFlag" class="actionCol"
+				[attr.data-title]="header.header | translate">
+					<span class="labelHeader">{{'NCPLabel.Action' | translate}}</span>
+
+				</th>
+			</tr>
+		</thead>
+		<tbody>
+			<!--orderBy pipe should  follow searchBy pipe to avoid filter sorting Issue-->
+			<tr *ngFor="let object of tableDataReceived  | searchBy : searchId : tableDetails | orderBy : convertSorting()" id="tabhide">
+				<td  *ngFor="let mappings of tableDetails; let i=index; let last=last" [attr.data-title]="mappings.header | translate">
+				 <i *ngIf="object.referenceNo && object.process ==='QT' && last" 
+			
+						[class.glyphicon-adjust]="object.status === 'QT' && i === 4" 
+						[class.glyphicon-remove]="object.status === 'QE' && i === 4" 
+						[class.glyphicon-remove]=" object.status === 'B003' && i === 4" 
+						[class.glyphicon-ok-sign]=" object.status === 'B001' && i === 4" 
+						[class.glyphicon-list-alt]="object.status === 'B002' && i === 4" 
+						[class.glyphicon-ok]="object.status ==='PC' && i === 4" 
+						[class.glyphicon-record]="object.status ==='VO' && i === 4"
+						class="glyphicon indexapp">
+					</i> 
+
+ 					<i *ngIf="object.referenceNo && object.process ==='POL'  && last" 
+						[class.glyphicon-adjust]="object.status === 'PN' && i === 4" 
+						[class.glyphicon-ok-sign]=" object.status === 'PT' && i === 4" 
+						[class.glyphicon-remove]=" object.status === 'CN' && i === 4" 
+						[class.glyphicon-remove]=" object.status === 'PE' && i === 4"
+						[class.glyphicon-remove]=" object.status === 'CP' && i === 4"
+						class="glyphicon indexapp">
+					</i> 
+					 <i *ngIf="object.referenceNo && object.process ==='CLM'  && last" 
+						[class.glyphicon-adjust]="object.status === 'OP' && i === 4" 
+						[class.glyphicon-check]=" object.status === 'NC' && i === 4"
+						[class.glyphicon-remove]=" object.status === 'CP' && i === 4" 
+						class="glyphicon indexapp">
+					</i> 
+					
+					<span *ngIf="!mappings.dataClickId">{{object[mappings.mapping]}}</span>
+					<span *ngIf="mappings.dataClickId"> <a (click)="doDataAction(object,mappings.dataClickId)"> {{object[mappings.mapping]}} </a></span>
+				</td>
+
+				<td class="actionCol" *ngIf="isActionFlag">
+				<!--<button type=radio name="button" class="fa fa-gear showPopover indexrecus" tooltipPlacement="left" [tooltip]="myTooltip"
+						[tooltipHide]="tooltipHide" tooltipClick=true (click)="doAction($event); tooltipHide = false">
+					</button>-->
+					<span>
+						<i class="fa fa-gear showPopover indexrecus" tooltipPlacement="left" [tooltip]="myTooltip"
+						[tooltipHide]="tooltipHide" (click)="doAction($event); tooltipHide = false" 
+						tooltipClick=true></i>
+					</span>
+					<tooltip-content #myTooltip>
+						<h3 class="popover-title">&nbsp;
+							<a class="close" (click)="tooltipHide = true">
+								<i class="icon-alert"></i></a>
+						</h3>
+						<div class="popover-content">
+							<div *ngIf="object.quoteNo">
+							<ul *ngIf="object.status==='QT'">
+								<li><a (click)="doActionProcess(object,'VQ'); tooltipHide = true"><i class="fa fa-eye iconToolTip"></i><span class="labelToolTip">{{'NCPLabel.viewQuote' | translate}}</span></a></li>
+								<li><a (click)="doActionProcess(object,'EQ'); tooltipHide = true"><i class=" iconToolTip"></i><span class="labelToolTip">{{'NCPLabel.editQuote' |  translate}}</span></a></li>
+								<li><a (click)="doActionProcess(object,'CQ'); tooltipHide = true"><i class="fa fa-copy iconToolTip"></i><span class="labelToolTip">{{'NCPLabel.copyQuote' | translate}}</span></a></li>
+								<li><a (click)="doActionProcess(object,'AQ'); tooltipHide = true"><i class="fa fa-close iconToolTip"></i><span class="labelToolTip">{{'NCPLabel.abandon' | translate}} </span></a></li>
+							</ul>
+							<ul *ngIf="object.status==='PT' || object.status==='PN'|| object.status==='CP'">
+								<li><a (click)="doActionProcess(object,'VQ'); tooltipHide = true"><i class="fa fa-eye iconToolTip"></i><span class="labelToolTip">{{'NCPLabel.viewQuote' | translate}}</span></a></li>
+								<li><a (click)="doActionProcess(object,'CQ'); tooltipHide = true"><i class="fa fa-copy iconToolTip"></i><span class="labelToolTip">{{'NCPLabel.copyQuote' | translate}}</span></a></li>
+							</ul>
+							</div>
+							<div *ngIf="object.policyNo">
+							<ul *ngIf="object.status==='PT' || object.status==='PN' || object.status==='CP'">
+								<li><a (click)="doActionProcess(object,'PENQ'); tooltipHide = true"><i class="fa fa-eye iconToolTip"></i><span class="labelToolTip">{{'NCPLabel.viewQuote' | translate}}</span></a></li>
+								<li><a (click)="doActionProcess(object,'ENDT'); tooltipHide = true"><i class=" iconToolTip"></i><span class="labelToolTip">{{'NCPLabel.endorse' | translate}}</span></a></li>
+								<li><a (click)="doActionProcess(object,'NC'); tooltipHide = true"><i class="fa fa-info iconToolTip"></i><span class="labelToolTip">{{'NCPLabel.notifyClaim' | translate}}</span></a></li>
+							</ul>
+							</div>
+						</div>
+					</tooltip-content>
+				</td>
+			</tr>
+		</tbody>
+	</table>
+</div>

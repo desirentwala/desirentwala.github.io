@@ -1,0 +1,83 @@
+<ion-content>
+  <h1 class="text-center page-header">Add vets</h1>
+  <!-- form for add/edit vet -->
+  <form class="add-pet-card m-auto ion-padding" #vetForm="ngForm">
+    <div class="row">
+      <div class="col-lg-4 col-md-6 col-sm-12 col-xs-12 image-mobile">
+        <div class="container">
+          <img src="{{imgUrl}}" alt="Avatar" class="image">
+          <div class="middle">
+            <div class="text">
+              <label for="file-input">
+                <i class="fa fa-edit"></i>
+              </label>
+              <input id="file-input" accept='image/*' type="file" (change)="vetPicUpdate($event)" /> -->
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- pet name input -->
+      <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
+        <label for="vetName">Vet name</label><i class="fas fa-asterisk form-asterisk"></i>
+        <input type="text" id="vetName" class="form-control" placeholder="Vet name" #vetNm="ngModel" name="vetName"
+          type="text" [(ngModel)]="model.vetName" required>
+        <div class="text-danger pl-4" *ngIf="vetNm.invalid && (vetNm.dirty || vetNm.touched)">
+          Vet name required.
+        </div>
+        <label for="contact">Contact no.</label><i class="fas fa-asterisk form-asterisk"></i>
+        <input type="text" id="contact" class="form-control" placeholder="Phone number" #contact="ngModel"appPhoneNumber
+          name="contact" type="text" [(ngModel)]="model.phoneNumber" minlength="10" maxlength="11" required>
+        <div class="text-danger pl-4" *ngIf="contact.errors?.pattern && (contact.dirty || contact.touched)">
+          Phone number required.
+        </div>
+        <label for="email">Email address</label><i class="fas fa-asterisk form-asterisk"></i>
+        <input type="text" id="email" class="form-control" placeholder=" Email" #email="ngModel" name="email"
+          type="text" [(ngModel)]="model.email" required>
+        <div class="text-danger pl-4" *ngIf="email.invalid && (email.dirty || email.touched)">
+          Email address required.
+        </div>
+
+      </div>
+
+      <div class="col-lg-4 col-md-6 col-sm-12 col-xs-12 image-desktop">
+        <!-- pet profile pic -->
+        <div class="container">
+          <img src="{{imgUrl}}" alt="Avatar" class="image">
+          <div class="middle">
+            <div class="text">
+              <label for="file-input">
+                <em class="fa fa-edit"></em>
+              </label>
+              <input id="file-input" accept='image/*' type="file" (change)="vetPicUpdate($event)" />
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+
+    <!-- species -->
+    <label for="speciesList">Species</label><i class="fas fa-asterisk form-asterisk"></i>
+    <div id="speciesList">
+      <div class="row">
+        <!-- MAX_SPECIES_ITEMS: max number of species to be displayed -->
+        <div class="col-md-3 col-sm-6 col-xs-12" *ngFor="let data of speciesData">
+            <app-card [species]="data" (emitSelected)="selectedSpecies(data)"></app-card>
+        </div>
+        <div class="col-md-3 col-sm-6 col-xs-12">
+            <ion-card class="cursor">
+              <!-- <ion-icon class="rounded-circle" name="add-circle-outline"></ion-icon> -->
+              <ion-card-header>
+                  <ion-card-title>More</ion-card-title>
+              </ion-card-header>
+            </ion-card>
+        </div>
+      </div>
+    </div>
+
+    <!-- breed -->
+    <div class="text-center p-2">
+      <ion-button color="primary m-auto"> Add </ion-button>
+    </div>
+  </form>
+</ion-content>

@@ -1,0 +1,16 @@
+<div *ngIf="!customFlag">
+    <div class="row mt-10" *ngIf="errorMsgShow && ((showErrorOnBlur ? elementControl.touched : true) || validateTab )">
+        <div class="col-xs-offset-0 col-md-offset-4 col-sm-offset-4 col-md-5 col-sm-6 col-xs-11 pr-sm-0">
+            <div class="errorContainer">
+                {{ errorMsgShow | translate }}</div>
+        </div>
+    </div>
+</div>
+<div *ngIf="customFlag">
+    <div class="row mt-10" *ngIf="errorMsgShow && ((showErrorOnBlur ? elementControl.touched : true) || validateTab )">
+        <div [ngClass]="errorCustomClass" class="pr-sm-0">
+            <div class="errorContainer">
+                {{ errorMsgShow | translate }}</div>
+        </div>
+    </div>
+</div>

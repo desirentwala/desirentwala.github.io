@@ -1,0 +1,15 @@
+<div class="pop">
+  <div class="pt-2 pb-2">
+    <ion-grid *ngFor="let role of data" class="active" (click)="eventFromPopover(role)">
+      <!-- <img class="pop-img ml-1" src="./assets/imgs/{{role.pic}}" [alt]="role.category"/> -->
+      <ion-row>
+        <ion-col size="2">
+          <i class="{{role.pic}} fa-log pl-1"></i>
+        </ion-col>
+        <ion-col>
+          <ion-text class="pop-text ml-3">I am a {{role.category}}</ion-text>
+        </ion-col>
+      </ion-row>
+      </ion-grid>
+  </div>
+</div>

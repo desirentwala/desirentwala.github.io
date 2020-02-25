@@ -1,0 +1,82 @@
+<div class="ion-padding" *ngIf="petOwnerData">
+  <div class="box" [class.opened]="value">
+    <form #petOwnerForm="ngForm">
+      <div class="ion-padding border border-light showdow p-3 mb-5 bg-white addslot">
+        <div class="border-bottom pb-2">
+          <ion-item lines="none" class="Schedule-An-Appointm">
+
+            <div *ngIf="imgUrl && !isMobile" class="imgcontainer">
+              <img [src]="imgUrl" class="image rounded-circle" alt="">
+              <div class="middle">
+                <div class="text">
+                  <label for="userProfile" class="input-file">
+                    <ion-icon name="create"></ion-icon>
+                  </label>
+                  <input id="userProfile" accept='image/*' type="file" (change)="uploadPicture($event)" />
+                </div>
+              </div>
+            </div>
+
+            <div *ngIf="imgUrl && isMobile" class="imgcontainer">
+              <img class="image rounded-circle" [src]="imgUrl" alt="" (click)="selectImage()">
+            </div>
+            <div *ngIf="!imgUrl" class="imgcontainer">
+              <label for="file-input" *ngIf="isMobile" class="input-file">
+                <div class="upload-image text-center" (click)="selectImage()">
+                  <ion-icon name="camera"></ion-icon>
+                  <!-- <p>Click here to upload photo</p> -->
+                </div>
+              </label>
+              <div *ngIf="!isMobile">
+                <label for="file-input" class="pt-2">
+                  <div class="upload-image text-center">
+                    <ion-icon name="camera"></ion-icon>
+                    <!-- <p>Click here to upload photo</p> -->
+                  </div>
+                </label>
+                <input id="file-input" accept='image/*' type="file" (change)="uploadPicture($event)" />
+              </div>
+            </div>
+
+            <span class="ml-2"> Pet owner info</span>
+          </ion-item>
+        </div>
+        <label>Full name</label><em class="fas fa-asterisk form-asterisk"></em>
+        <ion-input class="form-control pl-1" #firstNames="ngModel" name="firstName" type="text"
+          [(ngModel)]="petOwnerData.firstName" required placeholder="Full name" minlength="2" maxlength="28">
+        </ion-input>
+        <div class="text-danger" *ngIf="firstNames.invalid && (firstNames.dirty || firstNames.touched)">
+          <small class="inline" *ngIf="firstNames.errors.required">Full name required.</small>
+        </div>
+        <label position="stacked">Email address</label>
+        <input class="form-control pl-1" #email="ngModel" name="email" type="text" [(ngModel)]="petOwnerData.email"
+          readonly pattern="^(?!.*\.{2})[a-zA-Z0-9.-_]{1,64}@[a-zA-Z.-]{2,}[.]{1}[a-zA-Z]{2,}" required />
+
+        <label position="stacked">Phone no.</label>
+        <input class="form-control pl-1" #mobile="ngModel" name="mobile" type="text" [(ngModel)]="petOwnerData.mobile"
+          minlength="10" maxlength="11" numbersOnly readonly required />
+
+        <label for="speciesList">Pets</label>
+        <ion-row class="w-100">
+          <ion-col size="1.5" [ngClass]="{ 'isVisible': start === 0 }">
+            <ion-card class="navigation-card" (click)="onPrevious()">
+              <i class="fas fa-chevron-left"></i>
+            </ion-card>
+          </ion-col>
+          <ion-col size="3" *ngFor="let pets of images; let i = index">
+            <ion-card class="species-card" title="{{pets.petName}}">
+              <img class="profile w-100 h-100" src="{{pets.imgUrl}}" alt="" />
+            </ion-card>
+          </ion-col>
+          <ion-col size="1.5" [ngClass]="{ 'isVisible': end >= petOwnerData.pets.length }">
+            <ion-card class="navigation-card" (click)="onNext()">
+              <i class="fas fa-chevron-right"></i>
+            </ion-card>
+          </ion-col>
+        </ion-row>
+        <button class="Rectangle mt-3" [disabled]="!petOwnerForm.valid" (click)="updateProfile()">Update</button>
+        <button class="CANCEL mt-3" (click)="close()">Cancel</button>
+      </div>
+    </form>
+  </div>
+</div>

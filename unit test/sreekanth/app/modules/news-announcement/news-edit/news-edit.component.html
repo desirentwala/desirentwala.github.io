@@ -1,0 +1,21 @@
+<news-form [newsFormGroup]="newsViewFormGroup" iconClass="fa fa-refresh" label="NCPLabel.newsEdit" buttonName=UPDATE (doClick)="updateNews()" ></news-form>
+<ncp-modal #newsUpdatedModel [closeOnEscape]="false" [closeOnOutsideClick]="false" [hideCloseButton]="true"  modalClass="modal-sm">
+      <modal-content>
+            <div class="row">
+                <div class="col-md-8 col-sm-9 col-xs-8">
+                    <!--<label>
+                        <i class="fa fa-check iconLabel"></i><span class="labelDisplay">{{'NCPLabel.newNewsUpdated' | translate}} </span>
+                       
+                    </label>-->
+                     <ncp-label customFlag=true elementLabel="NCPLabel.newNewsUpdated" iconClass="fa fa-check"></ncp-label>
+                </div>
+                <div class="col-md-4 col-sm-3 col-xs-4 pull-right pl-md-0 mb20">	
+						<!--<button class="ncp-linkBtn" buttonType="custom" (click)="closeAndNavigate()"><i class="fa fa-close iconicButton"></i><span class="labelButton">{{'NCPBtn.close'|translate}}</span></button>-->
+                        <button-field buttonType="custom" buttonClass="ncp-linkBtn" (click)="closeAndNavigate()" buttonName="NCPBtn.close"
+                            iconClass="fa fa-close">
+                        </button-field>
+                </div>
+            </div>
+        </modal-content>
+             </ncp-modal>
+  

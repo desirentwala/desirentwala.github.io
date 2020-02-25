@@ -1,0 +1,26 @@
+<div *ngIf="!customFlag" class="col-sm-6 col-md-5 col-xs-11 counterAlignRTL">
+  <p class="mainFloatLabel">{{elementLabel | translate}}<span *ngIf="mandatoryFlag" class="aste">*</span></p>
+  <button (click)="decrement();" min="counterMin" class="counterBtn counterMinusBtn" [ngClass]="!decrementBtnText || !decrementBtnText.trim() ? 'fa fa-minus' : ''" [disabled]="isdisabled2()"><span class="labelButton">{{decrementBtnText}}</span></button>
+  <div class="col-md-4 col-sm-5 col-xs-4 p0 counterInputContainer" [class.invalid]="invalidFlag">
+      <input  [type]="inputType"  (input)="onInputText($event)" [formControl]="elementControl" [placeholder]="placeholder" [value]="counterValue" (change)="changeInValue()" class="form-control counterTextBox">
+      <i class="floatBorder"></i>
+  </div>
+  <button (click)="increment();" max="counterMax" class="counterBtn counterPlusBtn" [ngClass]="!incrementBtnText || !incrementBtnText.trim() ? 'fa fa-plus' : ''"  [disabled]="isdisabled1()"><span class="labelButton">{{incrementBtnText}}</span></button>
+</div>
+<div *ngIf="customFlag" [ngClass]="wrapperClass">
+  <button (click)="decrement();" min="counterMin" class="counterBtn counterMinusBtn" [ngClass]="!decrementBtnText || !decrementBtnText.trim() ? 'fa fa-minus' : ''" [disabled]="isdisabled2()"><span class="labelButton">{{decrementBtnText}}</span></button>
+  <div class="counterInputContainer" [class.invalid]="invalidFlag">
+    <input  [type]="inputType" (input)="onInputText($event)" [placeholder]="placeholder" [formControl]="elementControl" [value]="counterValue" (change)="changeInValue()" class="form-control counterTextBox">
+  </div>
+  <button (click)="increment();" max="counterMax" class="counterBtn counterPlusBtn"  [ngClass]="!incrementBtnText || !incrementBtnText.trim() ? 'fa fa-plus' : ''" [disabled]="isdisabled1()"><span class="labelButton">{{incrementBtnText}}</span></button>
+</div>
+<div *ngIf="tooltipTitle" class="col-sm-1 col-md-1 col-xs-1 tooltip-align tooltip-mobile3">
+<button *ngIf="tooltipTitle" type="button" class="btn btn-link info-tooltip" data-toggle="toggle" [tooltipPlacement]="tooltipPlacement"
+            [tooltip]="tooltipHTML" [id]="elementId">
+            <i class="icon-tooltip" [id]="elementId"></i>
+            <tooltip-content #tooltipHTML [excludeId]="elementId">
+              <div innerHTML="{{tooltipTitle | translate}}"></div>
+            	</tooltip-content>
+            </button>
+
+</div>

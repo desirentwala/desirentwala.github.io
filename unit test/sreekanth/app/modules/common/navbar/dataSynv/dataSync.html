@@ -1,0 +1,4 @@
+<div *ngIf="enableDataSync">
+    <i *ngIf="!syncFlag" class="fa dataSyncIcon fa-refresh fa-3x" (click)="dataSync()" title="{{'NCPLabel.syncData' | translate}}"></i>
+    <i *ngIf="syncFlag" class="fa dataSyncIcon fa fa-refresh fa-spin fa-3x" title="{{'NCPLabel.syncData' | translate}}"></i>
+</div>

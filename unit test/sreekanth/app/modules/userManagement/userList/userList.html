@@ -1,0 +1,188 @@
+<div *ngIf="userArray && userArray.length > 0" class="setting-icon">
+      <a data-toggle="modal" (click)="columnFilterModal.open()" class="filterimg">
+            <i class="settingsIcon fa gearIcon"></i>
+      </a>
+</div>
+<div  class="setting-icon">
+      <a data-toggle="modal" (click)="searchUser.open()" class="filterimg">
+            <i class="settingsIcon fa filterIcon"></i>
+      </a>
+</div>
+<div  *ngIf="userArray && userArray.length > 0" class="col-md-3 col-sm-12 col-xs-12  conf">
+      <input class="forconf" [(ngModel)]="searchId" placeholder="{{'NCPBtn.search'| translate}}">
+</div>
+<div style="clear:both;"></div>
+<div class="filterac">
+
+      <table>
+            <thead>
+                  <tr>
+                        <th *ngFor="let header of tableDetails;let i= index" [class]="selectedClass(header.mapping)" (click)="changeSorting(header.mapping);(this.rotateFlag === i) ? this.rotateFlag='':this.rotateFlag=i;"
+                              [attr.data-title]="header.header | translate">
+                              <span>
+                                    <span class="labelHeader">{{header.header | translate}}</span>
+                              </span>
+                              <i class="icon-arrow-d indexicon" [class.rotate]="rotateFlag === i"></i>
+                        </th>
+                        <th class="actionCol">
+                              <span>
+                                    <span class="labelHeader">{{'NCPLabel.Action' | translate}}</span>
+                              </span>
+                        </th>
+                  </tr>
+            </thead>
+            <tbody>
+                  <tr *ngFor="let object of userArray  | searchBy : searchId : tableDetails |  orderBy : convertSorting(); let rowIndex=index"
+                        id="tabhide">
+                        <td *ngFor="let mappings of tableDetails; let i=index" [attr.data-title]="mappings.header | translate">
+                              {{object[mappings.mapping]}}
+                        </td>
+
+                        <td class="actionCol">
+                              <!--<button type=radio name="button" class="fa fa-gear showPopover indexrecus" tooltipPlacement="left" [tooltip]="myTooltip"
+                                    [tooltipHide]="tooltipHide" tooltipClick=true (click)="doAction($event); tooltipHide = myTooltip.show(); setCurrentTooltip(myTooltip);">
+					</button>-->
+                              <span>
+                                    <i class="fa fa-gear showPopover indexrecus" tooltipPlacement="left" [tooltip]="myTooltip" [tooltipHide]="tooltipHide" tooltipClick=true
+                                          [id]="'userListTooltip'+rowIndex"></i>
+                              </span>
+                              <tooltip-content #myTooltip [excludeId]="'userListTooltip'+rowIndex">
+                                    <h3 class="popover-title">&nbsp;
+                                          <a class="close" (click)="tooltipHide = myTooltip.hide()">
+                                                <i class="icon-alert"></i>
+                                          </a>
+                                    </h3>
+                                    <div class="popover-content">
+                                          <div>
+                                                <ul>
+                                                      <li>
+                                                            <a (click)="editUserDetail(object.user_id,'EU'); tooltipHide = myTooltip.hide()">
+                                                                  <i class=" iconToolTip"></i>
+                                                                  <span class="labelToolTip">{{'NCPLabel.editUser' | translate}}</span>
+                                                            </a>
+                                                      </li>
+                                                      <li>
+                                                            <a (click)="getValueobject(object.user_id,'EU'); tooltipHide = myTooltip.hide()">
+                                                                  <i class=" iconToolTip"></i>
+                                                                  <span class="labelToolTip">{{'NCPLabel.deleteUser' | translate}}</span>
+                                                            </a>
+                                                      </li>
+                                                </ul>
+                                          </div>
+                                    </div>
+                              </tooltip-content>
+                        </td>
+                  </tr>
+            </tbody>
+      </table>
+      <div *ngIf="userArray.length == 0" >
+            <span class="badge">{{'NCPLabel.noRecordsFound' | translate}}</span>
+      </div> 
+      <div *ngIf="userArray && userArray.length > 0 && viewMore" class="col-centered mtb20">
+            <button-field buttonType="custom" buttonName="NCPBtn.showMore" buttonClass="ncpbtn-default" iconClass="fa fa-arrow-down"
+                  (click)='doViewMore()'>
+            </button-field>
+      </div>
+      <ncp-modal #userDeleteModel [closeOnEscape]="false" [closeOnOutsideClick]="false" class="modalForm" modalClass="modal-md"
+      modalTitle="NCPLabel.confirmDeletion" titleIcon="">
+      <modal-content>
+            <div *ngIf="childUsers.length > 0">
+                  <misc-h3 label="NCPLabel.userCannotBeDeletedBecause"></misc-h3>
+            </div>
+                  <div *ngIf="childUsers.length > 0" class="branchListUsers">
+                        <misc-h5 label="NCPLabel.follwingUsersUnderHisHierarchy"></misc-h5>
+                        <ul class="ul-css">
+                              <li *ngFor="let user of childUsers">{{user}}</li> 
+                        </ul>
+                  </div>
+                  <div *ngIf="childUsers.length == 0" class="btns-row">
+                        <button-field buttonType="custom" buttonClass="ncp-btn w100p" iconClass="fa fa-check" buttonName="NCPBtn.yes" (click)="deleteUserDetail(useridValue,objectValue);userDeleteModel.close();">
+                        </button-field>
+                        <button-field buttonType="custom" buttonClass="ncp-btn w100p" iconClass="fa fa-close " buttonName="NCPBtn.no" (click)="navigateUserList();userDeleteModel.close();">
+                        </button-field>
+                  </div>
+                  <div *ngIf="childUsers.length > 0 " class="col-md-3 col-sm-3 col-xs-4 pull-right pl-md-0 mb20">
+                        <button-field buttonClass="ncp-linkBtn" buttonType="custom" (click)="userDeleteModel.close()" buttonName="NCPBtn.close" iconClass="fa fa-close"></button-field>
+                  </div>
+            </modal-content>
+      </ncp-modal>
+      <ncp-modal class="modalForm" #columnFilterModal [closeOnEscape]="false" [closeOnOutsideClick]="false" modalClass="modal-lg"
+            modalTitle="NCPLabel.filterTableContents" titleIcon="glyphicon glyphicon-wrench confed">
+            <modal-content>
+                  <div class="row">
+                        <multi-check elementId="cbox" [checkboxArray]="multicheckarray" elementLabel="Fields" ngDefaultControl></multi-check>
+                  </div>
+            </modal-content>
+
+            <modal-footer>
+                  <div class="btns-row">
+                        <div class="col-md-12 col-sm-12 col-xs-12 pull-right plr-xs-0">
+                              <div *ngIf="errmsg">{{'NCPLabel.pleaseselectonefield' | translate}}&nbsp;
+                                    <i class="fa fa-smile-o" aria-hidden="true"></i>
+                              </div>
+                        </div>
+                        <button-field buttonType="custom" buttonClass="ncp-linkBtn w100p " iconClass="fa fa-close" buttonName="NCPBtn.close" (click)="columnFilterModal.close()">
+                        </button-field>
+                        <button-field buttonType="custom" buttonClass="ncpbtn-default w100p" iconClass="fa fa-save" buttonName="NCPBtn.save" (click)="colhide()">
+                        </button-field>
+                  </div>
+            </modal-footer>
+      </ncp-modal>
+
+<ncp-modal modalClass="modal-lg" #searchUser [closeOnEscape]="false" [closeOnOutsideClick]="false" modalTitle="NCPLabel.filterTableContent"
+      titleIcon="glyphicon glyphicon-wrench confed">
+      <modal-content>
+            <div [formGroup]="userListFormGroup">
+                  <div class="row">
+                        <ncp-label elementLabel="NCPLabel.UserID" elementId="UserID"></ncp-label>
+                        <text-box formControlName="user_id" ngDefaultControl elementLabel="NCPLabel.UserID"></text-box>
+                  </div>
+                  <div class="row">
+                        <ncp-label elementLabel="NCPLabel.userName" elementId="userName"></ncp-label>
+                        <text-box formControlName="user_name" ngDefaultControl elementLabel="NCPLabel.userName"></text-box>
+                  </div>
+                  <div class="row">
+                        <ncp-label elementLabel="NCPLabel.userBranch" elementId="UserBranch"></ncp-label>
+                        <drop-down elementId="user_branch" formControlName="user_branch" miscType="BranchGroup"
+                              pickListFlag=true elementId="UserBranch" isCodeDesc=true param1="{{currentUserBranch}}"
+                              displayCodeAndDesc=true [descControl]="userListFormGroup.controls['user_branch_desc']"
+                              displayOnClick=true ngDefaultControl elementLabel="NCPLabel.userBranch">
+                        </drop-down>
+                  </div>
+                  <div class="row">
+                        <ncp-label elementLabel="NCPLabel.userProfileGroup" elementId="UserProfileGroup"></ncp-label>
+                        <drop-down elementId="user_prf_group_code" formControlName="user_prf_group_code" miscType="MiscInfo"
+                              pickListFlag=true miscSubType="PRFGP" isCodeDesc=true [descControl]="userListFormGroup.controls['user_prf_group_desc']"
+                              displayOnClick=true ngDefaultControl elementLabel="NCPLabel.userProfileGroup">
+                        </drop-down>
+                  </div>
+                  <div class="row">
+                        <ncp-label elementLabel="NCPLabel.roleId" elementId="roleId"></ncp-label>
+                        <drop-down elementId="roleId" formControlName="roleId" displayCodeAndDesc=true
+                              miscType="ROLEID" elementId="RoleId" pickListFlag=true isCodeDesc=true ngDefaultControl
+                              displayOnClick=true [descControl]="userListFormGroup.controls['roleId_desc']"
+                              elementLabel="NCPLabel.roleId">
+                        </drop-down>
+                  </div>
+                  <div class="row radio-btn">
+                        <ncp-label elementLabel="NCPLabel.status" elementId="userstatus"></ncp-label>
+                        <radio-button [radioArray]="userstatus" [type]="switchbutton" radioName="user_status" elementId="user_status"
+                              horizontalflag=true formControlName="user_status" ngDefaultControl elementLabel="NCPLabel.status">
+                        </radio-button>
+                  </div>
+            </div>
+      </modal-content>
+      <modal-footer>
+            <div class="btns-row">
+                  <button-field buttonType="custom" buttonClass="ncp-linkBtn w100p mt-xs-10" iconClass="fa fa-close"
+                        buttonName="NCPBtn.close" (click)="searchUser.close();">
+                  </button-field>
+                  <button-field buttonType="custom" buttonClass="ncpbtn-default" iconClass="fa fa-eraser" buttonName="NCPBtn.clear"
+                        (click)="userListFormGroup.reset();">
+                  </button-field>
+                  <button-field buttonType="custom" buttonClass="ncpbtn-default" iconClass="fa fa-filter" buttonName="NCPBtn.filter"
+                        (click)="searchUser.close(); filterUsers()">
+                  </button-field>
+            </div>
+      </modal-footer>
+</ncp-modal>

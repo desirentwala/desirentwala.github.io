@@ -1,0 +1,172 @@
+<div *ngIf="bookingdata?.length === 0">
+  <h3 class="pl-3 no-appts">No bookings present</h3>
+</div>
+
+<div class="desktop-version" *ngIf="bookingdata?.length > 0">
+  <div class="table-responsive  table-striped table-width">
+    <table class="table mtable">
+      <thead class="header">
+        <tr class="table-row">
+          <th>#Appt no.</th>
+          <th *ngIf="!isCustomer">Appt date</th>
+          <th *ngIf="!isCustomer">Appt time</th>
+          <th *ngIf="!isCustomer">Duration</th>
+          <th *ngIf="isCustomer">Date & slot</th>
+          <th>{{header}}</th>
+          <th *ngIf="!isCustomer && bookingdata[0].role==='PA' ">Customer</th>
+          <th>Paid</th>
+          <th>Status</th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody class="tablebody">
+        <tr *ngFor="let data of bookingdata" class="table-row">
+          <td>
+            {{data.appointmentId}}
+          </td>
+          <td *ngIf="!isCustomer">{{data.appointmentDate}}</td>
+          <td *ngIf="!isCustomer">{{data.time}}</td>
+          <td *ngIf="!isCustomer">{{data.duration}} min</td>
+          <td *ngIf="isCustomer">
+            <div classs="d-flex flex-row">
+              {{data.time}} | {{data.duration}} min
+            </div>
+            <div class="d-flex flex-row slot">
+              <ion-text class="slot-txt">{{data.appointmentDate}}</ion-text>
+            </div>
+          </td>
+          <td *ngIf="data.role !== 'PA'">{{data.practicerName}}</td>
+          <td *ngIf="data.role === 'PA'">{{data.vet}}</td>
+          <td *ngIf="!isCustomer && data.role === 'PA'">{{data.cust}}</td>
+          <td>{{data.paid}}</td>
+          <td title={{data.status}} *ngIf="data.status !== 'Awaiting confirmation'">{{data.status}}
+            <span *ngIf="data.status === 'Cancelled'" class="text-danger dangerMark">*</span>
+          </td>
+          <td title={{data.status}} *ngIf="data.status === 'Awaiting confirmation'">
+            <span class="awating"><i class="far fa-exclamation-triangle alert-icon"></i>{{data.status}}</span>
+          </td>
+          <td>
+            <!-- <img *ngIf="!(data.role === 'PA' || data.role === 'VHD')" id="video"
+              [ngClass]="{ 'isVisible': !data.isEnable }" class="pr-1" src="../../../assets/icon/v.svg" alt="image"
+              (click)="StartVideo(data)" /> -->
+            <i class="fas fa-video video-icon pr-1" *ngIf="!(data.role === 'PA' || data.role === 'VHD')" id="video"
+              [ngClass]="{ 'isVisible': !data.isEnable }" (click)="StartVideo(data)"></i>
+            <ion-icon class="p-1 rounded-circle popover-ham" name="more" (click)="presentPopover(data, $event)">
+            </ion-icon>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+<app-cancel-appointment></app-cancel-appointment>
+<app-late-join></app-late-join>
+<!-- mobile responsive table -->
+<!-- for PO , VET -->
+<div class="hide-under-mob" *ngIf="!isCustomer">
+  <ion-grid>
+    <ion-row>
+      <ion-col class="ion-align-self-center" size="12">
+        <ion-card class="table-card" *ngFor="let data of bookingdata;let i = index">
+          <ion-card-content class="boking-card-content">
+            <ion-item lines="none">
+              <ion-label class="placingcontents">
+                <ion-label class="appt-with">Appointment with {{data.practicerName}}</ion-label><br>
+                <span class="iconplacingright">
+                  <!-- <ion-icon class="p-1 rounded-circle popover-ham" ios="ios-more" md="md-more" slot="end" (click)="presentPopover(data,$event)"></ion-icon> -->
+                  <p [ngClass]="{ 'isVisible': !data.isEnable }" class="text-center">
+                    <!-- <img id="video" src="../../../assets/icon/v.svg" (click)="StartVideo(data)" alt="image" /> -->
+                    <i class="fas fa-video video-icon pr-1" *ngIf="!(data.role === 'PA' || data.role === 'VHD')"
+                      id="video" [ngClass]="{ 'isVisible': !data.isEnable }" (click)="StartVideo(data)"></i>
+                  </p>
+                </span>
+                <ion-label class="appt-at">{{data.appointmentDate}} </ion-label>
+                <ion-label class="appt-at">at {{data.time}} ( {{data.duration}} mins)</ion-label>
+                <h1 class="appt-paid">{{data.paid}}</h1>
+                <ion-row>
+                  <ion-text class="paidstatus-icons" *ngIf="data.status !== 'Awaiting confirmation'">{{data.status}}
+                    <span *ngIf="data.status === 'Cancelled'" class="text-danger dangerMark">*</span>
+                  </ion-text>
+                  <ion-text class="paidstatus-icons pt-2" *ngIf="data.status === 'Awaiting confirmation'">
+                    <span class="awating"><i class="far fa-exclamation-triangle alert-icon"></i>{{data.status}}</span>
+                  </ion-text>
+                </ion-row>
+              </ion-label>
+            </ion-item>
+            <div>
+            </div>
+          </ion-card-content>
+          <div class="tabs">
+            <div class="tab">
+              <!-- <input [checked]="false" type="checkbox" id="{{i}}"
+                name="rd"> -->
+              <input class="radio-btn" (click)="checkRole(data, $event)"
+                [ngClass]="data.isTableChecked ? 'checked' : 'not-checked'" type="checkbox" id="{{i}}" name="rd">
+              <label class="tab-label" for="{{i}}">Actions </label>
+              <div class="tab-content">
+                <div class="tab" *ngFor="let menu of menuItems; let j = index">
+                  <input type="checkbox" class="radio-btn" id="{{j}} + 'rdx'" name="rd">
+                  <label for="{{j}} + 'rdx'" class="tab-close" (click)="popoverActions(data,menu )">{{menu}}</label>
+                </div>
+              </div>
+            </div>
+          </div>
+        </ion-card>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+</div>
+<!-- for PA -->
+<div class="hide-under-mob" *ngIf="isCustomer">
+  <ion-grid class="pl-0">
+    <ion-row>
+      <ion-col class="ion-align-self-center pl-0" size="12">
+        <ion-card class="custom-card" *ngFor="let data of bookingdata;let i = index" [ngClass]='{"mt-0": i === 0}'>
+          <ion-card-content class="boking-card-content">
+            <ion-item lines="none">
+              <ion-label class="placingcontents">
+                <ion-label class="appt-with">Appointment with {{data.practicerName}}</ion-label>
+                <span class="iconplacingright">
+                  <!-- <ion-icon class="p-1 rounded-circle popover-ham" ios="ios-more" md="md-more" slot="end" (click)="presentPopover(data,$event)"></ion-icon> -->
+                  <p [ngClass]="{ 'isVisible': !data.isEnable }" class="text-center">
+                    <!-- <img id="video" src="../../../assets/icon/v.svg" (click)="StartVideo(data)" alt="image" /> -->
+                    <i class="fas fa-video video-icon pr-1" *ngIf="!(data.role === 'PA' || data.role === 'VHD')"
+                      id="video" [ngClass]="{ 'isVisible': !data.isEnable }" (click)="StartVideo(data)"></i>
+                  </p>
+                </span>
+                <ion-label class="appt-at">{{data.appointmentDate}} </ion-label>
+                <ion-label class="appt-at">at {{data.time}} ( {{data.duration}} mins)</ion-label>
+                <ion-label class="appt-paid">{{data.paid}}</ion-label>
+                <ion-row>
+                  <ion-text class="paidstatus-icons" *ngIf="data.status !== 'Awaiting confirmation'">{{data.status}}
+                    <span *ngIf="data.status === 'Cancelled'" class="text-danger dangerMark">*</span>
+                  </ion-text>
+                  <ion-text class="paidstatus-icons pt-2" *ngIf="data.status === 'Awaiting confirmation'">
+                    <span class="awating"><i class="far fa-exclamation-triangle alert-icon"></i>{{data.status}}</span>
+                  </ion-text>
+                </ion-row>
+              </ion-label>
+            </ion-item>
+            <div>
+            </div>
+          </ion-card-content>
+          <div class="tabs">
+            <div class="tab">
+              <!-- <input [checked]="false" type="checkbox" id="{{i}}"
+                name="rd"> -->
+              <input class="radio-btn" (click)="checkRole(data, $event)"
+                [ngClass]="data.isTableChecked ? 'checked' : 'not-checked'" type="checkbox" id="{{i}}" name="rd">
+              <label class="tab-label" for="{{i}}">Actions </label>
+              <div class="tab-content">
+                <div class="tab" *ngFor="let menu of menuItems; let j = index">
+                  <input type="checkbox" class="radio-btn" id="{{j}} + 'rdx'" name="rd">
+                  <label for="{{j}} + 'rdx'" class="tab-close" (click)="popoverActions(data,menu )">{{menu}}</label>
+                </div>
+              </div>
+            </div>
+          </div>
+        </ion-card>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+</div>

@@ -1,0 +1,61 @@
+<div class="row pull-xs-left w-xs-100p" [id]="elementId">
+    <text-box [disabled]="disabledFlag" [placeHolder]="placeHolder" [class.invalid]="invalidFlag" [(ngModel)]="addressKey" [maxlength]="maxLength"></text-box>
+    <!--<span class="input-holder col-sm-5 col-md-5 col-xs-12">
+          <input
+              class="form-control"
+              [disabled]="disabledFlag"
+              type="text" 
+              placeholder="{{ placeHolder | translate}}"
+              [ngStyle]="{'text-align': textAlign}"
+              [maxlength]="maxLength"
+              [class.invalid]="invalidFlag"
+              [(ngModel)]="addressKey"
+              /> 
+      </span>-->
+    <button-field *ngIf="buttonText" buttonType="custom" buttonName="{{buttonText | translate}}" buttonClass="ncp-btn" [isDisabled]="disabledFlag" (click)="getAddress()" iconClass="fa fa-paper-plane-o"></button-field>
+
+    <!--<button *ngIf="buttonText" type="button" (click)="getAddress()" class="btn btn-default ncpbtn-default ml4p ml-sm-5 ml-xs-15  " [disabled]="disabledFlag">{{buttonText | translate}} 
+         </button>-->
+</div>
+<ncp-modal [modalKey]="addressModal" [title]="modalTitle"  modalClass="modal-lg" [closeOnEscape]="false"
+    [closeOnOutsideClick]="false" overFlowXFlag=true>
+    <modal-header>
+        <misc-h2 label="{{'NCPLabel.pleaseSelectAddress'}}"></misc-h2>
+    </modal-header>
+    <modal-content class="addressLookUp">
+        <div *ngIf="tableDataReceived.length == 0">
+             <misc-h2 label="{{'NCPLabel.addressNotFound'}}"></misc-h2>
+        </div>
+
+        <table *ngIf="tableDataReceived.length > 0">
+            <thead>
+                <tr>
+                    <th>
+                        <span>{{'NCPLabel.slNo' | translate}}</span>
+                    </th>
+                    <th *ngFor="let header of tableDetails;let i=index">
+                        <span>{{header.header | translate }}</span>
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let object of tableDataReceived;let j= index" id="tabhide">
+                    <td [attr.data-title]="'NCPLabel.slNo' | translate" class="cursor-pointer">
+                        <span>{{j + 1}}</span>
+                    </td>
+                    <td *ngFor="let mappings of tableDetails; let i=index" [attr.data-title]="mappings.header | translate" (click)="addressSelected(object)"
+                        class="cursor-pointer">
+                        <span>{{object[mappings.mapping]}}</span>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </modal-content>
+    <modal-footer>
+        <div class="btns-row">
+            <div class="col-md-2 col-sm-3 col-xs-12 pull-right pr0 mb-xs-10 pl-xs-0">
+                <button-field buttonType="custom" buttonName="NCPBtn.close" buttonClass="ncp-linkBtn" (click)="addressModal = false"></button-field>
+            </div>
+        </div>
+    </modal-footer>
+</ncp-modal>

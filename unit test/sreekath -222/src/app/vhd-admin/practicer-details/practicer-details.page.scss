@@ -1,0 +1,17 @@
+.detailtype{
+    cursor: pointer;
+    margin-left: 1rem;
+    margin-right: 2rem;
+}
+.active{
+    border-bottom: 2px solid;
+    font-weight: bold;
+}
+.table-content {
+    margin: 0rem 5rem 0rem 1rem;
+  }
+  @media (max-width: 768px) {
+    .table-content {
+      margin: 0px !important;
+    }
+  }

@@ -1,0 +1,35 @@
+<div class="listcard">
+  <ion-row class="border-bottom">
+      <ion-input [(ngModel)]="searchValue" class="search-input mb-1 pl-1" placeholder="Search" (ionInput)="search($event.target.value)"></ion-input>
+    <div class="m-auto">
+      <em class="far fa-search cursor btn-search pr-1"></em>
+      <em class="far fa-plus-square cursor btn-plus" (click)="addNew()"></em>
+    </div>
+
+  </ion-row>
+  <ion-row class="border-bottom" *ngIf="flag === 'vet'"> 
+    <ion-item [class.highlight]="activeAll" class="w-100 bg-list cursor col-height" lines="none">
+      <ion-col size="10">
+        <ion-label (click)="showAll()"><strong>{{header}}</strong></ion-label>
+      </ion-col>
+      <ion-badge slot="end" class="bladge-cust" color="medium">{{data.length}}</ion-badge>
+    </ion-item>
+  </ion-row>
+  <ion-grid *ngIf="data?.length > 0" class="bg-list p-0" [ngClass]="{'listbar': header === 'Show all vet'}">
+    <ion-row *ngFor="let data of userList; let ind = index" class="border-bottom">
+      <ion-item [class.highlight]="activeIndex === ind" class="bg-list w-100 cursor" lines="none" (click)="selected(data, ind)">
+        <ion-col class="ion-align-self-start col-height">
+          <img *ngIf="data.imgUrl" alt="" class="rounded-circle vetImg" [src]="data.imgUrl">
+          <ion-label *ngIf="data.nameShortForm" class="text-img rounded-circle">{{data.nameShortForm}}</ion-label>
+        </ion-col>
+        <ion-col size="10" class=" col-height">
+          <ion-label class="font-weight-bold name" >{{data.firstName}}</ion-label>
+          <ion-label *ngIf="flag !== 'customer'" class="font-id">{{data.mobile}}</ion-label>
+          <ion-label *ngIf="flag === 'customer'" class="font-id">{{data.pets.length}}</ion-label>
+        </ion-col>
+        <ion-badge slot="end" class="bladge-cust" color="medium">{{data.length}}</ion-badge>
+      </ion-item>
+    </ion-row>
+    <div *ngIf="userList.length === 0" class="ifNoData ml-3">Sorry! no result found</div>
+  </ion-grid>
+</div>

@@ -1,0 +1,252 @@
+@import "../../../theme/variables.scss";
+
+input[type="file"] {
+  display: none;
+}
+
+.container {
+  margin-top: 2rem;
+  width: 14.8vw;
+  height: 13rem;
+  border: 1px solid var(--ion-color-medium-tint);
+  position: relative;
+  border-radius: 5px;
+  padding-right: 0px !important;
+  padding-left: 0px !important;
+  text-align: -webkit-center !important;
+}
+.upload-image > ion-icon {
+  font-size: var(--size-icon-40);
+  cursor: var(--cursor);
+}
+@media (max-width: 762px) {
+  .container {
+    width: 50vw;
+    & .input-file {
+      width: 50vw;
+    }
+  }
+}
+
+@media (width: 768px) {
+  .container {
+    width: 25vw !important;
+  }
+}
+
+.input-file {
+  width: 14.8vw;
+  height: 11.3rem;
+  cursor: var(--cursor);
+}
+
+.image {
+  opacity: 1;
+  display: block;
+  width: 100%;
+  height: 100%;
+  -webkit-transition: 0.5s ease;
+  transition: 0.5s ease;
+  -webkit-backface-visibility: hidden;
+  backface-visibility: hidden;
+  border-radius: 4px;
+  height: -webkit-fill-available;
+}
+
+.middle {
+  transition: 0.5s ease;
+  opacity: 0;
+  position: absolute;
+  top: 50%;
+  left: 45%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  -ms-transform: translate(-50%, -50%);
+  text-align: center;
+}
+
+// .species-card {
+//   width: 6rem;
+//   height: 7rem;
+// }
+// .navigation-card {
+//   width: 2rem;
+//   height: 7rem;
+// }
+// .iconSize {
+//   font-size: 1.5rem;
+// }
+
+// @media (max-width: 762px) {
+//   .species-card {
+//     width: 3.5rem;
+//     height: 4.5rem;
+//     & ion-card-content {
+//       padding-top: 1rem !important;
+//     }
+//   }
+//   .navigation-card {
+//     width: 2rem;
+//     height: 4.5rem;
+//     & ion-icon {
+//       font-size: 30px;
+//       margin-top: 3vh;
+//     }
+//   }
+// }
+
+// @media (width: 768px) {
+//   .navigation-card > ion-icon {
+//     font-size: 30px;
+//     margin-top: 4vh;
+//   }
+// }
+
+.more-icon {
+  font-size: var(--size-icon-20);
+}
+hr.horizontalLine {
+  border-top: 1px solid #aeaeae;
+  margin: 1rem 0rem;
+}
+// .container:hover .image {
+//   opacity: 0.1;
+// }
+
+// .container:hover .middle {
+//   opacity: 1;
+// }
+
+.text {
+  color: #000;
+  font-size: 26px;
+}
+.text > label > i {
+  cursor: pointer;
+}
+.select-dropdown {
+  border: 1px solid #dde1e6 !important;
+  background: var(--white-background) !important;
+  padding: 7px !important;
+}
+
+.showMore-card {
+  width: 2vw;
+  height: 16vh;
+  cursor: var(--cursor);
+}
+.showMore-card > ion-icon {
+  font-size: 30px;
+  padding-top: 2rem;
+  cursor: var(--cursor);
+}
+.toggle-align {
+  padding: var(--size-p2) var(--size-pr1);
+}
+.active {
+  background: var(--ion-color-secondary);
+  color: var(--white-background);
+}
+.active > img {
+  color: var(--white-background);
+}
+.species-card {
+  cursor: pointer;
+}
+.species-card > i {
+  float: right;
+}
+
+//new scss
+
+.species-img {
+  width: 80%;
+  padding: 5px;
+  height: 10vh;
+}
+.create-btn {
+  width: 25%;
+}
+
+// .iconSize {
+//   font-size: 1.5rem;
+// }
+
+.tick-icon {
+  float: left !important;
+  padding: 12px;
+  font-size: 20px;
+}
+
+@media (max-width: 762px) {
+  // .species-card {
+  //   width: 3.5rem;
+  //   height: 4.5rem;
+  //   & ion-card-content {
+  //     padding-top: 1rem !important;
+  //   }
+  // }
+  // .navigation-card {
+  //   width: 2rem;
+  //   height: 4.5rem;
+  //   & ion-icon {
+  //     font-size: 30px;
+  //     margin-top: 3vh;
+  //   }
+  // }
+  .tick-icon {
+    float: left !important;
+    padding: 5px;
+  }
+}
+
+// @media (min-width: 762px) {
+//   .species-card {
+//     & ion-card-content {
+//       padding-top: 3.5rem;
+//     }
+//   }
+//   .navigation-card {
+//     width: 2rem;
+//     height: 6.8rem;
+//     & ion-icon {
+//       font-size: 30px;
+//       margin-top: 5vh;
+//     }
+//   }
+// }
+
+.destop-view {
+  display: none;
+}
+@media (min-width: 992px) {
+  .destop-view {
+    display: block;
+    margin-right: -1.9rem;
+  }
+}
+
+.content-card {
+  top: 0vh !important;
+}
+
+@media (max-width: 1366px) {
+  .desktop {
+    display: none !important;
+  }
+
+  .ipadPro {
+    display: block !important;
+  }
+}
+.desktop {
+  display: block;
+}
+.ipadPro {
+  display: none;
+}
+@media only screen and (min-device-width: 320px) and (max-device-width: 1023px) and (orientation: portrait) {
+  .content-card {
+    padding: 1.875rem 1.875rem 1.875rem 1.875rem !important;
+  }
+}

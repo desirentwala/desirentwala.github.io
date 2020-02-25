@@ -1,0 +1,90 @@
+<ul>
+    <!--<h2>Lead News</h2>-->
+    <misc-h2 label="Lead News"></misc-h2>
+        <section class="leadNews">
+            <div class="row modalNewsCol" *ngFor="let news of leadNewsData;let i=index">
+                <li class="newsCol">
+                    <div class="col-md-12 col-sm-11 col-xs-12 pull-right">
+                        <div class="dateContainer"><i class="fa fa-calendar iconLabel"></i><span class="labelDisplay">{{leadNewsDate[i] }}</span></div>
+                    </div>
+                    <div class="col-md-1 col-sm-2 col-xs-2 pl0 filledIcon">
+                        <i class="fa fa-file-text-o"></i>
+                    </div>
+                    <div class="col-md-11 col-sm-10 col-xs-10 newsTitleDateContainer">
+                        <!--<h3>{{news.newsTitle}}</h3> -->
+                        <misc-h3 [label]="news.newsTitle"></misc-h3>
+                        <p class="newsDesc" [innerHTML]="news.newsDetails"></p>
+                    </div>
+                    <!--<div class="col-md-2 col-lg-2 col-sm-4 col-xs-12 pull-right pr0" (click)="readMore(news)"><button class="ncp-btn2 link btn-2 btn-2a">Read More</button></div>-->
+                    
+                </li>		
+            </div>
+        </section>
+
+    <!--<h2>Secondary News</h2>-->
+    <misc-h2 label="Secondary News"></misc-h2>
+    <div class="otherNewsBlock">
+        <div class="row modalNewsCol">
+            <li class="newsCol" *ngFor="let news of normalNewsData;let i=index">
+                    <div class="col-md-12 col-sm-11 col-xs-10 pull-right">
+                        <div class="dateContainer"><i class="fa fa-calendar iconLabel"></i><span class="labelDisplay">{{normalNewsDate[i] }}</span></div>
+                    </div>
+                    <div class="col-md-1 col-sm-2 col-xs-2 filledIcon">
+                        <i class="fa fa-file-text-o"></i>
+                    </div>
+                    <div class="col-md-11 col-sm-10 col-xs-10 newsTitleDateContainer">
+                        <!--<h3>{{news.newsTitle}}</h3> -->
+                        <misc-h3 [label]="news.newsTitle"></misc-h3>
+                        <p class="newsDesc" [innerHTML]="news.newsDetails"></p>
+                    </div>
+                    <!--<div class="col-md-2 col-lg-2 col-sm-4 col-xs-12 pull-right" (click)="readMore(news)"><button class="ncp-btn2 link btn-2 btn-2a">Read More</button></div>-->
+                    
+                </li>
+        </div>
+    </div>
+    <ncp-modal class="modalForm bannerModal" #viewNewsModel [closeOnEscape]="false" [closeOnOutsideClick]="false" 
+        modalClass="modal-lg">
+        <modal-header>
+			<img *ngIf="newsType === 'News'" src="assets/img/News-Banner.jpg" alt="" class="img-responsive">
+                <img *ngIf="newsType === 'Announcement'" src="assets/img/Announcement-Banner.png" alt="" class="img-responsive">
+                <img *ngIf="newsType === 'Article'" src="assets/img/Article-Banner.png" alt="" class="img-responsive">
+                <img *ngIf="newsType === 'Notice'" src="assets/img/Notice-Banner.png" alt="" class="img-responsive">
+			<div class="row bannerModalHeader1">
+				<div class="col-md-6 col-sm-6 col-xs-6 p0">
+					<div class="newsType pull-left"><i class=" iconLabel"></i><span class="labelDisplay">{{newsType}}</span></div>
+				</div>
+				<div class="col-md-6 col-sm-6 col-xs-6 p0">
+					<div class="dateContainer pull-right"><i class="fa fa-calendar iconLabel"></i><span class="labelDisplay">{{newsDate}}</span></div>
+				</div>
+				<div class="col-md-12 col-sm-12 col-xs-12 bannerModalTitle">
+					<!--<h2><i class=" iconHeader"></i><span class="labelHeader">{{newsDataForModelTitle}}</span></h2>-->
+                    <misc-h2 [label]="newsDataForModelTitle"></misc-h2>
+				</div>
+			</div>
+	</modal-header>
+	<modal-content>
+		<div class="row">
+			<div class="bannerModalContent">
+				<!--<div class="col-md-1 col-sm-2 col-xs-2 pl0 filledIcon">
+					<i class="fa fa-file-text-o"></i>
+				</div>-->
+				<div class="col-md-12 col-sm-12 col-xs-12">
+					<p [innerHTML]=newsDataForModelNewsDetails></p>
+				</div>
+			</div>		
+		</div>
+			
+	</modal-content>
+	<modal-footer>
+		<div class="btns-row">
+				<!--<button class="ncp-linkBtn" (click)="viewNewsModel.close()"><i class="fa fa-close iconicButton"></i><span class="labelButton">{{'NCPBtn.close' | translate}}</span></button>-->
+                <button-field buttonType="custom" buttonClass="ncp-linkBtn" (click)="viewNewsModel.close()" elementLabel="NCPBtn.close"
+                iconClass="fa fa-close">
+            </button-field>
+		</div>
+	</modal-footer>
+        
+    </ncp-modal>
+</ul>
+
+

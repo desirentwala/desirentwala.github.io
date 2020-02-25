@@ -1,0 +1,11 @@
+<div *ngIf="enableChatWindow">
+    <div class="chatTooltip" (click)="toggleChatWindow=true" *ngIf="toggleChatWindow===false">
+        <span class="chatTooltipSpanFs">Ask me</span>
+        <i class="fa fa-comments"></i>
+    </div>
+    <div class="chatWindow" *ngIf="toggleChatWindow===true">
+        <i class="fa fa-close chatWindowClose" (click)="toggleChatWindow = false"></i>
+        <iframe width="350" height="430" [src]="src">
+        </iframe>
+    </div>
+</div>

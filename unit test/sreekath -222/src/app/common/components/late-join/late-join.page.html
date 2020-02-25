@@ -1,0 +1,23 @@
+<div class="box" [class.opened]="value">
+    <ion-card class="h-100 ion-padding join-card mt-0 mr-0">
+        <div class="border-bottom pb-3">
+            <p class="modal-title">Joining late</p>
+        </div>
+        <ion-label for="delay">Delay time</ion-label><i class="fas fa-asterisk form-asterisk"></i>
+        <select id="delay" placeholder="Delay time" class="select-dropdown dropdown" name="delay" #gdr="ngModel"
+            [(ngModel)]="delay">
+            <option *ngFor="let delay of delayList" ngDefaultControl>
+                {{delay}} minutes
+            </option>
+        </select>
+        <div class="pt-2">
+            <textarea class="form-control textara" name="message" placeholder="Message goes here" [(ngModel)]="message"
+                id="message" cols="50" rows="5"></textarea>
+        </div>
+        <div class="pt-2">
+            <ion-button class="ion-primary action-btn" [disabled]="!message || !delay" (click)="joinLate()">Yes
+            </ion-button>
+            <ion-button class="ion-primary action-btn" (click)="value = false">No</ion-button>
+        </div>
+    </ion-card>
+</div>

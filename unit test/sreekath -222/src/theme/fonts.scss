@@ -1,0 +1,41 @@
+/** fonts and text related CSS Variables **/
+:root {
+    /** font weight **/
+    --font-weight-3: 300;
+    --font-weight-4: 400;
+    --font-weight-5: 500;
+    --font-weight-6: 600;
+    --font-weight-7: 700;
+    --font-weight-8: 800;
+    --font-weight-bold: bold;
+    --font-weight-normal: normal;
+
+    /** font size px as rem **/
+    --size-8px-05rem: 0.5rem;
+    --size-12-075rem: 0.75rem;
+    --size-13-08125rem: 0.8125rem;
+    --size-14-0875rem: 0.875rem;
+    --size-15-09375rem: 0.9375rem;
+    --size-16-1rem: 1rem;
+    --size-20-125rem: 1.25rem;
+    --size-24-15rem: 1.5rem;
+    --size-36-225rem: 2.25rem;
+
+    /** font size px **/
+    --size-12px: 12px;
+    --size-13px: 13px;
+    --size-14px: 14px;
+    --size-15px: 15px;
+    --size-16px: 16px;
+    --size-20px: 20px;
+    --size-24px: 24px;
+    --size-26px: 26px;
+    --size-36px: 36px;
+
+    /** text decoration **/
+    --text-decoration-u: underline;
+    --text-decoration-o: overline;
+    --text-decoration-line-through: line-through;
+    --text-decoration-o-u: overline underline;    
+
+}

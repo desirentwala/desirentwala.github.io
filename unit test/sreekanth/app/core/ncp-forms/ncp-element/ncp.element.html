@@ -1,0 +1,709 @@
+<ng-container [ngSwitch]="controlType">
+    <div [class.highlightMode]="hoverMode && formUtils.isInspectMode" (mouseenter)="hoverMode = editorMode ? setHover(element) : false"
+        (mouseleave)="hoverMode = false;setMouseLeave(element)">
+        <ng-container *ngIf="hoverMode && formUtils.isInspectMode">
+           <span class="displayType"> {{controlType}} </span> 
+        </ng-container>
+        <ng-container *ngSwitchCase="'Condition'">
+            <ng-container *ngIf="element.condition">
+                <ncp-element [superParentIndex]="superParentIndex" [fieldTabId]="fieldTabId" [parentIndex]="parentIndex" [element]="item"
+                    [ncpForm]="ncpForm" *ngFor="let item of element.elementList;trackBy:item?.uniqueId" [indexes]="indexes ">
+                </ncp-element>
+            </ng-container>
+        </ng-container>
+        <ng-container *ngSwitchCase="'Compare'">
+            <ng-container *ngIf="compareResult">
+                <ncp-element [superParentIndex]="superParentIndex" [fieldTabId]="fieldTabId" [parentIndex]="parentIndex" [element]="item"
+                    [ncpForm]="ncpForm" *ngFor="let item of element.elementList;trackBy:item?.uniqueId" [indexes]="indexes">
+                </ncp-element>
+            </ng-container>
+        </ng-container>
+        <ng-container *ngSwitchCase="'List'">
+            <ng-container *ngFor="let itemValue of element.valueList;let j= index;let last = last;let isOdd = odd;let isEven= even">
+                <ncp-element [superParentIndex]="superParentIndex" [fieldTabId]="fieldTabId" [parentIndex]="parentIndex" [element]="item"
+                    [lastItem]="last" [isOdd]="isOdd" [isEven]="isEven" [ncpForm]="ncpForm" [valueElement]="itemValue" *ngFor="let item of element.elementList;trackBy:item?.uniqueId">
+                </ncp-element>
+            </ng-container>
+        </ng-container>
+        <ng-container *ngSwitchCase="'Group'">
+            <ng-container [formGroup]="elementForm">
+                <ncp-element [superParentIndex]="superParentIndex" [fieldTabId]="fieldTabId" [parentIndex]="parentIndex" [element]="item"
+                    [ncpForm]="elementForm" [valueElement]="valueElement" *ngFor="let item of element.elementList;trackBy:item?.uniqueId">
+                </ncp-element>
+            </ng-container>
+        </ng-container>
+
+        <ng-container *ngSwitchCase="'Array'">
+            <ng-container [formGroup]="elementForm">
+                <ng-container [formArrayName]="element.controlArrayName" *ngFor="let groupItem of elementForm.controls[element.controlArrayName]?.controls;let i = index;let last = last;let isOdd = odd;let isEven= even; trackBy: groupItem?.uniqueId">
+                    <ng-container [formGroupName]="i">
+                        <ncp-element [superParentIndex]="superParentIndex" [fieldTabId]="fieldTabId" [parentIndex]="parentIndex" [element]="item"
+                            [indexes]=i [lastItem]="last" [isOdd]="isOdd" [isEven]="isEven" [ncpForm]="groupItem" *ngFor="let item of element.elementList;trackBy:item?.uniqueId">
+                        </ncp-element>
+                    </ng-container>
+                </ng-container>
+            </ng-container>
+        </ng-container>
+
+        <ng-container *ngSwitchCase="'Table'">
+            <div class="filterac">
+                <table [class]="element.tableClass">
+                    <ng-template ngFor let-header [ngForOf]="element.elementList" let-i="index">
+                        <thead *ngIf="header.controlType === 'Table Header'" [class]="header.class">
+                            <th *ngFor="let headerElement of header.elementList;" [class.hide]="headerElement?.hide" [attr.data-title]="headerElement.headerLink | translate">
+                                <ncp-element [superParentIndex]="superParentIndex" [fieldTabId]="fieldTabId" [parentIndex]="parentIndex" [element]="headerElement"></ncp-element>
+                            </th>
+                        </thead>
+                    </ng-template>
+                    <ng-template ngFor let-trow [ngForOf]="element.elementList" let-i="index">
+                        <tbody *ngIf="!trow.isArray && trow?.controlType !== 'Table Header'">
+                            <tr [class]="trow?.class" [class.hide]="trow?.hide">
+                                <td *ngFor="let tdata of trow?.elementList;" [class]="tdata.tdClass" [attr.data-title]="tdata.headerLink | translate" [class.hide]="tdata?.hide">
+                                    <div *ngIf="tdata.rotateIcon" (click)="trClick(trow?.elementId);  clk ? clk=false : clk=true ">
+                                        <div class="pull-left">
+                                            <ncp-element [superParentIndex]="superParentIndex" [parentIndex]="parentIndex" [element]="tdata" [ncpForm]="ncpForm" [fieldTabId]="fieldTabId"></ncp-element>
+                                        </div>
+                                        <i [class]="clk ? 'pull-right icon-arrow-d discountIconAlignRTL' : 'pull-right icon-arrow-d discountIconAlignRTL rotate'"></i>
+                                    </div>
+                                    <div *ngIf="!tdata.rotateIcon">
+                                        <ncp-element [superParentIndex]="superParentIndex" [parentIndex]="parentIndex" [element]="tdata" [ncpForm]="ncpForm" [fieldTabId]="fieldTabId"></ncp-element>
+                                    </div>
+                                </td>
+                            </tr>
+                        </tbody>
+                        <tbody [formGroup]="elementForm" *ngIf="trow.isArray && trow?.controlType === 'Trow'">
+                            <ng-template [ngIf]="element.paginationRequired" [ngIfElse]="tableWithoutPaginationTpl">
+                                <tr [formArrayName]="trow.controlArrayName" *ngFor="let groupItem of elementForm?.get(trow.controlArrayName)?.controls | paginate: {id:element.paginationId, itemsPerPage: element.rowCount, currentPage: pageChange };let i = index;let last = last;let isOdd = odd;let isEven= even"
+                                    [class]="trow?.class" [ngClass]="trow['displayControl'] ?  groupItem.value[trow['displayControl']] === true  ? '' : 'hide' : ''">
+                                    <ng-container *ngTemplateOutlet="tableContentTpl;context:{$implicit:trow, trowId: i, groupItem: groupItem }"></ng-container>
+                                </tr>
+                            </ng-template>
+                            <ng-template #tableWithoutPaginationTpl>
+                            <tr [formArrayName]="trow.controlArrayName" *ngFor="let groupItem of elementForm?.get(trow.controlArrayName)?.controls;let i = index;let last = last;let isOdd = odd;let isEven= even"
+                                [class]="trow?.class" [ngClass]="trow['displayControl'] ?  groupItem.value[trow['displayControl']] === true  ? '' : 'hide' : ''">                                
+                                    <ng-container *ngTemplateOutlet="tableContentTpl;context:{$implicit:trow, trowId: i, groupItem: groupItem }"></ng-container>
+                                </tr>
+                            </ng-template>
+                            <ng-template #tableContentTpl let-trow let-i="trowId" let-groupItem="groupItem">
+                                <td *ngFor="let tdata of trow?.elementList;" [class]="tdata.tdClass" [attr.data-title]="tdata.headerLink | translate" [class.hide]="tdata?.hide">
+                                    <span>
+                                        <div *ngIf="tdata.rotateIcon" (click)="trClick(trow?.elementId);  clk ? clk=false : clk=true ">
+                                            <div class="pull-left">
+                                                <ncp-element [superParentIndex]="superParentIndex" [indexes]=i [element]="tdata" [ncpForm]="groupItem" [fieldTabId]="fieldTabId"></ncp-element>
+                                            </div>
+                                            <i [class]="clk ? 'pull-right icon-arrow-d discountIconAlignRTL' : 'pull-right icon-arrow-d discountIconAlignRTL rotate'"></i>
+                                        </div>
+                                        <div *ngIf="!tdata.rotateIcon">
+                                            <ncp-element [superParentIndex]="superParentIndex" [indexes]=i [parentIndex]="parentIndex" [element]="tdata" [ncpForm]="groupItem"
+                                                [fieldTabId]="fieldTabId"></ncp-element>
+                                        </div>
+                                    </span>
+                                </td>
+                            </ng-template>
+                        </tbody>
+                    </ng-template>
+                </table>
+                <div class="col-centered">
+                    <div *ngIf="element.paginationRequired && trow?.controlType !== 'Table Header'" class="row row-centered mb0">
+                        <div class="col-md-10 col-12 p0">
+                            <pagination-controls [id]='element.paginationId' (pageChange)="pageChange=$event">
+                            </pagination-controls>
+            </div>
+                        <div *ngIf="element.paginationRowRequired" class="col-md-2 col-6 float-right paddingmobileleftrigt20 p0">
+                            <div class="pagefoo">
+                                <span>Rows:</span>
+                                <select [(ngModel)]="element.rowCount" class="form-control-arrowrows">
+                                    <option *ngFor="let numRow of element.numRowArray; let i = index;" [value]="numRow" [selected]="i==0">{{numRow}}</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </ng-container>
+
+        <!-- <ng-container *ngSwitchCase="'Trow'">
+            <tbody [formGroup]="ncpForm" *ngIf="element?.isArray && element?.evaluate">
+                <tr [formArrayName]="element.controlArrayName" *ngFor="let groupItem of elementForm?.get(element.controlArrayName)?.controls;let i = index;let last = last;let isOdd = odd;let isEven= even"
+                    [class]="element?.class" [class.hide]="groupItem?.get(element[displayControl])?.value">
+                    <td *ngFor="let tdata of element?.elementList;" [class]="tdata.tdClass" [attr.data-title]="tdata.headerLink | translate" [class.hide]="tdata?.hide">
+                        <span [formGroupName]="i">
+                            <div *ngIf="tdata.rotateIcon" (click)="trClick(element?.elementId);  clk ? clk=false : clk=true ">
+                                <div class="pull-left">
+                                    <ncp-element [superParentIndex]="superParentIndex" [indexes]=i [element]="tdata" [ncpForm]="groupItem"></ncp-element>
+                                </div>
+                                <i [class]="clk ? 'pull-right icon-arrow-d discountIconAlignRTL' : 'pull-right icon-arrow-d discountIconAlignRTL rotate'"></i>
+                            </div>
+                            <div *ngIf="!tdata.rotateIcon">
+                                <ncp-element [superParentIndex]="superParentIndex" [indexes]=i [parentIndex]="parentIndex" [element]="tdata" [ncpForm]="groupItem"></ncp-element>
+                            </div>
+                        </span>
+                    </td>
+                </tr>
+            </tbody>
+        </ng-container> -->
+
+        <ng-container *ngSwitchCase="'Ng2Wizard'">
+            <ng2-wizard [config]="element.wizardConfig" [previousTabButton]="element.previousTabButton" [nextTabButton]="element.nextTabButton"
+                [disableNext]="element.disableNext" [disableStickNavButtons]="element.disableStickNavButtons" [eventValidateTabId]="element.eventValidateTabId"
+                [eventNextTabId]="element.eventNextTabId" [eventPreviousTabId]="element.eventPreviousTabId" [eventTabChangeId]="element.eventTabChangeId"
+                [makeNavigationStepsSticky]="element.makeNavigationStepsSticky" [eventNextStepId]="element.eventNextStepId" [eventPreviousStepId]="element.eventPreviousStepId"
+                [screenManipulatorConfig]="element.screenManipulatorConfig === undefined ? {} : element.screenManipulatorConfig"
+                [elementId]="element.elementId" [navigateOnLoadTabIndex]="element.navigateOnLoadTabIndex" [headerInputs]="element.headerInputs" [doNavigateOnTabClick]="element.doNavigateOnTabClick">
+                <ng2-wizard-tab *ngFor="let tabElem of element.elementList;trackBy:tabElem?.uniqueId" [doValidateSubBeforeNavigation]="tabElem.doValidateSubBeforeNavigation || false"
+                    [tabIcon]="tabElem.tabIcon" [tabTitle]="tabElem.tabTitle" [tabId]="tabElem.tabId" [enableStepNavigation]="tabElem.enableStepNavigation"
+                    [screenManipulatorConfig]="tabElem.screenManipulatorConfig === undefined ? {} : tabElem.screenManipulatorConfig">
+                    <ng2-wizard-step *ngIf="!tabElem.enableStepNavigation;else stepNavigationContent">
+                        <ng-container *ngFor="let tabElement of tabElem.elementList;trackBy:tabElement?.uniqueId">
+                            <ncp-element [superParentIndex]="superParentIndex" [fieldTabId]="tabElem.tabId" [parentIndex]="parentIndex" [element]="tabElement"
+                                [ncpForm]="ncpForm">
+                            </ncp-element>
+                        </ng-container>
+                    </ng2-wizard-step>
+                    <ng-template #stepNavigationContent>
+                        <ng-container *ngFor="let tabElement of tabElem.elementList;trackBy:tabElement?.elementId">
+                            <ng2-wizard-step *ngIf="doIncludeInSteps(tabElement)">
+                                <ncp-element [superParentIndex]="superParentIndex" [fieldTabId]="tabElem.tabId" [parentIndex]="parentIndex" [element]="tabElement"
+                                    [ncpForm]="ncpForm">
+                                </ncp-element>
+                            </ng2-wizard-step>
+                        </ng-container>
+                    </ng-template>
+                </ng2-wizard-tab>
+            </ng2-wizard>
+        </ng-container>
+
+        <ng-container *ngSwitchCase="'Accordion'">
+            <accordion [closeOthers]="element.oneAtATime">
+                <accordion-group *ngFor="let accordGrp of element.elementList;trackBy:accordGrp?.uniqueId" [heading]="element.isGetControlValue && elementFormValue ? elementFormValue : accordGrp.heading"
+                    [panelClass]="accordGrp.panelClass" [isDisabled]="accordGrp.isDisabled" [isOpen]="accordGrp.isOpen" [iconClass]="accordGrp.iconClass"
+                    [isStriked]="accordGrp.isStriked" [indexes]="indexes ? indexes + 1 : 1" [showIndex]="accordGrp.showIndex" [offset]="accordGrp.offset || 0">
+                    <ncp-element [superParentIndex]="superParentIndex" [fieldTabId]="fieldTabId" [parentIndex]="parentIndex" *ngFor="let accordElement of accordGrp.elementList;trackBy:accordElement?.uniqueId"
+                        [element]="accordElement" [ncpForm]="elementForm" [indexes]="indexes">
+                    </ncp-element>
+                </accordion-group>
+            </accordion>
+        </ng-container>
+
+    <ng-container *ngSwitchCase="'Collapse'">
+            <expand-collapse [heading]="element.heading" [indexes]="element.enableIndex ? indexes ? indexes + 1 : 1 : ''" [separator]="element.separator"
+                [suffix]="element.suffix" [displayValue1]="elementFormValue" [displayValue2]="secondaryFormValue" [alignment]="element.alignment"
+                [downArrowFlag]="element.downArrowFlag" [collapseId]="element.collapseId" [parentIndex]="parentIndex" [superParentIndex]="superParentIndex"
+                [expandId]="element.expandId" [collapse]="element.collapse" [expand]="element.expand" [hasFirstIndexHeading]="element.hasFirstIndexHeading"
+                [firstIndexHeading]="element.firstIndexHeading" [iconClass]="element.iconClass" [enableAddDelBtn]="element.enableAddDelBtn"
+                [addDelId]="element.addDelId" [disableDelBtn]="element.disableDelBtn" [tooltipTitle]="element.tooltipTitle" [tooltipPlacement]="element.tooltipPlacement"
+                [elementId]="indexes ? element.elementId+indexes :element.elementId">
+            <ncp-element [superParentIndex]="superParentIndex" [fieldTabId]="fieldTabId" [parentIndex]="parentIndex" *ngFor="let collElement of element.elementList;trackBy:collElement?.uniqueId"
+                [element]="collElement" [ncpForm]="elementForm" [indexes]="indexes">
+                </ncp-element>
+            </expand-collapse>
+        </ng-container>
+
+        <ng-container *ngSwitchCase="'Modal'">
+            <ncp-modal [modalKey]="element.modalKey" [modalTitle]="element.modalTitle" [closeOnEscape]="element.closeOnEscape" [closeOnOutsideClick]="element.closeOnOutSideClick"
+                [modalClass]="element.modalClass" [hideCloseButton]="element.hideCloseButton" [cancelButtonLabel]="element.cancelButtonLabel"
+                [submitButtonLabel]="element.submitButtonLabel" [modalOnOpenId]="element.modalOnOpenId" [modalOnCloseId]="element.modalOnCloseId"
+                [overFlowXFlag]="element.overFlowXFlag">
+                <modal-header>
+                    <ng-container *ngFor="let modalHeaderElement of element.elementList;trackBy:modalHeaderElement?.uniqueId">
+                        <ncp-element [superParentIndex]="superParentIndex" [fieldTabId]="fieldTabId" [parentIndex]="parentIndex" *ngIf="modalHeaderElement.type === 'header'"
+                            [element]="modalHeaderElement" [ncpForm]="elementForm">
+                        </ncp-element>
+                    </ng-container>
+                </modal-header>
+                <modal-content>
+                    <ng-container *ngFor="let modalContentElement of element.elementList;trackBy:modalContentElement?.uniqueId">
+                        <ncp-element [superParentIndex]="superParentIndex" [fieldTabId]="fieldTabId" [parentIndex]="parentIndex" *ngIf="modalContentElement.type === 'content'"
+                            [element]="modalContentElement" [ncpForm]="elementForm">
+                        </ncp-element>
+                    </ng-container>
+                </modal-content>
+                <modal-footer>
+                    <ng-container *ngFor="let modalFooterElement of element.elementList;trackBy:modalFooterElement?.uniqueId">
+                        <ncp-element [superParentIndex]="superParentIndex" [fieldTabId]="fieldTabId" [parentIndex]="parentIndex" *ngIf="modalFooterElement.type === 'footer'"
+                            [element]="modalFooterElement" [ncpForm]="elementForm">
+                        </ncp-element>
+                    </ng-container>
+                </modal-footer>
+            </ncp-modal>
+        </ng-container>
+
+        <ng-container *ngSwitchCase="'Row'">
+            <ncp-row [rowClass]="element.rowClass">
+                <ncp-element [superParentIndex]="superParentIndex" [fieldTabId]="fieldTabId" [parentIndex]="parentIndex" *ngFor="let rowItem of element.elementList;trackBy:rowItem?.uniqueId"
+                    [element]="rowItem" [ncpForm]="elementForm" [indexes]="indexes">
+                </ncp-element>
+            </ncp-row>
+        </ng-container>
+
+    <ng-container *ngSwitchCase="'Anchor'">
+            <misc-a [miscClass]="element.anchorClass" [isDisabled]="element.isDisabled" [parentIndex]="parentIndex" [superParentIndex]="superParentIndex"
+                [indexes]="element.enableIndex ? indexes ? indexes + 1 : 1 : ''" [clickId]="element.clickId" [clickParam]="element.isGetValue ? valueElement[element.clickParam] : element.isGetIndex ? indexes : element.isGetControlValue ? elementFormValue : element.clickParam ">
+            <ncp-element [superParentIndex]="superParentIndex" [fieldTabId]="fieldTabId" [parentIndex]="parentIndex" [element]="item"
+                    *ngFor="let item of element.elementList;trackBy:item?.uniqueId" [ncpForm]="elementForm">
+                </ncp-element>
+            </misc-a>
+        </ng-container>
+
+        <ng-container *ngSwitchCase="'Div'">
+            <misc-div [miscClass]="element.divClass" [htmlString]="element.htmlString" [isOdd]="isOdd" [isEven]="isEven" [evenClass]="element.evenClass"
+                [oddClass]="element.oddClass" [isContenteditable]="element.isContenteditable" [translateRequired]="element.translateRequired?element.translateRequired:false">
+                <ncp-element [superParentIndex]="superParentIndex" [fieldTabId]="fieldTabId" [parentIndex]="parentIndex" [valueElement]="valueElement"
+                    [indexes]="indexes" [lastItem]="lastItem" [isOdd]="isOdd" [isEven]="isEven" [element]="item" *ngFor=" let item of element.elementList;trackBy:item?.uniqueId"
+                    [ncpForm]="ncpForm">
+                </ncp-element>
+            </misc-div>
+        </ng-container>
+        <ng-container *ngSwitchCase="'Ul'">
+            <misc-ul [miscClass]="element.ulClass">
+                <ncp-element [superParentIndex]="superParentIndex" [fieldTabId]="fieldTabId" [parentIndex]="parentIndex" [element]="item"
+                    *ngFor=" let item of element.elementList;trackBy:item?.uniqueId" [ncpForm]="ncpForm">
+                </ncp-element>
+            </misc-ul>
+        </ng-container>
+        <ng-container *ngSwitchCase="'Li'">
+            <misc-li [miscClass]="element.liClass">
+                <ncp-element [superParentIndex]="superParentIndex" [fieldTabId]="fieldTabId" [parentIndex]="parentIndex" [element]="item"
+                    *ngFor=" let item of element.elementList;trackBy:item?.uniqueId" [ncpForm]="ncpForm">
+                </ncp-element>
+            </misc-li>
+        </ng-container>
+
+        <ng-container *ngSwitchCase="'Fieldset'">
+            <misc-fieldset [miscClass]="element.fieldSetClass">
+                <ncp-element [superParentIndex]="superParentIndex" [fieldTabId]="fieldTabId" [parentIndex]="parentIndex" [element]="item"
+                    *ngFor=" let item of element.elementList;trackBy:item?.uniqueId" [ncpForm]="ncpForm">
+                </ncp-element>
+            </misc-fieldset>
+        </ng-container>
+
+        <ng-container *ngSwitchCase="'Span'">
+        <misc-span [miscClass]="element.spanClass" [isOdd]="isOdd" [isEven]="isEven" [evenClass]="element.evenClass" [oddClass]="element.oddClass">
+            <ncp-element [superParentIndex]="superParentIndex" [fieldTabId]="fieldTabId" [parentIndex]="parentIndex" [element]="item"
+                    [lastItem]="lastItem" *ngFor=" let item of element.elementList;trackBy:item?.uniqueId" [ncpForm]="ncpForm"
+                    [valueElement]="valueElement" [indexes]="indexes">
+            </ncp-element>
+        </misc-span>
+    </ng-container>
+
+    <ng-container *ngSwitchCase="'Legend'">
+            <misc-legend [miscClass]="element.legendClass">
+                <ncp-element [superParentIndex]="superParentIndex" [fieldTabId]="fieldTabId" [parentIndex]="parentIndex" [element]="item"
+                    [lastItem]="lastItem" *ngFor=" let item of element.elementList;trackBy:item?.uniqueId" [ncpForm]="ncpForm">
+                </ncp-element>
+            </misc-legend>
+        </ng-container>
+
+        <ng-container *ngSwitchCase="'Bold'">
+            <misc-b [isLabel]="element.isLabel" [label]="element.isLabel ? element.label : element.isGetControlValue ? elementFormValue : element.isGetValue ? valueElement ? valueElement[element.valueKey] : ''  : element.label"
+                [append]="lastItem ? '' : element.append">
+            </misc-b>
+        </ng-container>
+
+        <ng-container *ngSwitchCase="'h1'">
+            <misc-h1 [miscClass]="element.h1Class" [iconClass]="element.iconClass" [label]="element.label ? element.label : element.isGetControlValue ? elementFormValue : element.isGetValue ? valueElement[element.valueKey] : element.label" [tooltipTitle]="element.tooltipTitle"
+                [tooltipPlacement]="element.tooltipPlacement" [elementId]="element.elementId">
+                <ncp-element [superParentIndex]="superParentIndex" [fieldTabId]="fieldTabId" [parentIndex]="parentIndex" [element]="item"
+                    *ngFor=" let item of element.elementList;trackBy:item?.uniqueId" [ncpForm]="elementForm">
+                </ncp-element>
+            </misc-h1>
+        </ng-container>
+        <ng-container *ngSwitchCase="'h2'">
+            <misc-h2 [miscClass]="element.h2Class" [iconClass]="element.iconClass" [label]="element.label ? element.label : element.isGetControlValue ? elementFormValue : element.isGetValue ? valueElement[element.valueKey] : element.label" [tooltipTitle]="element.tooltipTitle"
+                [tooltipPlacement]="element.tooltipPlacement" [elementId]="element.elementId">
+                <ncp-element [superParentIndex]="superParentIndex" [fieldTabId]="fieldTabId" [parentIndex]="parentIndex" [element]="item"
+                    *ngFor=" let item of element.elementList;trackBy:item?.uniqueId" [ncpForm]="elementForm">
+                </ncp-element>
+            </misc-h2>
+        </ng-container>
+        <ng-container *ngSwitchCase="'h3'">
+            <misc-h3 [miscClass]="element.h3Class" [iconClass]="element.iconClass" [label]="element.label ? element.label : element.isGetControlValue ? elementFormValue : element.isGetValue ? valueElement[element.valueKey] : element.label" [tooltipTitle]="element.tooltipTitle"
+                [tooltipPlacement]="element.tooltipPlacement" [elementId]="element.elementId">
+                <ncp-element [superParentIndex]="superParentIndex" [fieldTabId]="fieldTabId" [parentIndex]="parentIndex" [element]="item"
+                    *ngFor=" let item of element.elementList;trackBy:item?.uniqueId" [ncpForm]="elementForm">
+                </ncp-element>
+            </misc-h3>
+        </ng-container>
+        <ng-container *ngSwitchCase="'h4'">
+            <misc-h4 [miscClass]="element.h4Class" [iconClass]="element.iconClass" [label]="element.label ? element.label : element.isGetControlValue ? elementFormValue : element.isGetValue ? valueElement[element.valueKey] : element.label" [tooltipTitle]="element.tooltipTitle"
+                [tooltipPlacement]="element.tooltipPlacement" [elementId]="element.elementId">
+                <ncp-element [superParentIndex]="superParentIndex" [fieldTabId]="fieldTabId" [parentIndex]="parentIndex" [element]="item"
+                    [lastItem]="lastItem" *ngFor=" let item of element.elementList;trackBy:item?.uniqueId" [ncpForm]="ncpForm">
+                </ncp-element>
+            </misc-h4>
+        </ng-container>
+        <ng-container *ngSwitchCase="'h5'">
+            <misc-h5 [miscClass]="element.h5Class" [iconClass]="element.iconClass" [label]="element.label ? element.label : element.isGetControlValue ? elementFormValue : element.isGetValue ? valueElement[element.valueKey] : element.label" [tooltipTitle]="element.tooltipTitle"
+                [tooltipPlacement]="element.tooltipPlacement" [elementId]="element.elementId">
+                <ncp-element [superParentIndex]="superParentIndex" [fieldTabId]="fieldTabId" [parentIndex]="parentIndex" [element]="item"
+                    *ngFor=" let item of element.elementList;trackBy:item?.uniqueId" [ncpForm]="elementForm">
+                </ncp-element>
+            </misc-h5>
+        </ng-container>
+        <ng-container *ngSwitchCase="'h6'">
+            <misc-h6 [miscClass]="element.h6Class" [iconClass]="element.iconClass" [label]="element.label ? element.label : element.isGetControlValue ? elementFormValue : element.isGetValue ? valueElement[element.valueKey] : element.label" [tooltipTitle]="element.tooltipTitle"
+                [tooltipPlacement]="element.tooltipPlacement" [elementId]="element.elementId">
+                <ncp-element [superParentIndex]="superParentIndex" [fieldTabId]="fieldTabId" [parentIndex]="parentIndex" [element]="item"
+                    *ngFor=" let item of element.elementList;trackBy:item?.uniqueId" [ncpForm]="elementForm">
+                </ncp-element>
+            </misc-h6>
+        </ng-container>
+        <ng-container *ngSwitchCase="'Display'">
+            <misc-display [isLabel]="element.isLabel" [indexes]="element.enableIndex ? indexes ? indexes + 1 : 1 : ''" [label]="element.isLabel ? element.label : element.isGetControlValue ? elementFormValue : element.isGetValue ? valueElement[element.valueKey] : element.label"
+                [append]="lastItem ? '' : element.append" [class]="element.displayClass" [type]="element.type" [appendAlt]="element.appendAlt"
+				 [dateDisplayType]="element.dateDisplayType">
+            </misc-display>
+        </ng-container>
+        <ng-container *ngSwitchCase="'IFrame'">
+            <misc-iframe [elementId]="element.elementId" [iFrameUrl]="element.iFrameUrl" [frameClass]="element.frameClass">
+        </misc-iframe>
+    </ng-container>
+
+    <ng-container *ngSwitchCase="'Amount'">
+            <amount-field [elementId]="indexes ? element.elementId+indexes :element.elementId" [currencyCode]="element.currencyCode"
+                [symbolDisplay]="element.symbolDisplay" [disabledFlag]="element.disabledFlag" [digit]="element.digit" [placeHolder]="element.placeHolder" [customFlag]="element.customFlag" [elementValue]="elementForm.disabled ?  getElementFormRawValue(elementForm) : elementForm.value" [tooltipTitle]="element.tooltipTitle" [tooltipPlacement]="element.tooltipPlacement" [formControl]="elementForm"
+                [elementLabel]="element.elementLabel" [mandatoryFlag]="element.mandatoryFlag" [acceptPattern]="element.acceptPattern"
+                [superParentIndex]="superParentIndex" [parentIndex]="parentIndex" [index]="indexes" [changeId]="element.changeId" [amountClass]="element.amountClass">
+        </amount-field>
+        </ng-container>
+
+        <ng-container *ngSwitchCase="'Button'">
+            <button-field [buttonType]="element.buttonType" [buttonName]="element.buttonName" [isDisabled]="element.isGetControlValue ? elementFormValue.disabled : element.isDisabled" [buttonClass]="element.buttonClass"
+                [parentIndex]="parentIndex" [superParentIndex]="superParentIndex" [parentIndex]="element.parentIndex" [indexes]="element.enableIndex ? indexes ? indexes + 1 : 1 : ''"
+                [clickId]="element.clickId" [clickParam]="element.isGetValue ? valueElement[element.clickParam] : element.isGetIndex ? indexes : element.isGetControlValue ? elementFormValue : element.clickParam "
+                [iconClass]="element.iconClass" [tooltipTitle]="element.tooltipTitle" [tooltipPlacement]="element.tooltipPlacement"
+                [hasImageIcon]="element.hasImageIcon" [customImageIconClass]="element.customImageIconClass" [imgIconSrc]="element.imgIconSrc" [btnTitle]="element.btnTitle">
+            </button-field>
+    </ng-container>
+
+    <ng-container *ngSwitchCase="'ButtonRadio'">
+        <button-radio [buttonValue1]="element.buttonValue1" [buttonValue2]="element.buttonValue2" [buttonName]="element.buttonName"
+            [connectorName]="element.connectorName" [clickId]="element.clickId" [defaultbuttonOne]="element.defaultButtonOne"
+                [defaultbuttonTwo]="element.defaultButtonTwo" [elementId]="indexes ? element.elementId+indexes :element.elementId"
+                [buttonRadioId1]="element.buttonRadioId1" [buttonRadioId2]="element.buttonRadioId2" [customFlag]="element.customFlag"
+                [buttonradioCustomClass]="element.buttonradioCustomClass" [tooltipTitle]="element.tooltipTitle" [tooltipPlacement]="element.tooltipPlacement"
+                [formControl]="elementForm" [iconClass]="element.iconClass" [iconClass1]="element.iconClass1" [elementLabel]="element.elementLabel"
+                [mandatoryFlag]="element.mandatoryFlag">
+            </button-radio>
+        </ng-container>
+
+        <ng-container *ngSwitchCase="'Checkbox'">
+            <check-box [elementId]="indexes ? element.elementId+indexes :element.elementId" [isLabel]="element.isLabel" [itemLabel]="element.isLabel ? element.itemLabel : element.isGetControlValue ? secondaryFormValue : element.itemLabel"
+                [alignment]="element.alignment" [changeId]="element.changeId" [clickId]="element.clickId" [iconClass]="element.iconClass"
+                [formControl]="elementForm" [tooltipTitle]="element.tooltipTitle" [tooltipPlacement]="element.tooltipPlacement"
+                [checkBoxClass]="element.checkBoxClass" [mandatoryFlag]="element.mandatoryFlag" [parentIndex]="parentIndex" [superParentIndex]="superParentIndex"
+                [indexes]="element.enableIndex ? indexes ? indexes + 1 : 1 : ''" [elementValue]="elementForm.value" [fieldTabId]="fieldTabId">
+            </check-box>
+        </ng-container>
+
+    <ng-container *ngSwitchCase="'Multicheck'">
+            <multi-check [elementId]="indexes ? element.elementId+indexes :element.elementId" [checkboxArray]="element.checkboxArray"
+                [separator]="element.separator" ngDefaultControl>
+        </multi-check>
+    </ng-container>
+
+    <ng-container *ngSwitchCase="'Contact'">
+            <contact-number [elementId]="indexes ? element.elementId+indexes :element.elementId" [dropdownItems]="element.dropdownItems"
+                [placeHolder]="element.placeHolder" [hideArrowFlag]="element.hideArrowFlag" [showCodeFlag]="element.showCodeFlag"
+                [textElementWidth]="element.textElementWidth" [isEnquiryFlag]="element.isEnquiryFlag" [dropElementWidth]="element.dropElementWidth" [tooltipPlacement]="element.tooltipPlacement"
+                [tooltipTitle]="element.tooltipTitle" [formControl]="elementForm" [elementValue]="elementForm.value" [acceptPattern]="element.acceptPattern"
+                [fieldTabId]="fieldTabId" [acceptPattern]="element.acceptPattern" [displayOnClick]="element.displayOnClick" [typeAheadSearch]="element.typeAheadSearch"
+                [customFlag]="element.customFlag" [contactClass]="element.contactClass" [changeId]="element.changeId" [maxLength]="element.maxLength"
+                [disableCode]="element.disableCode" [elementLabel]="element.elementLabel" [mandatoryFlag]="element.mandatoryFlag"
+                [isLazyLoading]="element.isLazyLoading || false" [lazyLoadingOffsetValue]="element.lazyLoadingOffsetValue || 5"
+                [initialItemsNumber]="element.initialItemsNumber || 7" [doDisplayCountryCode]="element.doDisplayCountryCode" [separatorPatternArray]="element.separatorPatternArray">
+        </contact-number>
+    </ng-container>
+    <ng-container *ngSwitchCase="'MultiContact'">
+            <multicontact-number [elementId]="indexes ? element.elementId+indexes :element.elementId" [dropdownItems]="element.dropdownItems"
+                [placeHolder]="element.placeHolder" [hideArrowFlag]="element.hideArrowFlag" [showCodeFlag]="element.showCodeFlag"
+                [textElementWidth]="element.textElementWidth" [dropElementWidth]="element.dropElementWidth" [tooltipPlacement]="element.tooltipPlacement"
+                [tooltipTitle]="element.tooltipTitle" [formControl]="elementForm" [elementControlhome]="secondElementForm" [elementControloffice]="fourthElementForm"
+            [elementControlfax]="thirdElementForm" [elementValue]="elementForm.value" [acceptPattern]="element.acceptPattern"
+            [isEnquiryFlag]="element.isEnquiryFlag" [changeId]="element.changeId" [customFlag]="element.customFlag" [contactClass]="element.contactClass"
+                [ph]="element.contactType" [elementLabel]="element.elementLabel" [mandatoryFlag]="element.mandatoryFlag" [hasStateCode]="element.hasStateCode"
+                [phoneMaxLength]="element.phoneMaxLength" [faxMaxLength]="element.faxMaxLength">
+        </multicontact-number>
+    </ng-container>
+
+    <ng-container *ngSwitchCase="'DOB'">
+            <dateof-birth [elementId]="indexes ? element.elementId+indexes :element.elementId" [ageControl]="secondElementForm" [placeHolder]="element.placeHolder"
+                [customFlag]="element.customFlag" [dobCustomClass]="element.dobCustomClass" [elementValue]="elementForm.disabled ?  '' : elementForm.value"
+                [changeId]="element.changeId" [formControl]="elementForm" [fieldTabId]="fieldTabId" [defaultYear]="element.defaultYear"
+                [hideAgeControl]="element.hideAgeControl ? element.hideAgeControl : false" [minimumAgeGap]="element.minimumAgeGap"
+                [tooltipPlacement]="element.tooltipPlacement" [tooltipTitle]="element.tooltipTitle" [elementLabel]="element.elementLabel"
+                [mandatoryFlag]="element.mandatoryFlag">
+        </dateof-birth>
+    </ng-container>
+
+    <ng-container *ngSwitchCase="'Dropdown'">
+        <drop-down [elementId]="indexes ? element.elementId+indexes :element.elementId" [dropdownItems]="element.dropdownItems" [multipleSelect]="element.multipleSelect"
+            [placeHolder]="element.placeHolder" [tooltipPlacement]="element.tooltipPlacement" [tooltipTitle]="element.tooltipTitle"
+            [hideArrowFlag]="element.hideArrowFlag" [showCodeFlag]="element.showCodeFlag" [pickListFlag]="element.pickListFlag"
+            [miscType]="element.miscType" [miscSubType]="element.miscSubType" [param3Info]="element.param3Info" [param1]="element.param1"
+            [param2]="element.param2" [param3]="element.param3" [param4]="element.param4" [isCodeDesc]="element.isCodeDesc" [descControl]="secondElementForm"
+            [param1Control]="thirdElementForm" [param2Control]="fourthElementForm" [param3Control]="fifthElementForm" [param4Control]="sixthElementForm"
+            [customFlag]="element.customFlag" [formControl]="elementForm" [dropdownClass]="element.dropdownClass" [changeId]="element.changeId"
+            [elementValue]="elementForm.value" [productCode]="element.productCode" [displayCodeAndDesc]="element.displayCodeAndDesc"
+            [displayOnClick]="element.displayOnClick !== undefined ? element.displayOnClick : true" [displayLoader]="element.displayLoader" [fieldTabId]="fieldTabId" [typeAheadSearch]="element.typeAheadSearch"
+            [enableIndex]="element.enableIndex" [excluded]="element.excluded" [noFilter]="element.noFilter !== undefined ? element.noFilter : true"
+            [superParentIndex]="superParentIndex" [parentIndex]="parentIndex" [index]="indexes" [elementLabel]="element.elementLabel" [mandatoryFlag]="element.mandatoryFlag" [isLazyLoading]="element.isLazyLoading || false" 
+            [lazyLoadingOffsetValue]="element.lazyLoadingOffsetValue || 5" [initialItemsNumber]="element.initialItemsNumber || 7" [isAcceptExternalData]="element.isAcceptExternalData" [lobCode]="element.lobCode"  [isSort]="element.isSort"
+            [useCheckBoxMultiSelect]="element.useCheckBoxMultiSelect" [displaySelectAllCheckBox]="element.displaySelectAllCheckBox" [sharedValue]="element.sharedValue" [filterBy]="element.filterBy? element.filterBy:'CODEANDDESC'"
+            [type]="element.type" [displayOnlyCode]="element.displayOnlyCode">
+        </drop-down>
+    </ng-container>
+
+    <ng-container *ngSwitchCase="'Error'">
+        <error-handler [elementControl]="elementForm" [customMessages]="element.customMessages" [showErrorOnBlur]="element.showErrorOnBlur"
+                [skipDirtyCheck]="element.skipDirtyCheck" [customFlag]="element.customFlag" [errorCustomClass]="element.errorCustomClass">
+            </error-handler>
+        </ng-container>
+        <ng-container *ngSwitchCase="'ValidationHandler'">
+            <validation-handler [elementControl]="elementForm" [customMessages]="element.customMessages" [showErrorOnBlur]="element.showErrorOnBlur"
+                [skipDirtyCheck]="element.skipDirtyCheck" [options]="element.validationOptions" [activationID]="element.activationID"
+                [fieldTabId]="fieldTabId">
+            </validation-handler>
+        </ng-container>
+
+        <ng-container *ngSwitchCase="'Label'">
+            <ncp-label [elementLabel]="element.elementLabel" [elementId]="element.id" [mandatoryFlag]="element.mandatoryFlag" [customFlag]="element.customFlag"
+                [labelClass]="element.labelClass" [iconClass]="element.iconClass" [tooltipTitle]="element.tooltipTitle" [tooltipPlacement]="element.tooltipPlacement"
+                [labelInnerClass]="element.labelInnerClass">
+            </ncp-label>
+    </ng-container>
+
+    <ng-container *ngSwitchCase="'DatePicker'">
+        <ncp-date-picker [options]="element.options || {}" [overrideDisableDates]="element.overrideDisableDates" [locale]="element.locale"
+                [disableDate]="element.disableDate" [readonlyInput]="element.readonlyInput" [customFlag]="element.customFlag"
+                [datepickerClass]="element.datepickerClass" [hasImageIcon]="element.hasImageIcon" [changeId]="element.changeId"
+                [formControl]="elementForm" [fieldTabId]="fieldTabId" [tooltipTitle]="element.tooltipTitle" [tooltipPlacement]="element.tooltipPlacement"
+                [elementId]="indexes ? element.elementId+indexes :element.elementId" [elementLabel]="element.elementLabel" [mandatoryFlag]="element.mandatoryFlag"
+                [datePickerInputClass]="element.datePickerInputClass" [customImageIcon]="element.customImageIcon" [imgIconSrc]="element.imgIconSrc"
+                [parentIndex]="parentIndex" [superParentIndex]="superParentIndex" [indexes]="element.enableIndex ? indexes ? indexes + 1 : 1 : ''"
+            [overwriteNonGregorianType]="element.overwriteNonGregorianType ? element.overwriteNonGregorianType : false" [nonGregorianType]="element.nonGregorianType ? element.nonGregorianType : ''">
+        </ncp-date-picker>
+    </ng-container>
+
+    <ng-container *ngSwitchCase="'PlanTable'">
+        <plan-table [planControl]="elementForm" [productCode]="element.productCode" [selectText]="element.selectText" [unSelectText]="element.unSelectText"
+            [policyViewText]="element.policyViewText" [keyViewText]="element.keyViewText" [planSelectText]="element.planSelectText"
+            [selectedPlanText]="element.selectedPlanText" [unSelectedPlanText]="element.unSelectedPlanText" [showPlansInSinglePage]="element.showPlansInSinglePage"
+                [filterByCoverageGrpCode]="element.filterByCoverageGrpCode" [noOfColumns]="element.noOfColumns" [doFilterZeroCovgSi]="element.doFilterZeroCovgSi"
+                [enquiryFlag]="element.isEnquiryFlag" [doFilterZeroPremiumPlans]="element.doFilterZeroPremiumPlans !== undefined ? element.doFilterZeroPremiumPlans : true"
+                [showCoveragePremimum]="element.showCoveragePremimum" [premiumBreakupText]="element.premiumBreakupText" [siBreakupText]="element.siBreakupText">
+            <ncp-element [superParentIndex]="superParentIndex" [fieldTabId]="fieldTabId" [parentIndex]="parentIndex" *ngFor=" let item of element.elementList;trackBy:item?.uniqueId"
+                [element]="item" [ncpForm]="elementForm">
+            </ncp-element>
+        </plan-table>
+    </ng-container>
+    <ng-container *ngSwitchCase="'Radio'">
+            <radio-button [elementId]="indexes ? element.elementId+indexes :element.elementId" [radioArray]="element.radioArray || []"
+                [radioName]=" indexes ? element.radioName+indexes :element.radioName" [horizontalflag]="element.horizontalflag"
+            [formControl]="element.isExcludeControl ?  dummyControl : elementForm" [customFlag]="element.customFlag" [radioCustomClass]="element.radioCustomClass"
+                [type]="element.type" [iconClass]="element.iconClass" [indexes]="element.enableIndex ? indexes ? indexes : 1 : ''"
+                [changeId]="element.changeId" ngDefaultControl [fieldTabId]="fieldTabId" [elementLabel]="element.elementLabel"
+                [mandatoryFlag]="element.mandatoryFlag" [pickListFlag]="element.pickListFlag" [miscType]="element.miscType" [miscSubType]="element.miscSubType"
+                [param1]="element.param1" [descControl]="secondElementForm" [productCode]="element.productCode" [param2]="element.param2"
+                [param3]="element.param3" [param4]="element.param4" [param1Control]="thirdElementForm" [param2Control]="fourthElementForm"
+                [param3Control]="fifthElementForm" [param4Control]="sixthElementForm" [displayLoader]="element.displayLoader"
+                [hasImageIcon]="element.hasImageIcon" [imgIconSrc]="element.imgIconSrc" [customImageIcon]="element.customImageIcon"
+                [countPerRow]="element.countPerRow || 3" [superParentIndex]="superParentIndex" [parentIndex]="parentIndex">
+        </radio-button>
+    </ng-container>
+
+    <ng-container *ngSwitchCase="'SelectButton'">
+            <ncp-selectButton [elementId]="indexes ? element.elementId+indexes :element.elementId" [options]="element.options || []"
+                [tabindex]="element.tabindex" [multiple]="element.multiple" [style]="element.style" [styleClass]="element.styleClass"
+                [formControl]="elementForm" [customFlag]="element.customFlag" [selectButtonClass]="element.selectButtonClass"
+                [changeId]="element.changeId" [tooltipTitle]="element.tooltipTitle" [iconClass]="element.iconClass" [tooltipPlacement]="element.tooltipPlacement"
+                [elementLabel]="element.elementLabel" [descControl]="secondElementForm" [productCode]="element.productCode" [mandatoryFlag]="element.mandatoryFlag"
+                [wrapperClass]="element.wrapperClass" [pickListFlag]="element.pickListFlag" [miscType]="element.miscType" [miscSubType]="element.miscSubType"
+                [param1]="element.param1" [param2]="element.param2" [param3]="element.param3" [param4]="element.param4" [param1Control]="thirdElementForm"
+                [param2Control]="fourthElementForm" [param3Control]="fifthElementForm" [param4Control]="sixthElementForm" [displayLoader]="element.displayLoader"
+                [countPerRow]="element.countPerRow || 3" [favLabel]="element.favLabel">
+        </ncp-selectButton>
+    </ng-container>
+
+    <ng-container *ngSwitchCase="'SelectDrop'">
+            <select-drop [elementId]="indexes ? element.elementId+indexes :element.elementId" [selectDropCustomClass]="element.selectDropCustomClass"
+                [dropdownItems]="element.dropdownItems" [customFlag]="element.customFlag" [tooltipTitle]="element.tooltipTitle"
+                [tooltipPlacement]="element.tooltipPlacement" [formControl]="elementForm" [changeId]="element.changeId" [fieldTabId]="fieldTabId"
+                [elementLabel]="element.elementLabel" [mandatoryFlag]="element.mandatoryFlag" [hasOnlyCode]="element.hasOnlyCode">
+        </select-drop>
+    </ng-container>
+
+    <ng-container *ngSwitchCase="'SubHeading'">
+            <sub-heading [heading]="element.heading" [customFlag]="element.customFlag" [subheadingCustomClass]="element.subheadingCustomClass"
+                [tooltipTitle]="element.tooltipTitle" [tooltipPlacement]="element.tooltipPlacement" [elementId]="indexes ? element.elementId+indexes :element.elementId">
+        </sub-heading>
+    </ng-container>
+
+    <ng-container *ngSwitchCase="'TextArea'">
+            <text-area [elementId]="indexes ? element.elementId+indexes :element.elementId" [placeHolder]="element.placeHolder" [customFlag]="element.customFlag"
+                [disableClassFlag]="element.disableClassFlag" [textAreaRow]="element.textAreaRow" [textAreaCol]="element.textAreaCol"
+                [tooltipTitle]="element.tooltipTitle" [tooltipPlacement]="element.tooltipPlacement" [formControl]="element.isExcludeControl ?     dummyControl : elementForm"
+                [textareaClass]="element.textareaClass" [disabledFlag]="element.disabledFlag" [displayValue]="element.displayValue"
+                [maxLength]="element.maxLength" [fieldTabId]="fieldTabId" [elementLabel]="element.elementLabel" [mandatoryFlag]="element.mandatoryFlag"
+                [changeId]="element.changeId">
+        </text-area>
+    </ng-container>
+
+    <ng-container *ngSwitchCase="'Textbox'">
+            <text-box [elementId]="indexes ? element.elementId+indexes :element.elementId" [customFlag]="element.customFlag" [inputType]="element.inputType"
+                [superParentIndex]="superParentIndex" [parentIndex]="parentIndex" [index]="indexes" [placeHolder]="element.placeHolder"
+                [textAlign]="element.textAlign" [buttonText]="element.buttonText" [clickId]="element.clickId" [changeId]="element.changeId"
+                [tooltipTitle]="element.tooltipTitle" [tooltipPlacement]="element.tooltipPlacement" [formControl]="elementForm"
+                [elementValue]="elementForm.disabled ?  '' : elementForm.value" [disabledFlag]="element.disabledFlag" [buttonType]="element.buttonType"
+                [buttonClass]="element.buttonClass" [textBoxClass]="element.textBoxClass" [acceptPattern]="element.acceptPattern"
+            [maxLength]="element.maxLength" [maxValue]="element.maxValue" [minValue]="element.minValue" [fieldTabId]="fieldTabId"
+                [updateOnChange]="element.updateOnChange" [elementLabel]="element.elementLabel" [mandatoryFlag]="element.mandatoryFlag"
+                [textBoxInputClass]="element.textBoxInputClass" [iconClass]="element.iconClass" [hasImageIcon]="element.hasImageIcon"
+                [imgIconSrc]="element.imgIconSrc" [customImageIcon]="element.customImageIcon">
+        </text-box>
+    </ng-container>
+    <ng-container *ngSwitchCase="'TimePicker'">
+            <time-picker [elementId]="indexes ? element.elementId+indexes :element.elementId" [placeHolder]="element.placeHolder" [formControl]="elementForm"
+                [customFlag]="element.customFlag" [timeFormat]="element.timeFormat" [readOnlyFlag]="element.timeFormat" [inputClass]="element.timeFormat"
+                [time12hrControl]="secondElementForm" [timePickerClass]="element.timePickerClass" [tooltipPlacement]="element.tooltipPlacement"
+                [tooltipTitle]="element.tooltipTitle" [elementLabel]="element.elementLabel" [mandatoryFlag]="element.mandatoryFlag"
+                [defaultTime]="element.defaultTime">
+        </time-picker>
+    </ng-container>
+
+    <ng-container *ngSwitchCase="'TabHeaderError'">
+        <tab-error [displayFlag]="element.displayFlag" [errorMessage]="element.errorMessage">
+        </tab-error>
+    </ng-container>
+
+    <ng-container *ngSwitchCase="'Icon'">
+        <misc-i [miscClass]="element.iconClass"></misc-i>
+    </ng-container>
+    <ng-container *ngSwitchCase="'ItemBlocks'">
+        <item-block [labelControl]="secondElementForm" [premiumBlock]="element.premiumBlock" [premiumLabel]="element.premiumLabel"
+            [amountControl]="elementForm" [isDisabled]="element.isDisabled" [hasSlider]="element.hasSlider" [productCode]="element.productCode"
+                [indexes]="indexes" [superParentIndex]="superParentIndex" [parentIndex]="parentIndex" [showDelBtn]="element.showDelBtn"
+                [clickId]="element.clickId"></item-block>
+    </ng-container>
+    <ng-container *ngSwitchCase="'AddressLookUp'">
+        <address-lookup [elementId]="element.elementId" [placeHolder]="element.placeHolder" [disabledFlag]="element.disabledFlag"
+            [textAlign]="element.textAlign" [buttonText]="element.buttonText" [maxLength]="element.maxLength">
+        </address-lookup>
+    </ng-container>
+    <ng-container *ngSwitchCase="'Counter'">
+            <counter [elementId]="indexes ? element.elementId+indexes :element.elementId" [elementControl]="elementForm" [counterMin]="element.counterMin"
+                [counterMax]="element.counterMax" [tooltipPlacement]="element.tooltipPlacement" [tooltipTitle]="element.tooltipTitle"
+                [inputType]="element.inputType" [acceptPattern]="element.acceptPattern ? element.acceptPattern :'^[1-9][0-9]*$'"
+            [changeId]="element.changeId" [fieldTabId]="fieldTabId" [placeholder]="element.placeholder ? element.placeholder : ''"
+                [customFlag]="element.customFlag" [wrapperClass]="element.wrapperClass" [elementLabel]="element.elementLabel"
+                [mandatoryFlag]="element.mandatoryFlag" [decrementBtnText]="element.decrementBtnText" [incrementBtnText]="element.incrementBtnText">
+        </counter>
+    </ng-container>
+
+    <ng-container *ngSwitchCase="'SummaryTable'">
+        <summary-table [tableControl]="elementForm" [LOB]="element.LOB" [summaryTableClass]="element.summaryTableClass" [isEndorsementFlag]="element.isEndorsementFlag"
+            [project]="element.project ? element.project : ''" [transactionType]="element.transactionType"></summary-table>
+    </ng-container>
+    <ng-container *ngSwitchCase="'CoverTable'">
+            <cover-table [tableControl]="elementForm" [productCode]="element.productCode" [coverageHeader]="element.coverageHeader" [coverageMapping]="element.coverageMapping"
+                [endtReasonCode]="element.endtReasonCode" [planIndex]="element.planIndex" [sectionClass]="secondElementForm"></cover-table>
+    </ng-container>
+    <ng-container *ngSwitchCase="'ManufacturingAge'">
+            <manufacturing-age [elementId]="indexes ? element.elementId+indexes :element.elementId" [ageControl]="secondElementForm"
+                [placeHolder]="element.placeHolder" [dobCustomClass]="element.dobCustomClass" [changeId]="element.changeId" [elementControl]="elementForm"
+                [tooltipPlacement]="element.tooltipPlacement" [tooltipTitle]="element.tooltipTitle" [hideAgeControl]="element.hideAgeControl ? element.hideAgeControl : false"
+                [elementLabel]="element.elementLabel" [mandatoryFlag]="element.mandatoryFlag">
+        </manufacturing-age>
+    </ng-container>
+
+        <ng-container *ngSwitchCase="'ListView'">
+            <list-view [formControl]="elementForm" [tooltipPlacement]="element.tooltipPlacement" [tooltipTitle]="element.tooltipTitle">
+            </list-view>
+        </ng-container>
+    <ng-container *ngSwitchCase="'Slider'">
+            <slider [formControl]="elementForm" [animate]="element.animate" [readOnly]="element.readOnly" [min]="element.min" [max]="element.max" [step]="element.step" [range]="element.range" [hasTooltip]="element.hasTooltip" [tooltipPlacement]="element.tooltipPlacement" [sliderClass]="element.sliderClass" [styleClass]="element.styleClass" [customFlag]="element.customFlag" [elementLabel]="element.elementLabel" [mandatoryFlag]="element.mandatoryFlag"></slider>
+    </ng-container>
+    <ng-container *ngSwitchCase="'PaymentGateway'">
+            <payment-gateway [paymentInfo]="element.paymentInfo" [elementId]="element.elementId" [formValue]="element.formValue" [isCancelButtonRequired]="element.isCancelButtonRequired" [disablePaymentButtonId]="element.disablePaymentButtonId"></payment-gateway>
+    </ng-container>
+    <ng-container *ngSwitchCase="'CoverageDisplay'">
+            <coverage-display [plans]="element.plans" [productCode]="element.productCode" [riskInfoArray]="element.riskInfoArray" [selectedRiskIndex]="element.selectedRiskIndex"
+                [elementId]="element.elementId" [selectedPlanIndex]="element.selectedPlanIndex"></coverage-display>
+    </ng-container>
+    <ng-container *ngSwitchCase="'Declarations'">
+        <ncp-declarations [agreeAllDecelerationsCondition]="element.agreeAllDecelerationsCondition" [elementControl]="elementForm"
+            [secondaryFormName]="secondElementForm" [thirdElementForm]="thirdElementForm" [fourthElementForm]="fourthElementForm"
+            [importantNotice]="element.importantNotice" [warrantyAndDeclaration]="element.warrantyAndDeclaration" [personalDataProtectionActStatement]="element.personalDataProtectionActStatement"
+            [firstHeading]="element.firstHeading" [secondHeading]="element.secondHeading" [thirdHeading]="element.thirdHeading"
+            [hideIndividualCheckBoxCondition]="element.hideIndividualCheckBoxCondition" [changeId]="element.changeId"></ncp-declarations>
+    </ng-container>
+    <ng-container *ngSwitchCase="'AutoRenewal'">
+        <auto-renewal [renewalPlanControl]="elementForm">
+        </auto-renewal>
+    </ng-container>
+    <ng-container *ngSwitchCase="'Image'">
+            <misc-img [src]="element.src" [alt]="element.alt" [miscClass]="element.imgClass" [useBackgroundImage]="element.useBackgroundImage"
+                [backgroundImgURL]="element.backgroundImgURL" [customImgBoxContainerClass]="element.customImgBoxContainerClass"
+        [doExtractSVG]="element.doExtractSVG" [customHeight]="element.height" [customWidth]="element.width">
+        </misc-img>
+    </ng-container>
+    <ng-container *ngSwitchCase="'MultiCurrency'">
+            <multi-currency [elementId]="indexes ? element.elementId+indexes :element.elementId" [placeHolder]="element.placeHolder"
+                [tooltipPlacement]="element.tooltipPlacement" [tooltipTitle]="element.tooltipTitle" [elementControl]="elementForm"
+                [secondaryFormName]="secondElementForm" [thirdFormName]="thirdElementForm" [customFlag]="element.customFlag"
+                [changeId]="element.changeId" [elementValue]="elementForm.value">
+        </multi-currency>
+    </ng-container>
+    <ng-container *ngSwitchCase="'Navigator'">
+        <navigator [eventNextStepId]="element.eventNextStepId" [eventPreviousStepId]="element.eventPreviousStepId" [eventDoCheckForNext]="element.eventDoCheckForNext"
+                [navButtonPosition]="element.navButtonPosition" [prevButtonPosition]="element.prevButtonPosition" [nextButtonPosition]="element.nextButtonPosition"
+                [nextButtonTemplate]="element.nextButtonTemplate" [prevButtonTemplate]="element.prevButtonTemplate" [screenManipulatorConfig]="element.screenManipulatorConfig === undefined ? {} : element.screenManipulatorConfig"
+                [elementId]="element.elementId" [nextBtnNavigatorImageSrc]="element.nextBtnNavigatorImageSrc" [prevBtnNavigatorImageSrc]="element.prevBtnNavigatorImageSrc"
+                [doShowStepTitles]="element.doShowStepTitles || false" [hasClickableStepTitles]="element.hasClickableStepTitles || false"
+                [doShowProgressBar]="element.doShowProgressBar || true" [helpBtnImageSrc]="element.helpBtnImageSrc" [doShowCompleteBtn]="element.doShowCompleteBtn || false"
+                [progressOffset]="element.progressOffset || 0">
+                <navigator-step class="navigatorStep" *ngFor="let stepElem of element.elementList;trackBy:stepElem?.uniqueId" [stepTitle]="stepElem.stepTitle"
+                    [eventValidateStepId]="stepElem.eventValidateStepId" [isValid]="stepElem.isValid !== undefined ? stepElem.isValid : true"
+                    [stepId]="stepElem.stepId" [doCheckForNext]="stepElem.doCheckForNext" [nextStepId]="stepElem.nextStepId"
+                    [showPrev]="stepElem.showPrev !== undefined ? stepElem.showPrev : true" [showNext]="stepElem.showNext !== undefined ? stepElem.showNext : true"
+                    [goToStepIdWithoutNavigateButton]="stepElem.goToStepIdWithoutNavigateButton" [doValidate]="stepElem.doValidate !== undefined ? stepElem.doValidate : true"
+                    [animationClass]="stepElem.animationClass" [nextStepButtonName]="stepElem.nextStepButtonName ? stepElem.nextStepButtonName : 'NEXT'"
+            [screenManipulatorConfig]="stepElem.screenManipulatorConfig === undefined ? {} : stepElem.screenManipulatorConfig">
+                <ng-container *ngFor="let tabElement of stepElem.elementList;trackBy:tabElement?.uniqueId">
+                    <ncp-element [superParentIndex]="superParentIndex" [fieldTabId]="stepElem.tabId" [parentIndex]="parentIndex" [element]="tabElement"
+                        [ncpForm]="ncpForm">
+                    </ncp-element>
+                </ng-container>
+            </navigator-step>
+        </navigator>
+    </ng-container>
+    <ng-container *ngSwitchCase="'DatePickerDOB'">
+            <datepickerdob [elementId]="element.elementId" [options]="element.options" [ageControl]="secondElementForm" [placeHolder]="element.placeHolder"
+                [customFlag]="element.customFlag" [dobCustomClass]="element.dobCustomClass" [elementValue]="elementForm.disabled ?  '' : elementForm.value"
+                [changeId]="element.changeId" [formControl]="elementForm" [fieldTabId]="fieldTabId" [datepickerClass]="element.datepickerClass"
+            [overwriteNonGregorianType]="element.overwriteNonGregorianType ? element.overwriteNonGregorianType : false" [nonGregorianType]="element.nonGregorianType ? element.nonGregorianType : ''">
+            </datepickerdob>
+    </ng-container>
+    <ng-container *ngSwitchCase="'Include'">
+            <ncp-element [superParentIndex]="superParentIndex" [fieldTabId]="fieldTabId" [parentIndex]="parentIndex" [element]="item"
+            [ncpForm]="elementForm" [valueElement]="valueElement" *ngFor="let item of element.elementList;trackBy:item?.uniqueId">
+            </ncp-element>
+    </ng-container>
+
+    <ng-container *ngSwitchCase="'RangeSlider'">
+            <rangeslider [min]="element.min" [elementControl]="elementForm" [type]="element.type" [max]="element.max" [from]="element.from"
+                [to]="element.to" [from_min]="element.from_min" [from_max]="element.from_max" [from_shadow]="element.from_shadow"
+                [to_min]="element.to_min" [to_max]="element.to_max" [to_shadow]="element.to_shadow" [grid]="element.grid" [grid_num]="element.grid_num" 
+                [prefix]="element.prefix" [postfix]="element.postfix" [decorate_both]="element.decorate_both" [step]="element.step"
+                [isDisabled]="element.isDisabled" [values]="element.values" [customFlag]="element.customFlag" [changeId]="element.changeId"
+                [rangeSliderCustomClass]="element.rangeSliderCustomClass">
+        </rangeslider>
+    </ng-container>
+
+    <ng-container *ngSwitchCase="'TableSimple'">
+            <table-simple [elementId]="element.elementId" [tableData]="element.tableData" [mappingList]="element.mappingList" [headerList]="element.headerList"
+                [hasCustomProperties]="element.hasCustomProperties">
+            </table-simple>
+    </ng-container>
+    </div>
+</ng-container>

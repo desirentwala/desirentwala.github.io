@@ -1,0 +1,26 @@
+  <!-- <ion-content class="text-center">
+    <ion-card>
+      <ion-icon name="close-circle"></ion-icon>
+      <ion-title class="text-center">
+        <h1>Payment failed</h1>
+      </ion-title>
+      <div class="mt-4">
+        <ion-button class="mt-4">Retry payment</ion-button>
+      </div>
+    </ion-card>
+  </ion-content>
+ -->
+ <ion-content class="text-center">
+  <ion-card class="cancel-card pt-5">
+    <div class="text-center">
+      <div class=" text-center Oval">
+        <i class="fal fa-exclamation-circle icon mt-4"></i>
+      </div>
+      <h1 class="appt-success">We are really sorry…</h1>
+    </div>
+    <div class="text-center" ><strong> Please retry again or come back at a later time to continue </strong></div>
+    <div class="mt-4">
+      <ion-button class="mt-4" (click)="manageAppointment()">Manage my appointment</ion-button>
+    </div>
+  </ion-card>
+</ion-content>

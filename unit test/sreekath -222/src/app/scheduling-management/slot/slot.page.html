@@ -1,0 +1,93 @@
+<div class="ion-padding">
+  <div class="box" [class.opened]="value">
+    <form #slotForm="ngForm">
+      <div class="ion-padding border border-light showdow p-3 mb-5 bg-white addslot">
+        <div class="border-bottom">
+          <p class="Schedule-An-Appointm">Add / Edit vet slot</p>
+        </div>
+        <ion-label>Choose a vet</ion-label><i class="fas fa-asterisk form-asterisk"></i>
+        <div>
+          <select class="vet-drop-down" #vet="ngModel" name="vets" placeholder="Select"
+            [(ngModel)]="model.userId" required (change)="vetSelection(model.userId)">
+            <option *ngFor="let vet of vetList" [value]="vet.id">
+              {{vet.firstName}} {{vet.lastName}}
+            </option>
+          </select>
+        </div>
+        <ion-row>
+          <ion-col size="6" size-lg size-md size-sm no-padding>
+            <ion-label>Appointment date</ion-label><i class="fas fa-asterisk form-asterisk"></i>
+            <ion-input type="date" [(ngModel)]="model.date" class="date-time" (ngModelChange)="dateValidation($event)"
+              #calendar="ngModel" name="calendar" required [min]="today">
+              <ion-icon name="calendar" class="icon"></ion-icon>
+            </ion-input>
+            <div class="text-danger" *ngIf="isInvalid">
+              <small>Invalid date</small>
+            </div>
+          </ion-col>
+          <ion-col size="6" size-lg size-md size-sm no-padding>
+            <ion-label>Appointment time</ion-label><i class="fas fa-asterisk form-asterisk"></i>
+            <ion-input type="time" [(ngModel)]="model.time" class="date-time"
+              #timeCal="ngModel" name="timeCal" min="09:00" max="20:00" required>
+              <ion-icon name="time" class="icon"></ion-icon>
+            </ion-input>
+          </ion-col>
+        </ion-row>
+        <ion-label>Duration (minutes)</ion-label><i class="fas fa-asterisk form-asterisk"></i>
+        <div>
+            <select class="date-time" placeholder="Select"
+              [(ngModel)]="model.duration" #timeSlot="ngModel" name="timeSlots" required>
+              <option *ngFor="let minutes of timeslots">
+                {{minutes}}
+              </option>
+            </select>
+          </div>
+        <ion-radio-group>
+          <ion-label>Booking slot type</ion-label>
+          <div class="row p-3">
+            <ion-radio mode="md" checked={{isPublicChecked}} value="public" (ionSelect)="isPrivate('public')"></ion-radio>
+            <ion-label class="radio-label">Public</ion-label>
+            <ion-radio mode="md" checked={{isPrivateChecked}} value="private" (ionSelect)="isPrivate('private')"></ion-radio>
+            <ion-label class="radio-label">Private</ion-label>
+          </div>
+        </ion-radio-group>
+        <div *ngIf="model.isPrivate">
+          <div>
+            <ion-label>Appointment type</ion-label><i class="fas fa-asterisk form-asterisk"></i>
+            <select class="vet-drop-down" #cost="ngModel" name="cost" placeholder="Select"
+              [(ngModel)]="model.practiceAppointmentTypeId" required>
+              <option *ngFor="let a of appointmentTypes" [value]="a.id">
+                {{a.appointmentType}} - £&nbsp;{{a.customerFee}}
+              </option>
+            </select>
+          </div>
+        <!-- <ion-row>
+          <ion-col size="6" size-lg size-md size-sm> -->
+            <div class="mb-4">
+              <ion-label>Customer email</ion-label><i class="fas fa-asterisk form-asterisk"></i>
+              <select class="vet-drop-down" #email="ngModel" name="email" placeholder="Select"
+              [(ngModel)]="model.email" (change)="emailSelect(model.email)"  required>
+                <option *ngFor="let c of customerDetails" [value]="c.email">
+                  {{c.email}}
+                </option>
+              </select>
+            </div>
+            <!-- <ion-input type="text" [(ngModel)]="model.email" class="vet-drop-down"
+              #email="ngModel" name="email" pattern="^[a-zA-Z0-9.!#$%&amp;'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]{2,63})*$" required>
+            </ion-input>
+            <div class="text-danger" *ngIf="email.invalid && (email.dirty || email.touched)">
+              <small class="inline" *ngIf="email.errors.pattern">Invalid email address.</small>
+              <small class="inline" *ngIf="email.errors.required">Email address required.</small>
+            </div> -->
+          <!-- </ion-col>
+        </ion-row> -->
+        </div>
+        <div>
+          <button class="Rectangle" [disabled]="!(slotForm.valid) || isInvalid" (click)="createSlot(); value = false">Save
+          </button>
+          <button class="CANCEL" (click)="close();value = false">Cancel</button>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>

@@ -1,0 +1,182 @@
+<div [id]="elementId" *ngIf="!customFlag" class="col-md-5 col-sm-6 col-xs-11 pr-sm-0">
+  <p class="mainFloatLabel">{{elementLabel | translate}}<span *ngIf="mandatoryFlag" class="aste">*</span></p>
+  <div class="col-md-3 col-xs-3 col-sm-3 pr10 pl0 pr-sm-10 pr-xs-5 contactAlignRTL">
+    <drop-down [elementId]="elementId" [placeHolder]="placeHolder" [dropdownItems]="phonetype" [hideArrowFlag]="hideArrowFlag" 
+      [showCodeFlag]="showCodeFlag" [formControl]="dropElementControlcontacttype" [elementValue]="dropElementControlcontacttype.value"
+      class="contact-no" displayOnClick=true customFlag=true></drop-down>
+  </div>
+  <error-handler [elementControl]="dropElementControlcontacttype" [customMessages]="{required: 'NCPLabelcustomMessages.pleaseEntervalidphonenumber'}">
+  </error-handler>
+  <div id="ph" *ngIf="ph == 'Phone'">
+    <div class="col-md-3 col-xs-3 col-sm-3 pr10 pl0 pr-sm-10 pr-xs-5 contactAlignRTL">
+      <drop-down [elementId]="elementId"  [formControl]="dropElementControl" [placeHolder]="placeHolder" pickListFlag="true" miscType="MiscInfo"
+        miscSubType="MOBCD" [noFilter]="'false'" [hideArrowFlag]="hideArrowFlag" [showCodeFlag]="showCodeFlag" [elementValue]="dropElementControl.value"
+        (click)="changeValue()" class="contact-no"  displayOnClick=true customFlag=true></drop-down>
+    </div>
+    <div *ngIf="!hasStateCode"  class="col-md-6 col-xs-6 col-sm-6 p0">
+      <text-box class="inputType" [formControl]="textElementControl" customFlag=true [elementValue]="textElementControl.value"
+        placeHolder="{{placeHolder | translate}}" (click)="changeValue()" [acceptPattern]="acceptPattern" [maxLength]="phoneMaxLength"></text-box>
+        <a *ngIf="callPhoneString!== ''" [href]="callPhoneString" class="mobileNumberAnchor" >
+          <i class="fa fa-phone" aria-hidden="true"></i> 
+          <span>{{ callPhoneString }}</span>
+        </a>
+    </div>
+    <div *ngIf="hasStateCode"  class="col-md-6 col-xs-6 col-sm-6 p0">
+      <text-box class="inputType" [formControl]="textElementControlphone1" customFlag=true [elementValue]="textElementControlphone1.value"
+        placeHolder="{{placeHolder | translate}}" (click)="changeValue()" [acceptPattern]="acceptPattern[0]" textBoxClass="col-md-5 col-xs-5 col-sm-5 pr10 pl0 pr-sm-10 pr-xs-5 contactAlignRTL" maxLength="3"></text-box> 
+        <text-box class="inputType" [formControl]="textElementControlphone2" customFlag=true [elementValue]="textElementControlphone2.value"
+        placeHolder="{{placeHolder | translate}}" (click)="changeValue()" [acceptPattern]="acceptPattern[1]" textBoxClass="col-md-7 col-xs-7 col-sm-7 p0" [maxLength]="phoneMaxLength"></text-box> 
+          <a *ngIf="callPhoneString!== ''" [href]="callPhoneString" class="mobileNumberAnchor" >
+            <i class="fa fa-phone" aria-hidden="true"></i> 
+            <span>{{ callPhoneString }}</span>
+          </a>
+      </div>
+  </div>
+
+  <div id="hm" *ngIf="ph == 'Home'">
+    <div class="col-lg-9 col-md-9 col-sm-9 col-xs-9 input-append plr0">
+
+        <div class="col-md-3 col-sm-3 col-xs-3 p0">
+          <input type="text" class="form-control join" datatype="NUMBER" [formControl]="textElementControlhome1" onkeypress='return event.charCode >= 48 && event.charCode <= 57'>
+        <i class="floatBorder"></i>
+        </div>
+        <div class="col-md-3 col-sm-3 col-xs-3 p0">
+      <input type="text" id="home2" class="form-control join" datatype="NUMBER" data-opt="noValue" [formControl]="textElementControlhome2" onkeypress='return event.charCode >= 48 && event.charCode <= 57'>
+        <i class="floatBorder"></i>
+        </div>
+        <div class="col-md-3 col-sm-3 col-xs-3 p0">
+      <input type="text" id="home3" class="form-control join" datatype="NUMBER" data-opt="noValue" [formControl]="textElementControlhome3" onkeypress='return event.charCode >= 48 && event.charCode <= 57'>
+        <i class="floatBorder"></i>
+        </div>
+        <div class="col-md-3 col-sm-3 col-xs-3 p0">
+      <input type="text" id="home4" class="form-control join" datatype="NUMBER" maxlength="3" data-opt="noValue" [formControl]="textElementControlhome4" onkeypress='return event.charCode >= 48 && event.charCode <= 57'>
+        <i class="floatBorder"></i>
+        </div>
+    </div>
+  </div>
+
+  <div id="of" *ngIf="ph == 'Office'">
+    <div class="col-lg-9 col-md-9 col-sm-9 col-xs-9 input-append plr0">
+        <div class="col-md-3 col-sm-3 col-xs-3 p0">
+           <input type="text" class="form-control join" datatype="NUMBER" [formControl]="textElementControloffice1" onkeypress='return event.charCode >= 48 && event.charCode <= 57'>
+          <i class="floatBorder"></i>
+        </div>
+        <div class="col-md-3 col-sm-3 col-xs-3 p0">
+          <input type="text" id="office2" class="form-control join" datatype="NUMBER" data-opt="noValue" [formControl]="textElementControloffice2" onkeypress='return event.charCode >= 48 && event.charCode <= 57'>
+          <i class="floatBorder"></i>
+        </div>
+        <div class="col-md-3 col-sm-3 col-xs-3 p0">
+          <input type="text" id="office3" class="form-control join" datatype="NUMBER"
+            data-opt="noValue" [formControl]="textElementControloffice3" onkeypress='return event.charCode >= 48 && event.charCode <= 57'>
+          <i class="floatBorder"></i>
+        </div>
+        <div class="col-md-3 col-sm-3 col-xs-3 p0">
+          <input type="text" id="office4" class="form-control join" datatype="NUMBER"
+              maxlength="3" data-opt="noValue" [formControl]="textElementControloffice4" onkeypress='return event.charCode >= 48 && event.charCode <= 57'>
+          <i class="floatBorder"></i>
+        </div>
+    </div>
+  </div>
+ 
+  <div id="fax" *ngIf="ph == 'FAX'" class="col-md-9 col-xs-9 col-sm-9 p0">
+    <text-box class="inputType mobile-number" [formControl]="textElementControlfax" customFlag=true placeHolder="{{placeHolder | translate}}"
+      [elementValue]="textElementControlfax.value" (click)="changeValue()" [acceptPattern]="acceptPattern" width="50" size="3" [maxLength]="faxMaxLength" ></text-box>
+  </div>
+</div>
+
+<div [id]="elementId" *ngIf="customFlag" [class]="customNcpContactClass">
+  <p class="mainFloatLabel">{{elementLabel | translate}}<span *ngIf="mandatoryFlag" class="aste">*</span></p>
+  <div class="col-md-3 col-xs-3 col-sm-3 pr10 pl0 pr-sm-10 pr-xs-5 contactAlignRTL">
+    <drop-down [elementId]="elementId" [placeHolder]="placeHolder" [dropdownItems]="phonetype" [hideArrowFlag]="hideArrowFlag"
+      [showCodeFlag]="showCodeFlag" [formControl]="dropElementControlcontacttype" [elementValue]="dropElementControlcontacttype.value"
+      class="contact-no" displayOnClick=true customFlag=true></drop-down>
+  </div>
+
+  <div id="ph" *ngIf="ph == 'Phone'">
+    <div class="col-md-3 col-xs-3 col-sm-3 pr10 pl0 pr-sm-10 pr-xs-5 contactAlignRTL">
+      <drop-down [elementId]="elementId" [formControl]="dropElementControl" [placeHolder]="placeHolder" pickListFlag="true" miscType="MiscInfo"
+        miscSubType="MOBCD" [hideArrowFlag]="hideArrowFlag" [showCodeFlag]="showCodeFlag" [elementValue]="dropElementControl.value"
+        (click)="changeValue()" class="contact-no" displayOnClick=true customFlag=true></drop-down>
+    </div>
+    <div *ngIf="!hasStateCode"  class="col-md-6 col-xs-6 col-sm-6 p0">
+        <text-box class="inputType" [formControl]="textElementControl" customFlag=true [elementValue]="textElementControl.value"
+          placeHolder="{{placeHolder | translate}}" (click)="changeValue()" [acceptPattern]="acceptPattern" [maxLength]="phoneMaxLength"></text-box>
+          <a *ngIf="callPhoneString!== ''" [href]="callPhoneString" class="mobileNumberAnchor" >
+            <i class="fa fa-phone" aria-hidden="true"></i> 
+            <span>{{ callPhoneString }}</span>
+          </a>
+      </div>
+      <div *ngIf="hasStateCode"  class="col-md-6 col-xs-6 col-sm-6 p0">
+        <text-box class="inputType" [formControl]="textElementControlphone1" customFlag=true [elementValue]="textElementControlphone1.value"
+        placeHolder="{{placeHolder | translate}}" (click)="changeValue()" [acceptPattern]="acceptPattern[0]" textBoxClass="col-md-5 col-xs-5 col-sm-5 pr10 pl0 pr-sm-10 pr-xs-5 contactAlignRTL" maxLength="3"></text-box> 
+        <text-box class="inputType" [formControl]="textElementControlphone2" customFlag=true [elementValue]="textElementControlphone2.value"
+        placeHolder="{{placeHolder | translate}}" (click)="changeValue()" [acceptPattern]="acceptPattern[1]" textBoxClass="col-md-7 col-xs-7 col-sm-7 p0 contactAlignRTL" [maxLength]="phoneMaxLength" ></text-box>
+          <i class="floatBorder"></i>
+            <a *ngIf="callPhoneString!== ''" [href]="callPhoneString" class="mobileNumberAnchor" >
+              <i class="fa fa-phone" aria-hidden="true"></i> 
+              <span>{{ callPhoneString }}</span>
+            </a>
+        </div>
+  </div>
+
+  <div id="hm" *ngIf="ph == 'Home'">
+    <div class="col-lg-9 col-md-9 col-sm-9 col-xs-9 input-append plr0">
+      <div class="col-md-3 col-sm-3 col-xs-3 p0">
+        <input type="text" class="form-control join" datatype="NUMBER"
+        [formControl]="textElementControlhome1" onkeypress='return event.charCode >= 48 && event.charCode <= 57'>
+        <i class="floatBorder"></i>
+      </div>
+      <div class="col-md-3 col-sm-3 col-xs-3 p0">
+        <input type="text" id="home2" class="form-control join" datatype="NUMBER"
+          data-opt="noValue" [formControl]="textElementControlhome2" onkeypress='return event.charCode >= 48 && event.charCode <= 57'>
+          <i class="floatBorder"></i>
+      </div>
+      <div class="col-md-3 col-sm-3 col-xs-3 p0">
+          <input type="text" id="home3" class="form-control join" datatype="NUMBER"
+            data-opt="noValue" [formControl]="textElementControlhome3" onkeypress='return event.charCode >= 48 && event.charCode <= 57'>
+            <i class="floatBorder"></i>
+      </div>
+      <div class="col-md-3 col-sm-3 col-xs-3 p0">
+            <input type="text" id="home4" class="form-control join" datatype="NUMBER"
+              maxlength="3" data-opt="noValue" [formControl]="textElementControlhome4" onkeypress='return event.charCode >= 48 && event.charCode <= 57'>
+              <i class="floatBorder"></i>
+      </div>
+    </div>
+  </div>
+
+  <div id="of" *ngIf="ph == 'Office'">
+    <div class="col-lg-9 col-md-9 col-sm-9 col-xs-9 input-append plr0">
+      <div class="col-md-3 col-sm-3 col-xs-3 p0">
+        <input type="text" class="form-control join" datatype="NUMBER"
+        [formControl]="textElementControloffice1" onkeypress='return event.charCode >= 48 && event.charCode <= 57'>
+        <i class="floatBorder"></i>
+      </div>
+      <div class="col-md-3 col-sm-3 col-xs-3 p0">
+        <input type="text" id="office2" class="form-control join" datatype="NUMBER"
+          data-opt="noValue" [formControl]="textElementControloffice2" onkeypress='return event.charCode >= 48 && event.charCode <= 57'>
+        <i class="floatBorder"></i>
+      </div>
+      <div class="col-md-3 col-sm-3 col-xs-3 p0">
+        <input type="text" id="office3" class="form-control join" datatype="NUMBER"
+          data-opt="noValue" [formControl]="textElementControloffice3" onkeypress='return event.charCode >= 48 && event.charCode <= 57'>
+        <i class="floatBorder"></i>
+      </div>
+      <div class="col-md-3 col-sm-3 col-xs-3 p0">
+        <input type="text" id="office4" class="form-control join" datatype="NUMBER"
+            maxlength="3" data-opt="noValue" [formControl]="textElementControloffice4" onkeypress='return event.charCode >= 48 && event.charCode <= 57'>
+        <i class="floatBorder"></i>
+      </div>
+    </div>
+  </div>
+
+  <div id="fax" *ngIf="ph == 'FAX'" class="col-md-9 col-xs-9 col-sm-9 p0">
+    <text-box class="inputType mobile-number" [formControl]="textElementControlfax" customFlag=true placeHolder="{{placeHolder | translate}}"
+      [elementValue]="textElementControlfax.value" (click)="changeValue()" [acceptPattern]="acceptPattern" width="50" size="3" [maxLength]="faxMaxLength" ></text-box>
+  </div>
+</div>
+<div  *ngIf="tooltipTitle" class="col-sm-1 col-md-1 col-xs-1 tooltip-mobile3">
+  <button  type="button" class="btn btn-link info-tooltip" data-toggle="toggle" [tooltipPlacement]="tooltipPlacement"
+    [tooltip]="tooltipTitle">
+    <i class="icon-tooltip"></i>
+    </button>
+</div>

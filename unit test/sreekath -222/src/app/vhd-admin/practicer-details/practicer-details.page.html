@@ -1,0 +1,34 @@
+<h1 class="pt-2 pb-2"><strong>{{selectedPracticeData?.practiceName}}</strong></h1>
+<div class="row">
+    <h6 class="detailtype" [ngClass]="{'active':detailsType === 'appointments' ? true : false}"
+        (click)="practiceDetailsType('appointments')"> Appointments </h6>
+    <h6 class="detailtype" [ngClass]="{'active':detailsType === 'vets' ? true : false}"
+        (click)="practiceDetailsType('vets')"> Vets </h6>
+    <h6 class="detailtype" [ngClass]="{'active':detailsType === 'customers' ? true : false}"
+        (click)="practiceDetailsType('customers')"> Customers </h6>
+    <h6 class="detailtype" [ngClass]="{'active':detailsType === 'practiceInfo' ? true : false}"
+        (click)="practiceDetailsType('practiceInfo')"> Practice info</h6>
+</div>
+
+<div class="pr-2" *ngIf="detailsType === 'appointments'">
+    <app-appointments-list [data]="appointmentsData" [menuItems]="menuItems">
+    </app-appointments-list>
+</div>
+<div class="pr-2" *ngIf="detailsType === 'vets'">
+    <app-vhd-table [data]="vetsByPractice" [practicerDetails]="selectedPracticeData" [header]="columns" [type]="'vets'"
+        [menuItems]="tableMenuItems"></app-vhd-table>
+</div>
+<div class="pr-2" *ngIf="detailsType === 'customers'">
+    <app-vhd-table [data]="customersByPractice" [header]="columns" [type]="'customers'" [menuItems]="tableMenuItems">
+    </app-vhd-table>
+</div>
+<div *ngIf="(detailsType === 'practiceInfo' || detailsType === 'practiceApptType') && practicerDetails">
+    <div class="row">
+        <h6 class="detailtype" [ngClass]="{'active':detailsType === 'practiceInfo' ? true : false}"
+            (click)="practiceDetailsType('practiceInfo')"> Practice info</h6>
+        <h6 class="detailtype" [ngClass]="{'active':detailsType === 'practiceApptType' ? true : false}"
+            (click)="practiceDetailsType('practiceApptType')"> Appt. type </h6>
+    </div>
+    <app-practicer-info *ngIf="detailsType === 'practiceInfo'" [data]="practicerDetails"></app-practicer-info>
+    <app-appt-type-table *ngIf="detailsType === 'practiceApptType'" [apptTypes]="apptTypes"></app-appt-type-table>
+</div>

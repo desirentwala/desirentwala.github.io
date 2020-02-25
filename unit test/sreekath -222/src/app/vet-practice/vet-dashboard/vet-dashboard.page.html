@@ -1,0 +1,18 @@
+<ion-content>
+  <div class="back-card">
+    <div class="row mobile-card-align">
+      <!-- <div class="col-12">
+        <img src="../../../assets/imgs/mobile-logo.png" class="mobile-logo" alt="mobile-logo">
+      </div> -->
+      <div class="col-lg-6 col-md-12 col-sm-12 col-xs-12 content-card">
+        <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12 desktop-logo">
+          <img class="home-logo" src="./assets/imgs/logo.png" alt="logo">
+        </div>
+        <ion-item>
+          <h1 class="text-left page-header">My appointments</h1>
+        </ion-item>
+        <app-appointment-card *ngIf='isAppointments' [appointments]="appointments"></app-appointment-card>
+      </div>
+    </div>
+  </div>
+</ion-content>

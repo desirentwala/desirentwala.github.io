@@ -1,0 +1,119 @@
+<div class="map-container">
+    <div class="row">
+        <div class="col-md-8 col-sm-8 col-xs-12 p0">
+            <div class="col-md-5 col-sm-5 col-xs-12">
+                <input placeholder="{{'NCPBtn.search' | translate}}" autocorrect="off" autocapitalize="off" spellcheck="off" type="text" class="form-control" #search [formControl]="searchControl">
+            </div>
+            <ncp-label elementLabel="Radius" customFlag=true labelClass="col-sm-2 control-label"></ncp-label>
+             <div class="col-sm-2">
+                <select *ngIf="radiusList != null" class=" form-control col-md-2 col-sm-2 col-xs-2 p0" (change)="onChange($event.target.value)">
+                    <option *ngFor="let radii of radiusList" [value]="radii.value">{{radii.name}}</option>
+                </select>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-8 col-sm-8 col-xs-12 pb0">
+        <div *ngIf="brandingJson && !currentLatitude">
+            <div *ngIf="brandingJson.iframe_src">
+                <iframe [src]="trustedUrl" style="position: relative;overflow: hidden;height: 500px;" frameborder="0" scrolling="no" marginheight="0"
+                    marginwidth="0" allowfullscreen></iframe>
+            </div>
+        </div>
+        <agm-map *ngIf="currentLatitude" [latitude]="currentLatitude" [longitude]="currentLongitude" [scrollwheel]="false" [zoom]="zoom"
+            style="position: relative;overflow: hidden;height: 500px;">
+            <agm-marker *ngIf="searchedPlace" iconUrl="assets/img/bluemapicon.png" style="color:black" [latitude]="currentLatitude" [longitude]="currentLongitude">
+                <agm-info-window>
+                    <p style="color:black">{{searchedPlace}}</p>
+                </agm-info-window>
+            </agm-marker>
+            <agm-marker iconUrl="assets/img/bluemapicon.png" style="color:black" [latitude]="latitude" [longitude]="longitude">
+                <agm-info-window>
+                    <p style="color:black">{{defaultLoactionAddress}}</p>
+                </agm-info-window>
+            </agm-marker>
+            <div *ngFor="let marker of places">
+                <agm-marker *ngIf="marker[2] <= radius" [latitude]="marker[0]" [longitude]="marker[1]">
+                    <agm-info-window>
+                        <!--<h3><strong>{{marker[3].address.position}}</strong></h3>-->
+                        <p style="color:black">
+                            <strong>{{marker[3].address.branchName}}
+                                <br />
+                            </strong>
+                            <span>{{marker[3].address.address1}}
+                                <br />
+                            </span>
+                            <span>{{marker[3].address.address2}}
+                                <br />
+                            </span>
+                            <span>{{marker[3].address.address3}}
+                                <br />
+                            </span>
+                        </p>
+                        <span *ngIf="marker[3].address.zipcode" style="color:black">
+                            <strong>{{'NCPLabel.zipcode' | translate}}</strong>
+                            {{marker[3].address.zipcode}}
+                            <br />
+                        </span>
+                        <span *ngIf="marker[3].address.phone" style="color:black">
+                            <strong>{{'NCPLabel.phone' | translate}}</strong>
+                            {{marker[3].address.phone}}
+                            <br />
+                        </span>
+                        <span *ngIf="marker[3].address.email" style="color:black">
+                            <strong>{{'NCPLabel.emailId' | translate}}</strong>
+                            {{marker[3].address.email}}
+                            <br />
+                        </span>
+                        <span *ngIf="marker[3].address.fax" style="color:black">
+                            <strong>{{'NCPLabel.fax'| translate}}</strong>
+                            {{marker[3].address.fax}}
+                            <br />
+                        </span>
+                    </agm-info-window>
+                </agm-marker>
+            </div>
+        </agm-map>
+    </div>
+    <div style="height: 500px; 
+        overflow: auto; float:right; margin-bottom:10px; margin-top:0px !important;" class="col-md-4 col-sm-4 col-xs-12 form-group plr20 mt50 mt-xs-10">
+        <div *ngFor="let marker of places">
+            <div *ngIf="marker[2] <= radius">
+                <p style="color:black">
+                    <strong>{{marker[3].address.branchName}}
+                        <br />
+                    </strong>
+                    <span>{{marker[3].address.address1}}
+                        <br />
+                    </span>
+                    <span>{{marker[3].address.address2}}
+                        <br />
+                    </span>
+                    <span>{{marker[3].address.address3}}
+                        <br />
+                    </span>
+                </p>
+                <span *ngIf="marker[3].address.zipcode" style="color:black">
+                    <strong>{{'NCPLabel.zipcode' | translate}}</strong>
+                    {{marker[3].address.zipcode}}
+                    <br />
+                </span>
+                <span *ngIf="marker[3].address.phone" style="color:black">
+                    <strong>{{'NCPLabel.phone' | translate}}</strong>
+                    {{marker[3].address.phone}}
+                    <br />
+                </span>
+                <span *ngIf="marker[3].address.email" style="color:black">
+                    <strong>{{'NCPLabel.emailId' | translate}}</strong>
+                    {{marker[3].address.email}}
+                    <br />
+                </span>
+                <span *ngIf="marker[3].address.fax" style="color:black">
+                    <strong>{{'NCPLabel.fax'| translate}}</strong>
+                    {{marker[3].address.fax}}
+                    <br />
+                </span>
+                <br />
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,90 @@
+<section class="steps-section steps-sectionPVT">
+	<div class="row">
+		<div class="col-md-12 p0">
+			<div class="b2c-banner b2c-banner-img">
+				<div class="circle ml-md-135 ml-sm-20 ml-xs-28">
+					<div class="circle-text">
+						<p class="circle-text-p">{{'NCPLabel.bannerimg'| translate}}</p>
+						<button class="b2c-pln-btn col-xs-12 col-sm-9 col-md-9 ml-xs-0" (click)="gotToInsurance('TRAVEL')" type="button">{{'Get A Quote'}}</button>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="row">
+		<section class="plr15 mt30 p-xs-0 p-sm-0 w100p pull-left footerBorder">
+			<div *ngFor="let insurance of insurance;let i = index">
+				<div *ngIf="i < 2">
+					<div class="col-md-6 col-sm-6 p0 mb30 {{insurance.imageClass}}">
+						<div class="product-list">
+							<div class="hovereffect">
+								<div class="title-name">
+									<misc-h2 label="{{insurance.name}}" miscClass="text-truncate w90p mt0 pull-left" iconClass="fa {{insurance.iconClass}}"></misc-h2>
+									<div class="b2c-btn">
+										<button class="ncpbtn-default col-xs-12 col-sm-5 col-md-5" (click)="gotToInsurance(insurance.desc)" type="button">{{'More'}}</button>
+										<button class="ncpbtn-default col-xs-12  col-sm-5 col-md-5" (click)="getQuote(insurance.code)" type="button">{{'Get A Quote'}}</button>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div *ngIf="i > 1">
+					<div class="col-md-4 col-sm-12 p0 mb30 {{insurance.imageClass}}">
+						<div class="product-list">
+							<div class="hovereffect">
+								<div class="title-name">
+									<h2><span class="fs35 "><i class="fa {{insurance.iconClass}} color-fff mr20"></i></span>{{insurance.name}}</h2>
+									<div class="b2c-btn">
+										<button class="ncpbtn-default col-xs-12 col-sm-5 col-md-5" (click)="gotToInsurance(insurance.desc)" type="button">{{'NCPLabel.more'| translate}}</button>
+										<button class="ncpbtn-default col-xs-12  col-sm-5 col-md-5" (click)="getQuote(insurance.code)" type="button">{{'NCPLabel.getQuote'| translate}}</button>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</section>
+	</div>
+	<!--Make a claim-->
+	<div class="row b2c-btb">
+		<div class="col-md-6 col-sm-6 mb20">
+			<div class="col-md-9 col-sm-9 col-xs-12 p0 col-centered">
+				<div class="productHeading">
+					<h2><i class="fs35 theme-color fa icon-claims mr20"></i>
+						<div>{{'NCPLabel.makeaClaim' | translate}}</div>
+					</h2>
+				</div>
+				<p class="productDetails ml55 ml-xs-0 text-xs-center">{{'NCPLabel.b2cproductDetails' | translate}}</p>
+				<button class="hidden-xs ml55 b2c-btn2 mt10" (click)="gotoClaims()">{{'NCPLabel.howtomakeaclaim' | translate}}</button>
+				<div class="visible-xs"><button class="b2c-btn2 mt10 col-centered d-block" (click)="gotoClaims()">{{'NCPLabel.howtomakeaclaim' | translate}}</button></div>
+			</div>
+		</div>
+		<div class="col-md-6 col-sm-6 mb20">
+			<div class="col-md-9 col-sm-9 col-xs-12 p0 col-centered">
+				<div class="productHeading">
+					<h2><i class="fs35 theme-color fa fa-question-circle mr20"></i>
+						<div>{{'NCPLabel.gotaquestion?' | translate}}</div>
+					</h2>
+				</div>
+				<p class="productDetails ml55 ml-xs-0 text-xs-center">{{'NCPLabel.wemayalreadyhavetheanswerehere?' | translate}}</p>
+				<button class="hidden-xs ml55 b2c-btn2 mt10" (click)="gotoFAQ()">{{'NCPLabel.seeFAQs?' | translate}}</button>
+				<div class="visible-xs"><button class="visible-xs b2c-btn2 mt10 col-centered d-block" (click)="gotoFAQ()">{{'NCPLabel.seeFAQs?' | translate}}</button></div>
+			</div>
+		</div>
+	</div>
+</section>
+<!--<div class="bannerSection mt10">
+		<div class="bannerImg"><img alt="Banner" height="200" src="assets/img/accuntPageBanner.jpg"></div>
+		<div class="bannerDetails">
+			<h1 class="mtb15">
+				<span class="theme-color"></span></h1>
+			<div class="row">
+				<div class="col-md-7 col-sm-7 col-xs-12 bannerText" id="bannerDesc">
+				</div>
+			</div>
+		</div>
+</div>
+	<section class="steps-section">
+	</section>-->

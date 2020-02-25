@@ -1,0 +1,100 @@
+<section>
+    <!--<div class="bannerSection mt45">
+        <div class="bannerImg"><img class="img-responsive" [src]="imgUrl" alt="Banner"></div>
+        <div class="bannerDetails">
+            <div class="row">
+                <div *ngFor="let detail of claimsDetail">
+                    <div class="col-md-12 col-sm-12 col-xs-12 no-pad">
+                        <div class="claimBanner h350 p15">
+                            <h2>{{detail.title}}</h2>
+                            <ul>
+                                <li>{{detail.subTitle}}</li>
+                                <li class="fs30 fw600">{{detail.emergencyNo}}</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>-->
+
+    <div class="steps-section">
+        <div class="row rowWithNoMarginBottom claimDetails">
+            <div *ngFor="let detail of claimsDetail">
+                <div class="col-md-8 col-sm-8 col-xs-12 claimsDetailContainer">
+                    <misc-h2 miscClass="customisedHeader" iconClass="fa fa-info-circle" [label]="detail.heading1"></misc-h2>
+                    <ul class="listExplaination">
+                        <li *ngFor="let descp of detail.description1">
+                            <div [innerHtml]="descp | translate"></div>
+                        </li>
+                    </ul>
+                    <misc-h2 miscClass="customisedHeader" iconClass="fa fa-info-circle" [label]="detail.heading2"></misc-h2>
+                    <ul class="listExplaination">
+                        <li *ngFor="let descp of detail.description2">
+                            <div [innerHtml]="descp | translate"></div>
+                        </li>
+                    </ul>
+                </div>
+                <div class="col-md-4 col-sm-4 col-xs-12">
+                    <div class="rightThemeColorBox contactClaimsRTL">
+                        <misc-h2 miscClass="customisedHeader" iconClass="" [label]="detail.feedback"></misc-h2>
+                        <ul>
+                            <li>{{detail.feedbackDescription | translate}}</li>
+                            <li>
+                                <i class="fa fa-envelope iconLabel"></i>
+                                <span class="labelDisplay">{{'NCPLabel.emailId'|translate}} :</span>
+                                <span>
+                                    <b>{{detail.emailId | translate}}</b>
+                                </span>
+                            </li>
+                            <li>
+                                <i class="fa fa-phone iconLabel"></i>
+                                <span class="labelDisplay">{{'NCPLabel.phone'|translate}} :</span>
+                                <span>
+                                    <b>{{detail.emergencyNo | translate}}</b>
+                                </span>
+                            </li>
+                        </ul>
+                    </div>
+
+                    <div *ngFor="let detail of claimsDetail; let i = index">
+                        <div class="productList">
+                            <misc-h2 iconClass="" [label]="detail.claimTypes[i]"></misc-h2>
+                            <p>
+                                <span class="labelDisplay">{{'NCPLabel.ClaimsNumber'|translate}} : </span>
+                                <span>
+                                    <b>{{detail.emergencyNo | translate}}</b>
+                                </span>
+                            </p>
+                            <div class="row">
+                                <div class="col-md-2 col-sm-3 col-xs-2 claimDocumentIconContainer fileIconRTL">
+                                    <i class="fa fa-files-o claimDocumentIcon"></i>
+                                </div>
+                                <div class="col-md-10 col-sm-9 col-xs-10 p0 pl-md-15">
+                                    <button class="ncpbtn-large" (click)="navigateRoute()">
+                                        <span class="mr5" *ngIf="!b2cOrB2b2cFlag">
+                                            <i class="fa fa-paper-plane iconicButton"></i>
+                                            <span class="labelButton">{{'NCPLabel.submitTravelClaim'|translate}}</span>
+                                        </span>
+                                        <span class="mr5" *ngIf="b2cOrB2b2cFlag">
+                                            <i class="fa fa-paper-plane iconicButton"></i>
+                                            <span class="labelButton">{{'NCPLabel.onlineClaimsForm'|translate}}</span>
+                                        </span>
+                                        <span class="fa fa-angle-right"></span>
+                                    </button>
+                                    <div class="row rowWithNoMarginBottom">
+                                        <a class="anchor-link" target="_blank" [href]="claimFormPdf">
+                                            <i class="fa fa-download iconAnchorLink"></i>
+                                            <span class="labelAnchorLink">{{'NCPLabel.downloadClaimForm'|translate}}</span>
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>

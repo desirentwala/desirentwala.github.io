@@ -1,0 +1,103 @@
+<ion-content>
+  <div class="ion-padding">
+    <ion-card *ngIf="!addPracticeDetails" class="ion-padding practice-card">
+      <!-- practice slection content -->
+      <h1 class="text-center page-header">Vet sign up</h1>
+      <h3>Which vet practice are you registered with ? </h3>
+      <ion-input class="vetList" placeholder="Search by entering practice name" (ionInput)="search($event.target.value)"
+        [(ngModel)]="practice">
+      </ion-input>
+      <ion-list *ngIf="searchResults" class="vetList">
+        <ion-item class="search-item" *ngFor="let vet of vets">
+          <ion-row class="w-100" (click)="hideList(vet)">
+            <ion-col size="7">{{vet.practiceName}}</ion-col>
+            <ion-col size="5" class="text-right">{{vet.address}}</ion-col>
+          </ion-row>
+        </ion-item>
+        <div *ngIf="vets.length === 0" class="ifNoData ml-3">Sorry! no result found</div>
+      </ion-list>
+      <div class="text-right p-2">
+        <ion-button class="create-btn" color="primary" [disabled]="!practice || !isNextBtn"
+          (click)="navigateToDetails()">
+          Next
+        </ion-button>
+      </div>
+    </ion-card>
+
+    <ion-card class="ion-padding practice-card" *ngIf="addPracticeDetails">
+        <h1 class="text-center page-header">Vet sign up</h1>
+      <!-- form for practice Details -->
+      <form class=" m-auto" #vetForm="ngForm">
+        <div class="row">
+          <div class="col-12 col-md-6" *ngIf="!isDisabled">
+            <label for="vetName">Vet's name</label>
+            <input type="text" id="vetName" class="form-control" placeholder="Vet's name" #vetNm="ngModel"
+              name="vetName" type="text" [(ngModel)]="vet.firstName" [readonly]="true">
+            <div class="w-100">
+              <label>Contact no.</label>
+              <input id="contact" class="form-control" placeholder="Phone number" #contact="ngModel" name="contact"
+                type="text" [(ngModel)]="vet.mobile" minlength=10 maxlength=11 numbersOnly [readonly]="true" />
+              <!-- </ion-col> -->
+            </div>
+            <label for="email" *ngIf="!isDisabled">Email</label>
+            <input *ngIf="!isDisabled" type="text" id="email" class="form-control" placeholder=" Email" #email="ngModel"
+              name="email" type="text" [(ngModel)]="vet.email" [readonly]="true"
+              pattern="^(?!.*\.{2})[a-zA-Z0-9.-_]{1,64}@[a-zA-Z.-]{2,}[.]{1}[a-zA-Z]{2,}">
+          </div>
+
+          <div class="col-12 col-md-6" *ngIf="isDisabled">
+            <label for="practiceName">Practice name</label>
+            <input type="text" id="vetName" class="form-control" placeholder="Practice's name" #vetNm="ngModel"
+              name="practiceName" type="text" [(ngModel)]="practiceName" [readonly]="true">
+          </div>
+          <div class="col-12">
+            <!-- species -->
+            <label for="speciesList">Please select the relevant species that you will see.<i
+              class="fas fa-asterisk form-asterisk"></i></label>
+            <div class="inner-card m-auto">
+              <ion-row class="w-100">
+                <ion-col size="1.5" *ngIf="from !== 0">
+                  <ion-card class="navigation-card" (click)="onPrevious()">
+                    <i class="fas fa-chevron-left"></i>
+                  </ion-card>
+                </ion-col>
+                <ion-col size="3" class="slide-col" *ngFor="let species of speciesArray; let i = index">
+                  <ion-card class="species-card" [ngClass]="{'active':species.isActive === true ? true : false}"
+                    (click)="selectedSpecies(species,i)" title="{{species.species.speciesName}}">
+                    <i [ngClass]='{"isDisplay": species.isActive === true? false: true}' class="far fa-check tick-icon"></i>
+                    <ion-card-content></ion-card-content>
+                    <i class="{{species.species.iconName}} ion-float-end iconSize text-right p-2"></i>
+                  </ion-card>
+                </ion-col>
+                <ion-col size="1.5" *ngIf="initialImages < speciesList.length">
+                  <ion-card class="navigation-card" (click)="onNext()">
+                    <i class="fas fa-chevron-right"></i>
+                  </ion-card>
+                </ion-col>
+              </ion-row>
+            </div>
+          </div>
+        </div>
+
+        <ion-row *ngIf="!isDisabled">
+          <ion-col class="pl-0">
+            <ion-button class="text-right" [disabled]="selectedSpeciess.length === 0"
+              (click)="updateVet()">
+              <p class="pt-3 submit-btn-txt" slot="start">Update details</p>
+            </ion-button>
+          </ion-col>
+        </ion-row>
+        <ion-row *ngIf="isDisabled">
+          <ion-col class="pl-0">
+            <ion-button class="text-right" [disabled]="selectedSpeciess.length === 0"
+              (click)="updateVet()">
+              <p class="pt-3 submit-btn-txt" slot="start">Register</p>
+            </ion-button>
+          </ion-col>
+        </ion-row>
+      </form>
+
+    </ion-card>
+  </div>
+
+</ion-content>

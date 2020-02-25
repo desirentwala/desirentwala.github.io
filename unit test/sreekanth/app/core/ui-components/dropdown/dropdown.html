@@ -1,0 +1,255 @@
+<div *ngIf="!customFlag" (touchend)="isTouchDevice = true" (keydown.ArrowDown)="handleKeyDown('down')" (keydown.ArrowUp)="handleKeyDown('up')" (keydown.enter)="handleKeyDown('enter')" (keydown.tab)="handleKeyDown('tab')" (focus)="getDropdownItems()"  (clickOutside)="closeDropDown()" [active]="filteredItems?.length > 0 ? true: false">
+    <div *ngIf="multipleSelect" [attr.name]=[dropdownItems] class="col-sm-6 col-md-5 col-xs-11  pr-sm-0 multiselectDropdown">
+        <div class="tokenize-sample Tokenize " [class.invalid]="invalidFlag" [attr.name]="filteredItems">
+            <div [attr.name]="selectedItems">
+                <ul class="TokensContainer" [ngClass]="readOnlyFlag ? 'notAllowed' :' '">
+                    <li class="Token" class *ngFor="let item of selectedItems" data-value="{{item.desc}}">
+                        <a class="{{readOnlyFlag ? 'customDisabled' :' '}} close" (click)="unselectItem(item)">×</a>
+                        <span>{{item.desc | translate}}</span>
+                    </li>
+                    <li *ngIf="!emptyItems" class="{{readOnlyFlag ? 'customDisabled' :' '}} TokenSearch">
+                        <input [id]="elementId" *ngIf="!displayOnClick" placeholder="{{placeHolder | translate}}" type="text" (input)="onInput($event)"
+                            (blur)="onTouched($event)" (mouseenter)="getDropdownItems()" [formControl]="elementControl" class="dropdownInputField" autocomplete="off"
+                        />
+                        <input [id]="elementId" *ngIf="displayOnClick" placeholder="{{placeHolder | translate}}" type="text" (input)="onInput($event)"
+                            (blur)="onTouched($event)" (click)="getDropdownItems()" [formControl]="elementControl" class="dropdownInputField" autocomplete="off"
+                        />
+                        <p class="mainFloatLabel" [class.floatLabel]="value">{{elementLabel | translate}}
+                            <span *ngIf="mandatoryFlag" class="aste">*</span>
+                        </p>
+                        <i class="floatBorder"></i>
+                        <i [ngClass]="(invalidFlag && value || invalidFlag && !value)? 'fa fa-times-circle floatIcon warningIconColor' : (!invalidFlag && value)? 'fa fa-check-circle floatIcon successIconColor' :''"></i>
+                    </li>
+                </ul>
+                <ul class="Dropdown2"  *ngIf="!displayCodeAndDesc && filteredItems?.length > 0" (scroll)="scrollCallled($event)">
+                    <ng-container *ngIf="!useCheckBoxMultiSelect;else checkboxDropDownTpl">
+                        <li *ngFor="let filterItem of filteredItems;let index = index" [id]="index+'dropdown'" [class.selected]="index === focusIdx" (mouseover)="focusIdx = index"
+                            (click)="itemHover(filterItem)" (touchend)="forTocuchDevices(filterItem)">
+                            <span>{{filterItem.desc | translate}}</span>
+                        </li>
+                    </ng-container>
+                    <ng-template #checkboxDropDownTpl>
+                        <li *ngIf="displaySelectAllCheckBox" class="dropdownWithCheckboxItems">
+                            <check-box checkBoxClass="" itemLabel="Select All" [id]="index+'dropdown'"
+                            (touchend)="selectAll()" (change)="selectAll()" alignment=""></check-box>
+                        </li>
+                        <li class="dropdownWithCheckboxItems" *ngFor="let filterItem of filteredItems;let index = index">                
+                            <check-box checkBoxClass="" itemLabel="{{filterItem.desc | translate}}" [id]="index+'dropdown'" [class.selected]="index === focusIdx" (mouseover)="focusIdx = index" (touchend)="forTocuchDevices(filterItem.desc)" (change)="itemHover(filterItem)" alignment=""></check-box>
+                        </li>            
+                    </ng-template>
+                    <li  *ngIf="lazyLoader" >{{'NCPLabel.loading' | translate}}</li>
+                </ul>
+                <ul class="Dropdown2"  *ngIf="displayCodeAndDesc  && filteredItems?.length > 0" (scroll)="scrollCallled($event)">
+                    <ng-container *ngIf="!useCheckBoxMultiSelect;else checkboxDropDownTpl">
+                        <li *ngFor="let filterItem of filteredItems;let index = index" [id]="index+'dropdown'" [class.selected]="index === focusIdx" (mouseover)="focusIdx = index"
+                            (click)="itemHover(filterItem)" (touchend)="forTocuchDevices(filterItem)">
+                            <span>({{filterItem.code}}) - {{filterItem.desc | translate}}</span>
+                        </li>
+                    </ng-container>
+                    <ng-template #checkboxDropDownTpl>
+                            <li *ngIf="displaySelectAllCheckBox" class="dropdownWithCheckboxItems">
+                                <check-box checkBoxClass="pull-left p5" itemLabel="Select All" [id]="index+'dropdown'"
+                                (touchend)="selectAll()" (change)="selectAll()" alignment=""></check-box>
+                            </li>
+                        <li class="dropdownWithCheckboxItems" *ngFor="let filterItem of filteredItems;let index = index">
+                            <check-box checkBoxClass="pull-left p5" itemLabel="({{filterItem.code}}) - {{filterItem.desc | translate}}" [id]="index+'dropdown'" [class.selected]="index === focusIdx" (mouseover)="focusIdx = index"
+                            (touchend)="forTocuchDevices(filterItem.desc)" (change)="itemHover(filterItem)" alignment=""></check-box>
+                        </li>
+                    </ng-template>
+                    <li  *ngIf="lazyLoader" >{{'NCPLabel.loading' | translate}}</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <div *ngIf="!multipleSelect" [attr.name]=[dropdownItems] class="col-md-5 col-sm-6 col-xs-11  pr-sm-0 multiselectDropdown">
+        <div class="tokenize-sample  Tokenize tokeniz-mod filtered-items-div" [class.invalid]="invalidFlag" [attr.name]="filteredItems">
+            <ul class="TokensContainer" [ngClass]="readOnlyFlag ? 'notAllowed' :' '">
+                <li class="TokenSearch">
+                    <input [id]="elementId" *ngIf="!displayOnClick" type="text" placeholder="{{placeHolder | translate}}" [value]="selectedItem | translate"
+                        (input)="onInput($event)" (blur)="onTouched($event)" (mouseenter)="getDropdownItems()" (keypress)="clearItem(value)"
+                        [formControl]="elementControl" (change)="changeInSingle(elementControl.value)" class="mulreg dropdownInputField" autocomplete="off"
+                    />
+                    <ng-container *ngIf="type=='amount'">                            
+                        <amount-field [customFlag]="true" [symbolDisplay]="true" [formControl]="elementControl"
+                            (input)="onInput($event)" (blur)="onTouched($event)" (click)="getDropdownItems()" (keypress)="clearItem(value)"
+                            [formControl]="elementControl" (change)="changeInSingle(elementControl.value)" class="dropdownInputField dropdown-amount">
+                        </amount-field>
+                    </ng-container>
+                    <ng-container *ngIf="type!='amount'">
+                        <input [id]="elementId" type="text" *ngIf="displayOnClick" placeholder="{{placeHolder | translate}}" [value]="selectedItem | translate"
+                            (input)="onInput($event)" (blur)="onTouched($event)" (click)="getDropdownItems()" (keypress)="clearItem(value)"
+                            [formControl]="elementControl" (change)="changeInSingle(elementControl.value)" class="dropdownInputField" autocomplete="off"
+                        />
+                    </ng-container>
+                    <p class="mainFloatLabel" [class.floatLabel]="value">{{elementLabel | translate}}
+                        <span *ngIf="mandatoryFlag" class="aste">*</span>
+                    </p>
+                    <i class="floatBorder"></i>
+                    <i [ngClass]="(invalidFlag && value || invalidFlag && !value)? 'fa fa-times-circle floatIcon warningIconColor' : (!invalidFlag && value)? 'fa fa-check-circle floatIcon successIconColor' :''"></i>
+                </li>
+            </ul>
+            <ul class="Dropdown1"  *ngIf="filteredItems?.length > 0" (scroll)="scrollCallled($event)">
+                <li *ngFor="let filterItem of filteredItems;let index = index" [id]="index+'dropdown'"[class.selected]="index === focusIdx" (mouseover)="focusIdx = index"
+                    (touchend)="forTocuchDevices(filterItem.desc)" (click)="itemSelected(filterItem)">
+                    <!-- <span>{{filterItem.desc | translate}}</span> -->
+                    <ng-container *ngIf="!displayCodeAndDesc && !displayOnlyCode">
+                        <misc-display [type]="type" [label]="filterItem.desc"></misc-display>
+                    </ng-container>
+                    <ng-container *ngIf="displayCodeAndDesc && !displayOnlyCode">
+                        <span>({{filterItem.code}}) - {{filterItem.desc | translate}}</span>
+                    </ng-container>
+                    <ng-container *ngIf="!displayCodeAndDesc && displayOnlyCode">
+                        <misc-display [type]="type" [label]="filterItem.code"></misc-display>
+                    </ng-container>
+                </li>
+                <li  *ngIf="lazyLoader" >{{'NCPLabel.loading' | translate}}</li>
+            </ul>
+            <i *ngIf="!hideArrowFlag" class="icon-arrow-d dropdown-da" (click)="(filteredItems?.length > 0) ? closeDropDown() : getDropdownItems()" [class.rotate]="filteredItems ? filteredItems.length > 0 : filteredItems"></i>
+            <i *ngIf="hideArrowFlag && value!=null && value.icon" class="dropdown-da" [ngClass]="value.icon"></i>
+        </div>
+
+    </div>
+    <div class="col-md-1 col-sm-1 col-xs-1 tooltip-mobile3" *ngIf="tooltipShow && tooltipTitle">
+        <!--<button *ngIf="tooltipShow && tooltipTitle" type="button" class="btn btn-link info-tooltip" data-toggle="toggle" [tooltipPlacement]="tooltipPlacement"
+            [tooltip]="tooltipTitle">
+            <i class="icon-tooltip"></i>
+            </button>-->
+        <button  type="button" class="btn btn-link info-tooltip" data-toggle="toggle" [tooltipPlacement]="tooltipPlacement"
+            [tooltip]="tooltipHTML" [id]="elementId+'ToolTip'">
+            <i class="icon-tooltip" [id]="elementId+'ToolTip'"></i>
+            <tooltip-content #tooltipHTML [excludeId]="elementId+'ToolTip'">
+                <div innerHTML="{{tooltipTitle | translate}}"> </div>
+            </tooltip-content>
+        </button>
+    </div>
+
+</div>
+
+<div *ngIf="customFlag" (keydown.ArrowDown)="handleKeyDown('down')" (keydown.ArrowUp)="handleKeyDown('up')" (keydown.enter)="handleKeyDown('enter')"
+    (focus)="getDropdownItems()" (keydown.tab)="handleKeyDown('tab')"  (touchend)="isTouchDevice = true;" (clickOutside)="closeDropDown()"
+    [active]="filteredItems?.length > 0 ? true: false">
+    <div *ngIf="multipleSelect" [attr.name]=[dropdownItems] [ngClass]="dropdownClass" class="multiselectDropdown">
+        <div class="tokenize-sample Tokenize" [attr.name]="filteredItems" [class.invalid]="invalidFlag">
+            <div [attr.name]="selectedItems">
+                <ul class="TokensContainer" [ngClass]="readOnlyFlag ? 'notAllowed' :' '">
+                    <li class="Token" class *ngFor="let item of selectedItems" data-value="{{item.desc}}">
+                        <a class="{{readOnlyFlag? 'customDisabled' :' '}} close" (click)="unselectItem(item)">×</a>
+                        <span>{{item.desc | translate}}</span>
+                    </li>
+                    <li *ngIf="!emptyItems" class="{{readOnlyFlag ? 'customDisabled' :' '}} TokenSearch">
+                        <input [id]="elementId" *ngIf="!displayOnClick" placeholder="{{placeHolder | translate}}" type="text" (input)="onInput($event)"
+                            (blur)="onTouched($event)" (mouseenter)="getDropdownItems()" [formControl]="elementControl" class="dropdownInputField" autocomplete="off"
+                        />
+                        <input [id]="elementId" *ngIf="displayOnClick" placeholder="{{placeHolder | translate}}" type="text" (input)="onInput($event)"
+                            (blur)="onTouched($event)" (click)="getDropdownItems()" [formControl]="elementControl" class="dropdownInputField" autocomplete="off"
+                        />
+                        <p class="mainFloatLabel" [class.floatLabel]="value">{{elementLabel | translate}}
+                            <span *ngIf="mandatoryFlag" class="aste">*</span>
+                        </p>
+                        <i class="floatBorder"></i>
+                        <i [ngClass]="(invalidFlag && value || invalidFlag && !value)? 'fa fa-times-circle floatIcon warningIconColor' : (!invalidFlag && value)? 'fa fa-check-circle floatIcon successIconColor' :''"></i>
+                    </li>
+                </ul>
+                <ul class="Dropdown1"  *ngIf="!displayCodeAndDesc && filteredItems?.length > 0" (scroll)="scrollCallled($event)">
+                        <ng-container *ngIf="!useCheckBoxMultiSelect;else checkboxDropDownTpl">
+                            <li *ngFor="let filterItem of filteredItems;let index = index" [id]="index+'dropdown'"[class.selected]="index === focusIdx" (mouseover)="focusIdx = index"
+                                (click)="itemHover(filterItem)" (touchend)="forTocuchDevices(filterItem,$event)  ">
+                                <span>{{filterItem.desc | translate}}</span>
+                            </li>
+                        </ng-container>
+                        <ng-template #checkboxDropDownTpl>
+                            <li *ngIf="displaySelectAllCheckBox" class="dropdownWithCheckboxItems">
+                                <check-box checkBoxClass="" itemLabel="Select All" [id]="index+'dropdown'" (touchend)="selectAll()" (change)="selectAll()" alignment=""></check-box>
+                            </li>
+                            <li class="dropdownWithCheckboxItems" *ngFor="let filterItem of filteredItems;let index = index">                
+                                <check-box checkBoxClass="" itemLabel="{{filterItem.desc | translate}}" [id]="index+'dropdown'" [class.selected]="index === focusIdx" (mouseover)="focusIdx = index" (touchend)="forTocuchDevices(filterItem.desc)" (change)="itemHover(filterItem)" alignment=""></check-box>
+                            </li>            
+                        </ng-template>
+                    <li  *ngIf="lazyLoader" >{{'NCPLabel.loading' | translate}}</li>
+                </ul>
+                <ul class="Dropdown1" *ngIf="displayCodeAndDesc && filteredItems?.length > 0" (scroll)="scrollCallled($event)">
+                    <ng-container *ngIf="!useCheckBoxMultiSelect;else checkboxDropDownTpl">
+                        <li *ngFor="let filterItem of filteredItems;let index = index" [id]="index+'dropdown'"[class.selected]="index === focusIdx" (mouseover)="focusIdx = index" (click)="itemHover(filterItem)" (touchend)="forTocuchDevices(filterItem,$event)  ">
+                            <span>({{filterItem.code}}) - {{filterItem.desc | translate}}</span>
+                        </li>
+                    </ng-container>
+                    <ng-template #checkboxDropDownTpl>
+                            <li *ngIf="displaySelectAllCheckBox" class="dropdownWithCheckboxItems">
+                                <check-box checkBoxClass="" itemLabel="Select All" [id]="index+'dropdown'" (touchend)="selectAll()" (change)="selectAll()" alignment=""></check-box>
+                            </li>
+                        <li class="dropdownWithCheckboxItems" *ngFor="let filterItem of filteredItems;let index = index">
+                            <check-box checkBoxClass="" itemLabel="({{filterItem.code}}) - {{filterItem.desc | translate}}" [id]="index+'dropdown'" [class.selected]="index === focusIdx" (mouseover)="focusIdx = index" (touchend)="forTocuchDevices(filterItem.desc)" (change)="itemHover(filterItem)" alignment=""></check-box>
+                        </li>
+                    </ng-template>
+                    <li  *ngIf="lazyLoader" >{{'NCPLabel.loading' | translate}}</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <div *ngIf="!multipleSelect" [attr.name]=[dropdownItems] [ngClass]="dropdownClass" class="multiselectDropdown">
+        <div class="tokenize-sample Tokenize filtered-items-div" [attr.name]="filteredItems" [class.invalid]="invalidFlag">
+            <ul class="TokensContainer" [ngClass]="readOnlyFlag ? 'notAllowed' :' '">
+                <li class="TokenSearch">
+                    <input [id]="elementId" type="text" *ngIf="!displayOnClick" placeholder="{{placeHolder | translate}}" [value]="selectedItem | translate"
+                        (input)="onInput($event)" (blur)="onTouched($event)" (mouseenter)="getDropdownItems()" (keypress)="clearItem(value)"
+                        [formControl]="elementControl" (change)="changeInSingle(elementControl.value)" class="dropdownInputField" autocomplete="off"
+                    />
+                    <ng-container *ngIf="type=='amount'">                            
+                        <amount-field [customFlag]="true" [symbolDisplay]="true" [formControl]="elementControl"
+                            (input)="onInput($event)" (blur)="onTouched($event)" (click)="getDropdownItems()" (keypress)="clearItem(value)"
+                            [formControl]="elementControl" (change)="changeInSingle(elementControl.value)" class="dropdownInputField dropdown-amount">
+                        </amount-field>
+                    </ng-container>
+                    <ng-container *ngIf="type!='amount'">
+                        <input [id]="elementId" type="text" *ngIf="displayOnClick" placeholder="{{placeHolder | translate}}" [value]="selectedItem | translate"
+                            (input)="onInput($event)" (blur)="onTouched($event)" (click)="getDropdownItems()" (keypress)="clearItem(value)"
+                            [formControl]="elementControl" (change)="changeInSingle(elementControl.value)" class="dropdownInputField" autocomplete="off"
+                        />
+                    </ng-container>
+                    <p class="mainFloatLabel" [class.floatLabel]="value">{{elementLabel | translate}}
+                        <span *ngIf="mandatoryFlag" class="aste">*</span>
+                    </p>
+                    <i class="floatBorder"></i>
+                    <i [ngClass]="(invalidFlag && value || invalidFlag && !value)? 'fa fa-times-circle floatIcon warningIconColor' : (!invalidFlag && value)? 'fa fa-check-circle floatIcon successIconColor' :''"></i>
+                </li>
+
+            </ul>
+            <ul class="Dropdown1" *ngIf="filteredItems?.length > 0" (scroll)="scrollCallled($event)">
+                <li *ngFor="let filterItem of filteredItems;let index = index" [id]="index+'dropdown'"[class.selected]="index === focusIdx" (mouseover)="focusIdx = index"
+                    (touchend)="forTocuchDevices(filterItem.desc)" (click)="itemSelected(filterItem)">
+                    <!-- <span>{{filterItem.desc | translate}}</span> -->
+                    <ng-container *ngIf="!displayCodeAndDesc && !displayOnlyCode">
+                        <misc-display [type]="type" [label]="filterItem.desc"></misc-display>
+                    </ng-container>
+                    <ng-container *ngIf="displayCodeAndDesc && !displayOnlyCode">
+                        <span>({{filterItem.code}}) - {{filterItem.desc | translate}}</span>
+                    </ng-container>
+                    <ng-container *ngIf="!displayCodeAndDesc && displayOnlyCode">
+                        <misc-display [type]="type" [label]="filterItem.code"></misc-display>
+                    </ng-container>                    
+                </li>
+                <li *ngIf="lazyLoader"  >{{'NCPLabel.loading' | translate}}</li>
+            </ul>
+            <i *ngIf="!hideArrowFlag" class="icon-arrow-d dropdown-da" (click)="(filteredItems?.length > 0) ? closeDropDown() : getDropdownItems()" [class.rotate]="filteredItems ? filteredItems.length > 0 : filteredItems"></i>
+            <div *ngIf="hideArrowFlag && value!=null && value.icon">
+                <i class="dropdown-da" [ngClass]="value.icon"></i>
+            </div>
+        </div>
+
+    </div>
+    <div class="col-md-1 col-sm-1 col-xs-1 tooltip-mobile3" *ngIf="tooltipShow && tooltipTitle">
+        <button  type="button" class="btn btn-link info-tooltip" data-toggle="toggle" [tooltipPlacement]="tooltipPlacement"
+            [tooltip]="tooltipHTML" [id]="elementId+'ToolTip'">
+            <i class="icon-tooltip" [id]="elementId+'ToolTip'"></i>
+            <tooltip-content #tooltipHTML [excludeId]="elementId+'ToolTip'">
+                <div innerHTML="{{tooltipTitle | translate}}"> </div>
+            </tooltip-content>
+        </button>
+    </div>
+
+</div>
+<div *ngIf="param3Info" class="col-xs-offset-0 col-md-offset-4 col-sm-offset-4 col-md-3 col-sm-4 col-xs-12 ptb5 text-left worldwide">
+    <i class="fa fa-asterisk Cardinal-col fs8 va-m mr5"></i>
+    <label class="no-pad cursor-default">{{param3Info | translate}}</label>
+</div>
+<input id="focusout" type="hidden">

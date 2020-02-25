@@ -1,0 +1,13 @@
+<ion-card *ngIf="pet" class="text-center" (click)="onSelect(pet)">
+    <img class="img m-auto" src="./assets/imgs/{{pet?.pic}}" alt="pet photo" />
+    <ion-card-header class="p-0">
+      <ion-card-subtitle class="p-0">{{pet?.petName}}</ion-card-subtitle>
+    </ion-card-header>
+  </ion-card>
+
+  <ion-card *ngIf="species" class="text-center" (click)="onSelect(species)">
+      <img class="img m-auto" src="./assets/imgs/{{species?.pic}}" alt="Species photo" />
+      <ion-card-header class="p-0">
+        <ion-card-subtitle class="p-0">{{species?.speciesName}}</ion-card-subtitle>
+      </ion-card-header>
+    </ion-card>

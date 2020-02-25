@@ -1,0 +1,130 @@
+<div class="filterac">
+    <table>
+        <thead>
+            <tr>
+                <th *ngFor="let header of tableDetails;let i = index" [class]="selectedClass(header.mapping)" (click)="changeSorting(header.mapping);(this.rotateFlag === i) ? this.rotateFlag='':this.rotateFlag=i;"
+
+                    [attr.data-title]="header.header | translate">
+                    <span class="labelHeader">{{header.header | translate}}</span>
+                    <i class="icon-arrow-d indexicon" [class.rotate]="rotateFlag === i"></i>
+                </th>
+                <th *ngIf="isActionFlag" class="actionCol">
+                    <span class="labelHeader">{{'NCPLabel.Action' | translate}}</span>
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+		<!--orderBy pipe should  follow searchBy pipe to avoid filter sorting Issue-->
+            <tr *ngFor="let object of tableData  | searchBy : searchId : tableDetails | orderBy : convertSorting(); let rowIndex=index" id="tabhide">
+                <td *ngFor="let mappings of tableDetails; let i=index" [attr.data-title]="mappings.header | translate">
+                     <i *ngIf="object.claimNo" 
+						[class.glyphicon-adjust]="object.status === 'CP' && mappings.mapping === 'statusDesc'" 
+						[class.glyphicon-check]=" object.status === 'OP' && mappings.mapping === 'statusDesc'" 
+						class="glyphicon indexapp">
+					</i>
+                        <ng-container *ngIf="mappings.fieldConfig;else displaySameData">
+							<ng-template [ngIf]="mappings.fieldConfig.showTimelineOnClick">
+								<a (click)="openTimeline(object)">{{object[mappings.mapping]}}</a>
+							</ng-template>
+							<ng-template [ngIf]="mappings.fieldConfig.pipeTransformRequired">
+								<misc-display [type]="mappings.fieldConfig.type" [dateDisplayType]="mappings.fieldConfig.dateDisplayType"
+								[label]="object[mappings.mapping]" [joinString]="mappings.fieldConfig.joinString? mappings.fieldConfig.joinString :''">
+								</misc-display>
+							</ng-template>
+						</ng-container>
+						<ng-template #displaySameData>
+								<span>{{object[mappings.mapping]}}</span>
+						</ng-template>
+                </td>
+
+                <td class="actionCol" *ngIf="isActionFlag">
+
+                    <!--<button type=radio name="button" class="fa fa-gear showPopover indexrecus" tooltipPlacement="left" [tooltip]="myTooltip"
+                        [tooltipHide]="tooltipHide" tooltipClick="true" (click)="tooltipHide = myTooltip.show();setCurrentTooltip(myTooltip);">
+					</button>-->
+                    <span (click)=searchForShareReassingPermissions(object) >
+                        <i class="fa fa-gear showPopover indexrecus" tooltipPlacement="left" [tooltip]="myTooltip"
+                        [tooltipHide]="tooltipHide" tooltipClick="true"  [id]="'claimTooltip'+rowIndex"></i>
+                    </span>
+                    <tooltip-content #myTooltip [excludeId]="'claimTooltip'+rowIndex">
+                        <h3 class="popover-title">&nbsp;
+                            <a class="close" (click)="tooltipHide = myTooltip.hide()">
+                                <i class="icon-alert"></i></a>
+                        </h3>
+                        <div class="popover-content">
+                            <div class="activityactions" *ngIf ="loader">
+                                <ncp-loader subscribe='true' loading='yes' loaderType='DOTS'></ncp-loader>
+                            </div>
+                            <div *ngIf="object.claimNo && !loader">
+                                <ul  *ngIf="object.status==='CP'">
+                                    <li><a (click)="doActionClickRow(object,'VC'); tooltipHide = myTooltip.hide()"><i class="fa fa-eye iconToolTip"></i><span class="labelToolTip">{{'NCPLabel.viewQuote' | translate}}</span></a></li>
+                                    <li><a *ngIf="(object.issuedBy === userID) ? true :(permissions && (permissions.suEditOption|| permissions.ugEditOption))" (click)="doActionClickRow(object,'EC'); tooltipHide = myTooltip.hide();"><i class="fa fa-pencil iconToolTip"></i><span class="labelToolTip">{{'NCPLabel.editQuote' | translate}}</span></a></li>
+                                    <li><a *ngIf="(object.issuedBy === userID) ? true :(permissions && (permissions.suEditOption|| permissions.ugEditOption))&& !hideAbandonFlag" (click)="doActionClickRow(object,'AC'); tooltipHide = myTooltip.hide();"><i class="fa fa-close iconToolTip"></i><span class="labelToolTip">{{'NCPLabel.abandon' | translate}}</span></a></li>
+                                </ul>
+                                <ul  *ngIf="object.status==='OP'">
+                                    <li><a (click)="doActionClickRow(object,'VC'); tooltipHide = myTooltip.hide()"><i class="fa fa-eye iconToolTip"></i><span class="labelToolTip">{{'NCPLabel.viewQuote' | translate}}</span></a></li>
+                                    <!--<li><a (click)="doActionClickRow(object,'EC'); tooltipHide = myTooltip.hide();"><i class="fa fa-pencil iconToolTip"></i><span class="labelToolTip">Edit Claim</span></a></li>-->
+                                </ul>
+                                <ul>
+                                    <li>
+                                        <a (click)="doActionClickRow(object,'SH'); tooltipHide = myTooltip.hide()">
+                                            <i class="fa fa-eye iconToolTip"></i>
+                                            <span *ngIf="permissions && (permissions.suShareOption === true||permissions.ugShareOption === true)" class="labelToolTip">{{'NCPLabel.shareTxn'
+                                                | translate}}</span>
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a (click)="doActionClickRow(object,'RA'); tooltipHide = myTooltip.hide()">
+                                            <i class=" iconToolTip"></i>
+                                            <span *ngIf="permissions && (permissions.suReAssignOption === true||permissions.ugReAssignOption === true)" class="labelToolTip">{{'NCPBtn.reassign'
+                                                | translate}}</span>
+                                        </a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </tooltip-content>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <ncp-modal [modalKey]="timelineModal" [closeOnEscape]="false" [closeOnOutsideClick]="false"  modalClass="modal-lg" [hideCloseButton]= "true">
+        <modal-header class="">
+            <div class="row">
+                <div class="col-md-11 col-sm-11 col-xs-10 label-col">
+                    <!--<h2>{{'NCPLabel.timelineFor' | translate}} {{ ' '}} {{timelineKey}} </h2>-->
+                    <misc-h2  label="NCPLabel.timelineFor"> <misc-span>{{ ' '}} {{timelineKey}}</misc-span></misc-h2>
+                </div>
+                <div class="col-md-1 col-sm-1 col-xs-2 pull-right">
+                    <button class="close" (click)="doCloseTimelineModal()" type="button" aria-label="Close"><span aria-hidden="true">×</span></button>
+                    <!--<button buttonType="custom" (click)="doCloseTimelineModal()" buttonName="Close" class="ncp-linkBtn">X</button>-->
+                </div>
+            </div>
+        </modal-header>
+        <modal-content>
+            <time-line [eventData]="eventData" [eventKey]="eventKey" [productCd]="eventProdCd" (viewProd)="doView();"></time-line>
+        </modal-content>
+        <!--<modal-footer>
+            <div class="col-md-3 col-sm-3 col-xs-12 pull-right pl-md-0 mb20">
+                <button class="ncp-linkBtn" buttonType="custom" (click)="doCloseTimelineModal()" buttonName="Close">{{'NCPBtn.Close'| translate}}</button>
+            </div>
+        </modal-footer>-->
+    </ncp-modal>    
+        <ncp-modal [modalKey]="abandonClaimModal" [closeOnEscape]="false" [closeOnOutsideClick]="false"  modalClass="modal-md" [hideCloseButton]="true">
+        <modal-content>
+            <div class="row mt15 mt-xs-10">
+                <div class="col-md-12 col-sm-12 col-xs-12">
+					<misc-span class="d-block">{{'NCPLabel.yourClaimSuccessfullyAbandoned' | translate}}</misc-span>
+				</div>
+			</div>
+        </modal-content>
+        <modal-footer>
+            <div class="btns-row mt10">
+                <button-field buttonClass="ncp-linkBtn" buttonType="custom" (click)="abandonClaimModal=false;doClaimEnquiry()" buttonName="NCPBtn.Close"></button-field>
+            </div>
+        </modal-footer>
+    </ncp-modal>
+    
+</div>
+
+<share-reassign *ngIf="shareWindow" [shareReassignFormGroup]="shareReassignInfo" (doClick)="closeModal()" (doRefreshList)="refreshList()" ></share-reassign>

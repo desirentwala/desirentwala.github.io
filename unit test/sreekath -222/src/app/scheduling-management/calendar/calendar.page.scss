@@ -1,0 +1,168 @@
+@import "../../../theme/variables.scss";
+@import "../../../theme/fonts.scss";
+
+@mixin  m-top($margin) {
+  margin-top: $margin !important;
+}
+
+@mixin color-transform($background, $mr, $shadow) {
+  background-color: $background;
+  margin-right: $mr;
+  box-shadow: $shadow;
+}
+
+%fontstyle {  
+  font-family: var(--ion-header-font);
+  font-weight: var(--font-weight-bold);
+  font-stretch: var(--font-weight-noraml);
+  font-style: var(--font-weight-noraml);
+  line-height: var(--font-weight-noraml);
+  letter-spacing: var(--font-weight-noraml);
+}
+h1 {
+  // width: 284px !important;
+  width: max-content;
+  height: 44px !important;
+}
+.calendarHeader {
+    width: 115px;
+    height: 29px;
+    font-size: var(--size-24px);
+    @extend %fontstyle;
+    color: var(--gunmetal);
+  }
+.inline{
+  display: inline-block;
+}
+.C {
+  width: 14px;
+  height: 16px;
+  object-fit: contain;
+  @include m-top(-5px);
+}
+
+.m-top {
+  @include m-top(46px);
+}
+
+.m-top-2 {
+  @include m-top(28px);
+}
+em {
+  color: var(--calendar-slot-primary) !important;
+}
+.legend {
+  list-style: none;
+  margin-top: 46px;
+
+  li {
+    float: left;
+    margin-right: 10px;
+    font-size: var(--size-8px-05rem);
+    @extend %fontstyle;
+    color: #000000;
+  }
+
+  span {
+    float: left;
+    width: var(--size-16-1rem);
+    height: 1.25rem;
+    margin: 2px;
+  }
+
+  .booked {
+    @include color-transform(rgba(0, 131, 180, 0.25), 5px , inset 0 1px 0 0 rgba(75, 86, 96, 0.8));
+  }
+
+  .unconfirmed {
+    @include color-transform(#d3d3d3, 5px , inset 0 1px 0 0 #646464);
+  }
+
+  .confirmed {
+    @include color-transform(rgba(78, 180, 0, 0.5), 5px , inset 0 1px 0 0 #4eb400);
+  }
+}
+
+em:hover {
+  cursor: pointer !important;
+  color: var(--calendar-slot-hover) !important;
+}
+
+.star {
+  font-family: FontAwesome5Pro-Solid;
+  font-size: 8px;
+  font-weight: normal;
+  font-stretch: normal;
+  font-style: normal;
+  line-height: normal;
+  letter-spacing: normal;
+  color: #000000;
+}
+
+
+@media only screen 
+  and (min-device-width: 768px) 
+  and (max-device-width: 1024px) 
+  and (orientation: portrait) 
+  and (-webkit-min-device-pixel-ratio: 1) {
+    .Rectangle {
+      // width: 100px !important;
+      height: 35px !important;
+    }
+    h1 {
+      // width: 100px !important;
+      height: 24px !important;
+      font-size: var(--size-16px);
+      @include m-top(46px);
+    }
+    .calendarHeader {
+      width: 50vw !important;
+      height: 29px;
+      font-size: 16px;
+      color: var(--gunmetal);
+    }
+    .legend {
+      li {
+        margin-right: 0px !important;
+      }
+      span {
+        width: var(--size-14-0875rem) !important;
+        height: 1rem !important;
+      }
+    }
+}
+
+/* Landscape */
+@media only screen 
+  and (min-device-width: 768px) 
+  and (max-device-width: 1024px) 
+  and (orientation: landscape) 
+  and (-webkit-min-device-pixel-ratio: 1) {
+    .m-top {
+      @include m-top(0px);
+    }
+    h1 {
+      @include m-top(0px);
+      font-size: var(--size-26px);
+    }
+    .legend {
+      @include m-top(12px);
+    }
+
+}
+
+@media only screen 
+  and (min-device-width: 1024px) 
+  and (max-device-width: 1366px) 
+  and (orientation: portrait) 
+  and (-webkit-min-device-pixel-ratio: 1) {
+    .m-top {
+      @include m-top(0px);
+    }
+    h1{
+      @include m-top(12px);
+    }
+    .legend {
+      @include m-top(12px);
+    }
+  }

@@ -1,0 +1,57 @@
+<section class="greyContainer">
+    <div class="row">
+        <div class="col-md-6 col-sm-6 col-xs-12 pl0">
+            <!--<h3><i class="fa fa-newspaper-o iconHeader"></i><span class="labelHeader">Latest News</span></h3>-->
+            <misc-h3  iconClass="fa fa-newspaper-o" label="Latest News"></misc-h3>
+        </div>
+        <div class="col-md-6 col-sm-6 col-xs-12 pr0">
+            <a (click)="viewAllNews()" class="anchorLink"><i class="fa fa-external-link-square iconAnchorLink"></i><span class="labelAnchorLink">View all News</span></a>
+        </div>
+    </div>
+    <div class="row greyInnerContainer">
+        <div class="imgBlock1" *ngFor="let detail of newsData; let i=index">
+            <div class="col-md-12 col-sm-12 col-xs-12">
+                <img *ngIf="detail.newsType === 'News'" src="assets/img/News-Banner.png" alt="" class="img-responsive">
+                <img *ngIf="detail.newsType === 'Announcement'" src="assets/img/Announcement-Banner.png" alt="" class="img-responsive">
+                <img *ngIf="detail.newsType === 'Article'" src="assets/img/Article-Banner.png" alt="" class="img-responsive">
+                <img *ngIf="detail.newsType === 'Notice'" src="assets/img/Notice-Banner.png" alt="" class="img-responsive">
+            </div>
+            <div class="col-md-12 col-sm-12 col-xs-12">
+                <!--<h5>{{detail.newsTitle}}</h5>-->
+                <misc-h5   [label]="detail.newsTitle"></misc-h5>
+            </div>
+            <div class="col-md-12 col-sm-12 col-xs-12">
+                <!--<p class="text-justify newsDetail" [innerHTML]="detail.newsDetails"></p>-->
+                <div class="dateContainer pull-left"><span class="labelDisplay">{{detail.newsType}}</span></div>            </div>
+            <div class="col-md-12 col-sm-6 col-xs-12 pr0 newsDateAlignRTL">
+                <div class="dateContainer pt5"><i class="fa fa-calendar iconicButton"></i><span class="labelDisplay">{{detail.creationDate}}</span></div>
+            </div>
+            <div class="col-md-12 col-sm-6 col-xs-12 mt-md-5 btnAlignField">
+                <button-field 
+                    buttonType="custom" 
+                    (click)="doAction(i)" 
+                    buttonClass="ncpbtn-default text-capitalize"
+                    iconClass="fa fa-external-link-square"
+                    buttonName="View News">
+                </button-field>
+                <!-- <button class="ncpbtn-default text-capitalize"><i class="fa fa-external-link-square iconicButton"></i><span class="labelButton">View News</span></button> -->
+            </div>
+        </div>
+
+        <!--<div *ngFor="let detail of newsData; let i=index" class="newsCol">
+            <div class="col-md-4 col-sm-2 col-xs-2">
+                <i class="filledIcon fa fa-file-text-o"></i>
+            </div>
+            <div class="col-md-8 col-sm-10 col-xs-8 newsTitleDateContainer">
+                <h6>{{detail.newsTitle}}</h6>
+                <div class="dateContainer">{{detail.creationDate}}</div>
+            </div>
+
+            <div class="col-md-6 col-sm-3 col-xs-12 pull-right">
+                <button type="button" (click)="doAction(i)" class="ncp-btn">View News</button>
+            </div>
+        </div>-->
+    </div>
+</section>
+
+

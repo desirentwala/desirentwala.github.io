@@ -1,0 +1,42 @@
+.table-content {
+    margin-right: 6rem;
+  }
+@media (max-width:320px) {
+  h1{
+    // font-size: 25px;
+    margin-left: 1.1rem;
+  }
+}
+  @media (max-width: 823px) {
+    .table-content {
+      margin-right: 0rem !important;
+    }
+    .content-card{
+      h1{
+        // font-size: 30px;
+        margin-left: 1.1rem;
+      }
+    }
+  }
+@media (max-width: 851px) {
+  hr.horizontalLine {
+    border-top: 1px solid #aeaeae;
+    margin: 0px 1.1rem
+  }
+}
+// page header alignment // 
+@media only screen and (min-device-width: 320px)
+            and (max-device-width: 900px)
+            and (orientation: portrait) {
+              .page-header{
+                 margin-top: 0rem !important;
+               }
+            }
+
+@media only screen and (min-device-width: 320px)
+            and (max-device-width: 960px)
+            and (orientation: landscape) {  
+              .page-header{
+                 margin-top: 0rem !important;
+               }
+            }

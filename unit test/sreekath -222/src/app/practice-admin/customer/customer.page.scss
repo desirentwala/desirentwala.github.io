@@ -1,0 +1,27 @@
+@media (width: 768px) {
+  .ipad-device {
+    top: 6vh !important;
+  }
+  .ipad-sidebar {
+    display: none;
+  }
+  .ipad {
+    width: fit-content !important;
+    padding-left: 1.5rem;
+  }
+}
+
+.destop-view {
+  display: none;
+}
+@media (min-width: 992px) {
+  .destop-view {
+    display: block;
+  }
+}
+
+@media (min-width: 1025px) {
+  .destop-view {
+    margin-right: -1.5rem;
+  }
+}

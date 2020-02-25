@@ -1,0 +1,26 @@
+<tab-error [displayFlag]="!isValidUpdateUserGroupForm" errorMessage="NCPErrorMessage.pleaseCorrectErrorsBelow">
+</tab-error>
+<div *ngIf="isError" class="alert alert-danger">
+    <ul *ngFor="let error of errors">
+        <li>
+            {{error.errCode}} - {{error.errDesc}}
+        </li>
+    </ul>
+</div>
+<usergroup-form [userGroupMaintenanceFormGroup]="userGroupMaintenanceFormGroup" [branchId]="branchId" (doClick)="updateUserGroupDetails()" (click)="userClick()">
+</usergroup-form>
+<ncp-modal [modalKey]="updateUserGroupModal" modalTitle="NCPModalTitle.usergroupupdated" modalClass="modal-md" [hideCloseButton]=true>
+    <modal-content>
+        <div class="row">
+            <div class="col-md-9 col-sm-9 col-xs-8 label-col">
+                <label class="pl0">
+                    <i class=" iconLabel"></i><span class="labelDisplay">User Group {{this.userGroupMaintenanceFormGroup.get('user_group_code').value}}
+                        has been updated successfully</span>
+                </label>
+            </div>
+            <div class="col-md-3 col-sm-3 col-xs-4 pull-right pl-md-0 mb20">
+                <button-field buttonClass="ncp-linkBtn" buttonType="custom" (click)="navigateUserGroupList()" buttonName="NCPBtn.close" iconClass="fa fa-close"></button-field>
+            </div>
+        </div>
+    </modal-content>
+</ncp-modal>

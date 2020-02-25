@@ -1,0 +1,594 @@
+<div class="BrowserNotSupportPage hide">
+	<div class="container-fluid">
+		<div class="row">
+			<div class="col-md-8 col-sm-10 col-xs-12 col-centered text-center">
+				<i class="fa fa-meh-o fs80 d-block"></i>
+				<h1 class="mtb20 fs35">Looks like you're using an unsupported browser
+					<span>ver</span>.</h1>
+				<h2 class="mb20">Please update to your browser to
+					<span>ver</span>></h2>
+				<!--<h2 class="">
+					<ul class="listExplaination"> 
+						<li class="mb10"><b>Chrome</b> : 43+</li>
+						<li class="mb10"><b>Morzilla Firefox</b> : 38+</li>
+						<li class="mb10"><b>Explorer</b> : 14+</li>
+					</ul>
+				</h2>-->
+			</div>
+		</div>
+	</div>
+</div>
+<form [formGroup]="loginForm" (ngSubmit)="onSubmit(loginForm.value)" autocomplete="off" class="gradientLoginTemplate">
+	<div class="loginBlock col-sm-7 col-md-4 col-xs-12 col-centered">
+
+		<header class="logoBlock">
+			<img src="{{brandingJson['srcLogin']}}" class="img-responsive" alt="">
+		</header>
+		<fieldset>
+			<div class="row">
+				<div class="col-md-12 col-sm-12 col-xs-12">
+					<label class="displayAsLabel">{{"NCPLabel.username" | translate}}</label>
+				</div>
+				<div class="col-md-12 col-sm-12 col-xs-12">
+					<input class="form-control vfr" formControlName="user_id" (focus)="blurFlag=false" (keyup)="forgotpassCheck()" name="user_id"
+					 placeholder="User ID" autofocus type="text" (blur)="blurFlag=true" autocomplete="off">
+					<div *ngIf="loginForm.controls.user_id.errors?.required && loginForm.controls.user_id.touched && blurFlag" class="alert alert-danger">
+						{{"NCPLabel.userIdRequired" | translate}}
+					</div>
+					<div *ngIf="loginForm.controls.user_id.errors?.minlength && loginForm.controls.user_id.touched && blurFlag" class="alert alert-danger">
+						{{"NCPLabel.invalidLength" | translate}}
+					</div>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-md-12 col-sm-12 col-xs-12">
+					<label class="displayAsLabel">{{"NCPLabel.password" | translate}}</label>
+				</div>
+				<div class="col-md-12 col-sm-12 col-xs-12 passwordContainer" (mouseover)=" loginForm.controls.user_password.value ? isPasswordIcon = true: isPasswordIcon= false"
+				 (mouseleave)="isPasswordIcon = false;mousedown = false">
+					<input class="form-control vfr" formControlName="user_password" type="password" name="user_password" [type]="mousedown ? 'text' : 'password'"
+					 placeholder="Password" id="user_password" autocomplete="new-password" />
+					<i *ngIf="isPasswordIcon && !mousedown" class="fa fa-eye viewPassword" (mousedown)="mousedown = true"></i>
+					<i *ngIf="isPasswordIcon && mousedown" class="fa fa-eye viewPassword" (mouseup)="mousedown = false"></i>
+					<div *ngIf="loginForm.controls.user_password.errors?.required && loginForm.controls.user_password.touched" class="alert alert-danger">
+						{{"NCPLabel.passwordRequired" | translate}}
+					</div>
+
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-sm-12 col-md-12 col-xs-12">
+					<button type="submit" class="ncp-btn m0" [disabled]="!loginForm.valid">{{"NCPLabel.login" | translate}}</button>
+				</div>
+			</div>
+			<input type="hidden" formControlName="user_lang_code" class="form-control" name="user_lang_code" autocomplete="off">
+			<input type="hidden" formControlName="user_branch" class="form-control" name="user_branch" autocomplete="off">
+			<input type="hidden" formControlName="firstLogin" class="form-control" name="firstLogin" autocomplete="off">
+			<div class="row">
+				<div class="col-sm-12 col-md-12 col-xs-12 text-center">
+					<!--<a (click)="fetchRecoveryQuestions()">{{"NCPLabel.forgetPassword" | translate}}</a>-->
+					<!--<a (click)="sendOTP()">{{"NCPLabel.forgetPassword" | translate}}</a>-->
+					<a (click)="forgetPasswordOptionsModal()">{{"NCPLabel.forgetPassword" | translate}}</a>
+				</div>
+			</div>
+			<div *ngIf="isError" class="alert alert-danger">
+				<ul *ngFor="let error of errors">
+					<li>
+						{{error.errDesc}}
+					</li>
+				</ul>
+			</div>
+		</fieldset>
+		<footer class="FooterTemplate1">
+			<div class="row">
+
+				<div class="col-xs-12 col-sm-12 col-centered col-md-12 classForIe">
+					<ul class="footerTemplateList">
+						<li class="footerTemplateListItems">
+							<a target="_blank" href="{{brandingJson['Termsofuseurl']}}">{{brandingJson['Termsofuse'] | translate}}</a>
+						</li>
+						<li class="footerTemplateListItems">
+							<a target="_blank" href="{{brandingJson['Privacypolicyurl']}}">{{brandingJson['Privacypolicy'] | translate}}</a>
+						</li>
+						<li class="footerTemplateListItems">
+							<!-- <a target="_blank" href="{{brandingJson['Contactusurl']}}">{{brandingJson['Contactus']  | translate}}</a> -->
+							<a (click)="openContactUs()">{{"NCPLabel.contactus" | translate}}</a>
+						</li>
+					</ul>
+				</div>
+				<div class="col-xs-12 col-sm-12 col-md-12 text-center pt10">
+						<p>©{{brandingJson['copyRightYear']}} <a>{{brandingJson['name']}}</a></p>
+				</div>
+				<div *ngIf="brandingJson['browserMessage']" class="col-xs-12 col-sm-12 col-md-12 text-center pt10">
+					<p>{{brandingJson['browserMessage']  | translate}}</p>
+				</div>
+			</div>
+		</footer>
+	</div>
+	<div class="loginBlockBg1 loginBlockBg col-sm-7 col-md-4 col-centered hidden-xs"></div>
+	<div class="loginBlockBg2 loginBlockBg col-sm-7 col-md-4 col-centered hidden-xs"></div>
+</form>
+
+<!-- "loginTemplate" class to be changed as singleLineLoginTemplate  -->
+<form [formGroup]="loginForm" (ngSubmit)="onSubmit(loginForm.value)" class="form-signin loginForm whiteHeader loginTemplate" autocomplete="off" >
+	<div class="container-fluid p0 ">
+		<header>
+			<div class="whiteHeader">
+				<div class="head-liner">
+					<img alt="" class="p20 img-responsive" src="{{brandingJson['src']}}">
+				</div>
+			</div>
+			<!--<div class="head-liner row"><img alt="" class="logo-line img-responsive" src="assets/img/logo.png"></div>-->
+		</header>
+		<div class="login row">
+			<!--<img src="../assets/img/lg-bg.jpg" class="img-responsive">-->
+			<div class="lg-form col-sm-8 col-md-6 col-centered">
+				<fieldset>
+					<div class="userImgContainer">
+						<i class="fa fa-user"></i>
+					</div>
+					<div class="form-row">
+						<div class="col-md-3 col-sm-3 col-xs-12 label-col">
+							<label>{{"NCPLabel.username" | translate}}</label>
+						</div>
+						<!-- "input-col" is used in SingleLineLoginTemplate -->
+						<div class="col-md-6 col-sm-7 col-xs-12 input-col">
+							<input class="form-control vfr" formControlName="user_id" (focus)="blurFlag=false" (keyup)="forgotpassCheck()" name="user_id"
+							 placeholder="User ID" autofocus type="text" (blur)="blurFlag=true" autocomplete="off">
+							<div *ngIf="loginForm.controls.user_id.errors?.required && loginForm.controls.user_id.touched && blurFlag" class="alert alert-danger">
+								{{"NCPLabel.userIdRequired" | translate}}
+							</div>
+							<div *ngIf="loginForm.controls.user_id.errors?.minlength && loginForm.controls.user_id.touched && blurFlag" class="alert alert-danger">
+								{{"NCPLabel.invalidLength" | translate}}
+							</div>
+						</div>
+					</div>
+					<div class="form-row">
+						<div class="col-md-3 col-sm-3 col-xs-12 label-col">
+							<label>{{"NCPLabel.password" | translate}}</label>
+						</div>
+						<div class="col-md-6 col-sm-7 col-xs-12 passwordContainer" (mouseover)=" loginForm.controls.user_password.value ? isPasswordIcon = true: isPasswordIcon= false"
+						 (mouseleave)="isPasswordIcon = false;mousedown = false">
+							<input class="form-control vfr" formControlName="user_password" type="password" name="user_password" [type]="mousedown ? 'text' : 'password'"
+							 placeholder="Password" id="inputPassword" autocomplete="new-password" />
+							<i *ngIf="isPasswordIcon && !mousedown" class="fa fa-eye viewPassword" (mousedown)="mousedown = true"></i>
+							<i *ngIf="isPasswordIcon && mousedown" class="fa fa-eye viewPassword" (mouseup)="mousedown = false"></i>
+							<div *ngIf="loginForm.controls.user_password.errors?.required && loginForm.controls.user_password.touched" class="alert alert-danger">
+								{{"NCPLabel.passwordRequired" | translate}}
+							</div>
+
+						</div>
+					</div>
+					<div class="form-row">
+						<div class="col-sm-7 col-md-6 col-xs-offset-0 col-md-offset-3 col-sm-offset-3 col-xs-12 loginBtnContainer">
+							<button type="submit" class="ncp-btn" [disabled]="!loginForm.valid">{{"NCPLabel.login" | translate}}</button>
+						</div>
+					</div>
+					<input type="hidden" formControlName="user_lang_code" class="form-control" name="user_lang_code" autocomplete="off">
+					<input type="hidden" formControlName="user_branch" class="form-control" name="user_branch" autocomplete="off">
+					<input type="hidden" formControlName="firstLogin" class="form-control" name="firstLogin" autocomplete="off">
+					<div class="form-row">
+							<!-- forgotPwdContainer used in singleLineloginTemplate -->
+						<div class="col-sm-7 col-sm-offset-3 col-md-6 col-xs-offset-0 col-md-offset-3 col-xs-12 text-center mt10 forgotPwdContainer">
+							<!--<a (click)="fetchRecoveryQuestions()">{{"NCPLabel.forgetPassword" | translate}}</a>-->
+							<!--<a (click)="sendOTP()">{{"NCPLabel.forgetPassword" | translate}}</a>-->
+							<a (click)="forgetPasswordOptionsModal()">{{"NCPLabel.forgetPassword" | translate}}</a>
+						</div>
+					</div>
+					<div *ngIf="isError" class="alert alert-danger">
+						<ul *ngFor="let error of errors">
+							<li>
+								{{error.errDesc}}
+							</li>
+						</ul>
+					</div>
+				</fieldset>
+			</div>
+		</div>
+		<!-- loginTemplateFooter to be replaced with singleLineLoginTemplateFooter -->
+		<footer class="footer-login loginTemplateFooter" id="footer">
+			<div class="footer-liner">
+				<div class="row mlr0-i">
+					<div class="col-xs-12 col-sm-5 footul col-md-5">
+						<ul>
+							<li>
+								<a target="_blank" href="{{brandingJson['Termsofuseurl']}}">{{brandingJson['Termsofuse'] | translate}}</a>
+							</li>
+							<li>
+								<a target="_blank" href="{{brandingJson['Privacypolicyurl']}}">{{brandingJson['Privacypolicy'] | translate}}</a>
+							</li>
+							<li>
+								<!-- <a target="_blank" href="{{brandingJson['Contactusurl']}}">{{brandingJson['Contactus'] | translate}}</a> -->
+								<a (click)="openContactUs()">{{"NCPLabel.contactUs" | translate}}</a>
+							</li>
+						</ul>
+					</div>
+					<!--<div class="col-xs-12 col-sm-6 pull-right">
+						<p class="margin-0 text-right">©2016 <a target="_blank" href="http://nttdata-ndfs.com/">NTT DATA FA Insurance Systems </a></p>
+					</div>-->
+					<div class="col-xs-12 col-sm-6 pull-right p-xs-0 footul">
+						<p class="margin-0 text-right defaultFontSize">©{{brandingJson['copyRightYear']}} <a>{{brandingJson['name']}}</a></p>
+					</div>
+				</div>
+			</div>
+		</footer>
+	</div>
+
+</form>
+
+<form class="form-signin loginForm" (ngSubmit)="validateAnswers()" [formGroup]="passwordRecoveryForm" autocomplete="off">
+	<ncp-modal [modalKey]="forgotPassword"  modalClass="modal-lg"  modalTitle="NCPLabel.forgetPassword" titleIcon="fa fa-lock" [closeOnEscape]="false" [closeOnOutsideClick]="false" hideCloseButton=true>
+		<modal-content>
+			<fieldset>
+				<div class="row">
+					<div class="col-md-3 col-sm-4 col-xs-12 label-col pl0 fwb">
+						<label>{{"NCPLabel.recoveryQuestion" | translate}}</label>
+					</div>
+					<div class="col-md-9 col-sm-8 col-xs-12 pr0">
+						<span class="">
+							<!--<select class="form-control mt-sm-10"  formControlName="recoveryQuestion1_code" name="recoveryQuestion1">
+								<option selected value="{{passwordRecoveryForm.controls.recoveryQuestion1_code.value}}">{{passwordRecoveryForm.controls.recoveryQuestion1_code.value}}</option>
+							</select>-->
+							<label>{{passwordRecoveryForm.controls.recoveryQuestion1_code.value}}</label>
+						</span>
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-md-3 col-sm-4 col-xs-12 label-col pl0">
+						<label>{{"NCPLabel.answers1" | translate}}</label>
+					</div>
+					<div class="col-md-9 col-sm-8 col-xs-12 pr0">
+						<span class="">
+							<input class="form-control mt-sm-10" placeholder="" type="text" formControlName="recoveryAnswer1" name="recoveryAnswer1" required autofocus autocomplete="off">
+						</span>
+						<div *ngIf="passwordRecoveryForm.controls.recoveryAnswer1.errors?.required && passwordRecoveryForm.controls.recoveryAnswer1.touched"
+						 class="alert alert-danger">
+							{{"NCPLabel.answers1required" | translate}}
+						</div>
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-md-3 col-sm-4 col-xs-12 label-col pl0 fwb">
+						<label>{{"NCPLabel.recoveryQuestion2" | translate}}</label>
+					</div>
+					<div class="col-md-9 col-sm-8 col-xs-12 pr0">
+						<span class="">
+							<!--<select class="form-control mt-sm-10"  formControlName="recoveryQuestion2_code" name="recoveryQuestion2">
+								<option selected value="{{passwordRecoveryForm.controls.recoveryQuestion2_code.value}}">{{passwordRecoveryForm.controls.recoveryQuestion2_code.value}}</option>
+							</select>-->
+							<label>{{passwordRecoveryForm.controls.recoveryQuestion2_code.value}}</label>
+						</span>
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-md-3 col-sm-4 col-xs-12 label-col pl0">
+						<label>{{"NCPLabel.answers2" | translate}}</label>
+					</div>
+					<div class="col-md-9 col-sm-8 col-xs-12 pr0">
+						<span class=""><input class="form-control mt-sm-10" placeholder="" type="text" formControlName="recoveryAnswer2" name="recoveryAnswer2" required autofocus autocomplete="off">
+						</span>
+						<div *ngIf="passwordRecoveryForm.controls.recoveryAnswer2.errors?.required && passwordRecoveryForm.controls.recoveryAnswer2.touched"
+						 class="alert alert-danger">
+							{{"NCPLabel.answers2required" | translate}}
+						</div>
+					</div>
+				</div>
+				<div *ngIf="isModalError" class="alert alert-danger">
+					<ul *ngFor="let error of modalErrors">
+						<li>
+							{{error.errDesc}}
+						</li>
+					</ul>
+				</div>
+
+
+			</fieldset>
+		</modal-content>
+		<modal-footer>
+			<div class="btns-row">
+				<div class="btnContainer">
+					<button class="ncp-linkBtn" type="button" data-dismiss="modal" (click)="forgotPasswordFormGroupClear()">{{"NCPBtn.close" | translate}}</button>
+				</div>
+				<div class="btnContainer">
+					<button class="ncpbtn-default" type="submit" data-dismiss="modal" [disabled]="!passwordRecoveryForm.valid" data-toggle="modal">Recover</button>
+				</div>
+			</div>
+		</modal-footer>
+
+	</ncp-modal>
+</form>
+
+<form [formGroup]="resetPasswordForm" (ngSubmit)="changePassword(resetPasswordForm.value)" class="form-signin loginForm" autocomplete="off" >
+
+	<ncp-modal [modalKey]="resretPassword" modalClass="modal-lg" [closeOnEscape]="false" [closeOnOutsideClick]="false" modalTitle="NCPBtn.changePassword" titleIcon="fa fa-lock" hideCloseButton=true>
+
+		<modal-content>
+			<fieldset>
+				<div class="row">
+					<div class="col-md-3 col-sm-3 col-xs-12 label-col">
+						<label>{{"NCPLabel.newPassword" | translate}}</label>
+					</div>
+					<div class="col-sm-8 col-xs-12">
+						<span class="">
+							<input class="form-control" (keyup)="passwordStrength($event)" formControlName="user_password" name="user_password" required autofocus type="password" autocomplete="off">
+						</span>
+						<div *ngIf="resetPasswordForm.controls.user_password.errors?.required && resetPasswordForm.controls.user_password.touched"
+						 class="alert alert-danger">
+							{{"NCPLabel.passwordRequired" | translate}}
+						</div>
+					</div>
+				</div>
+				<div class="ml27p mt-10">
+					<ncp-password-strength-bar [passwordToCheck]="acceptPassword">
+					</ncp-password-strength-bar>
+				</div>
+				<div class="row">
+					<div class="col-md-3 col-sm-3 col-xs-12 label-col">
+						<label>{{"NCPLabel.confirmNewPassword" | translate}}</label>
+					</div>
+					<div class="col-md-6 col-sm-6 col-xs-12 pr-sm-0 passwordContainer" (mouseover)=" resetPasswordForm.controls.confirm_password.value ? isPasswordIcon = true: isPasswordIcon= false"
+					 (mouseleave)="isPasswordIcon = false;mousedown = false">
+							<input class="form-control vfr" (keyup)="passwordMismatch()" type="password" formControlName="confirm_password" name="confirm_password" required autofocus autocomplete="off" 
+							[type]="mousedown ? 'text' : 'password'" customFlag=true> 
+						<i *ngIf="isPasswordIcon && !mousedown" class="fa fa-eye viewPassword" (mousedown)="mousedown = true"></i>
+						<i *ngIf="isPasswordIcon && mousedown" class="fa fa-eye viewPassword" (mouseup)="mousedown = false"></i>
+						<div *ngIf="!passwordMatch" class="alert alert-danger">{{"NCPLabel.passwordsMismatch" | translate}}</div>
+					</div>
+				</div>
+				<div *ngIf="isModalError" class="alert alert-danger">
+					<ul *ngFor="let error of modalErrors">
+						<li>
+							{{error.errDesc}}
+						</li>
+					</ul>
+				</div>
+				<div class="btns-row">
+					<div class="btnContainer">
+						<button class="ncp-linkBtn" type="button" data-dismiss="modal" (click)="resretPassword = false">{{"NCPBtn.close" | translate}}</button>
+					</div>
+					<div class="btnContainer">
+						<button class="ncpbtn-default" type="submit" [disabled]="!(resetPasswordForm.valid && passwordMatch)">{{"NCPLabel.savePassword" | translate}}</button>
+					</div>
+				</div>
+			</fieldset>
+		</modal-content>
+
+	</ncp-modal>
+</form>
+<!--<form [formGroup]="createNewUserFormGroup" autocomplete="off" >
+	<ncp-modal [modalKey]="createNewUserModal"  modalClass="modal-lg" modalTitle="NCPBtn.changePassword" titleIcon="fa fa-lock">
+
+		<modal-content>
+			<div class="row">
+				<div class="col-md-3 col-sm-3 col-xs-12 label-col">
+					<label>{{"NCPLabel.currentPassword" | translate}}</label>
+				</div>
+				<text-box formControlName="current_password" inputType="password" customFlag=true textBoxClass="col-md-6 col-sm-6 col-xs-12 pr-sm-0"
+				 ngDefaultControl>
+				</text-box>
+			</div>
+			<div class="row">
+				<div class="col-md-3 col-sm-3 col-xs-12 label-col">
+					<label>{{"NCPLabel.UserPassword" | translate}}</label>
+				</div>
+				<text-box formControlName="user_password" inputType="password" (keyup)="passwordStrength($event)" customFlag=true textBoxClass="col-md-6 col-sm-6 col-xs-12 pr-sm-0"
+				 ngDefaultControl tooltipTitle="Password must be one Capital Letter,one Symbol, one Number and more than 8 digits">
+				</text-box>
+			</div>
+			<error-handler [elementControl]="createNewUserFormGroup.controls['user_password']" [customMessages]="{required: 'userPassword',pattern: 'pattern'}">
+			</error-handler>
+			<div class="ml27p mt-10">
+             <ncp-password-strength-bar
+                [passwordToCheck]="acceptPassword">
+            </ncp-password-strength-bar>
+            </div>
+			<div class="row">
+				<div class="col-md-3 col-sm-3 col-xs-12 label-col">
+					<label>{{"NCPLabel.ConfirmPassword" | translate}}</label>
+				</div>				
+				<div class="col-md-6 col-sm-6 col-xs-12 pr-sm-0 passwordContainer"  (mouseover)=" createNewUserFormGroup.controls.confirm_password.value ? isPasswordIcon = true: isPasswordIcon= false"
+								(mouseleave)="isPasswordIcon = false;mousedown = false">
+					<input class="form-control vfr" formControlName="confirm_password" type="password" name="confirm_password" [type]="mousedown ? 'text' : 'password'"
+					placeholder="Password" id="confirm_password" autocomplete="new-password" />							
+                      <i *ngIf="isPasswordIcon && !mousedown" class="fa fa-eye viewPassword" (mousedown)="mousedown = true"></i>
+					 <i *ngIf="isPasswordIcon && mousedown" class="fa fa-eye viewPassword" (mouseup)="mousedown = false"></i>												
+				</div>
+			</div>
+			<error-handler [elementControl]="createNewUserFormGroup.controls['confirm_password']" [customMessages]="{required: 'confirmPassword', mismatch: 'mismatch'}">
+			</error-handler>
+			<div *ngIf="isError" class="alert alert-danger">
+				<ul *ngFor="let error of errors">
+					<li>
+						{{error.errDesc}}
+					</li>
+				</ul>
+			</div>
+			<div class="row">
+				<div class="col-md-12 col-sm-12 col-xs-12 label-col">
+					<h2>{{"NCPLabel.setRecoveryQuestion" | translate}}</h2>
+				</div>
+			</div>
+			<hr>
+			<div class="row">
+				<div class="col-md-3 col-sm-3 col-xs-12 label-col">
+					<label>{{"NCPLabel.recoveryQuestion" | translate}}</label>
+				</div>
+				<drop-down elementId="recovery1" elementId="recovery1" formControlName="recoveryQuestion1_code" miscSubType="QUES" miscType="MiscInfo"
+				 pickListFlag=true isCodeDesc=true [descControl]="createNewUserFormGroup.controls['recoveryQuestion1_desc']" customFlag=t
+				 rue dropdownClass="col-md-6 col-sm-6 col-xs-12 pr-sm-0" ngDefaultControl>
+				</drop-down>
+			</div>
+			<div class="row">
+				<div class="col-md-3 col-sm-3 col-xs-12 label-col">
+					<label>{{"NCPLabel.answers1" | translate}}</label>
+				</div>
+				<text-box formControlName="recoveryAnswer1" customFlag=true textBoxClass="col-md-6 col-sm-6 col-xs-12 pr-sm-0" ngDefaultControl>
+				</text-box>
+			</div>
+			<div class="row">
+				<div class="col-md-3 col-sm-3 col-xs-12 label-col">
+					<label>{{"NCPLabel.recoveryQuestion2" | translate}}</label>
+				</div>
+				<drop-down elementId="recovery2" elementId="recovery2" formControlName="recoveryQuestion2_code" miscSubType="QUES" miscType="MiscInfo"
+				 pickListFlag=true isCodeDesc=true customFlag=t rue dropdownClass="col-md-6 col-sm-6 col-xs-12 pr-sm-0" [descControl]="createNewUserFormGroup.controls['recoveryQuestion2_desc']"
+				 ngDefaultControl>
+				</drop-down>
+			</div>
+			<div class="row">
+				<div class="col-md-3 col-sm-3 col-xs-12 label-col">
+					<label>{{"NCPLabel.answers1" | translate}}</label>
+				</div>
+				<text-box formControlName="recoveryAnswer2" customFlag=true textBoxClass="col-md-6 col-sm-6 col-xs-12 pr-sm-0" ngDefaultControl>
+				</text-box>
+			</div>
+			<!--<button 
+			       class="btn btn-primary btn-shadow" 
+				   type="button" 
+				   (click)="firstLoginUser()" 
+				   [disabled]="!(createNewUserFormGroup.valid)">Submit</button>
+			<button 
+			        class="btn btn-primary btn-shadow" 
+					type="button" 
+					(click)="createNewUserModal = false;">Close</button>-->
+<!--</modal-content>
+		<modal-footer>
+			<div class="btns-row">
+				<div class="col-md-2 col-sm-3 col-xs-12 pull-right mb10 mt-xs-10 plr-xs-0 pr0">
+					<button type="button" class="ncp-linkBtn" (click)="createNewUserModal = false;"> {{"NCPBtn.close" | translate}}
+						</button>
+				</div>
+				<div class="col-md-2 col-sm-3 col-xs-12 pull-right mb10 mt-xs-10 plr-xs-0">
+					<button class="btn btn-primary btn-shadow w100p" type="button" (click)="firstLoginUser()" [disabled]="!(createNewUserFormGroup.valid)">{{"NCPBtn.submit" | translate}}</button>
+				</div>
+			</div>
+		</modal-footer>
+	</ncp-modal>
+</form>-->
+<form [formGroup]="enterOTPFormGroup" autocomplete="off">
+	<ncp-modal [modalKey]="enterOTP" modalClass="modal-md" modalTitle="NCPBtn.changePassword" titleIcon="fa fa-lock">
+
+		<modal-content>
+			<div class="row">
+				<div class="col-md-4 col-sm-4 col-xs-12 label-col">
+					<label>{{"NCPLabel.enterOTP" | translate}}</label>
+				</div>
+				<text-box formControlName="user_OTP" inputType="password" maxlength="6" ngDefaultControl>
+				</text-box>
+			</div>
+			<div class="row">
+				<span class="pull-right" id="user_otp_successfully_sent">{{ "NCPLabel.otpSentSuccessfully" | translate }} {{ masked_user_mobile }}</span>
+			</div>
+			<error-handler [elementControl]="enterOTPFormGroup.controls['user_OTP']" [customMessages]="{required: 'One Time Password Cannot Be Blank'}">
+			</error-handler>
+			<div *ngIf="isError" class="alert alert-danger">
+				<ul *ngFor="let error of errors">
+					<li>
+						{{error.errDesc}}
+					</li>
+				</ul>
+			</div>
+		</modal-content>
+		<modal-footer>
+			<div class="btns-row">
+				<div class="col-md-3 col-sm-4 col-xs-12 pull-right pr0 mb10 mt-xs-10 plr-xs-0">
+					<button type="button" class="ncp-linkBtn" (click)="doclose()"> {{"NCPBtn.close" | translate}}
+					</button>
+				</div>
+				<div class="col-md-3 col-sm-4 col-xs-12 pull-right mb10 mt-xs-10 plr-xs-0">
+					<button class="btn btn-primary btn-shadow w100" type="button" (click)="doAuthenticateOTP()" [disabled]="!(enterOTPFormGroup.valid)">{{"NCPBtn.submit" | translate}}</button>
+				</div>
+			</div>
+		</modal-footer>
+	</ncp-modal>
+</form>
+<form [formGroup]="forgotPasswordOptionsFormGroup" class="radio-btn" autocomplete="off">
+	<ncp-modal [modalKey]="forgetPasswordOptions"  modalClass="modal-md" modalTitle="NCPLabel.forgetPassword" titleIcon="fa fa-lock" [closeOnEscape]="false" [closeOnOutsideClick]="false" hideCloseButton=true >
+
+		<modal-content>
+			<div class="row">
+				<radio-button formControlName="retrievePasswordBy" [radioArray]="forgotPasswordOptionsArray" changeId="forgotPasswordOptionSelected"
+				 horizontalflag=true customFlag=true elementId="retrievePasswordBy" radioCustomClass="col-md-12 col-sm-12 col-xs-12 pl0 radioHorizontalBtnsAlignRTL" ngDefaultControl>
+				</radio-button>
+			</div>
+		</modal-content>
+		<modal-footer>
+			<div class="btns-row">
+				<button type="button" class="ncp-linkBtn" (click)="forgetPasswordOptions=false"> {{"NCPBtn.close" | translate}}
+				</button>
+			</div>
+		</modal-footer>
+	</ncp-modal>
+</form>
+<ncp-modal [modalKey]="isForceLogin" modalClass="modal-sm" [closeOnEscape]="false" [closeOnOutsideClick]="false" hideCloseButton=true>
+	<modal-content>
+		<div class="row">
+			<h3>{{'NCPLabel.doYouWantForceLogin' | translate}}</h3>
+		</div>
+		<div class="row">
+			<div class="col-md-5 col-sm-5 col-xs-6 btnContainer pr0">
+				<button class="ncpbtn-default ml-sm-10 mt-xs-0 w100p" (click)="doForceLogin();">{{'NCPBtn.yes' | translate}}</button>
+			</div>
+			<div class="col-md-5 col-sm-5 col-xs-6 btnContainer pr0">
+				<button class="ncp-linkBtn w100p" (click)="isForceLogin = false">{{'NCPBtn.no' | translate}}</button>
+			</div>
+		</div>
+	</modal-content>
+</ncp-modal>
+
+<form [formGroup]="contactUsFormGroup" class="form-signin loginForm" autocomplete="off">
+    <ncp-modal [modalKey]="contactUsModelKey" modalClass="modal-md" [closeOnEscape]="false" [closeOnOutsideClick]="false" modalTitle="NCPLabel.contactUs" titleIcon="" hideCloseButton=false>
+
+        <modal-content>
+            <div class="row">
+                <ncp-label elementLabel="NCPLabel.territoryCode" elementId="Name"></ncp-label>
+                <drop-down elementId="territoryCodeElementId" formControlName="territoryCode" miscSubType="TERR" miscType="MiscInfo" pickListFlag=true isCodeDesc=true dropdownClass="col-md-6 col-sm-6 col-xs-12 pr-sm-0" [descControl]="contactUsFormGroup.controls['territoryCodeDesc']"
+                    ngDefaultControl></drop-down>
+            </div>
+
+            <div class="row">
+                <ncp-label elementLabel="NCPLabel.name" elementId="Name" mandatoryFlag="true"></ncp-label>
+                <text-box formControlName="name" maxLenght="30" ngDefaultControl elementLabel="NCPLabel.name" mandatoryFlag="true"></text-box>
+            </div>
+            <error-handler [elementControl]="contactUsFormGroup.controls['name']" [showErrorOnBlur]=true [customMessages]="{required: 'NCPLabel.mandatoryField'}"></error-handler>
+
+            <div class="row">
+                <ncp-label elementLabel="NCPLabel.emailAddress" elementId="emailAddress" mandatoryFlag="true"></ncp-label>
+                <text-box formControlName="fromAddress" inputType="email" ngDefaultControl elementLabel="NCPLabel.emailAddress" mandatoryFlag="true"></text-box>
+            </div>
+            <error-handler [elementControl]="contactUsFormGroup.controls['fromAddress']" [showErrorOnBlur]=true [customMessages]="{required: 'NCPLabelcustomMessages.pleaseEnterYourEmailid',mailFormat:'NCPLabelcustomMessages.pleaseEnterValidEmailId'}"></error-handler>
+
+
+            <div class="row">
+                <ncp-label elementLabel="NCPLabel.contactNumber" elementId="contactNumber" mandatoryFlag="true"></ncp-label>
+                <text-box formControlName="contactNumber" acceptPattern="^[0-9]*$" maxLength="10" ngDefaultControl elementLabel="NCPLabel.contactNumber" mandatoryFlag="true"></text-box>
+            </div>
+            <error-handler [elementControl]="contactUsFormGroup.controls['fromAddress']" [showErrorOnBlur]=true [customMessages]="{required: 'NCPLabel.mandatoryField'}"></error-handler>
+
+            <div class="row">
+                <ncp-label elementLabel="NCPLabel.subject" elementId="subject" mandatoryFlag="true"></ncp-label>
+                <text-box formControlName="subject" maxLength="50" ngDefaultControl elementLabel="NCPLabel.subject" mandatoryFlag="true"></text-box>
+            </div>
+            <error-handler [elementControl]="contactUsFormGroup.controls['subject']" [showErrorOnBlur]=true [customMessages]="{required: 'NCPLabel.mandatoryField'}"></error-handler>
+
+            <div class="row">
+                <ncp-label elementLabel="NCPLabel.Description" elementId="Description" mandatoryFlag="true"></ncp-label>
+                <text-area formControlName="emailMessage" textAreaRow="4" textAreaCol="6" elementLabel="NCPLabel.Description">
+                </text-area>
+            </div>
+            <error-handler [elementControl]="contactUsFormGroup.controls['emailMessage']" [showErrorOnBlur]=true [customMessages]="{required: 'NCPLabel.mandatoryField'}"></error-handler>
+        </modal-content>
+
+        <modal-footer>
+            <div class="btns-row">
+                <div class="btnContainer">
+                    <button class="ncp-linkBtn" type="button" data-dismiss="modal" (click)="closeContactUs()">{{"NCPBtn.close"
+                            | translate}}</button>
+                </div>
+                <div class="btnContainer">
+                    <button class="ncpbtn-default" type="submit" (click)="contactUsSubmit()" [disabled]="!(contactUsFormGroup.valid)">{{"NCPBtn.send"
+                                | translate}}</button>
+                </div>
+            </div>
+        </modal-footer>
+    </ncp-modal>
+</form>

@@ -1,0 +1,95 @@
+<div *ngIf="customFlag" [class]="timePickerClass" ngClass="time-picker mydp">
+    <div class="{{readOnlyFlag ? 'customDisabled' :' '}} input-holder" [class]="inputClass" class="selectiongroup">
+        <input [id]="elementId" type="text" class="form-control"  [maxlength]="maxLength" [placeholder]="placeHolder" [(value)]="time" (keyup)="inputTime($event)"  (blur)="inputBlur()" (click)="inputClick()" [formControl]="elementControl" >
+        <p class="mainFloatLabel" [class.floatLabel]="value">{{elementLabel | translate}}<span *ngIf="mandatoryFlag" class="aste">*</span></p>
+        <i class="floatBorder"></i>
+        <span [style.height]="height" (click)="openTimePicker()">
+            <button  type="button" class="btnpicker timePickerModal timePickerAlignRTL" >
+                <span class="fa fa-clock-o icon" [ngStyle]="{'line-height': height}"></span>
+            </button>
+        </span>
+    </div>
+    <div *ngIf="showTimepicker" class="timepicker-pp">
+            <ul class="time-picker-controls inline">
+                <li class="time-picker-controls-control">
+                    <button  type="button" class="btnpicker" ><span (click)="hourUp()" class="fa fa-angle-up"></span></button>
+                    <span class="time-picker-hours" tabindex="-1">{{hourString}}</span>
+                    <button  type="button" class="btnpicker" ><span (click)="hourDown()" class="fa fa-angle-down"></span></button>
+                </li>
+                <li class="time-picker-separator">
+                    <span class="time-picker-separator">:</span>
+                </li>
+                <li class="time-picker-controls-control">
+                    <button  type="button" class="btnpicker" ><span (click)="minuteUp()" class="fa fa-angle-up"></span></button>
+                    <span class="time-picker-minutes" tabindex="-1">{{minuteString}}</span>
+                    <button  type="button" class="btnpicker" ><span (click)="minuteDown()" class="fa fa-angle-down"></span></button>
+                </li>
+                <li class="time-picker-separator">
+                    <span class="time-picker-separator">:</span>
+                </li>
+                <li class="time-picker-controls-control">
+                    <button  type="button" class="btnpicker" ><span (click)="secondUp()" class="fa fa-angle-up"></span></button>
+                    <span class="time-picker-seconds" tabindex="-1">{{secondString}}</span>
+                    <button  type="button" class="btnpicker" ><span (click)="secondDown()" class="fa fa-angle-down"></span></button>
+                </li>
+                <li *ngIf="timeFormat == '12:00'" class="time-picker-controls-control">
+                    <button  type="button" class="btnpicker" ><span (click)="meridiemChange()" class="fa fa-angle-up"></span></button>
+                    <span class="time-picker-meridiem" tabindex="-1">{{meridiem}}</span>
+                    <button  type="button" class="btnpicker" ><span (click)="meridiemChange()" class="fa fa-angle-down"></span></button>
+                </li>
+            </ul>
+    </div>
+</div>
+<div *ngIf="!customFlag" class="time-picker col-sm-12 col-md-12 col-xs-11 mydp no-pad">
+    <div class="{{readOnlyFlag ? 'customDisabled' :' '}} input-holder">
+        <input [id]="elementId" type="text" class="form-control"  [maxlength]="maxLength" [placeholder]="placeHolder" [(value)]="time" (keyup)="inputTime($event)"  (blur)="inputBlur()" (click)="inputClick()" [formControl]="elementControl" >
+        <p class="mainFloatLabel" [class.floatLabel]="value">{{elementLabel | translate}}<span *ngIf="mandatoryFlag" class="aste">*</span></p>
+        <i class="floatBorder"></i>
+        <span [style.height]="height" (click)="openTimePicker()">
+            <button  type="button" class="btnpicker timePickerModal timePickerAlignRTL" >
+                <span class="fa fa-clock-o icon" [ngStyle]="{'line-height': height}"></span>
+            </button>
+        </span>
+        <!--<span class="timepicker-icon  selbtngroup"><i class="fa fa-clock-o" (click)="openTimePicker()"></i></span>-->
+    </div>
+    <div *ngIf="showTimepicker" class="timepicker-pp">
+            <ul class="time-picker-controls inline">
+                <li class="time-picker-controls-control">
+                    <button  type="button" class="btnpicker" ><span (click)="hourUp()" class="fa fa-angle-up"></span></button>
+                    <span class="time-picker-hours" tabindex="-1">{{hourString}}</span>
+                    <button  type="button" class="btnpicker" ><span (click)="hourDown()" class="fa fa-angle-down"></span></button>
+                </li>
+                <li class="time-picker-separator">
+                    <span class="time-picker-separator">:</span>
+                </li>
+                <li class="time-picker-controls-control">
+                    <button  type="button" class="btnpicker" ><span (click)="minuteUp()" class="fa fa-angle-up"></span></button>
+                    <span class="time-picker-minutes" tabindex="-1">{{minuteString}}</span>
+                    <button  type="button" class="btnpicker" ><span (click)="minuteDown()" class="fa fa-angle-down"></span></button>
+                </li>
+                <li class="time-picker-separator">
+                    <span class="time-picker-separator">:</span>
+                </li>
+                <li class="time-picker-controls-control">
+                    <button  type="button" class="btnpicker" ><span (click)="secondUp()" class="fa fa-angle-up"></span></button>
+                    <span class="time-picker-seconds" tabindex="-1">{{secondString}}</span>
+                    <button  type="button" class="btnpicker" ><span (click)="secondDown()" class="fa fa-angle-down"></span></button>
+                </li>
+                <li *ngIf="timeFormat == '12:00'" class="time-picker-controls-control">
+                    <button  type="button" class="btnpicker" ><span (click)="meridiemChange()" class="fa fa-angle-up"></span></button>
+                    <span class="time-picker-meridiem" tabindex="-1">{{meridiem}}</span>
+                    <button  type="button" class="btnpicker" ><span (click)="meridiemChange()" class="fa fa-angle-down"></span></button>
+                </li>
+            </ul>
+    </div>
+</div>
+<div *ngIf="tooltipTitle" class="col-sm-1 col-md-1 col-xs-1  tooltip-align tooltip-mobile3">
+<button *ngIf="tooltipTitle" type="button" class="btn btn-link info-tooltip" data-toggle="toggle" [tooltipPlacement]="tooltipPlacement"
+            [tooltip]="tooltipHTML" [id]="elementId">
+            <i class="icon-tooltip" [id]="elementId"></i>
+            <tooltip-content #tooltipHTML [excludeId]="elementId">
+                    <div [innerHTML]="tooltipTitle"> </div>
+            	</tooltip-content>
+            </button>
+
+</div>

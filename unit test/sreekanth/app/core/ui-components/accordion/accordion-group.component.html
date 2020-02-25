@@ -1,0 +1,22 @@
+<div class="panel-group col-md-12 col-sm-12 col-xs-12 accordio-pad">
+  <div class="panel" [ngClass]="panelClass">
+    <div class="panel-heading panelbg accordio-pad" (click)="toggleOpen($event)">
+      <h4 class="panel-title">
+        <a href tabindex="0" [class]="isDisabled ? 'accordion-toggle collap-pan-dis' : 'accordion-toggle collap-pan'">
+          <span *ngIf="heading" [ngClass]="{'text-muted': isDisabled}"><i ngClass="{{iconClass}} iconAccordion"></i>
+            <span *ngIf="isStriked" class="labelAccordion accordionStriked">{{heading|translate}}</span>
+          <span *ngIf="!isStriked" class="labelAccordion">{{heading|translate}}</span>
+          <span *ngIf="showIndex === true">{{indexes - offset}}</span>
+          </span>
+          <ng-content select="[accordion-heading]"></ng-content>
+          <i class="pull-right glyphicon accordionAlignRTL" [ngClass]="{'glyphicon-chevron-down': !isOpen, 'glyphicon-chevron-up': isOpen}"></i>
+        </a>
+
+      </h4>
+    </div>
+    <div class="panel-body padins borderpanel" [attr.aria-expanded]="_isOpen" [attr.aria-hidden]="!_isOpen" [class.collapse]="!_isOpen"
+      [class.hide]="!_isOpen">
+      <ng-content></ng-content>
+    </div>
+  </div>
+</div>

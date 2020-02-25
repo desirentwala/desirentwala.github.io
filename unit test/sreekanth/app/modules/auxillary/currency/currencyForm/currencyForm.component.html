@@ -1,0 +1,49 @@
+<div [formGroup]="currencyFormGroup" class="row radio-btn">
+    
+    <div>
+        <div class="row">
+            <ncp-label elementLabel="NCPLabel.currencyType" elementId="currencyType" mandatoryFlag="true">
+            </ncp-label>
+            <radio-button [radioArray]="currencyType" [type]="switchbutton" radioName="currencyType"
+                elementId="currencyType" horizontalflag=true formControlName="currencyType" ngDefaultControl
+                elementLabel="NCPLabel.currencyType" mandatoryFlag="true">
+            </radio-button>
+        </div>
+        <error-handler [elementControl]="currencyFormGroup.controls['currencyType']"
+        [customMessages]="{required: 'NCPLabelcustomMessages.pleaseEnterCurrencyType'}">
+        </error-handler>
+    
+        <div class="row">
+            <ncp-label elementLabel="NCPLabel.currencyCode" elementId="currencyCode" mandatoryFlag="true">
+            </ncp-label>
+            <text-box formControlName="currencyCode" maxLength="4" acceptPattern="[a-zA-Z]"
+                ngDefaultControl elementLabel="NCPLabel.currencyCode" mandatoryFlag="true"></text-box>
+        </div>
+        <error-handler [elementControl]="currencyFormGroup.controls['currencyCode']" acceptPattern="[a-zA-Z]"
+            maxLength="4" [customMessages]="{required: 'NCPLabelcustomMessages.pleaseEnterCurrencyCode'}">
+        </error-handler>
+        <div class="row">
+            <ncp-label elementLabel="NCPLabel.currencyCodeDesc" elementId="currencyCodeDesc" mandatoryFlag="true">
+            </ncp-label>
+            <text-box formControlName="currencyCodeDesc" maxLength="30" acceptPattern="[a-zA-Z0-9]"
+                ngDefaultControl elementLabel="NCPLabel.currencyCodeDesc" mandatoryFlag="true"></text-box>
+        </div>
+        <error-handler [elementControl]="currencyFormGroup.controls['currencyCodeDesc']" acceptPattern="[a-zA-Z0-9]"
+            [customMessages]="{required: 'NCPLabelcustomMessages.pleaseEnterCurrencyCodeDesc'}">
+        </error-handler>
+        <div class="row">
+            <ncp-label elementLabel="NCPLabel.currencyRate" elementId="currencyRate" mandatoryFlag="true">
+            </ncp-label>
+            <text-box formControlName="currencyRate" maxLength="12" ngDefaultControl inputType="text" acceptPattern="^[0-9]+(\.[0-9]{1,2})?$"
+                elementLabel="NCPLabel.currencyRate" mandatoryFlag="true"></text-box>
+
+        </div>
+        <error-handler [elementControl]="currencyFormGroup.controls['currencyRate']" acceptPattern="^[0-9]+(\.[0-9]{1,2})?$"
+            [customMessages]="{required: 'NCPLabelcustomMessages.pleaseEnterCurrencyRate'}">
+        </error-handler>
+        <div class="btns-row">
+            <button-field (click)="doAction($event)" buttonType="custom" [isDisabled]="!currencyFormGroup.valid"
+                buttonClass="ncpbtn-default" buttonName="NCPBtn.submit"></button-field>
+        </div>
+    </div>
+</div>

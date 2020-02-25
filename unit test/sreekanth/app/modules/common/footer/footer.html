@@ -1,0 +1,12 @@
+<footer *ngIf="shared.doShowElement('showFooter')" id="footer">
+    <div class="footerFrame">
+
+<ncp-footerlogo> </ncp-footerlogo>
+
+<ncp-footermap *ngIf="shared.doShowElement('showFooterMap')"> </ncp-footermap>
+  
+<ncp-footercontact> </ncp-footercontact>
+
+    </div>
+</footer>
+

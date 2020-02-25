@@ -1,0 +1,125 @@
+<div class="ion-padding" *ngIf="petData">
+  <div class="box" [class.opened]="value">
+    <form #petForm="ngForm">
+      <div class="ion-padding border border-light showdow p-3 bg-white addslot">
+        <div class="border-bottom pb-2">
+          <ion-item lines="none" class="Schedule-An-Appointm">
+
+            <div *ngIf="imgUrl && !isMobile" class="imgcontainer">
+              <img [src]="imgUrl" class="image rounded-circle" alt="">
+              <div class="middle">
+                <div class="text">
+                  <label for="userProfile" class="input-file">
+                    <ion-icon name="create"></ion-icon>
+                  </label>
+                  <input id="userProfile" accept='image/*' type="file" (change)="uploadPicture($event)" />
+                </div>
+              </div>
+            </div>
+
+            <div *ngIf="imgUrl && isMobile" class="imgcontainer">
+              <img class="image rounded-circle" [src]="imgUrl" alt="" (click)="selectImage()">
+            </div>
+            <div *ngIf="!imgUrl" class="imgcontainer">
+              <label for="file-input" *ngIf="isMobile" class="input-file">
+                <div class="upload-image text-center" (click)="selectImage()">
+                  <ion-icon name="camera"></ion-icon>
+                  <!-- <p>Click here to upload photo</p> -->
+                </div>
+              </label>
+              <div *ngIf="!isMobile">
+                <label for="file-input" class="pt-2">
+                  <div class="upload-image text-center">
+                    <ion-icon name="camera"></ion-icon>
+                    <!-- <p>Click here to upload photo</p> -->
+                  </div>
+                </label>
+                <input id="file-input" accept='image/*' type="file" (change)="uploadPicture($event)" />
+              </div>
+            </div>
+
+            <span class="ml-2"> Pet info</span>
+          </ion-item>
+        </div>
+        <label>Pet name</label><i class="fas fa-asterisk form-asterisk"></i>
+        <ion-input class="form-control pl-1" #petName="ngModel" name="petName" type="text" [(ngModel)]="petData.petName"
+          required placeholder="Pet name" minlength="2" maxlength="28"></ion-input>
+        <div class="text-danger" *ngIf="petName.invalid && (petName.dirty || petName.touched)">
+          <small class="inline" *ngIf="petName.errors.required">Pet name required.</small>
+        </div>
+        <!-- DOB -->
+        <label for="dob">Date of birth</label><i class="fas fa-asterisk form-asterisk"></i>
+        <input type="date" id="dob" class="form-control" placeholder="Approx date " #dob="ngModel" name="Date Of Birth"
+          [(ngModel)]="petData.dob" onkeydown="return false" [max]="presentDate" (change)="dateValidation($event)"
+          required [readonly]="flag === 'edit'">
+        <div class="text-danger " *ngIf="dob.invalid && (dob.dirty || dob.touched)">
+         <small>Date of birth is required.</small> 
+        </div>
+        <div class="text-danger " *ngIf="isInvalid && dob.valid">
+         <small>Invalid date</small>
+        </div>
+        <!-- gender -->
+        <label for="dob">Gender</label><i class="fas fa-asterisk form-asterisk"></i>
+        <select placeholder="Select gender" class="select-dropdown w-100" name="gender" #gdr="ngModel"
+          [(ngModel)]="petData.gender">
+          <option *ngFor="let gender of genderList" ngDefaultControl>
+            {{gender}}
+          </option>
+        </select>
+
+        <!-- species -->
+        <label for="speciesList">I have a...</label><i class="fas fa-asterisk form-asterisk"></i>
+        <div id="speciesList">
+          <div class="top-content">
+            <div class=" m-auto">
+              <ion-row>
+                <ion-col size="1.5" *ngIf="from !== 0 ">
+                  <ion-card class="navigation-card" (click)="onPrevious()">
+                    <i class="fas fa-chevron-left"></i>
+                  </ion-card>
+                </ion-col>
+                <ion-col size="3" *ngFor="let species of speciesArray; let i = index">
+                  <ion-card class="species-card" (click)="selectedSpecies(species,i)"
+                    [ngClass]="{'active':petData.speciesId === species.speciesId ? true : false}"
+                    title="{{species.speciesName}}">
+                    <i [ngClass]='{"isDisplay": petData.speciesId === species.speciesId? false: true}'
+                      class="far fa-check tick-icon"></i>
+                    <ion-card-content></ion-card-content>
+                    <i class="{{species.species.iconName}} ion-float-end iconSize text-right p-2"></i>
+                  </ion-card>
+                </ion-col>
+                <ion-col size="1.5" *ngIf="initialImages < speciesList.length">
+                  <ion-card class="navigation-card" (click)="onNext()">
+                    <i class="fas fa-chevron-right"></i>
+                  </ion-card>
+                </ion-col>
+              </ion-row>
+            </div>
+          </div>
+        </div>
+        <label for="breed">Pet breed</label>
+        <input id="breed" class="form-control" placeholder="Eg. Bulldog" #brd="ngModel" name="breed" type="text"
+          maxlength="50" [(ngModel)]="petData.breed">
+        <div class="row">
+          <!-- nuetured -->
+          <div class="p-3 d-flex flex-row">
+            <div class="my-auto">
+              <label class="pt-0">My pet is neutered</label>
+            </div>
+            <div class="my-auto">
+              <ion-toggle (ionChange)="neutered(petData.neutered)" mode="md" class="toggle-align" #nuetrd="ngModel"
+                name="Nuetured" [(ngModel)]="petData.neutered"></ion-toggle>
+            </div>
+          </div>
+        </div>
+        <div>
+          <button class="Rectangle" (click)="updateProfile()"
+            [disabled]="!(petForm.valid) || !petData.gender || petData.speciesId === undefined || isInvalid">
+            {{flag === 'edit'? 'Update' : 'Add pet'}}</button>
+          <button class="CANCEL" (click)="close()">Cancel</button>
+          <em *ngIf="flag === 'edit' && VHDA" class="far fa-trash-alt" title="Delete pet" (click)="delete()"></em>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>

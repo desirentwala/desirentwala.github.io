@@ -1,0 +1,36 @@
+<ion-header class="header">
+  <ion-toolbar>
+    <ion-grid no-padding>
+      <ion-row>
+        <ion-col no-padding>
+          <ion-title class="videocallheader">
+            <img class="home-logo" src="./assets/imgs/logo.png" alt="logo">
+          </ion-title>
+        </ion-col>
+        <!-- <ion-col size="1" no-padding>
+          <ion-icon name="mic" class="mic" (click)="mic()" [title]="'mic'"></ion-icon>
+        </ion-col> -->
+        <!-- <ion-col size="3" class="text-right" no-padding>
+          <span class="callstatus">Connected</span>
+          <span class="callsignal"></span>
+        </ion-col> -->
+      </ion-row> 
+    </ion-grid>
+  </ion-toolbar>
+</ion-header>
+<div class="subscriber">
+    <div id="subscriber"></div>
+</div>
+<ion-content>
+    <div class="caller-img">
+        <div id="publisher" class="publisher"></div> 
+    </div>
+    <ion-row class="caller-options" justify-content-center>
+        <ion-icon name="{{mic}}" (click)="micControl()" [title]="'mic'"></ion-icon>
+        <!-- <ion-icon *ngIf="showsetting" name="settings" (click)="presentModal()" [title]="'settings'"></ion-icon> -->
+        <!-- <ion-icon name="videocam" (click)="videocam()" [title]="'videocam'"></ion-icon> -->
+        <ion-icon name="close-circle" (click)="endSession()" [title]="'close'"></ion-icon>
+        <!-- <ion-icon name="disc" (click)="disc()" [title]="'disc'"></ion-icon> -->
+      <!-- <ion-icon name="text" (click)="text()" [title]="'text'"></ion-icon> -->
+    </ion-row>
+  </ion-content>

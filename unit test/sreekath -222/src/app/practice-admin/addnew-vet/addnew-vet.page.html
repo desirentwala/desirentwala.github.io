@@ -1,0 +1,188 @@
+<div class="row">
+  <div class="col-md-12">
+    <h1>Add a vet</h1>
+    <p>Send an email to invite a vet to add their details or
+      enter the details of the vet(s) who will be doing video consultations.</p>
+  </div>
+</div>
+
+<!-- <div class="row">
+  <div class="col-lg-7 col-md-12 col-sm-12 col-xs-12 add-pet-card">
+    <ion-radio-group [(ngModel)]="addOrInvite" name="value">
+      <ion-row class="w-100">
+        <ion-col size="6">
+          <ion-item lines="none">
+            <ion-radio mode="md" value="invite"></ion-radio>&nbsp;
+            <ion-label class="field-label ml-3">Invite</ion-label>
+          </ion-item>
+        </ion-col>
+        <ion-col size="6">
+          <ion-item lines="none">
+            <ion-radio mode="md" value="addnew"></ion-radio>&nbsp;
+            <ion-label class="field-label ml-3">Add new</ion-label>
+          </ion-item>
+        </ion-col>
+      </ion-row>
+    </ion-radio-group>
+  </div>
+</div> -->
+
+<!-- form for add vet -->
+<form class="add-pet-card m-auto" id="addVetForm" #addVetForm="ngForm">
+  <div class="row">
+    <!-- add vet form -->
+    <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
+      <label for="vetName">Vet's name</label><i class="fas fa-asterisk form-asterisk"></i>
+      <input type="text" id="vetName" class="form-control" placeholder="Vet's name" #vetNm="ngModel" name="vetName"
+        type="text" [(ngModel)]="model.firstName" minlength="2" maxlength="28" required>
+      <div class="text-danger" *ngIf="vetNm.invalid && (vetNm.dirty || vetNm.touched)">
+        <small>Vet's name required.</small>
+      </div>
+      <!-- <label>Contact no.</label><i class="fas fa-asterisk form-asterisk"></i>
+      <input id="contact" class="form-control" placeholder="Phone number" #contact="ngModel" name="contact" type="text"
+        [(ngModel)]="model.mobile" minlength=10 maxlength=11 appPhoneNumber numbersOnly required/>
+      <div class="text-danger" *ngIf="contact.invalid && (contact.touched)">
+        <div *ngIf="contact.errors?.required">
+          <small>Phone number required.</small>
+        </div>
+
+      </div>
+      <label for="email">Vet email address</label><i class="fas fa-asterisk form-asterisk"></i>
+      <input type="text" id="email" class="form-control" placeholder="Vet email address" #email="ngModel" name="email"
+        type="text" [(ngModel)]="model.email" required preventWhiteSpace
+        pattern="^(?!.*\.{2})[a-zA-Z0-9.-_]{1,64}@[a-zA-Z.-]{2,}[.]{1}[a-zA-Z]{2,}">
+      <div class="text-danger" *ngIf="email.touched">
+        <div *ngIf="email.errors?.required">
+          <small>Email required.</small>
+        </div>
+        <div *ngIf="email.errors?.pattern">
+          <small>Invalid email id.</small>
+        </div>
+      </div> -->
+
+      <label for="userName">User name</label><i class="fas fa-asterisk form-asterisk"></i>
+      <div class="input-group">
+        <div class="input-group-prepend">
+          <span class="input-group-text" id="basic-addon1">{{model.prefix}}</span>
+        </div>
+        <input type="text" id="userName" class="form-control" placeholder="User name" #userName="ngModel" name="userName"
+          type="text" [(ngModel)]="model.userName" minlength="4" maxlength="8" pattern='^[a-zA-Z0-9]*$' aria-describedby="basic-addon1"
+          (focusout)="onSearchUsername()" required>
+      </div>
+      <div class="text-danger" *ngIf="userName.errors && (userName.dirty || userName.touched)">
+        <small *ngIf="userName.errors.pattern || userName.errors.minlength">User name pattern is alphanumeric, must be (4-8) characters long</small>
+        <small *ngIf="userName.errors.required">User name is required.</small>
+        <!-- <small *ngIf="userName.errors.minlength">User name must be (6-10) characters long</small> -->
+      </div>
+      <label>Password</label><i class="fas fa-asterisk form-asterisk"></i>
+      <div class="show-password w-100">
+        <input [type]="show?'text':'password'" placeholder="Password" #pswd="ngModel" class="form-control" name="password" [(ngModel)]="model.password"
+        pattern='^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])[\w~@#$%^&*+=`|{}:;!.?\"()\[\]-]{8,16}$' minlength="8" maxlength="16" required/>
+          <ion-icon class="eye-icon" [name]="show?'eye':'eye-off'" (click)='showPassword()'>
+          </ion-icon>
+      </div>
+      <div class="text-danger" *ngIf="pswd.invalid && (pswd.dirty || pswd.touched)">
+        <small *ngIf="pswd.errors.pattern">Min 8 characters, 1 uppercase, 1 lowercase and 1 number.</small>
+        <small *ngIf="pswd.errors.required">Password is required.</small>
+      </div>
+
+    </div>
+
+    <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12 pt-3 pl-0 image-desktop">
+      <!-- pet profile pic in desktop-->
+      <div *ngIf="imgUrl && !isMobile" class="container">
+        <img [src]="imgUrl" class="image" alt="vet profile image">
+        <div class="middle">
+          <div class="text">
+            <label for="file-input" class="input-image">
+              <ion-icon name="create"></ion-icon>
+            </label>
+            <input id="file-input" accept='image/*' type="file" (change)="petPicUpdate($event)" />
+          </div>
+        </div>
+      </div>
+      <div *ngIf="imgUrl && isMobile" class="container">
+        <img class="image" [src]="imgUrl" (click)="takePicture($event)" alt="vet profile image">
+      </div>
+      <div *ngIf="!imgUrl" class="container">
+        <label for="file-input" *ngIf="isMobile" class="input-file">
+          <div class="upload-image text-center p-4 mt-4" (click)="takePicture($event)">
+            <ion-icon name="camera"></ion-icon>
+            <p>Click here to upload photo</p>
+          </div>
+        </label>
+        <div *ngIf="!isMobile">
+          <label for="file-input">
+            <div class="upload-image text-center p-4">
+              <ion-icon name="camera"></ion-icon>
+              <p>Click here to upload photo</p>
+            </div>
+          </label>
+          <input id="file-input" accept='image/*' type="file" (change)="petPicUpdate($event)" />
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- species -->
+  <label for="speciesList">Please select the relevant species that the vet will see.</label><i class="fas fa-asterisk form-asterisk"></i>
+  <div id="speciesList">
+      <div class="top-content">
+        <div class="container-fluid m-auto">
+          <ion-row class="w-100">
+            <ion-col [size]="colNavSize" *ngIf="from !== 0">
+              <ion-card class="navigation-card" (click)="onPrevious()">
+                <i class="fas fa-chevron-left"></i>
+              </ion-card>
+            </ion-col>
+            <ion-col [size]="colSize" *ngFor="let species of speciesArray; let i = index">
+              <ion-card class="species-card" title="{{species.speciesName}}" (click)="selectedSpecies(species,i)"
+                [ngClass]="{'active':species.isActive === true ? true : false}">
+                <em [ngClass]='{"isDisplay": species.isActive === true? false: true}' class="far fa-check tick-icon"></em>
+                <ion-card-content></ion-card-content>
+                <em class="{{species.species.iconName}} ion-float-end iconSize text-right p-2"></em>
+              </ion-card>
+            </ion-col>
+            <ion-col [size]="colNavSize" *ngIf="initialImages < speciesList.length">
+              <ion-card class="navigation-card" (click)="onNext()">
+                <i class="fas fa-chevron-right"></i>
+              </ion-card>
+            </ion-col>
+          </ion-row>
+        </div>
+      </div>
+    </div>
+  
+  <ion-row>
+    <ion-col class="pl-0">
+      <ion-button ion-button color="primary" [disabled]="!(addVetForm.valid) || selectedSpeciess.length === 0"
+        (click)="createVet()">
+        <ion-text class="pl-4 pr-4 page-header">Add vet</ion-text>
+      </ion-button>
+    </ion-col>
+  </ion-row>
+</form>
+
+<!-- <form class="m-auto" id="inviteVetForm" #inviteVetForm="ngForm" *ngIf="addOrInvite === 'invite'">
+  <div class="row">
+    <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
+
+      <label for="practiceEmail">Vet email address</label><i class="fas fa-asterisk form-asterisk"></i>
+      <input type="text" id="practiceEmail" class="form-control" placeholder="Vet email address"
+        #practiceEmail="ngModel" pattern="^(?!.*\.{2})[a-zA-Z0-9.-_]{1,64}@[a-zA-Z.-]{2,}[.]{1}[a-zA-Z]{2,}"
+        name="practiceEmail" [(ngModel)]="inviteEmail" preventWhiteSpace required>
+      <div class="text-danger" *ngIf="practiceEmail.touched">
+        <div *ngIf="practiceEmail.errors?.required"><small>Email address required.</small></div>
+        <div *ngIf="practiceEmail.errors?.pattern"><small>Invalid email id.</small></div>
+      </div>
+    </div>
+  </div>
+  <br>
+  <div class="row">
+    <div class="col-md-6">
+      <ion-button ion-button color="primary" [disabled]="!(inviteVetForm.valid)" (click)="inviteVet()">
+        Send invite
+      </ion-button>
+    </div>
+  </div>
+</form> -->

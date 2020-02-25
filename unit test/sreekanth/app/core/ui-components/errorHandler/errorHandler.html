@@ -1,0 +1,26 @@
+<div *ngIf="customFlag">
+<div *ngIf="isError">
+    <ul *ngFor="let error of errors">
+        <li *ngIf="error.errCode" class="alert alert-danger"  [ngClass]="errorCustomClass">
+            <span *ngIf="error.errCode==='error.errCode | translate';else translateCode"> {{error.errDesc}} </span>
+            <ng-template #translateCode>
+                    <span> {{error.errCode | translate}} </span>
+            </ng-template>
+        </li>
+    </ul>
+
+</div>
+</div>
+<div *ngIf="!customFlag">
+<div  *ngIf="isError">
+    <ul *ngFor="let error of errors">
+        <li *ngIf="error.errCode" class="alert alert-danger">
+            <span *ngIf="error.errCode==='error.errCode | translate';else translateCode"> {{error.errDesc}} </span>
+            <ng-template #translateCode>
+                    <span> {{error.errCode | translate}} </span>
+            </ng-template>
+        </li>
+    </ul>
+
+</div>
+</div>

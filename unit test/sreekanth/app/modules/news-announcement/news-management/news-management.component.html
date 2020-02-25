@@ -1,0 +1,178 @@
+<div class="d-block col-xs-12 no-pad">
+   <div class="setting-icon" >
+      <a data-toggle="modal" (click)="showHideColumnModal.open()" class="filterimg">
+      <i class="settingsIcon fa fa-gears"></i>
+      </a>
+   </div>
+   <div class="setting-icon" >
+      <a data-toggle="modal" (click)= "newsListEditView.open()" class="filtering">
+      <i class="settingsIcon glyphicon glyphicon-filter"></i>
+      </a>
+   </div>
+   <div class="col-md-3 col-sm-12 col-xs-12  conf">
+       <input class="forconf" [(ngModel)]="searchId" placeholder="{{'NCPBtn.search' |translate}}">
+   </div>
+</div>
+<div style="clear:both;">
+	</div>
+<div class="filterac">
+	<table class="radio-btn">
+		<thead>
+			<tr>
+				<th [attr.data-title]="'Serial No'"  class="text-center w82">
+					<span class="labelHeader d-block">{{'NCPLabel.serialNo' | translate}}</span>
+				</th>
+				<th *ngFor="let header of tableDetails;let i=index" [class]="selectedClass(header.mapping)" (click)="changeSorting(header.mapping);this.rotateFlag === i ? this.rotateFlag='':this.rotateFlag=i;"
+				 [attr.data-title]="header.header | translate">
+					<span class="labelHeader">{{header.header | translate }}</span>
+					<i class="icon-arrow-d indexicon" [class.rotate]="rotateFlag === i"></i>
+				</th>
+				<th class="actionCol">
+					<span class="labelHeader">{{'NCPLabel.Action' | translate}}</span>
+				</th>
+				<th [attr.data-title]="'Lead Article'">
+					<span class="labelHeader">{{'NCPLabel.leadArticle' | translate}}</span>
+				</th>
+			</tr>
+		</thead>
+		<tbody>
+			<tr class="alignColumnVerticallyCenter" *ngFor="let object of tableData | searchBy : searchId : tableDetails | orderBy : convertSorting(); let rowIndex=index" id="tabhide">
+				<td [attr.data-title]="'Serial No'" class="text-center">
+					{{rowIndex + 1}}
+				</td>
+				<td *ngFor="let mappings of tableDetails" [attr.data-title]="mappings.header | translate">
+					<p class="ellipsis " [innerHTML]="object[mappings.mapping]"></p>
+				</td>
+
+				<td class="actionCol">
+
+					<span><i class="fa fa-gear showPopover indexrecus" tooltipPlacement="left" [tooltip]="myTooltip"
+						[tooltipHide]="tooltipHide" tooltipClick=true  [id]="'newsMngmentTooltip'+rowIndex"></i></span>
+
+					<tooltip-content #myTooltip [excludeId]="'newsMngmentTooltip'+rowIndex">
+						<h3 class="popover-title">&nbsp;
+							<a class="close" (click)="tooltipHide = myTooltip.hide()">
+							<i class="icon-alert"></i></a>
+						</h3>
+						<div class="popover-content">
+							<div>
+								<ul>
+									<li><a (click)="editNews(object.newsID)"><i class="fa fa-pencil iconToolTip"></i><span class="labelToolTip">Edit</span></a></li>
+									<li><a (click)="viewNews(object.newsID)"><i class="fa fa-eye iconToolTip"></i><span class="labelToolTip">View</span></a></li>
+									<li><a (click)="delete(object.newsID);myTooltip.hide()"><i class="fa fa-close iconToolTip"></i><span class="labelToolTip">Delete</span></a></li>
+								</ul>
+							</div>
+						</div>
+					</tooltip-content>
+				</td>
+				<td class="" [attr.data-title]="'Lead Article'">
+
+					<!-- <input type="checkbox" class="customCheckbox" [checked]="object.isArticleImpo" 
+ (change)="leadArticleSelection(i,object.newsTitle, object.newsType, object.creationDate, object.newsDetails, object.isArticleImpo, object.newsID)" 
+ [disabled]="!checkBoxDisableArray[i]" id="{{ 'newsCheck-' + i }}"/>  -->
+	<label class="d-block">
+		<input type="checkbox" class="customCheckbox"
+		[checked]="object.isArticleImpo" (change)="leadArticleSelection(rowIndex, object.newsTitle, object.startDate, object.endDate, object.newsType, object.creationDate, object.newsDetails, object.isArticleImpo, object.newsID)" [disabled]="!checkBoxDisableArray[rowIndex]" id="{{ 'newsCheck-' + rowIndex }}">
+		<span class="fake-input"></span>
+	 </label>
+					<!--<check-box
+				 disabled="!checkBoxDisableArray[i]"
+                 elementId="{{ 'newsCheck-' + i }}" 
+				 alignment="center"
+                 (change) = "leadArticleSelection(i,object.newsTitle, object.newsType, object.creationDate, object.newsDetails, object.isArticleImpo, object.newsID)"
+                 ngDefaultControl>
+         </check-box>-->
+				</td>
+			</tr>
+		</tbody>
+	</table>
+	<div>
+	</div>
+	 <div *ngIf="!disableShowMoreButton">
+      <div class="col-centered mtb20">
+            <button-field buttonType="custom" buttonName="NCPBtn.showMore" buttonClass="ncpbtn-default text-capitalize" (click)=' showMore()'
+              iconClass="fa fa-arrow-down">
+           </button-field>
+      </div>
+  </div>
+</div>
+<ncp-modal #newsDeleteModel [closeOnEscape]="false" [closeOnOutsideClick]="false" [hideCloseButton]="true" class="modalForm" modalClass="modal-md"
+ modalTitle="NCPLabel.confirmDeletion" titleIcon="fa fa-question-circle">
+	<modal-content>
+		<div class="h100">
+
+		</div>
+	</modal-content>
+	<modal-footer>
+		<div class="btns-row">
+			<!--<button type="submit" class="ncp-btn " (click)="deleteNews()"><i class="fa fa-check iconicButton"></i><span class="labelButton">{{'NCPLabel.Yes'|translate}}</span></button>-->
+			<button-field buttonType="custom" buttonClass="ncp-btn" iconClass="fa fa-check" buttonName="NCPLabel.Yes" (click)="deleteNews()">
+			</button-field>
+			<!--<button type="submit" class="ncp-btn" (click)="returnToNews()"><i class="fa fa-close iconicButton"></i><span class="labelButton">{{'NCPBtn.no'|translate}}</span></button>-->
+			<button-field buttonType="custom" buttonClass="ncp-btn" iconClass="fa fa-close" buttonName="NCPBtn.no" (click)="returnToNews()">
+			</button-field>
+		</div>
+
+	</modal-footer>
+</ncp-modal>
+<ncp-modal #showHideColumnModal class="modalForm" [closeOnEscape]="false" [closeOnOutsideClick]="false" [hideCloseButton]="true" modalClass="modal-lg"
+  modalTitle="NCPLabel.filterTableContents" titleIcon="glyphicon glyphicon-wrench confed">
+  <modal-content>
+    <div class="row">
+      <multi-check elementId="cbox" [checkboxArray]="newsMulticheckarray" elementLabel="Fields"></multi-check>
+    </div>
+  </modal-content>
+  <modal-footer>
+    <div class="btns-row">
+      <div class="col-md-12 col-sm-12 col-xs-12 pull-right plr-xs-0">
+        <div *ngIf="errmsg" class="red mb10 fw600">Please Select Atleast One Field &nbsp;<i class="fa fa-smile-o" aria-hidden="true"></i></div>
+      </div>
+      <!--<div class="col-md-4 col-sm-5 col-xs-12 pull-right pr-md-0 pr-sm-0 mb20 mb-xs-10 plr-xs-0">
+        <button type="submit" class="ncpbtn-default text-capitalize w100p" (click)="selectAllColumn()" (click)="customerEditView.close()">{{'NCPBtn.showAll&Close'|translate}}</button>
+      </div>-->
+      <button-field buttonType="custom" buttonName="NCPBtn.close" (click)="colClose();showHideColumnModal.close()" buttonClass="ncp-linkBtn w100p "
+      iconClass="fa fa-close">
+     </button-field>
+      <button-field (click)="colhide();" buttonName="NCPBtn.save" buttonType="custom" buttonClass="ncpbtn-default text-capitalize w100p"
+        iconClass="fa fa-save">
+      </button-field>
+    </div>
+  </modal-footer>
+</ncp-modal>
+<ncp-modal #newsListEditView class="modalForm" [closeOnEscape]="false" [closeOnOutsideClick]="false"  modalClass="modal-lg"
+  modalTitle="NCPLabel.searchFilter" titleIcon="glyphicon glyphicon-wrench confed">
+  <modal-content>
+		<div [formGroup]= "searchNewsFormGroup" >
+      <div class="row">
+        <ncp-label elementLabel="NCPLabel.newsTitle" ></ncp-label>
+        <text-box inputType="text" formControlName= "newsTitle" elementLabel="NCPLabel.newsTitle"></text-box>
+      </div>
+      <div class="row">
+        <ncp-label elementLabel="NCPLabel.adate" ></ncp-label>
+				<ncp-date-picker [options]="NCPDatePickerNormalOptions" formControlName="creationDate" ngDefaultControl customFlag=true datepickerClass="col-xs-6 col-sm-4 col-md-3 pr0 newsFilterDate" elementLabel="NCPLabel.adate">
+                    </ncp-date-picker>
+      </div>
+      <div class="row">
+          <ncp-label elementLabel="NCPLabel.newsType"></ncp-label>
+        <drop-down elementId="dropElementNewsType" placeHolder="NCPLabel.pleaseSelectType" [dropdownItems]="newsType" formControlName="newsType" elementLabel="NCPLabel.newsType"></drop-down>
+        </div>
+  </div>
+  </modal-content>
+  <modal-footer>
+    <div class="btns-row">
+      <div class="col-md-12 col-sm-12 col-xs-12 pull-right mb-xs-10">
+        <div class="red" *ngIf="searchErrmsg">{{'NCPLabel.noRecordsFound' | translate}} &nbsp;<i class="fa fa-smile-o" aria-hidden="true"></i></div>
+      </div>
+      <div *ngIf="errmsg" class="red mb10 fw-600">{{'NCPLabel.pleaseselectonefield' | translate}}&nbsp;<i class="fa fa-smile-o" aria-hidden="true"></i></div>
+      <button-field (click)="clearNewsSearchModel();" buttonName="NCPBtn.clear" buttonType="custom"
+        buttonClass="ncpbtn-default" iconClass="fa fa-close">
+      </button-field>
+      <button-field (click)="resetNewsSearchModel();" buttonName="NCPBtn.reset" buttonType="custom" buttonClass="ncpbtn-default text-capitalize"
+        iconClass="fa fa-undo">
+      </button-field>
+      <button-field (click)="searchNewsModel();" buttonName="NCPBtn.search" buttonType="custom" buttonClass="ncpbtn-default text-capitalize"
+        iconClass="fa fa-search">
+      </button-field>
+    </div>
+  </modal-footer>
+</ncp-modal>

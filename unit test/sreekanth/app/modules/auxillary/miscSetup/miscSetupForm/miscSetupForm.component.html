@@ -1,0 +1,59 @@
+<div [formGroup]="miscSetupFormGroup" class="row radio-btn">
+    <div *ngIf="isError" class="alert alert-danger">
+        <ul *ngFor="let error of errors">
+            <li>
+                {{error.errCode}} - {{error.errDesc}}
+            </li>
+        </ul>
+    </div>
+    <div>
+        <div class="row">
+            <ncp-label elementLabel="NCPLabel.miscType" elementId="miscType" mandatoryFlag="true">
+            </ncp-label>
+            <text-box formControlName="miscType" maxLength="4" acceptPattern="[A-Za-z]"
+                ngDefaultControl elementLabel="NCPLabel.miscType" mandatoryFlag="true"></text-box>
+        </div>
+        <error-handler [elementControl]="miscSetupFormGroup.controls['miscType']" acceptPattern="[A-Za-z]"
+            maxLength="4" [customMessages]="{required: 'NCPLabelcustomMessages.pleaseEnterMiscType'}">
+        </error-handler>
+        <div class="row">
+            <ncp-label elementLabel="NCPLabel.miscCode" elementId="miscCode" mandatoryFlag="true">
+            </ncp-label>
+            <text-box formControlName="miscCode" maxLength="4" acceptPattern="[A-Za-z0-9]"
+                ngDefaultControl elementLabel="NCPLabel.miscCode" mandatoryFlag="true"></text-box>
+        </div>
+        <error-handler [elementControl]="miscSetupFormGroup.controls['miscCode']" acceptPattern="[A-Za-z0-9]"
+            maxLength="4" [customMessages]="{required: 'NCPLabelcustomMessages.pleaseEnterMiscCode'}">
+        </error-handler>
+        <div class="row">
+            <ncp-label elementLabel="NCPLabel.miscCodeDesc" elementId="miscCodeDesc" mandatoryFlag="true">
+            </ncp-label>
+            <text-box formControlName="miscCodeDesc" maxLength="255" acceptPattern="[A-Za-z0-9]"
+                ngDefaultControl elementLabel="NCPLabel.miscCodeDesc" mandatoryFlag="true"></text-box>
+        </div>
+        <error-handler [elementControl]="miscSetupFormGroup.controls['miscCodeDesc']" acceptPattern="[A-Za-z0-9]"
+            [customMessages]="{required: 'NCPLabelcustomMessages.pleaseEnterMiscCodeDesc'}">
+        </error-handler>
+        <div class="row">
+            <ncp-label elementLabel="NCPLabel.Validdate" mandatoryFlag="true"></ncp-label>
+            <div class="col-md-5 col-sm-6 col-xs-6 userValidDateAlignRTL">
+                <div class="col-xs-12 col-sm-8 col-md-5 no-pad">
+                    <ncp-date-picker [options]="NCPDatePickerNormalOptions" formControlName="effectiveFrom"
+                        ngDefaultControl elementLabel="NCPLabel.Validdate" mandatoryFlag="true">
+                    </ncp-date-picker>
+                </div>
+                <ncp-label labelClass="col-md-2 col-sm-2 col-xs-12 toLabel" customFlag=true elementLabel="NCPLabel.to">
+                </ncp-label>
+                <div class="col-xs-12 col-sm-8 col-md-5 no-pad date-align mt-sm-10 mt-xs-5">
+                    <ncp-date-picker [options]="NCPDatePickerNormalOptions" formControlName="effectiveTo"
+                        ngDefaultControl>   
+                    </ncp-date-picker>
+                </div>
+            </div>
+        </div>
+        <div class="btns-row">
+            <button-field (click)="doAction($event)" buttonType="custom" [isDisabled]="!miscSetupFormGroup.valid"
+                buttonClass="ncpbtn-default" buttonName="NCPBtn.submit"></button-field>
+        </div>
+    </div>
+</div>

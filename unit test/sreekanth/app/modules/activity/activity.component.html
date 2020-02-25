@@ -1,0 +1,426 @@
+<div class="activity-tab">
+    <div class="setting-icon">
+        <a data-toggle="modal" (click)="customerEditView.open()" class="filterimg">
+            <i class="settingsIcon fa gearIcon"></i>
+        </a>
+    </div>
+    <div class="setting-icon">
+        <a data-toggle="modal" (click)="searchCust.open()" class="filterimg">
+            <i class="settingsIcon fa filterIcon"></i>
+        </a>
+    </div>
+    <div *ngIf="pageWidth < 768" class="mblDropdownContainer customSelect">
+        <div class="defaultSelectOption form-control" (click)="toggleFlag = !toggleFlag">
+            <i class="mblDropdownIcon icon-document"></i>
+            <span *ngIf="enquiryType=='QT'" class="mblDropdownLabel">{{'NCPLabel.quotes' | translate}}</span>
+            <span *ngIf="enquiryType=='PR' && lifeLOBFlag" class="mblDropdownLabel">{{'NCPTab.proposal' | translate}}</span>
+            <span *ngIf="enquiryType=='PO'" class="mblDropdownLabel">{{'NCPLabel.policies' | translate}}</span>
+            <span *ngIf="enquiryType=='CL'" class="mblDropdownLabel">{{'NCPLabel.claims' | translate}}</span>
+            <span *ngIf="enquiryType=='RP'" class="mblDropdownLabel">{{'NCPLabel.renewalPolicies' | translate}}</span>
+            <i class="icon-arrow-d dropdown-da" [class.rotate]="toggleFlag"></i>
+        </div>
+        <ul name="" id="" class="mblDropdownList Dropdown1" [class.show]="toggleFlag" (mouseleave)="toggleFlag =false;">
+            <li id="tab1" value="Quotes" class="mblDropdownListItems" (click)="toggleFlag =false; enquiryType='QT';showTabContent($event);">
+                <i class="icon-document mblDropdownIcon"></i>
+                <span class="mblDropdownLabel">{{'NCPLabel.quotes' | translate}}</span>
+            </li>
+            <li id="tab2" value="Proposals" class="mblDropdownListItems" (click)="toggleFlag =false; enquiryType='PR';showTabContent($event);">
+                <i class="icon-document mblDropdownIcon"></i>
+                <span class="mblDropdownLabel">{{'NCPTab.proposal' | translate}}</span>
+            </li>
+            <li id="tab3" value="Policies" class="mblDropdownListItems" (click)="toggleFlag =false; enquiryType='PO';showTabContent($event);">
+                <i class="fa fa-life-saver mblDropdownIcon"></i>
+                <span class="mblDropdownLabel">{{'NCPLabel.policies' | translate}}</span>
+            </li>
+            <li id="tab4" value="Claims" class="mblDropdownListItems" (click)="toggleFlag =false; enquiryType='CL';showTabContent($event);">
+                <i class="icon-reports mblDropdownIcon"></i>
+                <span class="mblDropdownLabel">{{'NCPLabel.claims' | translate}}</span>
+            </li>
+            <li id="tab5" value="Reniwals" class="mblDropdownListItems" (click)="toggleFlag =false; enquiryType='RP';showTabContent($event);">
+                <i class="fa fa-retweet mblDropdownIcon"></i>
+                <span class="mblDropdownLabel">{{'NCPLabel.renewalPolicies' | translate}}</span>
+            </li>
+        </ul>
+    </div>
+    <ul *ngIf="pageWidth > 767" class="nav nav-tabs maintab">
+        <li class="mainTabList">
+            <input id="tab1" (click)="enquiryType='QT'; showTabContent($event);" class="podi" type="radio" name="tabs" value="Quotes"
+                [checked]="enquiryType=='QT'" checked>
+            <label for="tab1" class="filterac">
+                <i class="icon-document iconLabel"></i>
+                <span class="labelDisplay">{{'NCPLabel.quotes' | translate}}</span>
+            </label>
+        </li>
+        <li class="mainTabList" *ngIf="lifeLOBFlag">
+            <input id="tab2" (click)="enquiryType='PR'; showTabContent($event);" class="podi" type="radio" name="tabs" value="Proposals"
+                [checked]="enquiryType=='PR'">
+            <label for="tab2" class="filterac">
+                <i class="icon-document iconLabel"></i>
+                <span class="labelDisplay">{{'NCPTab.proposal' | translate}}</span>
+            </label>
+        </li>
+        <li class="mainTabList">
+            <input id="tab3" (click)="enquiryType='PO'; showTabContent($event);" class="podi" type="radio" name="tabs" value="Policies"
+                [checked]="enquiryType=='PO'">
+            <label for="tab3" class="filterac">
+                <i class="fa fa-life-saver iconLabel"></i>
+                <span class="labelDisplay">{{'NCPLabel.policies' | translate}}</span>
+            </label>
+        </li>
+        <li class="mainTabList">
+            <input id="tab4" (click)="enquiryType='CL'; showTabContent($event);" class="podi" type="radio" name="tabs" value="Claims"
+                [checked]="enquiryType=='CL'">
+            <label for="tab4" class="filterac">
+                <i class="icon-reports iconLabel"></i>
+                <span class="labelDisplay">{{'NCPLabel.claims' | translate}}</span>
+            </label>
+        </li>
+        <li class="mainTabList">
+            <input id="tab5" (click)="enquiryType='RP'; showTabContent($event);" class="podi" type="radio" name="tabs" value="Reniwals"
+                [checked]="enquiryType=='RP'">
+            <label for="tab5" class="filterac">
+                <i class="fa fa-retweet iconLabel"></i>
+                <span class="labelDisplay">{{'NCPLabel.renewalPolicies' | translate}}</span>
+            </label>
+        </li>
+    </ul>
+    <!--<input id="tab1" (click)="enquiryType='QT'" class="podi" type="radio" name="tabs" value="Quotes" [checked]="enquiryType=='QT'">
+    <label for="tab1" class="filterre">{{'NCPLabel.quotes' | translate}}</label>
+    <input id="tab2" (click)="enquiryType='PO'" class="podi" type="radio" name="tabs" value="Policies" [checked]="enquiryType=='PO'">
+    <label for="tab2" class="filterre">{{'NCPLabel.policies' | translate}}</label>-->
+    <!--<input id="tab3" (click)="enquiryType='CL'" class="podi" type="radio" name="tabs" value="upcoming" [checked]="enquiryType=='CL'">
+    <label for="tab3" class="filterre">{{'NCPLabel.claims' | translate}}</label>-->
+
+
+    <div class="col-md-3 col-sm-12 col-xs-12  conf">
+        <input class="forconf" [(ngModel)]="searchId" placeholder="{{'NCPBtn.search' | translate}}">
+    </div>
+    <div class="content col-xs-12 no-pad col-md-12 col-sm-12">
+        <div id="content1" class="activityDataTable">
+            <quote-enquiry [tableData]="quoteEnquiryInput" [tableDetails]="quotTableDetails" [searchId]="searchId" [quoteActivityHeader]="quoteActivityHeader"
+                [quoteFieldConfiguration]="quoteFieldConfiguration" [quoteActivityMapping]="quoteActivityMapping" [quoteActivityIconsClassNames]="quoteActivityIconsClassNames" [searchFilterDetails]="searchlDetailsFormGroup.value">
+            </quote-enquiry>
+            <div  *ngIf="!(quoteEnquiryInput && quoteEnquiryInput.length >= 0)" class="col-md-12 col-sm-12 col-xs-12">
+                    <ncp-loader subscribe='true' loading='yes' loaderType='DOTS'></ncp-loader>
+                </div>
+                <div *ngIf="checkQuoteEnquiry && quoteEnquiryInput.length == 0" >
+                    <span class="badge">{{'No record found'}}</span>
+                </div>   
+            <div class="col-centered mtb20" *ngIf="noQuotEnquiryInputFlag===false">
+                <!--<button type="custom" (click)='doViewMore()' class="ncpbtn-default"><i class="fa fa-arrow-down iconicButton"></i><span class="labelButton">{{'NCPLabel.viewMoreActivity' | translate}}</span></button>-->
+                <button-field buttonType="custom" buttonClass="ncpbtn-default" iconClass="fa fa-arrow-down" buttonName="NCPLabel.viewMoreActivity"
+                    (click)='doViewMore()'>
+                </button-field>
+            </div>
+        </div>
+        <div id="content2" class="activityDataTable">
+            <proposal-enquiry [tableData]="proposalEnquiryList" [tableDetails]="quotTableDetails" [searchId]="searchId" [proposalActivityHeader]="proposalActivityHeader"
+                [proposalFieldConfiguration]="proposalFieldConfiguration" [proposalActivityMapping]="proposalActivityMapping" [proposalActivityIconsClassNames]="proposalActivityIconsClassNames">
+            </proposal-enquiry>
+            <div *ngIf="!(proposalEnquiryList && proposalEnquiryList.length >= 0)" class="col-md-12 col-sm-12 col-xs-12">
+                    <ncp-loader subscribe='true' loading='yes' loaderType='DOTS'></ncp-loader>
+                </div>
+                <div *ngIf="checkProposalEnquiry && proposalEnquiryList.length == 0" >
+                    <span class="badge">{{'No record found'}}</span>
+                </div>
+            <div class="col-centered mtb20" *ngIf="noProposalEnquiryInputFlag===false">
+                <!--<button type="custom" (click)='doViewMore()' class="ncpbtn-default"><i class="fa fa-arrow-down iconicButton"></i><span class="labelButton">{{'NCPLabel.viewMoreActivity' | translate}}</span></button>-->
+                <button-field buttonType="custom" buttonClass="ncpbtn-default" iconClass="fa fa-arrow-down" buttonName="NCPLabel.viewMoreActivity"
+                    (click)='doViewMore()'>
+                </button-field>
+            </div>
+        </div>
+        <div id="content3" class="activityDataTable">
+            <policy-enquiry [tableData]="policyEnquiryInput" [tableDetails]="policyTableDetails" [searchId]="searchId" [policyActivityHeader]="policyActivityHeader"
+                [policyFieldConfiguration]="policyFieldConfiguration" [policyActivityMapping]="policyActivityMapping" [policyActivityIconsClassNames]="policyActivityIconsClassNames">
+            </policy-enquiry>
+            <div  *ngIf="!(policyEnquiryInput && policyEnquiryInput.length >= 0)" class="col-md-12 col-sm-12 col-xs-12">
+                    <ncp-loader subscribe='true' loading='yes' loaderType='DOTS'></ncp-loader>
+                </div>
+                <div *ngIf="checkPolicyEnquiry && policyEnquiryInput.length == 0" >
+                    <span class="badge">{{'No record found'}}</span>
+                </div>
+            <div class="col-centered mtb20" *ngIf="noPolicyEnquiryInputFlag===false">
+                <!--<button type="custom" (click)='doViewMore()' class="ncpbtn-default"><i class="fa fa-arrow-down iconicButton"></i><span class="labelButton">{{'NCPLabel.viewMoreActivity' | translate}}</span></button>-->
+                <button-field buttonType="custom" buttonClass="ncpbtn-default" iconClass="fa fa-arrow-down" buttonName="NCPLabel.viewMoreActivity"
+                    (click)='doViewMore()'>
+                </button-field>
+            </div>
+        </div>
+        <div id="content4" class="activityDataTable">
+            <claim-enquiry [tableData]="claimEnquiryInput" [tableDetails]="claimTableDetails" [searchId]="searchId" [claimActivityHeader]="claimActivityHeader"
+                [claimActivityMapping]="claimActivityMapping" [claimActivityIconsClassNames]="claimActivityIconsClassNames" [searchFilterDetails]="searchlDetailsFormGroup.value"
+                [claimFieldConfiguration]="claimFieldConfiguration">
+            </claim-enquiry>
+            <div  *ngIf="!(claimEnquiryInput && claimEnquiryInput.length >= 0)" class="col-md-12 col-sm-12 col-xs-12">
+                    <ncp-loader subscribe='true' loading='yes' loaderType='DOTS'></ncp-loader>
+                </div>
+                <div *ngIf="checkClaimEnquiry && claimEnquiryInput.length == 0" >
+                    <span class="badge">{{'No record found'}}</span>
+                </div>
+            <div class="col-centered mtb20" *ngIf="noClaimEnquiryInputFlag===false">
+                <!--<button type="custom" (click)='doViewMore()' class="ncpbtn-default"><i class="fa fa-arrow-down iconicButton"></i><span class="labelButton">{{'NCPLabel.viewMoreActivity' | translate}}</span></button>-->
+                <button-field buttonType="custom" buttonClass="ncpbtn-default" iconClass="fa fa-arrow-down" buttonName="NCPLabel.viewMoreActivity"
+                    (click)='doViewMore()'>
+                </button-field>
+            </div>
+        </div>
+        <div id="content5" class="activityDataTable">
+            <renewal-enquiry showSearch="N" [tableData]="renewalActivityList" [tableDetails]="renewalTableDetails" [searchId]="searchId"
+                [renewalActivityHeader]="renewalActivityHeader" [renewalActivityMapping]="renewalActivityMapping" [renewalActivityIconsClassNames]="renewalActivityIconsClassNames"
+                [renewalFieldConfiguration]="renewalFieldConfiguration">
+            </renewal-enquiry>
+            <div  *ngIf="!(renewalActivityList && renewalActivityList.length >= 0)" class="col-md-12 col-sm-12 col-xs-12">
+                    <ncp-loader subscribe='true' loading='no' loaderType='DOTS'></ncp-loader>
+                </div>
+                <div *ngIf="checkRenewalEnquiry && renewalActivityList.length == 0" >
+                    <span class="badge">{{'No record found'}}</span>
+                </div>
+            <div class="col-centered mtb20" *ngIf="noRenewalEnquiryInputFlag===false">
+                <button-field buttonType="custom" buttonClass="ncpbtn-default" iconClass="fa fa-arrow-down" buttonName="NCPLabel.viewMoreActivity"
+                    (click)='doViewMore()'>
+                </button-field>
+            </div>
+        </div>
+    </div>
+
+    <!--Search Customer Modal-->
+    <ncp-modal modalClass="modal-lg" #searchCust [closeOnEscape]="false" [closeOnOutsideClick]="false" modalTitle="NCPLabel.filterTableContent"
+        titleIcon="glyphicon glyphicon-wrench confed">
+        <modal-content>
+            <div *ngIf="enquiryType=='QT' || enquiryType=='PO' || enquiryType=='CL' || enquiryType=='PR'" [formGroup]="searchlDetailsFormGroup">
+                <div *ngIf='hideFilterModal'>
+                    <div class="row">
+                        <ncp-label elementLabel="NCPLabel.customerName"></ncp-label>
+                        <text-box [inputType]="text" formControlName=clientName customFlag=true textBoxClass="col-md-6 col-sm-6 col-xs-11 p-sm-0" elementLabel="NCPLabel.customerName">
+                        </text-box>
+                    </div>
+
+                    <div class="row" *ngIf="enquiryType=='QT'">
+                        <ncp-label elementLabel="NCPLabel.quoteNo"></ncp-label>
+                        <text-box [inputType]="text" formControlName=quoteNo customFlag=true textBoxClass="col-md-6 col-sm-6 col-xs-11 p-sm-0" elementLabel="NCPLabel.quoteNo">
+                        </text-box>
+                    </div>
+                </div>
+                <div class="row" *ngIf="enquiryType=='PO'">
+                    <ncp-label elementLabel="NCPLabel.policyNo"></ncp-label>
+                    <text-box [inputType]="text" formControlName=policyNo customFlag=true textBoxClass="col-md-6 col-sm-6 col-xs-11 p-sm-0" elementLabel="NCPLabel.policyNo">
+                    </text-box>
+                </div>
+                <div class="row" *ngIf="enquiryType=='CL'">
+                    <ncp-label elementLabel="NCPLabel.claimNo"></ncp-label>
+                    <text-box [inputType]="text" formControlName=claimNo customFlag=true textBoxClass="col-md-6 col-sm-6 col-xs-11 p-sm-0" elementLabel="NCPLabel.claimNo">
+                    </text-box>
+                </div>
+                <div class="row" *ngIf="enquiryType=='QT' || enquiryType=='PO' || enquiryType=='PR'">
+                    <ncp-label elementLabel="NCPLabel.identityNo"></ncp-label>
+                    <text-box [inputType]="text" formControlName=identityNo customFlag=true textBoxClass="col-md-6 col-sm-6 col-xs-11 p-sm-0" elementLabel="NCPLabel.identityNo">
+                    </text-box>
+                </div>
+                <div class="row" *ngIf="enquiryType!=='RP'">
+                    <ncp-label elementLabel="NCPLabel.vehicleRegNo"></ncp-label>
+                    <text-box [inputType]="text" formControlName=vehicleRegNo customFlag=true textBoxClass="col-md-6 col-sm-6 col-xs-11 p-sm-0" elementLabel="NCPLabel.vehicleRegNo">
+                    </text-box>
+                </div>
+                <div class="row">
+                    <ncp-label elementLabel="NCPLabel.product"></ncp-label>
+                    <drop-down formControlName="product" ngDefaultControl placeHolder="NCPLabel.pleaseSelectType" elementId="productCode" 
+                        miscType="ProductInfo" pickListFlag=true customFlag=true dropdownClass="col-md-6 col-sm-6 col-xs-11 p-sm-0"
+                        multipleSelect="true"  displayCodeAndDesc=true displayOnClick="true" elementLabel="NCPLabel.product">
+                    </drop-down>
+                </div>
+                <div class="row">
+                    <ncp-label elementLabel="NCPLabel.status"></ncp-label>
+                    <div class="col-md-6 col-sm-6 col-xs-11 p-sm-0">
+                        <div class="form-check disabled">
+                            <drop-down *ngIf="enquiryType=='QT'" formControlName="status" ngDefaultControl placeHolder="NCPLabel.pleaseSelectType" elementId="QuoteStatus"
+                                miscSubType="STAT" miscType="MiscInfo" param1="QOT" pickListFlag=true customFlag=true dropdownClass="col-md-12 col-sm-12 col-xs-12 no-pad"
+                                [elementValue]="searchlDetailsFormGroup.controls['status'].value" multipleSelect="true" displayOnClick="true" elementLabel="NCPLabel.status">
+                            </drop-down>
+                            <drop-down *ngIf="enquiryType=='PO'" formControlName="status" ngDefaultControl placeHolder="NCPLabel.pleaseSelectType" elementId="PolicyStatus"
+                                miscSubType="STAT" miscType="MiscInfo" param1="POL" pickListFlag=true customFlag=true dropdownClass="col-md-12 col-sm-12 col-xs-12 no-pad"
+                                [elementValue]="searchlDetailsFormGroup.controls['status'].value" multipleSelect="true" displayOnClick="true" elementLabel="NCPLabel.status">
+                            </drop-down>
+                            <drop-down *ngIf="enquiryType=='CL'" formControlName="status" ngDefaultControl placeHolder="NCPLabel.pleaseSelectType" elementId="ClaimStatus"
+                                miscSubType="STAT" miscType="MiscInfo" param1="CLM" pickListFlag=true customFlag=true dropdownClass="col-md-12 col-sm-12 col-xs-12 no-pad"
+                                [elementValue]="searchlDetailsFormGroup.controls['status'].value" multipleSelect="true" displayOnClick="true" elementLabel="NCPLabel.status">
+                            </drop-down>
+                            <drop-down *ngIf="enquiryType=='PR'" formControlName="status" ngDefaultControl placeHolder="NCPLabel.pleaseSelectType" elementId="ProposalStatus"
+                            miscSubType="STAT" miscType="MiscInfo" param1="PRP" pickListFlag=true customFlag=true dropdownClass="col-md-12 col-sm-12 col-xs-12 no-pad"
+                            [elementValue]="searchlDetailsFormGroup.controls['status'].value" multipleSelect="true" displayOnClick="true" elementLabel="NCPLabel.status">
+                            </drop-down>
+                        </div>
+                    </div>
+                </div>
+                <div class="row" *ngIf="enquiryType=='QT' || enquiryType=='PO' || enquiryType=='PR'">
+                    <ncp-label elementLabel="NCPLabel.fromDate"></ncp-label>
+                    <ncp-date-picker [options]="NCPDatePickerNormalOptions" formControlName="inceptionDate" ngDefaultControl customFlag=true
+                        datepickerClass="col-xs-6 col-sm-4 col-md-3 pr0 pl-sm-0 filterTableDateAlignRTL" elementLabel="NCPLabel.fromDate">
+                    </ncp-date-picker>
+                </div>
+                <div class="row" *ngIf="enquiryType=='QT' || enquiryType=='PO'|| enquiryType=='PR'">
+                    <ncp-label elementLabel="NCPLabel.toDate"></ncp-label>
+                    <ncp-date-picker [options]="NCPDatePickerToDateOptions" formControlName="expiryDate" ngDefaultControl customFlag=true datepickerClass="col-xs-6 col-sm-4 col-md-3 pr0 pl-sm-0 filterTableDateAlignRTL" elementLabel="NCPLabel.toDate">
+                    </ncp-date-picker>
+                </div>
+                <div class="row" *ngIf="enquiryType=='QT' || enquiryType=='PO' || enquiryType=='CL'">
+                    <div class="row">
+                        <ncp-label elementLabel="NCPLabel.ownTransaction"></ncp-label>
+                        <div class="col-md-6 col-sm-6 col-xs-11 p-sm-0">
+                            <check-box changeId="ownTransaction" checkBoxClass="declarationCheckbox" formControlName="ownTransaction"
+                                elementId="ownTransaction" alignment="left" ngDefaultControl>
+                            </check-box>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <ncp-label elementLabel="NCPLabel.subordinateUser"></ncp-label>
+                        <div class="col-md-6 col-sm-6 col-xs-11 p-sm-0">
+                            <div class="form-check disabled">
+                                <drop-down formControlName="subOrdinateUser" ngDefaultControl placeHolder="NCPLabel.pleaseSelectType"
+                                    elementId="subordinateUser" miscType="ChildUsers" param1="{{userID}}" param2="{{roleId}}"  pickListFlag=true customFlag=true
+                                    dropdownClass="col-md-12 col-sm-12 col-xs-12 no-pad" multipleSelect="true" displayCodeAndDesc=true
+                                    displayOnClick="true" elementLabel="NCPLabel.subordinateUser">
+                                </drop-down>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <ncp-label elementLabel="NCPLabel.shareTransaction"></ncp-label>
+                        <div class="col-md-6 col-sm-6 col-xs-11 p-sm-0">
+                            <check-box  checkBoxClass="declarationCheckbox" formControlName="sharedBySuperUser" elementId="sharedBySuperUser"
+                                alignment="left" ngDefaultControl>
+                            </check-box>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <ncp-label elementLabel="NCPLabel.sharedByUser"></ncp-label>
+                        <div class="col-md-6 col-sm-6 col-xs-11 p-sm-0">
+                            <check-box  checkBoxClass="declarationCheckbox" formControlName="sharedByUser" elementId="sharedByUser"
+                                alignment="left" ngDefaultControl>
+                            </check-box>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <ncp-label elementLabel="NCPLabel.userGroupId"></ncp-label>
+                        <div class="col-md-6 col-sm-6 col-xs-11 p-sm-0">
+                            <div class="form-check disabled">
+                                <drop-down formControlName="userGroupCode" ngDefaultControl placeHolder="NCPLabel.userGroupId"
+                                    elementId="userGroupId" miscType="UsersUG" param1="{{userID}}" param2="GR" pickListFlag=true customFlag=true
+                                    dropdownClass="col-md-12 col-sm-12 col-xs-12 no-pad" multipleSelect="true" displayCodeAndDesc=true
+                                    displayOnClick="true" elementLabel="NCPLabel.userGroupId">
+                                </drop-down>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <br>
+            </div>
+            <!-- Renewal Filter start  -->
+            <div *ngIf="enquiryType=='RP'" [formGroup]="searchlDetailsFormGroup">
+                <div class="row" *ngIf="enquiryType=='RP'">
+                    <ncp-label elementLabel="NCPLabel.product" customFlag=true labelClass="col-md-4 col-sm-4 col-xs-12 labelAlign"></ncp-label>
+                    <drop-down formControlName="product" ngDefaultControl placeHolder="NCPLabel.pleaseSelectType" elementId="RP_product" 
+                        miscType="ProductInfo" pickListFlag=true customFlag=true dropdownClass="col-md-6 col-sm-6 col-xs-11 p-sm-0"
+                        displayOnClick="true"  elementLabel="NCPLabel.product">
+                    </drop-down>
+                </div>
+                <div class="row" *ngIf="enquiryType=='RP'">
+                    <ncp-label elementLabel="NCPLabel.clientName" customFlag=true labelClass="col-md-4 col-sm-4 col-xs-12 labelAlign"></ncp-label>
+                    <text-box [inputType]="text" formControlName=clientName customFlag=true textBoxClass="col-md-6 col-sm-6 col-xs-11 p-sm-0" elementLabel="NCPLabel.clientName"></text-box>
+                </div>
+                <div class="row" *ngIf="enquiryType=='RP'">
+                    <ncp-label elementLabel="NCPLabel.policyNumber" customFlag=true labelClass="col-md-4 col-sm-4 col-xs-12 labelAlign"></ncp-label>
+                    <text-box [inputType]="text" formControlName=policyNo customFlag=true textBoxClass="col-md-6 col-sm-6 col-xs-11 p-sm-0" elementLabel="NCPLabel.policyNumber"></text-box>
+                </div>
+                <div class="row" *ngIf="enquiryType=='RP'">
+                    <ncp-label elementLabel="NCPLabel.policyStatus" customFlag=true labelClass="col-md-4 col-sm-4 col-xs-12 labelAlign"></ncp-label>
+                    <drop-down formControlName="status" ngDefaultControl placeHolder="NCPLabel.pleaseSelectType" elementId="status" miscSubType="STAT"
+                        miscType="MiscInfo" param1="REN" pickListFlag=true customFlag=true dropdownClass="col-md-6 col-sm-6 col-xs-11 p-sm-0"
+                        displayOnClick="true" elementLabel="NCPLabel.policyStatus">
+                    </drop-down>
+                </div>
+                <div class="row" *ngIf="enquiryType=='RP'">
+                    <ncp-label elementLabel="NCPLabel.policyFrom"></ncp-label>
+                    <ncp-date-picker [options]="NCPDatePickerNormalOptions" formControlName="fromDate" ngDefaultControl customFlag=true datepickerClass="col-xs-6 col-sm-4 col-md-3 pr0 pl-sm-0" elementLabel="NCPLabel.policyFrom">
+                    </ncp-date-picker>
+                </div>
+                <div class="row" *ngIf="enquiryType=='RP'">
+                    <ncp-label elementLabel="NCPLabel.policyTo"></ncp-label>
+                    <ncp-date-picker [options]="NCPDatePickerToDateOptions" formControlName="toDate" ngDefaultControl customFlag=true datepickerClass="col-xs-6 col-sm-4 col-md-3 pr0 pl-sm-0" elementLabel="NCPLabel.policyTo">
+                    </ncp-date-picker>
+                </div>
+            </div>
+            <!-- Renewal Filter End  -->
+
+        </modal-content>
+        <modal-footer>
+            <div class="btns-row">
+                <button-field buttonType="custom" buttonClass="ncp-linkBtn w100p mt-xs-10" iconClass="fa fa-close" buttonName="NCPBtn.close"
+                    (click)="searchCust.close();">
+                </button-field>
+                <button-field buttonType="custom" buttonClass="ncpbtn-default" iconClass="fa fa-eraser" buttonName="NCPBtn.clear" (click)="clearCustomerSearchModel();">
+                </button-field>
+                <button-field buttonType="custom" buttonClass="ncpbtn-default" iconClass="fa fa-filter" buttonName="NCPBtn.filter"
+                    (click)="searchCust.close(); searchCustomerModel()">
+                </button-field>
+            </div>
+        </modal-footer>
+    </ncp-modal>
+
+    <!--Edit Customer Modal-->
+    <ncp-modal #customerEditView [closeOnEscape]="false" [closeOnOutsideClick]="false" modalClass="modal-lg" modalTitle="NCPLabel.filterTableContents" hideCloseButton="true"
+        titleICon="glyphicon glyphicon-wrench confed">
+        <modal-content>
+            <div class="row">
+                <div class="col-md-3 col-sm-6 col-xs-12 mb-xs-35 pl0">
+                    <h4>
+                        <i class="icon-document iconHeader"></i>
+                        <span class="labelHeader">{{'NCPBtn.quote' | translate}}</span>
+                    </h4>
+                    <multi-check elementId="qbox" [checkboxArray]="quotInfoHeaderMultiCheckArray" elementLabel="Fields" ngDefaultControl></multi-check>
+                </div>
+                <div class="col-md-4 col-sm-6 col-xs-12 mb-xs-35 pl0">
+                    <h4>
+                        <i class="fa fa-life-saver iconHeader"></i>
+                        <span class="labelHeader">{{'NCPTab.policies' | translate}}</span>
+                    </h4>
+                    <multi-check elementId="pbox" [checkboxArray]="policyInfoHeaderMultiCheckArray" elementLabel="Fields" separator="-" ngDefaultControl></multi-check>
+                </div>
+
+                <div class="col-md-3 col-sm-6 col-xs-12 pl0">
+                    <h4>
+                        <i class="icon-reports iconHeader"></i>
+                        <span class="labelHeader">{{'NCPTab.claim' | translate}}</span>
+                    </h4>
+                    <multi-check elementId="cbox" [checkboxArray]="claimInfoHeaderMultiCheckArray" elementLabel="Fields" ngDefaultControl></multi-check>
+                </div>
+                <div class="col-md-2 col-sm-6 col-xs-12 pl0">
+                    <h4>
+                        <i class="fa fa-retweet iconHeader"></i>
+                        <span class="labelHeader">{{'NCPTab.renewals' | translate}}</span>
+                    </h4>
+                    <multi-check elementId="rbox" [checkboxArray]="renewalInfoHeaderMultiCheckArray" elementLabel="Fields" ngDefaultControl></multi-check>
+                </div>
+            </div>
+        </modal-content>
+        <modal-footer>
+            <div class="btns-row">
+                <div class="col-md-12 col-sm-12 col-xs-12 pull-right mb-xs-10">
+                    <div class="red" *ngIf="errmsg">{{'NCPLabel.selectAtleastOnefield' | translate}} &nbsp;
+                        <i class="fa fa-smile-o" aria-hidden="true"></i>
+                    </div>
+                </div>
+                <!--<div class="col-md-4 col-sm-5 col-xs-12 pull-right pr-md-0 pr-sm-0 mb-xs-10 plr-xs-0">
+                      <button type="submit" class="ncp-btn w100p mb10" (click)="selectAllColumn()" (click)="customerEditView.close()">{{'NCPBtn.showAll&Close' | translate}}</button>
+                </div>-->
+                <button-field buttonType="custom" buttonClass="ncp-linkBtn w100p mt-xs-10" iconClass="fa fa-close" buttonName="NCPBtn.close"
+                    (click)="settingsClose();customerEditView.close()">
+                </button-field>
+                <button-field buttonType="custom" buttonClass="ncpbtn-default" iconClass="fa fa-save" buttonName="NCPBtn.save" (click)="colhide()"
+                    [isDisabled]="!errmsg===false">
+                </button-field>
+            </div>
+
+        </modal-footer>
+    </ncp-modal>
+</div>

@@ -1,0 +1,158 @@
+<div *ngIf="!customFlag" class="col-md-12 col-sm-12 col-xs-11 mydp text-right no-pad pb-xs-10" (clickOutside)="closeDatePicker()"
+    [active]="showSelector" ngClass="{{hasImageIcon || iconClass ? 'hasImageIconContainer' : ''}}">
+    <div [class.invalid]="invalidFlag" class="selectiongroup" *ngIf="!inline">
+        <input id="inputId" [readonly]="readonlyInput" type="text" class="form-control" maxlength="10" [ngClass]="{'invaliddate': invalidDate&&indicateInvalidDate, 'invalid': invalidFlag}"
+            placeholder="{{showDateFormatPlaceholder?dateFormat:''}}" (keyup)="userDateInput($event)" [value]="selectionDayTxt"
+            [formControl]="nonGregorianType ? gregorianFormControl : elementControl" (blur)="inputBlur()" (focus)="selectAllContent($event)" autocomplete="off">
+        <p class="mainFloatLabel" [class.floatLabel]="value">{{elementLabel | translate}}
+            <span *ngIf="mandatoryFlag" class="aste">*</span>
+        </p>
+        <i class="floatBorder"></i>
+        <span class="{{readOnlyFlag ? 'customDisabled' :' '}} selbtngroup">
+            <button *ngIf="!hasImageIcon" type="button" class="btnpicker" (click)="openBtnClicked()">
+                <span class="fa fa-calendar icon"></span>
+            </button>
+            <div *ngIf="hasImageIcon" class="datepickerImgIcon componentIcons" [ngClass]="customImageIcon">
+                <misc-img [doExtractSVG] = "true" (click)="openBtnClicked()" [src]="imgIconSrc"></misc-img>
+            </div>
+        </span>
+    </div>
+    <div class="selector datepicker-align" [class.topdatePicker]="datePickerTop" *ngIf="showSelector||inline" [ngClass]="{'inlinedp': inline, 'alignselectorright': alignSelectorRight}">
+        <table class="header">
+            <tr class="headerbg">
+                <td>
+                    <div class="monthContainer">
+                        <div class="headerbtn" (click)="prevMonth()">
+                            <span class="icon fa fa-caret-left"></span>
+                        </div>
+                        <div class="headermonthtxt">
+                            <span>{{visibleMonth.monthTxt}}</span>
+                        </div>
+                        <div class="headerbtn" (click)="nextMonth()">
+                            <span class="icon fa fa-caret-right"></span>
+                        </div>
+                    </div>
+                </td>
+                <td>
+                    <button type="button" class="headertodaybtn" (click)="todayClicked()">{{todayBtnTxt}}</button>
+                </td>
+                <td>
+                    <div class="yearContainer">
+                        <div class="headerbtn" (click)="prevYear()">
+                            <span class="icon fa fa-caret-left"></span>
+                        </div>
+                        <div class="headeryeartxt">
+                            <span>{{visibleMonth.yearTxt}}</span>
+                        </div>
+                        <div class="headerbtn" (click)="nextYear()">
+                            <span class="icon fa fa-caret-right"></span>
+                        </div>
+                    </div>
+                </td>
+            </tr>
+        </table>
+        <table class="caltable">
+            <thead>
+                <tr class="headerbg">
+                    <th *ngFor="let d of weekDays">{{d}}</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr class="trbg" *ngFor="let w of dates">
+                    <td *ngFor="let d of w" [ngClass]="{'currmonth':d.cmo===CURR_MONTH&&!d.disabled, 'currday':d.currDay, 'selectedday':selectedDate.day===d.dateObj.day && selectedDate.month===d.dateObj.month && selectedDate.year===d.dateObj.year && d.cmo===CURR_MONTH, 'disabled': d.disabled, 'tablesingleday': d.cmo===CURR_MONTH&&!d.disabled}"
+                        (click)="$event.stopPropagation();!d.disabled && cellClicked(d)">
+                        <div [ngClass]="{'prevmonth':d.cmo===PREV_MONTH && !d.disabled,'currmonth':d.cmo===CURR_MONTH && !d.disabled,'nextmonth':d.cmo===NEXT_MONTH && !d.disabled,'sunday':d.dayNbr === 0 && sunHighlight && !d.disabled}">
+                            <span [ngClass]="{'sundayDim': sunHighlight && d.dayNbr === 0 && (d.cmo===PREV_MONTH || d.cmo===NEXT_MONTH || d.disabled)}">{{d.dateObj.dayTxt}}</span>
+                        </div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+
+
+<div *ngIf="customFlag" [class]="datepickerClass" class="mydp" (clickOutside)="closeDatePicker()" [active]="showSelector"
+    ngClass="{{hasImageIcon ? 'hasImageIconContainer' : ''}}">
+    <div class="w100p">
+        <div class="selectiongroup " *ngIf="!inline">
+            <input id="inputId" [readonly]="readonlyInput" type="text" class="form-control" maxlength="10" [ngClass]="{'invaliddate': invalidDate&&indicateInvalidDate, 'invalid': invalidFlag}"
+                placeholder="{{showDateFormatPlaceholder?dateFormat:''}}" (keyup)="userDateInput($event)" [value]="selectionDayTxt"
+                [formControl]="nonGregorianType ? gregorianFormControl : elementControl" (blur)="inputBlur()" [class]="datePickerInputClass" autocomplete="off">
+            <p class="mainFloatLabel" [class.floatLabel]="value">{{elementLabel | translate}}
+                <span *ngIf="mandatoryFlag" class="aste">*</span>
+            </p>
+            <i class="floatBorder"></i>
+            <span class="{{readOnlyFlag ? 'customDisabled' :' '}} selbtngroup">
+                <button *ngIf="!hasImageIcon" type="button" class="btnpicker" (click)="openBtnClicked()">
+                    <span class="fa fa-calendar icon"></span>
+                </button>
+                <div *ngIf="hasImageIcon" class="datepickerImgIcon componentIcons" [ngClass]="customImageIcon">
+                    <misc-img [doExtractSVG] = "true"  (click)="openBtnClicked()" [src]="imgIconSrc"></misc-img>
+                </div>
+            </span>
+        </div>
+    </div>
+    <div class="selector datepicker-align" [class.topdatePicker]="datePickerTop" *ngIf="showSelector||inline " [ngClass]="{'inlinedp': inline, 'alignselectorright': alignSelectorRight}">
+        <table class="header">
+            <tr class="headerbg">
+                <td>
+                    <div class="monthContainer">
+                        <div class="headerbtn" (click)="prevMonth()">
+                            <span class="icon fa fa-caret-left"></span>
+                        </div>
+                        <div class="headermonthtxt">
+                            <span>{{visibleMonth.monthTxt}}</span>
+                        </div>
+                        <div class="headerbtn" (click)="nextMonth()">
+                            <span class="icon fa fa-caret-right"></span>
+                        </div>
+                    </div>
+                </td>
+                <td>
+                    <button type="button" class="headertodaybtn" (click)="todayClicked()">{{todayBtnTxt}}</button>
+                </td>
+                <td>
+                    <div class="yearContainer">
+                        <div class="headerbtn" (click)="prevYear()">
+                            <span class="icon fa fa-caret-left"></span>
+                        </div>
+                        <div class="headeryeartxt">
+                            <span>{{visibleMonth.yearTxt}}</span>
+                        </div>
+                        <div class="headerbtn" (click)="nextYear()">
+                            <span class="icon fa fa-caret-right"></span>
+                        </div>
+                    </div>
+                </td>
+            </tr>
+        </table>
+        <table class="caltable">
+            <thead>
+                <tr class="headerbg">
+                    <th *ngFor="let d of weekDays">{{d}}</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr class="trbg" *ngFor="let w of dates">
+                    <td *ngFor="let d of w" [ngClass]="{'currmonth':d.cmo===CURR_MONTH&&!d.disabled, 'currday':d.currDay, 'selectedday':selectedDate.day===d.dateObj.day && selectedDate.month===d.dateObj.month && selectedDate.year===d.dateObj.year && d.cmo===CURR_MONTH, 'disabled': d.disabled, 'tablesingleday': d.cmo===CURR_MONTH&&!d.disabled}"
+                        (click)="$event.stopPropagation();!d.disabled && cellClicked(d)">
+                        <div [ngClass]="{'prevmonth':d.cmo===PREV_MONTH && !d.disabled,'currmonth':d.cmo===CURR_MONTH && !d.disabled,'nextmonth':d.cmo===NEXT_MONTH && !d.disabled,'sunday':d.dayNbr === 0 && sunHighlight && !d.disabled}">
+                            <span [ngClass]="{'sundayDim': sunHighlight && d.dayNbr === 0 && (d.cmo===PREV_MONTH || d.cmo===NEXT_MONTH || d.disabled)}">{{d.dateObj.dayTxt}}</span>
+                        </div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+<div *ngIf="tooltipTitle" class="col-sm-1 col-md-1 col-xs-1  tooltip-mobile3">
+    <button type="button" class="btn btn-link info-tooltip" data-toggle="toggle" [tooltipPlacement]="tooltipPlacement" [tooltip]="tooltipHTML"
+        [id]="elementId">
+        <i class="icon-tooltip" [id]="elementId"></i>
+        <tooltip-content #tooltipHTML [excludeId]="elementId">
+            <div [innerHTML]="tooltipTitle"> </div>
+        </tooltip-content>
+    </button>
+</div>

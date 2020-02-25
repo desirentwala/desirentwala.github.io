@@ -1,0 +1,131 @@
+<div style="clear:both;">
+</div>
+<div [formGroup]="batchPaymentFilterFormGroup">
+    <div class="row">
+        <ncp-label elementLabel="NCPLabel.policyNo"></ncp-label>
+        <text-box inputType="text" formControlName=policyNo customFlag=true textBoxClass="col-md-6 col-sm-6 col-xs-12 pl0" elementLabel="NCPLabel.policyNo">
+        </text-box>
+    </div>
+    <div class="row">
+        <ncp-label elementLabel="NCPLabel.product" customFlag=true labelClass="col-md-4 col-sm-4 col-xs-12 labelAlign"></ncp-label>
+        <drop-down formControlName="productCode" ngDefaultControl placeHolder="NCPLabel.pleaseSelectType" elementId="product" miscSubType="PROD"
+            miscType="MiscInfo" pickListFlag=true customFlag=true dropdownClass="col-md-6 col-sm-6 col-xs-12 pl0" displayOnClick="true" elementLabel="NCPLabel.product">
+        </drop-down>
+    </div>
+    <!-- <div class="row">
+        <ncp-label elementLabel="NCPLabel.clientCode" customFlag=true labelClass="col-md-4 col-sm-4 col-xs-12"></ncp-label>
+        <text-box [inputType]="text" formControlName=clientCode customFlag=true textBoxClass="col-md-6 col-sm-6 col-xs-12"></text-box>
+    </div>
+    <div class="row">
+        <ncp-label elementLabel="NCPLabel.agentCode" customFlag=true labelClass="col-md-4 col-sm-4 col-xs-12"></ncp-label>
+        <text-box [inputType]="text" formControlName=agentCode customFlag=true textBoxClass="col-md-6 col-sm-6 col-xs-12"></text-box>
+    </div>-->
+    <div class="row">
+        <ncp-label elementLabel="NCPLabel.dueDateFrom"></ncp-label>
+        <ncp-date-picker [options]="NCPDatePickerNormalOptions" formControlName="dueFromDate" ngDefaultControl customFlag=true datepickerClass="col-xs-5 col-sm-3 col-md-3 pl0" elementLabel="NCPLabel.dueDateFrom">
+        </ncp-date-picker>
+        <ncp-date-picker [options]="NCPDatePickerToDateOptions" formControlName="dueToDate" ngDefaultControl customFlag=true datepickerClass="col-xs-5 col-sm-3 col-xs-offset-0 col-md-offset-0 col-sm-offset-4 col-md-3 mt-sm-10 pull-xs-right pl0">
+        </ncp-date-picker>
+    </div>
+    <div class="row">
+        <button-field buttonType="custom" buttonClass="ncpbtn-default" iconClass="fa fa-eraser" buttonName="NCPBtn.clear" (click)="clearBatchPaymentSearchModel()">
+        </button-field>
+        <button-field buttonType="custom" buttonClass="ncpbtn-default" iconClass="fa fa-filter" buttonName="NCPBtn.search"
+            (click)="batchPaymentSearchModel()">
+        </button-field>
+    </div>
+    <div class="btns-row">
+    </div>
+</div>
+<div *ngIf="batchPaymentList.length>0" class="col-md-3 col-sm-12 col-xs-12  conf">
+        <input class="forconf" [(ngModel)]="searchId" placeholder="{{'NCPBtn.search' | translate}}">
+    </div>
+<div *ngIf="batchPaymentList.length>0" class="filterac">
+    <table>
+        <thead>
+            <tr>
+                <th *ngFor="let header of tableDetails;let i = index" [class]="selectedClass(header.mapping)" (click)="changeSorting(header.mapping);this.rotateFlag === i ? this.rotateFlag='':this.rotateFlag=i;"
+                    [attr.data-title]="header.header | translate">
+
+                    <span class="labelDisplay">{{header.header | translate}}</span>
+                    <i class="icon-arrow-d indexicon" [class.rotate]="rotateFlag === i"></i>
+                </th>
+                <th class="">
+                    <span class="labelHeader">{{'NCPLabel.pay' | translate}}</span>
+                </th>
+                <th class="">
+                    <span class="labelHeader">{{'NCPLabel.selectAll' | translate}}</span>
+                    <div [formGroup]="batchPaymentFormGroup">
+                        <check-box elementId="isAllRowSelectedID" formControlName="selectAllOption" alignment="left" ngDefaultControl (change)="selectAllRow(batchPaymentList)"></check-box>
+                    </div>
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            <!--orderBy pipe should  follow searchBy pipe to avoid filter sorting Issue-->
+            <tr *ngFor="let object of batchPaymentList | searchBy : searchId : tableDetails | orderBy : convertSorting()" id="tabhide">
+                <td *ngFor="let mappings of tableDetails; let i=index" [attr.data-title]="mappings.header | translate">
+                    <span *ngIf="mappings.mapping !== 'policyNo' && mappings.mapping !== 'amount' && mappings.mapping !== 'netAmt' && mappings.mapping !== 'grossAmt'">{{object[mappings.mapping]}}</span>
+                    <span *ngIf="mappings.mapping === 'amount'">
+                    <misc-display isLabel="true" label="{{object['amount']}}" type="amount"></misc-display></span>
+                    <span *ngIf="mappings.mapping === 'netAmt'">
+                        <misc-display isLabel="true" label="{{object['netAmt']}}" type="amount"></misc-display></span>
+                    <span *ngIf="mappings.mapping === 'grossAmt'">
+                         <misc-display isLabel="true" label="{{object['grossAmt']}}" type="amount"></misc-display></span>
+                    <span *ngIf="mappings.mapping === 'policyNo'">{{object['policyNo']}} - {{object['endtNo']}}</span>
+                </td>
+                <td class="text-center actionCol">
+                    <div [formGroup]="batchPaymentFormGroup" class="form-check disabled">
+                        <select-drop (ngModelChange)="doActionClickRow(object,batchPaymentFormGroup.controls['amountTypeCode'].value,index);" formControlName="amountTypeCode"
+                            customFlag=true elementLabel="amountTypeCode" elementId="amountTypeCode" [dropdownItems]="amountTypeIDList">
+                        </select-drop>
+                    </div>
+                </td>
+                <td>
+                    <div [formGroup]="batchPaymentFormGroup">
+                        <check-box elementId="isRowSelectedID" formControlName="isAmtSelected" alignment="center" (change)="selectRow(object['policyNo'],object['endtNo'],batchPaymentList)"></check-box>
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <div class="row">
+            <div class="col-md-12 col-sm-12 col-xs-8 p0 pull-xs-right">
+                <ncp-label elementLabel="NCPLabel.total" customFlag=true labelClass="col-md-10 col-sm-9 col-xs-6 labelAlign p0 fwb"></ncp-label>
+                <misc-display isLabel="true" class="col-md-2 col-sm-3 col-xs-6 displayAsLabel text-xs-right" label={{totalPayAmount}}></misc-display>
+            </div>
+        <!-- <div class="col-md-10 text-right mt5">
+            <span class="labelHeader">{{'NCPLabel.total' | translate}}
+                <misc-display isLabel="true" class="d-inline" label={{totalPayAmount}} type="amount"></misc-display>
+            </span>
+        </div> -->
+    </div>
+    <div *ngIf="totalPayAmount > 0" class="col-md-12 col-sm-12 col-xs-12 p0">
+        <button-field buttonType="custom" buttonName="NCPBtn.payNow" buttonClass="ncpbtn-default" (click)='doPayment()' iconClass="fa fa-plus"></button-field>
+    </div>
+    <div class="col-centered mtb20" *ngIf="disableShowMoreButton===false">
+        <button-field buttonType="custom" buttonClass="ncpbtn-default" iconClass="fa fa-arrow-down" buttonName="NCPBtn.showMore"
+            (click)='doViewMore()'>
+        </button-field>
+    </div>
+</div>
+<payment-gateway [paymentInfo]="paymentInfo" elementId="payment" [isBatchPolicy]="true" ></payment-gateway>
+
+<ncp-modal modalClass="modal-sm" #paymentSuccessModal [closeOnEscape]="false" [closeOnOutsideClick]="false" [hideCloseButton]="true">
+    <modal-content>
+
+        <div class="row">
+            <ncp-label elementLabel="NCPLabel.paymentSuccess"></ncp-label>
+
+        </div>
+
+    </modal-content>
+    <modal-footer>
+        <div class="btns-row">
+            <button-field buttonType="custom" buttonClass="ncp-linkBtn" iconClass="fa fa-close" buttonName="NCPBtn.close"
+                (click)="paymentSuccessModal.close(); ">
+            </button-field>
+
+        </div>
+    </modal-footer>
+</ncp-modal>

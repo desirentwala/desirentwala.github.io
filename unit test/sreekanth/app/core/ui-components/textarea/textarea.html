@@ -1,0 +1,53 @@
+<div *ngIf = "!customFlag && !disableClassFlag" class="col-md-5 col-sm-6 col-xs-11 pr-sm-0"  >
+      <span class="input-holder fre">
+          <textarea *ngIf="displayValue" [id]="elementId" class="rea" [class.invalid]="invalidFlag" [(ngModel)]="value" [attr.rows]="textAreaRow" [attr.cols]="textAreaCol" [value]="value" [placeholder]="placeHolder" [formControl]="elementControl" (blur)="onTouched($event)" (input)="onInput($event)" (change)="changeInValue($event)" >{{displayValue | translate}}</textarea>
+            <textarea *ngIf="!displayValue" [id]="elementId" class="rea" [class.invalid]="invalidFlag" [(ngModel)]="value" [attr.rows]="textAreaRow" [attr.cols]="textAreaCol" [value]="value" [placeholder]="placeHolder" [formControl]="elementControl" (blur)="onTouched($event)" (input)="onInput($event)" (change)="changeInValue($event)" > </textarea>
+            <p class="mainFloatLabel" [class.floatLabel]="value">{{elementLabel | translate}}<span *ngIf="mandatoryFlag" class="aste">*</span></p>
+            <i class="floatBorder"></i>
+           <i [ngClass]="(invalidFlag && value || invalidFlag && !value)? 'fa fa-times-circle floatIcon warningIconColor' : (!invalidFlag && value)? 'fa fa-check-circle floatIcon successIconColor' :''"></i>
+          <img  *ngIf="loadingFlag" src="assets/img/loader.png" alt="" class="loader">
+      </span>
+    <div *ngIf="tooltipTitle" class="col-sm-1 col-md-1 col-xs-1 tooltip-align tooltip-mobile3">
+        <button *ngIf="tooltipTitle" type="button" class="btn btn-link info-tooltip" data-toggle="toggle" [tooltipPlacement]="tooltipPlacement"
+            [tooltip]="tooltipHTML" [id]="elementId">
+            <i class="icon-tooltip" [id]="elementId"></i>
+            <tooltip-content #tooltipHTML [excludeId]="elementId">
+            <div innerHTML="{{tooltipTitle | translate}}"></div>
+        </tooltip-content>
+        </button>
+    </div>
+</div>
+<div *ngIf = "disableClassFlag">
+      <span class="input-holder fre">
+          <textarea [id]="elementId" class="form-control vfr rea" [class.invalid]="invalidFlag" [(ngModel)]="value" [attr.rows]="textAreaRow" [attr.cols]="textAreaCol" [value]="value" [placeholder]="placeHolder" [formControl]="elementControl" (blur)="onTouched($event)" (input)="onInput($event)" (change)="changeInValue($event)" ></textarea>
+            <p class="mainFloatLabel" [class.floatLabel]="value">{{elementLabel | translate}}<span *ngIf="mandatoryFlag" class="aste">*</span></p>
+            <i class="floatBorder"></i>
+           <i [ngClass]="(invalidFlag && value || invalidFlag && !value)? 'fa fa-times-circle floatIcon warningIconColor' : (!invalidFlag && value)? 'fa fa-check-circle floatIcon successIconColor' :''"></i>
+          <img  *ngIf="loadingFlag" src="assets/img/loader.png" alt="" class="loader">
+      </span>
+    <div *ngIf="tooltipTitle" class="col-sm-1 col-md-1 col-xs-1 tooltip-align tooltip-mobile3">
+        <button *ngIf="tooltipTitle" type="button" class="btn btn-link info-tooltip" data-toggle="toggle" [tooltipPlacement]="tooltipPlacement"
+            [tooltip]="tooltipHTML" [id]="elementId">
+            <i class="icon-tooltip" [id]="elementId"></i>
+            <tooltip-content #tooltipHTML [excludeId]="elementId">
+            <div innerHTML="{{tooltipTitle | translate}}"></div>
+        </tooltip-content>
+        </button>
+    </div>
+</div>
+<!-- please Dont give any space between the textArea Tags -->
+<div *ngIf="customFlag">
+    <div [class]="textareaClass">
+          <textarea *ngIf="displayValue" [id]="elementId" class="rea" [attr.rows]="textAreaRow" [attr.cols]="textAreaCol" [placeholder]="placeHolder" [disabled]="disabledFlag">{{displayValue | translate}}</textarea>
+          <textarea  *ngIf="!displayValue" [id]="elementId" class="rea" [class.invalid]="invalidFlag" [(ngModel)]="value" [attr.rows]="textAreaRow" [attr.cols]="textAreaCol" [value]="value" [placeholder]="placeHolder" [formControl]="elementControl" (blur)="onTouched($event)" (input)="onInput($event)" (change)="changeInValue($event)" ></textarea>
+    <div *ngIf="tooltipTitle" class="col-sm-1 col-md-1 col-xs-1  tooltip-align tooltip-mobile3">
+        <button *ngIf="tooltipTitle" type="button" class="btn btn-link info-tooltip" data-toggle="toggle" [tooltipPlacement]="tooltipPlacement"
+            [tooltip]="tooltipHTML" [id]="elementId">
+            <i class="icon-tooltip" [id]="elementId"></i>
+            <tooltip-content #tooltipHTML [excludeId]="elementId">
+            <div innerHTML="{{tooltipTitle | translate}}"></div>
+        </tooltip-content>
+        </button>
+        </div>
+    </div>
+</div>

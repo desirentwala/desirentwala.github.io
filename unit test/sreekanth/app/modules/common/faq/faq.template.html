@@ -1,0 +1,12 @@
+<div class="fnolAccordion">  
+    <accordion [closeOthers]="oneAtATime" class="accordionView">
+        <accordion-group *ngFor="let group of groups; let i = index;" [isOpen]="i=='0'" [heading]="group.title">
+        
+                <ol class="ul-css">
+                    <li *ngFor="let subGroup of group.content" class="mb10">
+                        <span class="cb">{{subGroup}}</span></li>
+                </ol>
+        
+        </accordion-group>
+    </accordion>
+</div>

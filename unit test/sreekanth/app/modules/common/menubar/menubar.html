@@ -1,0 +1,166 @@
+<div *ngIf="shared.doShowElement('showMenu')" class="main-nav-wrap hidden-xs clearfix navbar-default" id="mainNavBar">
+  <ul class="nav navbar-nav">
+    <li *ngFor="let mainmenus of _menujsondata" class="activeMenuItem">
+      <a  class="menuLink" *ngIf="mainmenus.url && isDisplayMenu(mainmenus.productCode,mainmenus.isProductCheck);" (mouseenter)="closeRootSubMenu(activeMenuItemID)"
+        (click)="showStyle = !showStyle; activeMenuItemID = mainmenus.id; navigateRouterLink(mainmenus);"><i class={{mainmenus.imageName}}></i><span class="labelmainMenu">{{mainmenus.name |  translate}}</span></a>
+      <a class="menuLink" *ngIf="!mainmenus.url && menuDisplayType =='OnClick'" (click)="showStyle = !showStyle; showRootSubMenu(mainmenus.id);activeMenuItemID = mainmenus.id;"><i class={{mainmenus.imageName}}></i><span class="labelmainMenu">{{mainmenus.name | translate}}</span></a>
+      <a class="menuLink" *ngIf="!mainmenus.url && menuDisplayType !=='OnClick'" (mouseenter)="showStyle = !showStyle; showRootSubMenu(mainmenus.id);activeMenuItemID = mainmenus.id;"
+        (click)="showStyle = !showStyle; showRootSubMenu(mainmenus.id);"><i class={{mainmenus.imageName}}></i><span class="labelmainMenu">{{mainmenus.name | translate}}</span></a>
+
+      <div  class="drop product-drop" id={{mainmenus.id}}>
+        <div class="menuClose">
+          <a (click)="showStyle = !showStyle;closeRootSubMenu(mainmenus.id);" class="close product-close"><i class="icon-alert"></i></a>
+        </div>
+        <!--<div class="clearfix">
+            <a (click)="showStyle = !showStyle;closeRootSubMenu(mainmenus.id);" class="close product-close">Close <i class="icon-alert"></i></a>
+          </div>-->
+        <div class="drop-row" *ngFor="let submenus of mainmenus.child">
+
+          <div class="drop-col col-md-3 col-sm-3">
+            <ul class="drop-tabset dropListContainer">
+              <li id={{submenus.id+1}} class="dropList">
+                <a class="menuLink" *ngIf="submenus.url && isDisplayMenu(submenus.productCode,submenus.isProductCheck);" (click)="showChildStyle = !showChildStyle;showSubMenuofChild(submenus.id); activeMenuItemID = mainmenus.id; navigateRouterLink(submenus)"><i class="iconSubMenu" ngClass={{submenus.imageName}}></i> <span class="labelMenu">{{submenus.name | translate}}</span></a>
+                <a class="menuLink" *ngIf="!submenus.url && menuDisplayType =='OnClick'" (click)="showChildStyle = !showChildStyle;showSubMenuofChild(submenus.id)"><i class="iconSubMenu" ngClass={{submenus.imageName}}></i> <span class="labelMenu">{{submenus.name | translate}}</span></a>
+                <a class="menuLink" *ngIf="!submenus.url && menuDisplayType !=='OnClick'" (mouseenter)="showChildStyle = !showChildStyle;showSubMenuofChild(submenus.id)"
+                  (click)="showChildStyle = !showChildStyle;showSubMenuofChild(submenus.id)"><i class="iconSubMenu" ngClass={{submenus.imageName}}></i> <span class="labelMenu">{{submenus.name | translate}}</span></a>
+              </li>
+            </ul>
+          </div>
+          <div id={{submenus.id}} class="tab-content col-md-9 col-sm-9" style="display:none">
+            <ul class="tabContentListContainer dropListContainer">
+              <li *ngFor="let submenuofchild of submenus.child" class="col-md-3 col-sm-6 tabContentList dropList">
+                <span class="cursor-default"><i class="iconSubMenu" ngClass={{submenuofchild.imageName}}></i> <span class="labelSubMenuHead">{{submenuofchild.name | translate}}</span></span>
+                <ul class="tabContentSublistContainer dropListContainer">
+                  <li *ngFor="let submenuofchildofchid of submenuofchild.child" class="tabContentSublist dropList">
+
+                    <a class="tabContentlistLink menuLink" *ngIf="submenuofchildofchid.url && isDisplayMenu(submenuofchildofchid.productCode,submenuofchildofchid.isProductCheck);"
+                      (click)="watchforclick(submenuofchildofchid.productCode);activeMenuItemID = mainmenus.id; navigateRouterLink(submenuofchildofchid); watchProductsOnclick(submenuofchildofchid.name)"><span class="labelSubMenu">{{submenuofchildofchid.name | translate}}</span></a>
+                    <a class="menuLink" *ngIf="!submenuofchildofchid.url" (click)=" watchProductsOnclick(submenuofchildofchid.name)"><span class="labelSubMenu">{{submenuofchildofchid.name | translate}}</span></a>
+                  </li>
+                </ul>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </li>
+  </ul>
+</div>
+
+<!--design 2-->
+<div class="menuWrapper hide">
+  <div class="main-nav-wrap hidden-xs clearfix navbar-default" id="mainNavBar">
+    <ul class="nav navbar-nav">
+      <li>
+        <a><i class=icon-customers></i><span>Dashboard</span></a>
+      </li>
+      <li>
+        <a><i class=icon-customers></i><span>New Quote</span><i class="menuDropdownIcon icon-arrow-d"></i></a>
+        <div class="product-drop hide">
+          <ul>
+            <li>
+              <a><i class=icon-customers></i><span>Travel</span><i class="menuDropdownIcon icon-arrow-r"></i></a>
+              <div class="subProductDrop menuDrop hide">
+                <ul>
+                  <li>
+                    <a><i class=icon-customers></i><span>Persoanl</span><i class="menuDropdownIcon icon-arrow-r"></i></a>
+                    <div class="subProductDrop1 menuDrop">
+                      <ul>
+                        <li>
+                          <a><i class=icon-customers></i><span>Product Name</span></a>
+                        </li>
+                        <li>
+                          <a><i class=icon-customers></i><span>Product Name</span></a>
+                        </li>
+                        <li>
+                          <a><i class=icon-customers></i><span>Product Name</span></a>
+                        </li>
+                        <li>
+                          <a><i class=icon-customers></i><span>Product Name</span></a>
+                        </li>
+                        <li>
+                          <a><i class=icon-customers></i><span>Product Name</span></a>
+                        </li>
+                        <li>
+                          <a><i class=icon-customers></i><span>Product Name</span></a>
+                        </li>
+                        <li>
+                          <a><i class=icon-customers></i><span>Product Name</span></a>
+                        </li>
+                        <li>
+                          <a><i class=icon-customers></i><span>Product Name</span></a>
+                        </li>
+                        <li>
+                          <a><i class=icon-customers></i><span>Product Name</span></a>
+                        </li>
+                        <li>
+                          <a><i class=icon-customers></i><span>Product Name</span></a>
+                        </li>
+                      </ul>
+                    </div>
+
+                  </li>
+                  <li>
+                    <a><i class=icon-customers></i><span>Corporate</span><i class="menuDropdownIcon icon-arrow-r"></i></a>
+                  </li>
+                </ul>
+              </div>
+            </li>
+            <li>
+              <a><i class=icon-customers></i><span>Travel</span><i class="menuDropdownIcon icon-arrow-r"></i></a>
+            </li>
+            <li>
+              <a><i class=icon-customers></i><span>Travel</span><i class="menuDropdownIcon icon-arrow-r"></i></a>
+            </li>
+            <li>
+              <a><i class=icon-customers></i><span>Travel</span><i class="menuDropdownIcon icon-arrow-r"></i></a>
+            </li>
+            <li>
+              <a><i class=icon-customers></i><span>Travel</span><i class="menuDropdownIcon icon-arrow-r"></i></a>
+            </li>
+            <li>
+              <a><i class=icon-customers></i><span>Travel</span><i class="menuDropdownIcon icon-arrow-r"></i></a>
+            </li>
+            <li>
+              <a><i class=icon-customers></i><span>Travel</span><i class="menuDropdownIcon icon-arrow-r"></i></a>
+            </li>
+            <li>
+              <a><i class=icon-customers></i><span>Travel</span><i class="menuDropdownIcon icon-arrow-r"></i></a>
+            </li>
+            <li>
+              <a><i class=icon-customers></i><span>Travel</span><i class="menuDropdownIcon icon-arrow-r"></i></a>
+            </li>
+            <li>
+              <a><i class=icon-customers></i><span>Personal</span><i class="menuDropdownIcon icon-arrow-r"></i></a>
+            </li>
+          </ul>
+        </div>
+      </li>
+      <li>
+        <a><i class=icon-customers></i><span>Dashboard</span></a>
+      </li>
+      <li>
+        <a><i class=icon-customers></i><span>Dashboard</span><i class="menuDropdownIcon icon-arrow-d"></i></a>
+      </li>
+      <li>
+        <a><i class=icon-customers></i><span>Dashboard</span></a>
+      </li>
+      <li>
+        <a><i class=icon-customers></i><span>More</span><i class="menuDropdownIcon icon-arrow-d"></i></a>
+        <div class="product-drop hide">
+          <ul>
+            <li>
+              <a><i class=icon-customers></i><span>Travel</span><i class="menuDropdownIcon icon-arrow-r"></i></a>
+            </li>
+            <li>
+              <a><i class=icon-customers></i><span>Travel</span><i class="menuDropdownIcon icon-arrow-r"></i></a>
+            </li>
+            <li>
+              <a><i class=icon-customers></i><span>Travel</span><i class="menuDropdownIcon icon-arrow-r"></i></a>
+            </li>
+          </ul>
+        </div>
+      </li>
+    </ul>
+  </div>
+</div>

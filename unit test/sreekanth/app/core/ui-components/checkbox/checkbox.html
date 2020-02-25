@@ -1,0 +1,29 @@
+<!--<div [id]="elementId" class="list-inline" [class.table-checkbox]="alignment==='left'" [class.checkbox-center]="alignment==='center'" [class.checkbox-right]="alignment==='right'" >-->
+<div [id]="elementId" class="list-inline"  [ngClass]="checkBoxClass" [class.table-checkbox]="alignment==='left'" [class.checkbox-right]="alignment==='right'" [class.checkbox-center]="alignment==='center'">
+	<label [ngClass]="readOnlyFlag? 'notAllowed' :' '" class="{{readOnlyFlag ? 'customDisabled' :' '}}nopadding">
+				<input class="form-control" 
+					   class="checkboxinput" 
+				       type="checkbox"
+					   [(checked)]="value"
+					   (click)="setCheckBoxValue()" 					   
+					   [formControl]="elementControl">
+					   <span *ngIf="invalidFlag" class="invalidCheckbox"></span>			  
+			    <span  class="fake-input checkbox"></span>
+	   </label>
+	<span class="fake-label display-xs-inline" [attr.for]="elementId"><i *ngIf="iconClass" ngClass="{{iconClass}} iconCheckBox"></i><span class="labelCheckBox">{{itemLabel | translate}}</span>
+	<span *ngIf="mandatoryFlag" class="aste" >*</span></span>
+	<div *ngIf="tooltipTitle" class="tooltip-align tooltip-mobile3">
+		 <button *ngIf=" tooltipTitle " 
+                type="button " 
+                class="btn btn-link info-tooltip " 
+                data-toggle="toggle " 
+                [tooltipPlacement]="tooltipPlacement "
+				[tooltip]="tooltipHTML"
+				[id]="elementId">
+		<i class="icon-tooltip" [id]="elementId"></i>
+		<tooltip-content #tooltipHTML [excludeId]="elementId">
+                <div innerHTML="{{tooltipTitle | translate}} "></div>
+        </tooltip-content>
+        </button>
+	</div>
+</div>

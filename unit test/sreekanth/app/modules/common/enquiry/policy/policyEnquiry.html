@@ -1,0 +1,469 @@
+<div class="filterac">
+	<table>
+		<thead>
+			<tr>
+				<th *ngFor="let header of tableDetails;let i = index" [class]="selectedClass(header.mapping)" (click)="changeSorting(header.mapping);this.rotateFlag === i ? this.rotateFlag='':this.rotateFlag=i;"
+					[attr.data-title]="header.header | translate">
+
+					<span class="labelHeader">{{header.header | translate}}</span>
+					<i class="icon-arrow-d indexicon" [class.rotate]="rotateFlag === i"></i>
+				</th>
+				<th *ngIf="isActionFlag" class="actionCol">
+					<span class="labelHeader">{{'NCPLabel.Action' | translate}}</span>
+				</th>
+			</tr>
+		</thead>
+		<tbody>
+			<!--orderBy pipe should  follow searchBy pipe to avoid filter sorting Issue-->
+			<tr *ngFor="let object of tableData  | searchBy : searchId : tableDetails | orderBy : convertSorting(); let rowIndex=index" id="tabhide">
+				<td *ngFor="let mappings of tableDetails; let i=index" [attr.data-title]="mappings.header | translate">
+					<i *ngIf="object.policyNo" 
+						[class.glyphicon-adjust]="object.status === 'PN' &&  mappings.mapping === 'statusDesc'" 
+						[class.glyphicon-ok-sign]=" object.status === 'PT' && mappings.mapping === 'statusDesc'"
+						[class.glyphicon-remove]="(object.status === 'CN' || object.status === 'PE') && mappings.mapping === 'statusDesc'"
+						class="glyphicon indexapp">
+					</i>
+						<ng-container *ngIf="mappings.fieldConfig;else displaySameData">
+							<ng-template [ngIf]="mappings.fieldConfig.showTimelineOnClick">
+								<span><a  (click)="openTimeline(object)" >{{object['policyNo']}}</a>  - {{object['policyEndtNo']}}</span>
+							</ng-template>
+							<ng-template [ngIf]="mappings.fieldConfig.pipeTransformRequired">
+								<misc-display [type]="mappings.fieldConfig.type" [dateDisplayType]="mappings.fieldConfig.dateDisplayType"
+								[label]="object[mappings.mapping]" [joinString]="mappings.fieldConfig.joinString? mappings.fieldConfig.joinString :''">
+								</misc-display>
+							</ng-template>
+						</ng-container>
+						<ng-template #displaySameData>
+								<span>{{object[mappings.mapping]}}</span>
+						</ng-template>
+				</td>
+
+				<td class="actionCol" *ngIf="isActionFlag">
+					<!--<button type=radio name="button" class="fa fa-gear showPopover indexrecus" tooltipPlacement="left" [tooltip]="policyModalTooltip"
+						[tooltipHide]="tooltipHide" tooltipClick=true (click)="doAction($event); tooltipHide = policyModalTooltip.show(); setCurrentPolicyTooltip(policyModalTooltip);">
+						</button>-->
+					<span (click)=searchForShareReassingPermissions(object) >
+							<i class="fa fa-gear showPopover indexrecus" tooltipPlacement="left" [tooltip]="policyModalTooltip"
+							[tooltipHide]="tooltipHide" tooltipClick=true [id]="'policyTooltip'+rowIndex"></i>
+					</span>
+					<tooltip-content #policyModalTooltip [excludeId]="'policyTooltip'+rowIndex">
+						<h3 class="popover-title">&nbsp;
+							<a class="close" (click)="tooltipHide = policyModalTooltip.hide()">
+								<i class="icon-alert"></i></a>
+						</h3>
+						<div class="popover-content">
+							<div class="activityactions" *ngIf ="loader">
+								<ncp-loader subscribe='true' loading='yes' loaderType='DOTS'></ncp-loader>
+							</div>
+							<div *ngIf="object.policyNo && !loader">
+								<ul *ngIf="object.status==='PT' && pmovFlag===false">
+									<li>
+										<a (click)="doActionClickRow(object,'PENQ'); tooltipHide = policyModalTooltip.hide()">
+											<i class="fa fa-eye iconToolTip"></i>
+											<span class="labelToolTip">{{'NCPLabel.viewQuote' | translate}}</span>
+										</a>
+									</li>
+									<li>
+										<a (click)="doActionClickRow(object,'ENDT'); tooltipHide = policyModalTooltip.hide()">
+											<i class=" iconToolTip"></i>
+											<span *ngIf="(object.issuedBy === userID) ? true : (permissions && (permissions.suEditOption === true||permissions.ugEditOption === true))" class="labelToolTip">{{'NCPLabel.endorse' | translate}}</span>
+										</a>
+									</li>
+									<li>
+										<a (click)="doActionClickRow(object,'NC'); tooltipHide = policyModalTooltip.hide()">
+											<i class="fa fa-bell iconToolTip"></i>
+											<span class="labelToolTip">{{'NCPLabel.notifyClaim' | translate}}</span>
+										</a>
+									</li>
+									<li>
+										<a (click)="doActionClickRow(object,'DOC'); tooltipHide = policyModalTooltip.hide()">
+											<i class="fa fa-file iconToolTip"></i>
+											<span class="labelToolTip">{{'NCPLabel.documents' | translate}}</span>
+										</a>
+									</li>
+									<li *ngIf="object.policyEndtNo!=='000'">
+										<a (click)="doActionClickRow(object,'PMOV'); tooltipHide = policyModalTooltip.hide()">
+											<i class="fa fa-file iconToolTip"></i>
+											<span class="labelToolTip">{{'NCPLabel.policyMovements' | translate}}</span>
+										</a>
+									</li>
+								</ul>
+								<ul *ngIf="object.status==='CN'&& pmovFlag===false">
+									<li>
+										<a (click)="doActionClickRow(object,'PENQ'); tooltipHide = policyModalTooltip.hide()">
+											<i class="fa fa-eye iconToolTip"></i>
+											<span class="labelToolTip">{{'NCPLabel.viewQuote' | translate}}</span>
+										</a>
+									</li>
+									<li>
+										<a (click)="doActionClickRow(object,'DOC'); tooltipHide = policyModalTooltip.hide()">
+											<i class="fa fa-file iconToolTip"></i>
+											<span class="labelToolTip">{{'NCPLabel.documents' | translate}}</span>
+										</a>
+									</li>
+									<li>
+										<a (click)="doActionClickRow(object,'POL_REINI'); tooltipHide = policyModalTooltip.hide()">
+											<i class="fa fa-file iconToolTip"></i>
+											<span *ngIf="(object.issuedBy === userID) ? true : (permissions && (permissions.suEditOption === true||permissions.ugEditOption === true))" class="labelToolTip">{{'NCPLabel.reinstate' | translate}}</span>
+										</a>
+									</li>
+									<li *ngIf="object.policyEndtNo!=='000'">
+										<a (click)="doActionClickRow(object,'PMOV'); tooltipHide = policyModalTooltip.hide()">
+											<i class="fa fa-file iconToolTip"></i>
+											<span class="labelToolTip">{{'NCPLabel.policyMovements' | translate}}</span>
+										</a>
+									</li>
+								</ul>
+								<ul *ngIf="object.status==='PN'&& pmovFlag===false">
+									<li>
+										<a (click)="doActionClickRow(object,'PENQ'); tooltipHide = policyModalTooltip.hide()">
+											<i class="fa fa-eye iconToolTip"></i>
+											<span class="labelToolTip">{{'NCPLabel.viewQuote' | translate}}</span>
+										</a>
+									</li>
+									<li *ngIf="object.status==='PN'">
+										<a (click)="doActionClickRow(object,'PHLD'); tooltipHide = policyModalTooltip.hide()">
+											<i class=" iconToolTip"></i>
+											<span *ngIf="(object.issuedBy === userID) ? true : (permissions && (permissions.suEditOption === true||permissions.ugEditOption === true))" class="labelToolTip">{{'NCPLabel.editQuote' | translate}}</span>
+										</a>
+									</li>
+									<li *ngIf="object.status!=='PE'">
+										<a (click)="doActionClickRow(object,'PABN'); tooltipHide = policyModalTooltip.hide()">
+											<i class="fa fa-close iconToolTip"></i>
+											<span *ngIf="(object.issuedBy === userID) ? true : (permissions && (permissions.suEditOption === true||permissions.ugEditOption === true))&& !hideAbandonFlag" class="labelToolTip">{{'NCPLabel.abandonPolicy' | translate}}</span>
+										</a>
+									</li>
+									<li>
+										<a (click)="doActionClickRow(object,'DOC'); tooltipHide = policyModalTooltip.hide()">
+											<i class="fa fa-file iconToolTip"></i>
+											<span class="labelToolTip">{{'NCPLabel.documents' | translate}}</span>
+										</a>
+									</li>
+									<li *ngIf="object.policyEndtNo!=='000'">
+										<a (click)="doActionClickRow(object,'PMOV'); tooltipHide = policyModalTooltip.hide()">
+											<i class="fa fa-file iconToolTip"></i>
+											<span class="labelToolTip">{{'NCPLabel.policyMovements' | translate}}</span>
+										</a>
+									</li>
+								</ul>
+								<ul *ngIf="object.status==='PE' && pmovFlag===false">
+									<li>
+										<a (click)="doActionClickRow(object,'PENQ'); tooltipHide = policyModalTooltip.hide()">
+											<i class="fa fa-eye iconToolTip"></i>
+											<span class="labelToolTip">{{'NCPLabel.viewQuote' | translate}}</span>
+										</a>
+									</li>
+									<li *ngIf="object.status==='PN'">
+										<a (click)="doActionClickRow(object,'PHLD'); tooltipHide = policyModalTooltip.hide()">
+											<i class="fa fa-pencil iconToolTip"></i>
+											<span *ngIf="permissions && (permissions.suEditOption === true ||permissions.ugEditOption === true)" class="labelToolTip">{{'NCPLabel.editQuote' | translate}}</span>
+										</a>
+									</li>
+									<li *ngIf="object.status!=='PE'">
+										<a (click)="doActionClickRow(object,'PABN'); tooltipHide = policyModalTooltip.hide()">
+											<i class="fa fa-close iconToolTip"></i>
+											<span *ngIf="(object.issuedBy === userID) ? true : (permissions && (permissions.suEditOption === true||permissions.ugEditOption === true))&& !hideAbandonFlag" class="labelToolTip">{{'NCPLabel.abandonPolicy' | translate}}</span>
+										</a>
+									</li>
+									<li>
+										<a (click)="doActionClickRow(object,'DOC'); tooltipHide = policyModalTooltip.hide()">
+											<i class="fa fa-file iconToolTip"></i>
+											<span class="labelToolTip">{{'NCPLabel.documents' | translate}}</span>
+										</a>
+									</li>
+									<li *ngIf="object.policyEndtNo!=='000'">
+										<a (click)="doActionClickRow(object,'PMOV'); tooltipHide = policyModalTooltip.hide()">
+											<i class="fa fa-file iconToolTip"></i>
+											<span class="labelToolTip">{{'NCPLabel.policyMovements' | translate}}</span>
+										</a>
+									</li>
+								</ul>
+								<ul *ngIf="pmovFlag===true">
+									<li>
+										<a (click)="doActionClickRow(object,'PENQ'); tooltipHide = policyModalTooltip.hide()">
+											<i class="fa fa-eye iconToolTip"></i>
+											<span class="labelToolTip">{{'NCPLabel.viewQuote' | translate}}</span>
+										</a>
+									</li>
+									<li>
+										<a (click)="doActionClickRow(object,'DOC'); tooltipHide = policyModalTooltip.hide()">
+											<i class="fa fa-file iconToolTip"></i>
+											<span class="labelToolTip">{{'NCPLabel.documents' | translate}}</span>
+										</a>
+									</li>
+								</ul>
+
+								<ul *ngIf="(object.status==='PI' || object.status==='PF') && pmovFlag===false">
+									<li>
+										<a (click)="doActionClickRow(object,'PENQ'); tooltipHide = policyModalTooltip.hide()">
+											<i class="fa fa-eye iconToolTip"></i>
+											<span class="labelToolTip">{{'NCPLabel.viewQuote' | translate}}</span>
+										</a>
+									</li>
+									<li>
+										<a (click)="doActionClickRow(object,'ENDT'); tooltipHide = policyModalTooltip.hide()">
+											<i class=" iconToolTip"></i>
+											<span *ngIf="(object.issuedBy === userID) ? true : (permissions && (permissions.suEditOption === true||permissions.ugEditOption === true))" class="labelToolTip">{{'NCPLabel.endorse' | translate}}</span>
+										</a>
+									</li>
+								</ul>
+								<ul>
+									<li>
+										<a (click)="doActionClickRow(object,'SH'); tooltipHide = policyModalTooltip.hide()">
+											<i class="fa fa-eye iconToolTip"></i>
+											<span *ngIf="(permissions && (permissions.suShareOption === true||permissions.ugShareOption === true))" class="labelToolTip">{{'NCPLabel.shareTxn' | translate}}</span>
+										</a>
+									</li>
+									<li>
+										<a (click)="doActionClickRow(object,'RA'); tooltipHide = policyModalTooltip.hide()">
+											<i class=" iconToolTip"></i>
+											<span *ngIf="(permissions && (permissions.suEditOption === true||permissions.ugEditOption === true))" class="labelToolTip">{{'NCPBtn.reassign' | translate}}</span>
+										</a>
+									</li>
+								</ul>
+							</div>
+
+						</div>
+					</tooltip-content>
+				</td>
+			</tr>
+		</tbody>
+	</table>
+</div>
+
+<!--Document view modal without email option -->
+<ncp-modal *ngIf="false" [modalKey]="documentViewModal" [closeOnEscape]="false" [closeOnOutsideClick]="false">
+	<modal-header class="">
+		<div class="row">
+			<div class="col-md-12 col-sm-12 col-xs-12 p0">
+				<!--<h2>{{'NCPLabel.documentInformation'|translate}}</h2>-->
+				<misc-h2 [label]="'NCPLabel.documentInformation'"></misc-h2>
+			</div>
+		</div>
+	</modal-header>
+	<modal-content>
+		<misc-h4 *ngIf="documentInfo && documentInfo.length > 0" miscClass="mt0" [label]="'NCPLabel.listOfDocument'"></misc-h4>
+		<div *ngIf="documentInfo && documentInfo.length > 0" class="filterac">
+			<table>
+				<thead>
+					<tr>
+						<th>
+							<span>{{ 'NCPLabel.documentName' | translate }}</span>
+						</th>
+						<th>
+							<span>{{ 'NCPLabel.Action' | translate }}</span>
+						</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr *ngFor="let info of documentInfo; let i = index">
+						<td *ngIf="info.dispatchType==='PRINT' || info.dispatchType==='PDF'|| info.dispatchType==='PREVIEW'">
+							<span class="displayAsLabel">{{info.documentDesc}}</span>
+							</td>
+							<td *ngIf="info.dispatchType==='PRINT' || info.dispatchType==='PDF'|| info.dispatchType==='PREVIEW'" (click)="documentView(i)"
+							 [attr.data-title]="info.documentDesc">
+								<button-field buttonType="custom" buttonClass="ncpbtn-default ml-sm-10 mt-xs-0" buttonName="NCPBtn.viewFile">
+								</button-field>
+							</td>
+						</tr>
+
+					</tbody>
+				</table>
+				<div class="popupLabel">
+					<!--<label>{{ 'NCPLabel.popup' | translate }}</label>-->
+					<ncp-label elementLabel="NCPLabel.popup" customFlag=true labelClass="col-md-12 col-sm-12 col-lg-12 col-xs-12 text-center"></ncp-label>
+				</div>
+			</div>
+		</modal-content>
+		<modal-footer>
+			<div class="btns-row mt10">
+				<button-field buttonType="custom" buttonClass="ncp-linkBtn mb10" buttonName="NCPBtn.close" (click)="documentViewModal = false;"
+					data-dismiss="modal">
+				</button-field>
+			</div>
+		</modal-footer>
+	</ncp-modal>
+	<!--Document view modal With E-mail option -->
+	<ncp-modal *ngIf="isEmailWithDocs" [modalKey]="documentViewModal" [closeOnEscape]="false" [closeOnOutsideClick]="false" modalTitle="NCPLabel.documentInformation" modalClass="modal-md" hideCloseButton="true">
+	<modal-content>
+		<accordion [closeOthers]="oneAtATime" class="accordionView accordionEmail">
+			<accordion-group heading="Email">
+				<div [formGroup]="emailDocumentsFormGroup">
+					<div class="row">
+						<ncp-label elementLabel="NCPLabel.QuotFromdate" customFlag=true labelClass="col-md-4 col-sm-4 col-xs-12 labelAlign"></ncp-label>
+						<text-box [inputType]="text" formControlName=fromAddress customFlag=true textBoxClass="col-md-8 col-sm-8 col-xs-12" (change)="emailValidate()"
+						 elementLabel="NCPLabel.QuotFromdate">
+						</text-box>
+					</div>
+					<error-handler [elementControl]="emailDocumentsFormGroup.controls['fromAddress']" [customMessages]="{required: 'NCPLabelcustomMessages.reqemailId', mailFormat :'NCPLabelcustomMessages.mailformat'}"customFlag=true errorCustomClass="col-xs-offset-0 col-md-offset-4 col-sm-offset-4 col-md-8 col-sm-8 col-xs-12">
+					</error-handler>
+
+					<div class="row">
+						<ncp-label elementLabel="NCPLabel.to" customFlag=true labelClass="col-md-4 col-sm-4 col-xs-12 labelAlign"></ncp-label>
+							<text-box [inputType]="text" formControlName=toAddress customFlag=true textBoxClass="col-md-8 col-sm-8 col-xs-12" (change)="emailValidate()" elementLabel="NCPLabel.to">
+						</text-box>
+					</div>
+						<error-handler [elementControl]="emailDocumentsFormGroup.controls['toAddress']" [customMessages]="{required: 'NCPLabelcustomMessages.reqemailId', multiplemailFormat :'NCPLabelcustomMessages.mailformat'}" customFlag=true errorCustomClass="col-xs-offset-0 col-md-offset-4 col-sm-offset-4 col-md-8 col-sm-8 col-xs-12">
+					</error-handler>
+					<div class="row">
+						<ncp-label elementLabel="NCPLabel.ccAddress" customFlag=true labelClass="col-md-4 col-sm-4 col-xs-12 labelAlign"></ncp-label>
+							<text-box [inputType]="text" formControlName=ccAddress customFlag=true textBoxClass="col-md-8 col-sm-8 col-xs-12" (change)="emailValidate()" elementLabel="NCPLabel.ccAddress">
+						</text-box>
+					</div>
+						<error-handler [elementControl]="emailDocumentsFormGroup.controls['ccAddress']" [customMessages]="{multiplemailFormat :'NCPLabelcustomMessages.mailformat'}" customFlag=true errorCustomClass="col-xs-offset-0 col-md-offset-4 col-sm-offset-4 col-md-8 col-sm-8 col-xs-12">
+					</error-handler>
+					<div class="row">
+						<ncp-label elementLabel="NCPLabel.subject" customFlag=true labelClass="col-md-4 col-sm-4 col-xs-12 labelAlign"></ncp-label>
+						<text-box [inputType]="text" formControlName=subject customFlag=true textBoxClass="col-md-8 col-sm-8 col-xs-12" elementLabel="NCPLabel.subject">
+						</text-box>
+					</div>
+					<div class="row">
+						<ncp-label elementLabel="NCPLabel.emailBody" customFlag=true labelClass="col-md-4 col-sm-4 col-xs-12 labelAlign"></ncp-label>
+						<div class="col-md-8 col-sm-8 col-xs-12">
+							<text-area formControlName=emailBody textAreaRow="5" textAreaCol="25" disableClassFlag=false elementLabel="NCPLabel.emailBody"></text-area>
+						</div>
+					</div>
+
+
+				</div>
+			</accordion-group>
+		</accordion>
+		<div class="row">
+			<div class="col-md-12 col-sm-12 col-xs-12 mb-xs-10">
+				<div class="red" *ngIf="errmsgSelectDoc">{{'NCPLabel.pleaseSelectDocument' | translate}}</div>
+			</div>
+
+
+			<div class="col-md-12 col-sm-12 col-xs-12 mb-xs-10">
+				<div class="red" *ngIf="errmsgSelectAtleastDoc">{{'NCPLabel.pleaseSelectAtleastOneDocument' | translate}}</div>
+			</div>
+
+			<div class="col-md-12 col-sm-12 col-xs-12 mb-xs-10">
+				<div class="red" *ngIf="errmsgNoDocuments">{{'NCPLabel.documentsNotAvailable' | translate}}</div>
+			</div>
+
+			<div class="col-md-12 col-sm-12 col-xs-12 mb-xs-10">
+				<div class="red" *ngIf="errmsgUnselectAll">{{'NCPLabel.pleaseSelectAtleastOneDocument' | translate}}</div>
+			</div>
+		</div>
+
+		<div class="row" *ngIf="documentInfo && documentInfo.length > 0">
+			<div class="col-md-4 col-sm-4 col-xs-12 p0 mt0">
+				<!--<h4 class="mt0">{{ 'NCPLabel.listOfDocument' | translate }}</h4>-->
+				<misc-h4 [label]="'NCPLabel.listOfDocument'"></misc-h4>
+			</div>
+			<div class="col-md-5 col-sm-5 col-xs-12 p0 mb-xs-10">
+				<ncp-label customFlag=true class="col-xs-8 col-sm-8 col-md-8 col-lg-8 labelAlign" elementLabel="NCPLabel.selectAll"></ncp-label>
+				<div [formGroup]="emailDocumentsFormGroup" class="col-lg-4 col-md-4 col-sm-4 col-xs-4">
+					<check-box elementId="isAllDocumentSelectedID" formControlName="selectAllOption" alignment="right" ngDefaultControl (click)="selectAllDocuments(documentInfo)"></check-box>
+				</div>
+			</div>
+
+			<button-field buttonType="custom" buttonClass="ncpbtn-default mt-xs-0" elementId="sendEmail" buttonName="NCPBtn.sendEMail"
+			 clickId="sendEmailwithDocuments" [isDisabled]="!(emailDocumentsFormGroup.valid && flagCount !== 0)"> </button-field>
+		</div>
+
+		<div class="row" *ngIf !="documentInfo.length > 0">
+			<div class="col-md-12 col-sm-12 col-xs-12 mb-xs-10 red" *ngIf="errmsgNoDocuments">{{'NCPLabel.documentsNotAvailable' | translate}}
+			</div>
+		</div>
+		<div [formGroup]="emailDocumentsFormGroup" *ngIf="documentInfo && documentInfo.length > 0" class="filterac">
+			<table>
+				<thead>
+					<tr>
+						<th>
+							<span>{{ 'NCPLabel.documentName' | translate }}</span>
+						</th>
+						<th>
+							<span>{{ 'NCPLabel.Action' | translate }}</span>
+						</th>
+						<th>
+							<span>{{ 'NCPLabel.select' | translate }}</span>
+						</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr *ngFor="let info of documentInfo; let i = index" class="btnAlignField">
+						<td *ngIf="info.dispatchType==='PRINT' || info.dispatchType==='PDF'|| info.dispatchType==='PREVIEW'">
+							<span>{{info.documentDesc}}</span>
+						</td>
+						<td *ngIf="info.dispatchType==='PRINT' || info.dispatchType==='PDF'|| info.dispatchType==='PREVIEW'" (click)="documentView(i)"
+						 [attr.data-title]="info.documentDesc">
+							<button-field buttonType="custom" buttonClass="ncpbtn-default ml-sm-10 mt-xs-0" buttonName="NCPBtn.viewFile">
+							</button-field>
+						</td>
+						<td *ngIf="info.dispatchType==='PRINT' || info.dispatchType==='PDF'|| info.dispatchType==='PREVIEW'">
+							<check-box elementId="isDocumentSelectedID" formControlName="isDocumentSelected" alignment="center" ngDefaultControl checkBoxClass="mt0"
+							 (change)="selectDocument(info.documentId,documentInfo);emailValidate();" (click)="emailValidate()"></check-box>
+						</td>
+					</tr>
+				</tbody>
+			</table>
+			<div class="popupLabel">
+				<!--<label>{{ 'NCPLabel.popup' | translate }}</label>-->
+				<ncp-label elementLabel="NCPLabel.popup" customFlag=true labelClass="col-md-12 col-sm-12 col-lg-12 col-xs-12 text-center"></ncp-label>
+			</div>
+		</div>
+	</modal-content>
+	<modal-footer>
+		<div class="btns-row">
+			<button-field buttonType="custom" buttonClass="ncp-linkBtn" buttonName="NCPBtn.close" (click)="documentViewModal = false;"
+			 data-dismiss="modal"> </button-field>
+		</div>
+	</modal-footer>
+</ncp-modal>
+
+<ncp-modal [modalKey]="emailDocumentsSuccessModal" [closeOnEscape]="false" [closeOnOutsideClick]="false" modalClass="modal-md"
+ hideCloseButton="true">
+	<modal-content>
+		<div class="row">
+			<span>{{ 'NCPLabel.yourDocumentsSentSuccessfully' | translate }}</span>
+		</div>
+	</modal-content>
+	<modal-footer>
+		<div class="btns-row">
+			<button-field buttonType="custom" buttonClass="ncp-linkBtn" buttonName="NCPBtn.ok" (click)="emailDocumentsSuccessModal = false;"
+			 data-dismiss="modal"> </button-field>
+		</div>
+	</modal-footer>
+</ncp-modal>
+
+<ncp-modal [modalKey]="abandonPolicyModal" [closeOnEscape]="false" [closeOnOutsideClick]="false" modalClass="modal-md" [hideCloseButton]="true">
+	<modal-content>
+		<div class="row mt15 mt-xs-10">
+			<div class="col-md-9 col-sm-8 col-xs-12 label-col">
+				<misc-span class="d-block">{{'NCPLabel.yourPolicySuccessfullyAbandoned' | translate}}</misc-span>
+			</div>
+		</div>
+	</modal-content>
+	<modal-footer>
+		<div class="btns-row mt10">
+			<button-field buttonClass="ncp-linkBtn" buttonType="custom" (click)="abandonPolicyModal=false" buttonName="NCPBtn.Close"></button-field>
+		</div>
+	</modal-footer>
+</ncp-modal>
+<ncp-modal [modalKey]="timelineModal" [closeOnEscape]="false" [closeOnOutsideClick]="false" modalClass="modal-lg" [hideCloseButton]="true">
+	<modal-header class="">
+		<div class="row">
+			<div class="col-md-11 col-sm-11 col-xs-10 label-col">
+				<!--<h2>{{'NCPLabel.timelineFor' | translate}} {{ ' '}} {{timelineKey}} </h2>-->
+				<misc-h2 label="NCPLabel.timelineFor">
+					<misc-span>{{ ' '}} {{timelineKey}}</misc-span>
+				</misc-h2>
+			</div>
+			<div class="col-md-1 col-sm-1 col-xs-2 pull-right">
+				<button class="close" (click)="doCloseTimelineModal()" type="button" aria-label="Close">
+					<span aria-hidden="true">×</span>
+				</button>
+
+				<!--<button buttonType="custom" (click)="doCloseTimelineModal()" buttonName="Close" class="ncp-linkBtn">X</button>-->
+			</div>
+		</div>
+	</modal-header>
+	<modal-content>
+		<time-line [eventData]="eventData" [eventKey]="eventKey" [productCd]="eventProdCd" (viewProd)="doView();"></time-line>
+	</modal-content>
+</ncp-modal>
+
+<share-reassign *ngIf="shareWindow" [shareReassignFormGroup]="shareReassignInfo" (doClick)="closeModal()" (doRefreshList)="refreshList()" ></share-reassign>
+		

@@ -1,0 +1,81 @@
+<ion-content>
+  <div class="back-card">
+    <div class="row mobile-card-align">
+      <!-- <div class="col-12">
+        <img src="../../../assets/imgs/mobile-logo.png" class="mobile-logo" alt="mobile-logo">
+      </div> -->
+      <div class="col-lg-6 col-md-12 col-sm-12 col-xs-12 content-card">
+        <!-- <ion-toolbar> -->
+        <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12 desktop-logo">
+          <img class="home-logo" src="./assets/imgs/logo.png" alt="logo">
+        </div>
+        <!-- </ion-toolbar> -->
+        <ion-item >
+          <h1 class="text-left page-header">My pets</h1>
+          <div class="text-right toggle-btn">
+            <span class="toggle"><label>{{isShow ? 'All profiles' : 'Active profiles'}}</label>
+              <ion-toggle class="toggle-align" mode="md" (ionChange)="showActivePets()" [(ngModel)]="isShow"></ion-toggle>
+            </span>
+          </div>
+        </ion-item>
+        <ion-list class="pl-3 mb-0" lines="inset" *ngFor="let pet of petList">
+          <div class="d-flex flex-row">
+            <div class="mx-auto pt-2 flex-img">
+              <div *ngIf="!pet.profilePic">
+                <img class="pet-img rounded-circle" src="../../../assets/imgs/default-dog.png" alt="pet-image">
+              </div>
+              <div *ngIf="pet.profilePic">
+                <img class="pet-img rounded-circle" src="{{basePath}}storage/download/{{pet.profilePic}}" alt="pet profile">
+              </div>
+            </div>
+            <div class="pet-info">
+              <ion-label class="list-label">{{pet.petName}},</ion-label>&nbsp;
+              <div class="new-line"></div>
+              <ion-label class="list-label-small">{{pet.gender}},</ion-label>&nbsp;
+              <ion-label class="list-label-small">{{pet.breed}}</ion-label>
+              <div>
+                <ion-label>Neutered </ion-label>
+                <ion-label class="insurance" [ngClass]="{'primary' : pet.neutered ? true : false}">
+                  {{pet.neutered ? 'Yes' : 'No'}}
+                </ion-label>
+              </div>
+            </div>
+          </div>
+
+          <div class="d-flex flex-row btn-action action-bar mobile-pt">
+            <ion-text (click)="viewPetInfo(pet)" class="cursor">
+              <!-- <ion-icon class="btn-action-m" name="eye"></ion-icon> -->
+              <i class="fas fa-eye"></i>
+              View details
+            </ion-text>
+            <ion-text class="cursor ml-3" (click)="confirmationAlert(pet)">
+              <!-- <ion-icon class="btn-action-m" name="trash"></ion-icon> -->
+              <i class="far fa-trash-alt"></i>
+              Delete profile
+            </ion-text>
+          </div>
+
+          <div class="d-flex flex-row btn-next action-bar pt-2">
+            <ion-text class="appt-btn" (click)="handleBookingButton(pet)" [ngClass]="{'cursor-disabled': pet.hide, 'cursor': !pet.hide}">
+              <!-- <ion-icon name="calendar" class="btn-action-m"></ion-icon> -->
+              <i class="fal fa-calendar-alt pr-2"></i>
+              <ion-text>Book an appointment</ion-text>
+            </ion-text>
+          </div>
+          <ion-item-divider></ion-item-divider>
+
+        </ion-list>
+        <ion-row>
+          <ion-col size="6" size-lg="6" size-md="6" size-sm="12" size-xs="12">
+            <ion-item lines="none">
+              <ion-text class="btn-next cursor" routerLink="/pets/new">
+                <ion-icon name="add" class="btn-add btn-action-m"></ion-icon>Add pet
+              </ion-text>
+            </ion-item>
+          </ion-col>
+
+        </ion-row>
+      </div>
+    </div>
+  </div>
+</ion-content>

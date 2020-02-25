@@ -1,0 +1,43 @@
+.content-card {
+  margin-left: 0rem !important;
+}
+.settings-card {
+  background: var(--active-item-background);
+  min-height: var( --view-height-100) !important;
+  padding: 0rem 0rem 3.125rem 6rem;
+  -webkit-transform: translateZ(0) scale(1, 1);
+  -webkit-transition: all 1s linear;
+  transition: all 1s linear;
+}
+.table-card {
+  background: var(--white-background) !important;
+  min-height: var(--view-height-100) !important;
+  padding: 3.125rem 3.125rem 3.125rem 2.125rem;
+}
+@media (max-width: 768px) {
+  .settings-card {
+    padding: 3.125rem 0rem 3.125rem 0rem !important;
+  }
+}
+.settings-list {
+  list-style: none;
+  padding: 0px;
+  font-size: 16px;
+}
+.settings-list > li:hover {
+  background: var(--white-background) !important;
+  box-shadow: 3px 3px 5px 6px #ccc;
+  padding: 15px;
+}
+.settings-list > li {
+  padding: 15px;
+  cursor: var(--cursor);
+}
+h3{
+  font-family: var(--ion-header-font);
+}
+.active{
+  background: var(--white-background) !important;
+  box-shadow: 3px 3px 5px 6px #ccc;
+  padding: 15px;
+}

@@ -1,0 +1,216 @@
+<div *ngIf="branchArray && branchArray.length > 0" class="setting-icon">
+      <a data-toggle="modal" (click)="columnFilterModal.open()" class="filterimg">
+            <i class="settingsIcon fa gearIcon"></i>
+      </a>
+</div>
+<div  class="setting-icon">
+      <a data-toggle="modal" (click)="searchBranch.open()" class="filterimg">
+            <i class="settingsIcon fa filterIcon"></i>
+      </a>
+</div>
+
+<div *ngIf="branchArray && branchArray.length > 0" class="col-md-3 col-sm-12 col-xs-12  conf">
+      <input class="forconf" [(ngModel)]="searchId" placeholder="{{'NCPBtn.search'| translate}}">
+</div>
+<div style="clear:both;"></div>
+<div class="filterac">
+
+      <table>
+            <thead>
+                  <tr>
+                        <th *ngFor="let header of tableDetails;let i= index" [class]="selectedClass(header.mapping)" (click)="changeSorting(header.mapping);(this.rotateFlag === i) ? this.rotateFlag='':this.rotateFlag=i;"
+                              [attr.data-title]="header.header | translate">
+                              <span>
+                                    <span class="labelHeader">{{header.header | translate}}</span>
+                              </span>
+                              <i class="icon-arrow-d indexicon" [class.rotate]="rotateFlag === i"></i>
+                        </th>
+                        <th class="actionCol">
+                              <span>
+                                    <span class="labelHeader">{{'NCPLabel.Action' | translate}}</span>
+                              </span>
+                        </th>
+                  </tr>
+            </thead>
+            <tbody *ngIf="branchArray && branchArray.length > 0">
+                  <tr *ngFor="let object of branchArray  | searchBy : searchId : tableDetails |  orderBy : convertSorting(); let rowIndex=index"
+                        id="tabhide">
+                        <td *ngFor="let mappings of tableDetails; let i=index" [attr.data-title]="mappings.header | translate">
+                              {{object[mappings.mapping]}}
+                        </td>
+
+
+                        <td class="actionCol">
+                              <!--<button type=radio name="button" class="fa fa-gear showPopover indexrecus" tooltipPlacement="left" [tooltip]="myTooltip"
+                                  [tooltipHide]="tooltipHide" tooltipClick=true (click)="doAction($event); tooltipHide = myTooltip.show(); setCurrentTooltip(myTooltip);">
+                  </button>-->
+                              <span>
+                                    <i class="fa fa-gear showPopover indexrecus" tooltipPlacement="left" [tooltip]="myTooltip" [tooltipHide]="tooltipHide" tooltipClick=true
+                                          [id]="'branchListTooltip'+rowIndex"></i>
+                              </span>
+                              <tooltip-content #myTooltip [excludeId]="'branchListTooltip'+rowIndex">
+                                    <h3 class="popover-title">&nbsp;
+                                          <a class="close" (click)="tooltipHide = myTooltip.hide()">
+                                                <i class="icon-alert"></i>
+                                          </a>
+                                    </h3>
+                                    <div class="popover-content">
+                                          <div>
+                                                <ul>
+                                                      <li>
+                                                            <a (click)="editBranchDetail(object.branch_id,'EU'); tooltipHide = myTooltip.hide()">
+                                                                  <i class=" iconToolTip"></i>
+                                                                  <span class="labelToolTip">{{'NCPLabel.editBranch' | translate}}</span>
+                                                            </a>
+                                                      </li>
+                                                      <li>
+                                                            <a (click)="getValueobject(object.branch_id,'EU'); tooltipHide = myTooltip.hide()">
+                                                                  <i class=" iconToolTip"></i>
+                                                                  <span class="labelToolTip">{{'NCPLabel.deleteBranch' |
+                                                                        translate}}
+                                                                  </span>
+                                                            </a>
+                                                      </li>
+                                                </ul>
+                                          </div>
+                                    </div>
+                              </tooltip-content>
+                        </td>
+                  </tr>
+            </tbody>
+      </table>
+      <div *ngIf="branchArray.length == 0" >
+            <span class="badge">{{'NCPLabel.noRecordsFound' | translate}}</span>
+      </div> 
+      <div *ngIf="branchArray && branchArray.length > 0 && viewMore" class="col-centered mtb20">
+            <button-field buttonType="custom" buttonName="NCPBtn.showMore" buttonClass="ncpbtn-default" iconClass="fa fa-arrow-down"
+                  (click)='doViewMore()'>
+            </button-field>
+      </div>
+      <ncp-modal #BranchDeleteModel [closeOnEscape]="false" [closeOnOutsideClick]="false" class="modalForm" modalClass="modal-md"
+            modalTitle="NCPLabel.confirmDeletion" titleIcon="">
+            <modal-content>
+                  <div *ngIf="branchUsers.length >0 || childBranches.length >0 || userGroups.length >0">
+                        <misc-h3 label="NCPLabel.branchCannotBeDeletedBecause"></misc-h3>
+                  </div>
+                  <div *ngIf="branchUsers.length >0" class="branchListUsers">
+                        <misc-h5 label="NCPLabel.follwingUsersLinkedToThisBranch"></misc-h5>
+                        <ul class="ul-css">
+                             <li *ngFor="let user of branchUsers">{{user}}</li> 
+                        </ul>
+                  </div>
+                  <div *ngIf="childBranches.length >0" class="branchListUsers">
+                        <misc-h5 label="NCPLabel.follwingBranchesAreChildsToThisBranch"></misc-h5>
+                        <ul class="ul-css">
+                              <li *ngFor="let branch of childBranches">{{branch}}</li> 
+                        </ul>
+                  </div>
+                  <div *ngIf="userGroups.length >0" class="branchListUsers">
+                        <misc-h5 label="NCPLabel.follwingUserGroupsLinkedToThisBranch"></misc-h5>
+                        <ul class="ul-css">
+                              <li *ngFor="let userGroup of userGroups">{{userGroup}}</li> 
+                        </ul>
+                  </div>
+
+                  <div *ngIf="branchUsers.length == 0 && childBranches.length == 0 && userGroups.length == 0" class="btns-row">
+                        <button-field buttonType="custom" buttonClass="ncp-btn w100p" iconClass="fa fa-check" buttonName="NCPBtn.yes" (click)="deleteBranchDetail(branchidValue,objectValue);BranchDeleteModel.close();">
+                        </button-field>
+                        <button-field buttonType="custom" buttonClass="ncp-btn w100p" iconClass="fa fa-close " buttonName="NCPBtn.no" (click)="BranchDeleteModel.close();">
+                        </button-field>
+                  </div>
+                  <div *ngIf="branchUsers.length > 0 && childBranches.length > 0 && userGroups.length > 0" class="col-md-3 col-sm-3 col-xs-4 pull-right pl-md-0 mb20">
+                        <button-field buttonClass="ncp-linkBtn" buttonType="custom" (click)="BranchDeleteModel.close()" buttonName="NCPBtn.close" iconClass="fa fa-close"></button-field>
+                    </div>
+            </modal-content>
+      </ncp-modal>
+      <ncp-modal class="modalForm" #columnFilterModal [closeOnEscape]="false" [closeOnOutsideClick]="false" modalClass="modal-lg"
+            modalTitle="NCPLabel.filterTableContents" titleIcon="glyphicon glyphicon-wrench confed">
+            <modal-content>
+                  <div class="row">
+                        <multi-check elementId="cbox" [checkboxArray]="multicheckarray" elementLabel="Fields" ngDefaultControl></multi-check>
+                  </div>
+            </modal-content>
+
+            <modal-footer>
+                  <div class="btns-row">
+                        <div class="col-md-12 col-sm-12 col-xs-12 pull-right plr-xs-0">
+                              <div *ngIf="errmsg">{{'NCPLabel.pleaseselectonefield' | translate}}&nbsp;
+                                    <i class="fa fa-smile-o" aria-hidden="true"></i>
+                              </div>
+                        </div>
+                        <button-field buttonType="custom" buttonClass="ncp-linkBtn w100p " iconClass="fa fa-close" buttonName="NCPBtn.close" (click)="settingsClose();columnFilterModal.close()">
+                        </button-field>
+                        <button-field buttonType="custom" buttonClass="ncpbtn-default w100p" iconClass="fa fa-save" buttonName="NCPBtn.save" (click)="colhide()">
+                        </button-field>
+                  </div>
+            </modal-footer>
+      </ncp-modal>
+
+      <ncp-modal #errorMessageModel [closeOnEscape]="false" [closeOnOutsideClick]="false" class="modalForm" modalClass="modal-md"
+            modalTitle="NCPLabel.confirmDeletion" titleIcon="fa fa-question-circle">
+            <modal-content>
+                  <div class="btns-row">
+                       {{errorMessage}}
+                  </div>
+            </modal-content>
+      </ncp-modal>
+
+      <ncp-modal modalClass="modal-lg" #searchBranch [closeOnEscape]="false" [closeOnOutsideClick]="false" modalTitle="NCPLabel.filterTableContent"
+      titleIcon="glyphicon glyphicon-wrench confed">
+      <modal-content>
+            <div [formGroup]="branchListFormGroup">
+                  <div class="row">
+                        <ncp-label elementLabel="NCPLabel.userBranch" elementId="UserBranch"></ncp-label>
+                        <drop-down elementId="user_branch" formControlName="branch_id" miscType="BranchGroup"
+                              pickListFlag=true elementId="UserBranch" isCodeDesc=true param1="{{userBranchCode}}"
+                              displayCodeAndDesc=true [descControl]="branchListFormGroup.controls['branch_desc']"
+                              displayOnClick=true ngDefaultControl elementLabel="NCPLabel.userBranch">
+                        </drop-down>
+                  </div>
+                  <div class="row">
+                        <ncp-label elementLabel="NCPLabel.parentBranchID" elementId="parentBranchID"></ncp-label>
+                        <drop-down elementId="parent_branch_id" formControlName="parent_branch_id" miscType="BranchGroup" param1="{{userBranchCode}}" elementId="parentBranchID"
+                            pickListFlag=true displayCodeAndDesc=true [isCodeDesc] =true [descControl]="branchListFormGroup['controls']['parent_branch_desc']"
+                            chnageId="parentBranchId" ngDefaultControl displayOnClick=true elementLabel="NCPLabel.parentBranchID" mandatoryFlag="false">
+                        </drop-down>
+                    </div>
+                  <div class="row">
+                        <ncp-label elementLabel="NCPLabel.location" elementId="location">
+                        </ncp-label>
+                        <text-box formControlName="branch_loc" inputType="text" ngDefaultControl acceptPattern="[A-Za-z0-9]" maxLength="20" elementLabel="NCPLabel.location"></text-box>
+                  </div>
+                  <div class="row">
+                        <ncp-label elementLabel="NCPLabel.city" elementId="city">
+                        </ncp-label>
+                        <text-box formControlName="city" inputType="text" acceptPattern="[A-Za-z]" ngDefaultControl maxLength="30" elementLabel="NCPLabel.city"></text-box>
+                  </div>
+                  <div class="row">
+                        <ncp-label elementLabel="NCPLabel.state" elementId="state">
+                        </ncp-label>
+                        <text-box formControlName="state" inputType="text" ngDefaultControl acceptPattern="[A-Za-z]" maxLength="30" elementLabel="NCPLabel.state"></text-box>
+                  </div>
+                  <div class="row">
+                        <ncp-label elementLabel="NCPLabel.country" elementId="country">
+                        </ncp-label>
+                        <drop-down elementId="country" miscSubType="CTRY" miscType="MiscInfo" pickListFlag=true formControlName="country" isCodeDesc=true
+                            [descControl]="branchListFormGroup.controls['country_desc']" displayOnClick=true ngDefaultControl elementLabel="NCPLabel.country">
+                        </drop-down>
+                    </div>
+            </div>
+      </modal-content>
+      <modal-footer>
+            <div class="btns-row">
+                  <button-field buttonType="custom" buttonClass="ncp-linkBtn w100p mt-xs-10" iconClass="fa fa-close"
+                        buttonName="NCPBtn.close" (click)="searchBranch.close();">
+                  </button-field>
+                  <button-field buttonType="custom" buttonClass="ncpbtn-default" iconClass="fa fa-eraser" buttonName="NCPBtn.clear"
+                        (click)="branchListFormGroup.reset();">
+                  </button-field>
+                  <button-field buttonType="custom" buttonClass="ncpbtn-default" iconClass="fa fa-filter" buttonName="NCPBtn.filter"
+                        (click)="searchBranch.close(); filterBranches()">
+                  </button-field>
+            </div>
+      </modal-footer>
+</ncp-modal>
+
+</div>

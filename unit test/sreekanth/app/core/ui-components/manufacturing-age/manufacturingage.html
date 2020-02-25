@@ -1,0 +1,77 @@
+<div *ngIf="!customFlag && !hideAgeControl" class="col-md-5 col-sm-6 col-xs-11 pr-sm-0" [id]="elementId">
+    <p class="mainFloatLabel">{{elementLabel | translate}}<span *ngIf="mandatoryFlag" class="aste">*</span></p>
+    <div class="{{readOnlyFlag ? 'customDisabled' :'col-sm-6 col-md-6 col-xs-5 p0'}}" ngDefaultControl class="col-sm-6 col-md-6 col-xs-5 p0">
+        <!--<i class="icon-arrow-d indexicon dropdownIcon"></i>-->
+        <select id="elementID" [formControl]="elementControl" [(ngModel)]="year" (blur)="daymonthyearSelected(year)" class="form-control jcf-select customSelect ">
+        <option *ngFor="let year of years" [value]="year">{{year}}</option>
+        </select>
+    </div>
+    <div class="col-md-6 col-sm-6 col-xs-7 no-pad text-center">
+        <ncp-label elementLabel="Age" customFlag=true labelClass="col-md-4 col-sm-4 col-xs-5 p0 toLabel"></ncp-label>
+        <text-box [ngClass]="'notAllowed'" readonly [inputType]="number" elementId="elementID" placeHolder="{{placeholder | translate}}"
+            [formControl]="ageControl" customFlag=true textBoxClass="col-sm-8 col-md-8 col-xs-7 p0" ngDefaultControl></text-box>
+        <!--<div class="col-sm-4 col-md-4 col-xs-5 age-align pull-right pr-sm-0">
+        <input [ngClass]="'notAllowed'" class="form-control" readonly type="number" id="elementID" placeholder="{{placeHolder | translate}}"
+            [formControl]="ageControl" ngDefaultControl>
+    </div>-->
+    </div>
+</div>
+
+<div *ngIf="customFlag && !hideAgeControl" [class]="dobCustomClass" [id]="elementId">
+    <p class="mainFloatLabel">{{elementLabel | translate}}<span *ngIf="mandatoryFlag" class="aste">*</span></p>
+    <div class="{{readOnlyFlag ? 'customDisabled' :' '}}" ngDefaultControl class="col-sm-6 col-md-6 col-xs-5 p0">
+        <!--<i class="icon-arrow-d indexicon dropdownIcon"></i>-->
+        <select id="elementID" [formControl]="elementControl" [(ngModel)]="year" (blur)="daymonthyearSelected(year)" class="form-control jcf-select customSelect ">
+                <option *ngFor="let year of years" [value]="year">{{year}}</option>
+                </select>
+    </div>
+    <div class="col-md-6 col-sm-6 col-xs-7 no-pad text-center">
+        <ncp-label elementLabel="Age" customFlag=true labelClass="col-md-4 col-sm-4 col-xs-5 p0 toLabel"></ncp-label>
+        <text-box [ngClass]="'notAllowed'" readonly [inputType]="number" elementId="elementID" placeHolder="{{placeholder | translate}}"
+            [formControl]="ageControl" customFlag=true textBoxClass="col-sm-8 col-md-8 col-xs-7 p0" ngDefaultControl></text-box>
+    </div>
+</div>
+
+<div *ngIf="!customFlag && hideAgeControl" class="col-md-5 col-sm-6 col-xs-11 pr-sm-0" [id]="elementId">
+    <p class="mainFloatLabel">{{elementLabel | translate}}<span *ngIf="mandatoryFlag" class="aste">*</span></p>
+    <div class="{{readOnlyFlag ? 'customDisabled' :'col-sm-6 col-md-5 col-xs-5 p0'}}" ngDefaultControl class="col-sm-6 col-md-5 col-xs-5 p0">
+        <!--<i class="icon-arrow-d indexicon dropdownIcon"></i>-->
+        <select id="elementID" [formControl]="elementControl" [(ngModel)]="year" (blur)="daymonthyearSelected(year)" class="form-control jcf-select customSelect ">
+        <option *ngFor="let year of years" [value]="year">{{year}}</option>
+        </select>
+    </div>
+    <div [class.hide]="hideAgeControl" class="col-md-7 col-sm-6 p0">
+        <ncp-label elementLabel="Age" customFlag=true labelClass="col-md-4 col-sm-4 p0 toLabel"></ncp-label>
+        <text-box [ngClass]="'notAllowed'" readonly [inputType]="number" elementId="elementID" placeHolder="{{placeholder | translate}}"
+            [formControl]="ageControl" customFlag=true textBoxClass="col-sm-8 col-md-8 p0" ngDefaultControl></text-box>
+        <!--<div class="col-sm-4 col-md-4 col-xs-5 age-align pull-right pr-sm-0">
+        <input [ngClass]="'notAllowed'" class="form-control" readonly type="number" id="elementID" placeholder="{{placeHolder | translate}}"
+            [formControl]="ageControl" ngDefaultControl>
+    </div>-->
+    </div>
+</div>
+
+<div *ngIf="customFlag && hideAgeControl" [class]="dobCustomClass" [id]="elementId">
+    <p class="mainFloatLabel">{{elementLabel | translate}}<span *ngIf="mandatoryFlag" class="aste">*</span></p>
+    <div class="{{readOnlyFlag ? 'customDisabled' :' '}}" ngDefaultControl class="col-sm-6 col-md-5 col-xs-5 p0">
+        <!--<i class="icon-arrow-d indexicon dropdownIcon"></i>-->
+        <select id="elementID" [formControl]="elementControl" [(ngModel)]="year" (blur)="daymonthyearSelected(year)" class="form-control jcf-select customSelect ">
+                <option *ngFor="let year of years" [value]="year">{{year}}</option>
+                </select>
+    </div>
+    <div [class.hide]="hideAgeControl" class="col-md-7 col-sm-7 p0">
+        <ncp-label elementLabel="Age" customFlag=true labelClass="col-md-4 col-sm-4 toLabel p0"></ncp-label>
+        <text-box [ngClass]="'notAllowed'" readonly [inputType]="number" elementId="elementID" placeHolder="{{placeholder | translate}}"
+            [formControl]="ageControl" customFlag=true textBoxClass="col-sm-8 col-md-8 p0" ngDefaultControl></text-box>
+    </div>
+</div>
+<div *ngIf="tooltipTitle" class="col-sm-1 col-md-1 col-xs-1 tooltip-align tooltip-mobile3">
+    <button *ngIf="tooltipTitle" type="button" class="btn btn-link info-tooltip" data-toggle="toggle" [tooltipPlacement]="tooltipPlacement"
+        [tooltip]="tooltipHTML" [id]="elementId">
+        <i class="icon-tooltip" [id]="elementId"></i>
+        <tooltip-content #tooltipHTML [excludeId]="elementId">
+                    <div [innerHTML]="tooltipTitle"> </div>
+            	</tooltip-content>
+            </button>
+
+</div>

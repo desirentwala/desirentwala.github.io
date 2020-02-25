@@ -1,0 +1,162 @@
+<div *ngIf="!customFlag && !hideAgeControl" [ngClass]="readOnlyFlag? 'notAllowed' :' '" class="col-sm-6 col-md-5 col-xs-11 pr-sm-0 datepickerWithAgeText"
+    [id]="elementId"> 
+    <p class="mainFloatLabel">{{elementLabel | translate}}<span *ngIf="mandatoryFlag" class="aste">*</span></p>
+    <div [ngClass]="readOnlyFlag? 'notAllowed' :' '" class="datepickerAgetextContainerShown {{readOnlyFlag ? 'customDisabled' :' '}}" [formControl]="elementControl"
+        ngDefaultControl class="datepickerAgetextContainerShown">
+        <div class="datepickerDayContainer customerDtlsDOBRTL">
+            <!--<i class="icon-arrow-d indexicon dropdownIcon"></i>-->
+            <select [class.invalid]="invalidFlag" id="elementID" [(ngModel)]="day" (blur)="daymonthyearSelected(day,month,year,'day')"
+                class="form-control jcf-select customSelect selectDay">
+                <option *ngFor="let day of days" [value]="day">{{day}}</option>
+                </select>
+                <i class="floatBorder"></i>
+        </div>
+        <div class="datepickerMonthContainer customerDtlsDOBRTL">
+            <!--<i class="icon-arrow-d indexicon dropdownIcon"></i>-->
+            <select id="elementID" [class.invalid]="invalidFlag" [(ngModel)]="month" (blur)="daymonthyearSelected(day,month,year,'month')"
+                class="form-control jcf-select customSelect selectMonth">
+                    
+                    <option *ngFor="let month of months"  [value]="month">{{month}}</option>
+                </select>
+                <i class="floatBorder"></i>
+        </div>
+        <div class="datepickerYearContainer customerDtlsDOBRTL">
+            <!--<i class="icon-arrow-d indexicon dropdownIcon"></i>-->
+            <select id="elementID" [class.invalid]="invalidFlag" [(ngModel)]="year" (blur)="daymonthyearSelected(day,month,year,'year')"
+                class="form-control jcf-select customSelect selectYear">
+                     <option *ngFor="let year of years"   [value]="year">{{year}}</option>
+                </select>
+        </div>
+    </div>
+
+    <div [class.hide]="hideAgeControl" [class.invalid]="invalidFlag" class="datepickerAgetextContainer">
+        <input [ngClass]="'notAllowed'" class="form-control text-center" readonly [value]="age" type="number" id="elementID" placeholder="{{placeHolder | translate}}"
+            [formControl]="ageControl" (change)="setDate(age)" ngDefaultControl>
+    </div>
+</div>
+
+
+<div *ngIf="customFlag && !hideAgeControl" [ngClass]="dobCustomClass" Class="datepickerWithAgeText" [ngClass]="readOnlyFlag? 'notAllowed' :' '" [id]="elementId">
+    <p class="mainFloatLabel">{{elementLabel | translate}}<span *ngIf="mandatoryFlag" class="aste">*</span></p>
+    <div class="datepickerAgetextContainerShown {{readOnlyFlag ? 'customDisabled' :' '}}" [formControl]="elementControl" ngDefaultControl class="datepickerAgetextContainerShown">
+        <div class="datepickerDayContainer">
+            <!--<i class="icon-arrow-d indexicon dropdownIcon"></i>-->
+            <select id="elementID" [class.invalid]="invalidFlag" [(ngModel)]="day" (blur)="daymonthyearSelected(day,month,year,'day')"
+                class="form-control jcf-select customSelect selectDay">
+                <option *ngFor="let day of days" [value]="day">{{day}}</option>
+                </select>
+                <i class="floatBorder"></i>
+        </div>
+        <div class="datepickerMonthContainer">
+            <!--<i class="icon-arrow-d indexicon dropdownIcon"></i>-->
+            <select id="elementID" [class.invalid]="invalidFlag" [(ngModel)]="month" (blur)="daymonthyearSelected(day,month,year,'month')"
+                class="form-control jcf-select customSelect selectMonth">
+                    
+                <option *ngFor="let month of months"  [value]="month">{{month}}</option>
+                </select>
+                <i class="floatBorder"></i>
+        </div>
+        <div class="datepickerYearContainer">
+            <!--<i class="icon-arrow-d indexicon dropdownIcon"></i>-->
+            <select id="elementID" [class.invalid]="invalidFlag" [(ngModel)]="year" (blur)="daymonthyearSelected(day,month,year,'year')"
+                class="form-control jcf-select customSelect selectYear">
+                <option *ngFor="let year of years"   [value]="year">{{year}}</option>
+                </select>
+                <i class="floatBorder"></i>
+        </div>
+    </div>
+
+    <div [class.hide]="hideAgeControl" [class.invalid]="invalidFlag" class="datepickerAgetextContainer">
+        <input [ngClass]="'notAllowed'" class="form-control text-center" readonly [value]="age" type="number" id="elementID" placeholder="{{placeHolder | translate}}"
+            [formControl]="ageControl" (change)="setDate(age)" ngDefaultControl>
+    </div>
+</div>
+
+
+<div *ngIf="!customFlag && hideAgeControl" [ngClass]="readOnlyFlag? 'notAllowed' :' '" class="col-md-5 col-sm-6 col-xs-11 pr-sm-0 datepickerWithoutAgeText"
+    [id]="elementId" >
+    <p class="mainFloatLabel">{{elementLabel | translate}}<span *ngIf="mandatoryFlag" class="aste">*</span></p>
+    <div [ngClass]="readOnlyFlag? 'notAllowed' :' '" class=" datepickerAgetextContainerHidden {{readOnlyFlag ? 'customDisabled' :' '}}" [formControl]="elementControl"
+        ngDefaultControl class="datepickerAgetextContainerHidden">
+        <div class="datepickerDayContainer">
+            <!--<i class="icon-arrow-d indexicon dropdownIcon"></i>-->
+            <select [class.invalid]="invalidFlag" id="elementID" [(ngModel)]="day" (blur)="daymonthyearSelected(day,month,year,'day')"
+                class="form-control jcf-select customSelect selectDay">
+                <option *ngFor="let day of days" [value]="day">{{day}}</option>
+                </select>
+                <i class="floatBorder"></i>
+        </div>
+        <div class="datepickerMonthContainer">
+            <!--<i class="icon-arrow-d indexicon dropdownIcon"></i>-->
+            <select id="elementID" [class.invalid]="invalidFlag" [(ngModel)]="month" (blur)="daymonthyearSelected(day,month,year, 'month')"
+                class="form-control jcf-select customSelect selectMonth">
+                    
+                    <option *ngFor="let month of months" [value]="month">{{month}}</option>
+                </select>
+                <i class="floatBorder"></i>
+        </div>
+        <div class="datepickerYearContainer">
+            <!--<i class="icon-arrow-d indexicon dropdownIcon"></i>-->
+            <select id="elementID" [class.invalid]="invalidFlag" [(ngModel)]="year" (blur)="daymonthyearSelected(day,month,year,'year')"
+                class="form-control jcf-select customSelect selectYear">
+                     <option *ngFor="let year of years" [value]="year">{{year}}</option>
+                </select>
+                <i class="floatBorder"></i>
+        </div>
+    </div>
+
+    <div [class.hide]="hideAgeControl" [class.invalid]="invalidFlag" class="datepickerAgetextContainer">
+        <input [ngClass]="'notAllowed'" class="form-control text-center" readonly [value]="age" type="number" id="elementID" placeholder="{{placeHolder | translate}}"
+            [formControl]="ageControl" (change)="setDate(age)" ngDefaultControl>
+    </div>
+
+</div>
+
+
+<div *ngIf="customFlag && hideAgeControl" [ngClass]="dobCustomClass"  Class="datepickerWithoutAgeText" [ngClass]="readOnlyFlag? 'notAllowed' :' '" [id]="elementId">
+    <p class="mainFloatLabel">{{elementLabel | translate}}<span *ngIf="mandatoryFlag" class="aste">*</span></p>
+    <div class="datepickerAgetextContainerHidden {{readOnlyFlag ? 'customDisabled' :' '}}" [formControl]="elementControl" ngDefaultControl class="datepickerAgetextContainerHidden">
+        <div class="datepickerDayContainer">
+            <!--<i class="icon-arrow-d indexicon dropdownIcon"></i>-->
+            <select id="elementID" [class.invalid]="invalidFlag" [(ngModel)]="day" (blur)="daymonthyearSelected(day,month,year,'day')"
+                class="form-control jcf-select customSelect selectDay">
+                <option *ngFor="let day of days" [value]="day">{{day}}</option>
+                </select>
+                <i class="floatBorder"></i>
+        </div>
+        <div class="datepickerMonthContainer">
+            <!--<i class="icon-arrow-d indexicon dropdownIcon"></i>-->
+            <select id="elementID" [class.invalid]="invalidFlag" [(ngModel)]="month" (blur)="daymonthyearSelected(day,month,year,'month')"
+                class="form-control jcf-select customSelect selectMonth">
+                    
+                <option *ngFor="let month of months"  [value]="month">{{month}}</option>
+                </select>
+                <i class="floatBorder"></i>
+        </div>
+        <div class="datepickerYearContainer">
+            <!--<i class="icon-arrow-d indexicon dropdownIcon"></i>-->
+            <select id="elementID" [class.invalid]="invalidFlag" [(ngModel)]="year" (blur)="daymonthyearSelected(day,month,year,'year')"
+                class="form-control jcf-select customSelect selectYear">
+                <option *ngFor="let year of years"   [value]="year">{{year}}</option>
+                </select>
+                <i class="floatBorder"></i>
+        </div>
+    </div>
+
+    <div [class.hide]="hideAgeControl" [class.invalid]="invalidFlag" class="datepickerAgetextContainer">
+        <input [ngClass]="'notAllowed'" class="form-control text-center" readonly [value]="age" type="number" id="elementID" placeholder="{{placeHolder | translate}}"
+            [formControl]="ageControl" (change)="setDate(age)" ngDefaultControl>
+    </div>
+
+</div>
+
+
+<div *ngIf="tooltipTitle" class="col-md-1 col-sm-1 col-xs-1 tooltip-align tooltip-mobile3">
+    <button *ngIf="tooltipTitle" type="button" class="btn btn-link info-tooltip" data-toggle="toggle" [tooltipPlacement]="tooltipPlacement"
+        [tooltip]="tooltipHTML" [id]="elementId">
+        <i class="icon-tooltip" [id]="elementId"></i>
+        <tooltip-content #tooltipHTML [excludeId]="elementId">
+            <div innerHTML="{{tooltipTitle | translate}}"></div>
+    </tooltip-content>
+    </button>
+</div>

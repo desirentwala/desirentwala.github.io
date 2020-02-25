@@ -1,0 +1,16 @@
+ <div *ngIf="!customFlag" class="col-xs-12 col-sm-4 col-md-4 col-lg-4 labelAlign">
+    <label [attr.for]="elementId" class="displayAsLabel"> <i *ngIf="iconClass" ngClass="{{iconClass}} iconLabel"></i><span class="labelDisplay"> {{elementLabel | translate }} <span *ngIf="mandatoryFlag" class="aste">*</span></span></label>
+</div>
+
+<div *ngIf="customFlag" [class]="labelClass">
+    <label [attr.for]="elementId" ngClass="{{labelInnerClass}}"  class="displayAsLabel"> <i *ngIf="iconClass" ngClass="{{iconClass}} iconLabel"></i><span class="labelDisplay"> {{elementLabel | translate}} <span *ngIf="mandatoryFlag" class="aste">*</span></span></label>
+</div>
+<div *ngIf="tooltipTitle" class="col-sm-1 col-md-1 col-xs-1 tooltip-mobile3 withTooltipHeader">
+            <button  type="button" class="btn btn-link info-tooltip" data-toggle="toggle" [tooltipPlacement]="tooltipPlacement"
+            [tooltip]="tooltipHTML" [id]="elementId">
+            <i class="icon-tooltip" [id]="elementId"></i>
+            <tooltip-content #tooltipHTML [excludeId]="elementId">
+                    <div innerHTML="{{tooltipTitle | translate}}"> </div>
+            	</tooltip-content>
+            </button>
+    </div>

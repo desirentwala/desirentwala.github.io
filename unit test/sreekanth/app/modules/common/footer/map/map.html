@@ -1,0 +1,19 @@
+<div *ngIf="brandingJson  && !multiLocationMap" class="mapContainer">
+    <img *ngIf="brandingJson.img_src" class="img-responsive" src="{{brandingJson.img_src}}" alt="{{brandingJson.alt}}">
+</div>
+<div *ngIf="brandingJson && !multiLocationMap" class="mapContainer">
+    <div *ngIf="brandingJson.iframe_src" class="map-container" map="" url="inc/map-options.json">
+        <iframe [src]="trustedUrl" width="100%" height="250" frameborder="0" scrolling="no" marginheight="0" marginwidth="0" allowfullscreen></iframe>
+    </div>
+</div>
+<div *ngIf="brandingJson && multiLocationMap">
+    <multi-location-map [defaultLatitude]="defaultLatitude" [defaultLongitude]="defaultLongitude" [radiusList]="radiusList" [defaultLoactionAddress]="defaultLoactionAddress"></multi-location-map>
+</div>
+
+
+
+
+<!--<iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d18500.354598952443!2d77.63171764775944!3d12.893540514974157!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3bae14ba179d88c7%3A0x9890ae976485a65e!2sNTT+DATA+FA+Insurance+Systems+Group!5e0!3m2!1sen!2sus!4v1484047173725" width="100%" height="250" frameborder="0" style="border:0" allowfullscreen></iframe>
+	
+<iframe width="100%" height="250" frameborder="0" style="border:0"
+src="https://www.google.com/maps/embed/v1/place?q=place_id:ChIJx4idF7oUrjsRXqaFZJeukJg&key=..." allowfullscreen></iframe>-->

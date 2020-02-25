@@ -1,0 +1,100 @@
+<div class="pt-3">
+  <div class="text-right">
+    <ion-button (click)="addNewApptType()"><i class="fal fa-plus"></i> Add new</ion-button>
+  </div>
+  <table class="table mtable">
+    <thead class="header">
+      <tr class="table-row">
+        <th> #Appointment.</th>
+        <th> Duration.</th>
+        <th> Fee.</th>
+        <th *ngIf="!practiceAdmin"> VHD margin.</th>
+        <th *ngIf="!practiceAdmin"> Total.</th>
+        <th></th>
+      </tr>
+    </thead>
+    <tbody class="tablebody">
+      <tr class="table-row" *ngFor="let types of apptTypes">
+        <td>
+          {{types.appointmentType}} 
+          <span *ngIf="types.isPrivate" class="badge public-badge">Private</span>
+          <span *ngIf="!types.isPrivate" class="badge public-badge">Public</span>
+        </td>
+        <td>
+          {{types.duration}}
+        </td>
+        <td>
+          &pound; {{types.practiceFee}}
+        </td>
+        <td *ngIf="!practiceAdmin">
+          &pound; {{+types.customerFee - +types.practiceFee}}
+        </td>
+        <td *ngIf="!practiceAdmin">
+          &pound; {{types.customerFee}}
+        </td>
+        <td><i class="fal fa-edit trash-icon" (click)="editApptType(types)"></i></td>
+        <td><i class="fal fa-trash-alt trash-icon" (click)="confirmationAlert(types)"></i></td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+<!-- slider for add appt. type -->
+<div class="ion-padding">
+  <div class="box" [class.opened]="value">
+    <form #apptTypeForm="ngForm">
+      <div class="ion-padding border border-light showdow p-3 mb-5 bg-white addslot">
+        <div class="border-bottom">
+          <p class="Schedule-An-Appointm">Add new</p>
+        </div>
+        <label class="pt-0" for="apptName">Appointment name</label><i class="fas fa-asterisk form-asterisk"></i>
+        <input type="text" id="apptName" class="form-control" placeholder="Appt. name" #apptNm="ngModel" name="apptName"
+          [(ngModel)]="apptModel.appointmentType" maxlength="50" required>
+        <div class="text-danger pl-4" *ngIf="apptNm.invalid && (apptNm.dirty || apptNm.touched)">
+          Appointment name is required.
+        </div>
+        <ion-label>Duration (minutes)</ion-label><i class="fas fa-asterisk form-asterisk"></i>
+        <div>
+          <select id="apptDuration" class="date-time" placeholder="Select" [(ngModel)]="apptModel.duration"
+            #timeSlot="ngModel" name="timeSlots" required>
+            <option *ngFor="let minutes of timeslots">
+              {{minutes}}
+            </option>
+          </select>
+        </div>
+        <label class="pt-0" for="price">Price</label><i class="fas fa-asterisk form-asterisk"></i>
+        <input type="text" id="price" class="form-control" placeholder="Appt. price" #price="ngModel" name="price"
+          [(ngModel)]="apptModel.practiceFee" maxlength="3"numbersOnly required>
+        <div class="text-danger pl-4" *ngIf="price.invalid && (price.dirty || price.touched)">
+          price is required.
+        </div>
+        <div *ngIf="!practiceAdmin">
+          <label class="pt-0" for="vprice">VHD price</label><i class="fas fa-asterisk form-asterisk"></i>
+          <input type="text" id="vprice" class="form-control" placeholder="VHD price" #vprice="ngModel" name="vhdPrice"
+            [(ngModel)]="apptModel.vhdPrice" maxlength="3" numbersOnly required>
+          <div class="text-danger pl-4" *ngIf="vprice.invalid && (vprice.dirty || vprice.touched)">
+            VHD price is required.
+          </div>
+        </div>
+
+        <ion-radio-group >
+          <ion-label>Type</ion-label>
+          <div class="row p-3">
+            <ion-radio mode="md" checked={{!apptModel.isPrivate}} value="public" (click)="isPrivate('public')">
+            </ion-radio>
+            <ion-label class="radio-label">Public</ion-label>
+            <ion-radio mode="md" checked={{apptModel.isPrivate}} value="private" (click)="isPrivate('private')">
+            </ion-radio>
+            <ion-label class="radio-label">Private</ion-label>
+          </div>
+        </ion-radio-group>
+
+        <div>
+          <ion-button class="Rectangle" [disabled]="!(apptTypeForm.valid)"
+            (click)="createApptType(); value = false">{{apptBtn}}
+          </ion-button>
+          <button class="CANCEL" (click)="value = false">Cancel</button>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>

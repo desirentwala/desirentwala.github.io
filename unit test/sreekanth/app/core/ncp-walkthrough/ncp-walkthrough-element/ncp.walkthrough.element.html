@@ -1,0 +1,31 @@
+<ng-container *ngIf="showFlow && walkthroughInput && utils.obj.keys(walkthroughInput).length > 0">
+    <ng-walkthrough-flow
+        [id]="walkthroughInput['id']"
+        [focusBackdrop]="walkthroughInput['focusBackdrop']"
+        [closeButton]="walkthroughInput['closeButton']"
+        [closeAnywhere]="walkthroughInput['closeAnywhere']"
+        [arrowColor]="walkthroughInput['arrowColor']"
+        [showArrow]="walkthroughInput['showArrow']"
+        [radius]="walkthroughInput['radius']">
+        <ng-container *ngFor="let item of walkthroughInput['elementList']; let i = index;trackBy:item?.id">
+                <ng-walkthrough
+                        [id]="item['id']"
+                        [focusElementSelector]="item['focusElementSelector']"
+                        [contentTemplate]="i"
+                        [disabled]="item['disabled']"
+                        [focusBackdrop]="item['focusBackdrop']"
+                        [closeButton]="item['closeButton']"
+                        [closeAnywhere]="item['closeAnywhere']"
+                        [showArrow]="item['showArrow']"
+                        [arrowColor]="item['arrowColor']"
+                        [radius]="item['radius']"
+                        [typeSelector]="item['typeSelector']">
+                        <ng-template #i>
+                                <div [innerHTML]="item['contentTemplate']"></div>
+                        </ng-template>
+                </ng-walkthrough>
+        </ng-container>
+    </ng-walkthrough-flow>
+    <radio-button *ngIf="hasCustomSwitch === false" [formControl]="utils.showHideWalkthroughControl" [radioArray]="utils.showHideWalkthroughOptions" type="switchbutton" ngDefaultControl>
+        </radio-button>                                
+</ng-container>

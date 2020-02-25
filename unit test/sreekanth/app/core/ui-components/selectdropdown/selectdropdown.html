@@ -1,0 +1,38 @@
+<div *ngIf="customFlag" class="tooltip-mobile2" [attr.name]=[dropdownItems] [class]="selectDropCustomClass">
+    <select [class.invalid]="invalidFlag" class=" form-control jcf-select customSelect" id="elementId" (blur)="onTouched($event)" [value]="value" [formControl]="elementControl" (ngModelChange)="onChange($event)">
+    <option *ngFor="let items of dropdownItems" [value]="items.value">
+            <div *ngIf="hasOnlyCode">
+                    {{items.value | translate}}
+            </div>
+            <div *ngIf="!hasOnlyCode">
+                    {{items.display | translate}}
+            </div>
+    </option>
+    </select>
+    <p class="mainFloatLabel" [class.floatLabel]="value">{{elementLabel | translate}}<span *ngIf="mandatoryFlag" class="aste">*</span></p>
+    <i class="floatBorder"></i>
+    <!--<span class="jcf-select-opener select-quote"><i class="icon-arrow-d"></i></span>-->
+</div>
+<div *ngIf="!customFlag" class="col-md-5 col-sm-6 col-xs-11 tooltip-mobile2 pr-sm-0" [attr.name]=[dropdownItems]>
+    <select [class.invalid]="invalidFlag" class=" form-control jcf-select customSelect" id="elementId" (blur)="onTouched($event)" [value]="value" [formControl]="elementControl" (ngModelChange)="onChange($event)">
+    <option *ngFor="let items of dropdownItems" [value]="items.value">
+            <div *ngIf="hasOnlyCode">
+                    {{items.value | translate}}
+            </div>
+            <div *ngIf="!hasOnlyCode">
+                    {{items.display | translate}}
+            </div>
+        </option>
+    </select>
+    <p class="mainFloatLabel" [class.floatLabel]="value">{{elementLabel | translate}}<span *ngIf="mandatoryFlag" class="aste">*</span></p>
+    <i class="floatBorder"></i>
+    <!--<span class="jcf-select-opener select-quote"><i class="icon-arrow-d"></i></span>-->
+</div>
+<div *ngIf="tooltipTitle" class="col-sm-1 col-md-1 col-xs-1  tooltip-mobile3">
+    <button *ngIf="tooltipTitle" type="button" class="btn btn-link info-tooltip" data-toggle="toggle" [tooltipPlacement]="tooltipPlacement" [tooltip]="tooltipHTML" [id]="elementId">
+        <i class="icon-tooltip" [id]="elementId"></i>
+        <tooltip-content #tooltipHTML [excludeId]="elementId">
+                <div innerHTML="{{tooltipTitle | translate}}"></div>
+        </tooltip-content>
+        </button>
+</div>

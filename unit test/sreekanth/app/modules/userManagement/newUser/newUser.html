@@ -1,0 +1,24 @@
+<!--<tab-error [displayFlag]="!isValidCreateUserForm" errorMessage="NCPErrorMessage.pleaseCorrectErrorsBelow">
+            </tab-error>-->
+<div *ngIf="isError" class="alert alert-danger">
+    <ul *ngFor="let error of errors">
+        <li>
+            {{error.errCode}} - {{error.errDesc}}
+        </li>
+    </ul>
+</div>
+<user-form [userMaintenanceFormGroup]="userMaintenanceFormGroup" (doClick)="CreateNewUser()" (doCheck)="checkPartyid()"></user-form>
+<ncp-modal [modalKey]="createUserModal" modalTitle="NCPModalTitle.usercreation" modalClass="modal-lg" [hideCloseButton]=true>
+    <modal-content>
+        <div class="row">
+            <div class="col-md-9 col-sm-9 col-xs-8 label-col">
+                <label class="pl0">
+                    <span>{{this.userMaintenanceFormGroup.get('user_id').value}} {{'NCPLabel.hasbeencreatedsuccessfully' | translate}}</span>
+                </label>
+            </div>
+            <div class="col-md-3 col-sm-3 col-xs-4 pull-right pl-md-0 mb20">
+                <button-field buttonClass="ncp-linkBtn" buttonType="custom" (click)="createUserModal = false; navigateList()" buttonName="NCPBtn.close" iconClass="fa fa-close"></button-field>
+            </div>
+        </div>
+    </modal-content>
+</ncp-modal>

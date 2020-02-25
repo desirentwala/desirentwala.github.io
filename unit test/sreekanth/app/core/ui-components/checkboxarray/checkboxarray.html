@@ -1,0 +1,33 @@
+<div class="col-sm-12 col-md-12 col-xs-11 pl0 checkBoxArrayAlignRTL">
+    <ul class="list-inline">
+        <div *ngFor="let item of checkboxArray">
+            <li class="fields-box" [attr.name]="checkboxArray" *ngIf="item.hasAdjField==true; else elseBlock">
+                <check-box [id]="elementId" [itemLabel]="item.label" [formControl]="item.elementControl">
+                </check-box>
+                <span *ngIf="item.elementControl.value">
+                    <span class="separator">{{separator}}</span>
+                    <check-box *ngFor="let adjFieldIndex of item.adjFieldIndexes" [id]="elementId" [itemLabel]="checkboxArray[adjFieldIndex].label"
+                    [formControl]="checkboxArray[adjFieldIndex].elementControl"></check-box>
+                </span>
+            </li>
+            <ng-template #elseBlock>
+                <li class="fields-box" [attr.name]="checkboxArray" *ngIf="!item.isAdjField==true">
+                    <check-box [id]="elementId" [itemLabel]="item.label" [formControl]="item.elementControl" (change)="setCheckBoxValue(item)">
+                    </check-box>
+                </li>
+            </ng-template>
+        </div>
+    </ul>
+</div>
+
+<div class="col-sm-4 col-md-4">
+</div>
+<div *ngIf="tooltipTitle" class="col-sm-1 col-md-1 col-xs-1 tooltip-mobile3">
+            <button  type="button" class="btn btn-link info-tooltip" data-toggle="toggle" [tooltipPlacement]="tooltipPlacement"
+            [tooltip]="tooltipHTML" [id]="elementId">
+            <i class="icon-tooltip" [id]="elementId"></i>
+            <tooltip-content #tooltipHTML [excludeId]="elementId">
+                    <div [innerHTML]="tooltipTitle"> </div>
+            	</tooltip-content>
+            </button>
+    </div>

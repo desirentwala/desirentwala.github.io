@@ -1,0 +1,21 @@
+<ion-content class="contentbg">
+  <div class="row">
+    <div class="col-lg-1 col-md-0 destop-view"></div>
+    <div class="col-lg-3 col-md-4 ipad bg-list list-height">
+        <div>
+            <img class="home-logo" src="./assets/imgs/logo.png" alt="logo">
+          </div>
+      <!-- Vet list searchable component -->
+      <app-listbar *ngIf="isVetData" [data]="vetList" [header]="'Show all vet'" [flag]="'vet'"
+        (selectedData)="selectedCustomer($event)" (addNewMember)="addNewCustomer()">
+      </app-listbar>
+    </div>
+    <div *ngIf="isCalender" class="col-lg-8 col-md-8 vetListCalender" >
+      <!-- Slot scheduling component -->
+      <!-- <app-calendar [vetList]="vetList" [calendarData]="calendarData" [view]="calendarViewMode" (slotsOut)="slotsIn($event)"></app-calendar> -->
+    </div>
+    <div *ngIf="isNew" class="col-lg-8 col-md-8">
+      <app-addnew-vet (success)="onAddNewVet()"></app-addnew-vet>
+    </div>
+  </div>
+</ion-content>

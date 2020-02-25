@@ -1,0 +1,265 @@
+<div class="tableSimple tableMaxWidth" [ngClass]="summaryTableClass">
+    <table>
+        <tbody *ngIf="!isEndorsementFlag && project === ''">
+            <tr *ngIf="summaryData.policyInfo && type==='QT'">
+                <td>{{'NCPLabel.quoteNo' | translate}}</td>
+                <td>{{ summaryData.policyInfo.quoteNo }}</td>
+            </tr>
+            <tr *ngIf="summaryData.policyInfo && type!='QT'">
+                <td>{{'NCPLabel.policyNo' | translate}}</td>
+                <td>{{ summaryData.policyInfo.policyNo }}{{'NCPLabel.hyphen' | translate}}{{ summaryData.policyInfo.policyEndtNo }}
+                </td>
+            </tr>
+            <tr *ngIf="summaryData.policyInfo">
+                <td>{{'NCPLabel.policyPeriod' | translate}}</td>
+                <td>{{ summaryData.policyInfo.inceptionDt }} {{'NCPLabel.to' | translate}} {{ summaryData.policyInfo.expiryDt }}
+                </td>
+            </tr>
+            <tr *ngIf="summaryData.policyInfo && summaryData.policyInfo.policyTerm && summaryData.policyInfo.policyTermDesc">
+                <td> {{'NCPLabel.policyType' | translate}}</td>
+                <td>{{summaryData.policyInfo.policyTerm }} - {{summaryData.policyInfo.policyTermDesc }}
+                </td>
+            </tr>
+            <tr *ngIf="LOB==='TRAVEL' && travellingTo">
+                <td>{{'NCPLabel.countries' | translate }}</td>
+                <td>{{ travellingTo }}</td>
+            </tr>
+            <tr *ngIf="LOB==='TRAVEL' && region">
+                <td>{{'NCPLabel.region' | translate}}</td>
+                <td>{{ region }}</td>
+            </tr>
+            <tr *ngIf="LOB==='MOTOR' && summaryData.summaryInfo && summaryData.summaryInfo.siPrime">
+                <td>{{'NCPLabel.carValueCovered' | translate}}</td>
+                <!-- <td>{{summaryData.summaryInfo.siPrime}}</td> -->
+            <td> <misc-display isLabel="true" label={{summaryData.summaryInfo.siPrime}} type="amount"> </misc-display> </td>
+            </tr>
+            <tr *ngIf="LOB==='MOTOR' && optionalCovers">
+                <td>{{'NCPLabel.optionalCovers' | translate}}</td>
+                <td>{{optionalCovers}}</td>
+            </tr>
+            <tr>
+                <td>{{"NCPLabel.premium" | translate}}</td>
+                <!-- <td>{{ summaryData.summaryInfo && summaryData.summaryInfo.premiumPrime ? summaryData.summaryInfo.premiumPrime : na }}</td> -->
+            <td> <misc-display isLabel="true" label={{summaryData.summaryInfo&&summaryData.summaryInfo.premiumPrime?summaryData.summaryInfo.premiumPrime:na}} type="amount"> </misc-display> </td>
+            </tr>
+
+            <tr>
+                <td>{{'NCPLabel.charges' | translate}}</td>
+                <!-- <td>{{summaryData.summaryInfo && summaryData.summaryInfo.chargesPrime ? summaryData.summaryInfo.chargesPrime : na }}</td> -->
+                <td>
+                    <misc-display isLabel="true" label={{summaryData.summaryInfo&&summaryData.summaryInfo.chargesPrime?summaryData.summaryInfo.chargesPrime:na}} type="amount"> </misc-display>
+                </td>
+            </tr>
+            <tr (click)="isCollapsedTr = !isCollapsedTr">
+                <td>{{'NCPLabel.discount' | translate}} </td>
+                <!-- <td>{{ summaryData.summaryInfo && summaryData.summaryInfo.discountPrime ? summaryData.summaryInfo.discountPrime : na }} <i class="pull-right icon-arrow-d icon-arrow-ud-lh"></i></td> -->
+            <td><i class="pull-right icon-arrow-d"></i><misc-display isLabel="true" label={{summaryData.summaryInfo&&summaryData.summaryInfo.discountPrime?summaryData.summaryInfo.discountPrime:na}} type="amount"> </misc-display> 
+                </td>
+            </tr>
+            <tr *ngIf="isCollapsedTr">
+                <td>{{'NCPLabel.schemeDiscount' | translate}}</td>
+                <!-- <td>{{ summaryData.summaryInfo && summaryData.summaryInfo.commissionPrime ? summaryData.summaryInfo.commissionPrime : na }}</td> -->
+            <td> <misc-display isLabel="true" label={{summaryData.summaryInfo&&summaryData.summaryInfo.commissionPrime?summaryData.summaryInfo.commissionPrime:na}} type="amount"> </misc-display> </td>
+            </tr>
+
+            <tr *ngIf="isCollapsedTr">
+                <td>{{'NCPLabel.multiProductDiscount' | translate}}</td>
+                <!-- <td>{{summaryData.summaryInfo && summaryData.summaryInfo.commissionTaxPrime ? summaryData.summaryInfo.commissionTaxPrime : na }}</td> -->
+            <td> <misc-display isLabel="true" label={{summaryData.summaryInfo&&summaryData.summaryInfo.commissionTaxPrime?summaryData.summaryInfo.commissionTaxPrime:na}} type="amount"> </misc-display> </td>
+            </tr>
+            <tr>
+                <td>{{'NCPLabel.netPremium' | translate}}</td>
+                <!-- <td>{{summaryData.summaryInfo && summaryData.summaryInfo.netPremiumPrime ? summaryData.summaryInfo.netPremiumPrime : na }}</td> -->
+            <td> <misc-display isLabel="true" label={{summaryData.summaryInfo&&summaryData.summaryInfo.netPremiumPrime?summaryData.summaryInfo.netPremiumPrime:na}} type="amount"> </misc-display> </td>
+            </tr>
+
+            <tr *ngIf="LOB==='MOTOR' &&  summaryData.riskInfo">
+                <td>{{'NCPLabel.noDrivers' | translate}}</td>
+                <td>{{summaryData.riskInfo[0].insuredList.length }}</td>
+            </tr>
+            <tr *ngIf="LOB==='MOTOR' &&  summaryData.riskInfo">
+                <td>{{'NCPLabel.noClaims' | translate}}</td>
+                <td>{{summaryData.riskInfo[0].hasDriverClaimed ? summaryData.riskInfo[0].driverClaimsHistory.length : 0 }}</td>
+            </tr>
+        </tbody>
+        <tbody *ngIf="isEndorsementFlag && project === ''">
+            <tr *ngIf="summaryData.policyInfo">
+                <td>{{'NCPLabel.policyPeriod' | translate}}</td>
+                <td>{{ summaryData.policyInfo.inceptionDt }} {{'NCPLabel.to' | translate}} {{ summaryData.policyInfo.expiryDt }}
+                </td>
+            </tr>
+            <tr *ngIf="summaryData.policyInfo && summaryData.policyInfo.policyTerm && summaryData.policyInfo.policyTermDesc">
+                <td> {{'NCPLabel.policyType' | translate}}</td>
+                <td>{{summaryData.policyInfo.policyTermDesc }}
+                </td>
+            </tr>
+            <tr *ngIf="LOB==='TRAVEL' && travellingTo">
+                <td>{{'NCPLabel.countries' | translate }}</td>
+                <td>{{ travellingTo }}</td>
+            </tr>
+            <tr *ngIf="LOB==='TRAVEL' && region">
+                <td>{{'NCPLabel.region' | translate}}</td>
+                <td>{{ region }}</td>
+            </tr>
+            <tr *ngIf="LOB==='MOTOR' && optionalCovers">
+                <td>{{'NCPLabel.optionalCovers' | translate}}</td>
+                <td>{{optionalCovers}}</td>
+            </tr>
+            <tr>
+                <td>
+                    {{"NCPLabel.premium" | translate}}
+                    <div *ngIf="tooltipTitle" class="col-md-2 col-sm-1 hidden-xs tooltip-align tooltip-mobile3 pull-md-right">
+                    <button 
+                        type="button" 
+                        class="btn btn-link info-tooltip" 
+                        data-toggle="toggle" 
+                        [tooltip]="tooltipHTML"
+                        id="summaryTooltip">
+                        <i class="icon-tooltip" id="summaryTooltip"></i>
+                        <tooltip-content #tooltipHTML excludeId="summaryTooltip">
+                        <div innerHTML="{{ tooltipTitle | translate }}"></div>
+                    </tooltip-content>
+                    </button>
+                    </div>
+                </td>
+                <!-- <td>{{ lastPremium }}</td> -->
+            <td> <misc-display isLabel="true" label={{summaryData.summaryInfo.clientPremiumBase}} type="amount"> </misc-display> </td>
+            </tr>
+            <tr *ngIf="LOB==='MOTOR' &&  summaryData.riskInfo">
+                <td>{{'NCPLabel.noDrivers' | translate}}</td>
+                <td>{{summaryData.riskInfo[0].insuredList.length }}</td>
+            </tr>
+            <tr *ngIf="LOB==='MOTOR' &&  summaryData.riskInfo">
+                <td>{{'NCPLabel.noClaims' | translate}}</td>
+                <td>{{summaryData.riskInfo[0].hasDriverClaimed ? summaryData.riskInfo[0].driverClaimsHistory.length : 0 }}</td>
+            </tr>
+        </tbody>
+        <tbody *ngIf="!isEndorsementFlag && project === 'ga'">
+            <tr *ngIf="summaryData.policyInfo && type==='QT'">
+                <td>{{'NCPLabel.quoteNo' | translate}}</td>
+                <td>{{ summaryData.policyInfo.quoteNo }}</td>
+            </tr>
+            <tr *ngIf="summaryData.policyInfo && type!='QT'">
+                <td>{{'NCPLabel.policyNo' | translate}}</td>
+                <td>{{ summaryData.policyInfo.policyNo }}{{'NCPLabel.hyphen' | translate}}{{ summaryData.policyInfo.policyEndtNo }}
+                </td>
+            </tr>
+            <tr *ngIf="summaryData.customerInfo && summaryData.customerInfo.policyHolderType=='I'">
+                <td>{{'NCPSubHeading.policyHolder' | translate}}</td>
+                <td>{{ summaryData.customerInfo.prefixDesc }}{{'NCPLabel.dot' | translate}} {{ summaryData.customerInfo.appFName }} {{ summaryData.customerInfo.appLName }}
+                </td>
+            </tr>
+            <tr *ngIf="summaryData.customerInfo && summaryData.customerInfo.policyHolderType=='O'">
+                <td>{{'NCPSubHeading.policyHolder' | translate}}</td>
+                <td>{{ summaryData.customerInfo.companyName }}
+                </td>
+            </tr>
+            <tr *ngIf="LOB==='MOTOR' && summaryData.riskInfo[0]">
+                <td>{{'NCPLabel.vehicleRegNo' | translate}}</td>
+                <td>{{summaryData.riskInfo[0].vehicleRegNo}}</td>
+            </tr>
+            <tr *ngIf="LOB==='MOTOR' && summaryData.riskInfo[0]">
+                <td>{{'NCPLabel.vehicleMake' | translate}}</td>
+                <td>{{summaryData.riskInfo[0].vehicleMakeDesc}}</td>
+            </tr>
+            <tr *ngIf="LOB==='MOTOR' && summaryData.riskInfo[0]">
+                <td>{{'NCPLabel.vehicleModel' | translate}}</td>
+                <td>{{summaryData.riskInfo[0].vehicleModelDesc}}</td>
+            </tr>
+            <tr *ngIf="summaryData.policyInfo">
+                <td>{{'NCPLabel.policyPeriod' | translate}}</td>
+                <td>{{ summaryData.policyInfo.inceptionDt }} {{'NCPLabel.to' | translate}} {{ summaryData.policyInfo.expiryDt }}
+                </td>
+            </tr>
+            <tr>
+                <td>{{"NCPLabel.premium" | translate}}</td>
+                <td>
+                    <misc-display isLabel="true" label={{summaryData.summaryInfo&&summaryData.summaryInfo.clientPremiumPrime?summaryData.summaryInfo.clientPremiumPrime:na}} type="amount"> </misc-display>
+                </td>
+            </tr>
+            <tr>
+                <td>{{"NCPLabel.riskPremium" | translate}}</td>
+                <td>
+                    <misc-display isLabel="true" label={{summaryData.summaryInfo&&summaryData.summaryInfo.premiumPrime?summaryData.summaryInfo.premiumPrime:na}} type="amount"> </misc-display>
+                </td>
+            </tr>
+            <tr>
+                <td>{{'NCPLabel.discount' | translate}} </td>
+                <td>
+                    <misc-display isLabel="true" label={{summaryData.summaryInfo&&summaryData.summaryInfo.discountPrime?summaryData.summaryInfo.discountPrime:na}} type="amount"> </misc-display>
+                </td>
+            </tr>
+            <tr>
+                <td>{{'NCPLabel.gst' | translate}} </td>
+                <td>
+                    <misc-display isLabel="true" label={{summaryData.summaryInfo&&summaryData.summaryInfo.taxPrime?summaryData.summaryInfo.taxPrime:na}} type="amount"> </misc-display>
+                </td>
+            </tr>
+            <tr>
+                <td>{{'NCPLabel.netPremium' | translate}}</td>
+                <td class="fwb">
+                    <misc-display isLabel="true" label={{summaryData.summaryInfo&&summaryData.summaryInfo.clientPremiumPrime?summaryData.summaryInfo.clientPremiumPrime:na}} type="amount" displayClass="fwb"> </misc-display>
+                </td>
+            </tr>
+        </tbody>
+        <tbody *ngIf="isEndorsementFlag && project === 'ga'">
+            <tr>
+                <td>{{'NCPLabel.policyPeriod' | translate}}</td>
+                <td>{{ summaryData.policyInfo.policyNo }}{{'NCPLabel.hyphen' | translate}}{{ summaryData.policyInfo.policyEndtNo }}
+                </td>
+            </tr>
+            <tr *ngIf="summaryData.customerInfo">
+                <td>{{'NCPSubHeading.policyHolder' | translate}}</td>
+                <td>{{ summaryData.customerInfo.prefixDesc }}{{'NCPLabel.dot' | translate}} {{ summaryData.customerInfo.appFName }} {{ summaryData.customerInfo.appLName }}
+                </td>
+            </tr>
+            <tr *ngIf="LOB==='MOTOR' && summaryData.riskInfo[0]">
+                <td>{{'NCPLabel.vehicleRegNo' | translate}}</td>
+                <td>{{summaryData.riskInfo[0].vehicleRegNo}}</td>
+            </tr>
+            <tr *ngIf="LOB==='MOTOR' && summaryData.riskInfo[0]">
+                <td>{{'NCPLabel.vehicleMake' | translate}}</td>
+                <td>{{summaryData.riskInfo[0].vehicleMakeDesc}}</td>
+            </tr>
+            <tr *ngIf="LOB==='MOTOR' && summaryData.riskInfo[0]">
+                <td>{{'NCPLabel.vehicleModel' | translate}}</td>
+                <td>{{summaryData.riskInfo[0].vehicleModelDesc}}</td>
+            </tr>
+            <tr *ngIf="summaryData.policyInfo">
+                <td>{{'NCPLabel.policyPeriod' | translate}}</td>
+                <td>{{ summaryData.policyInfo.inceptionDt }} {{'NCPLabel.to' | translate}} {{ summaryData.policyInfo.expiryDt }}
+                </td>
+            </tr>
+            <tr>
+                <td>{{"NCPLabel.premium" | translate}}</td>
+                <td>
+                    <misc-display isLabel="true" label={{summaryData.summaryInfo&&summaryData.summaryInfo.clientPremiumPrime?summaryData.summaryInfo.clientPremiumPrime:na}} type="amount"> </misc-display>
+                </td>
+            </tr>
+            <tr>
+                <td>{{"NCPLabel.riskPremium" | translate}}</td>
+                <td>
+                    <misc-display isLabel="true" label={{summaryData.summaryInfo&&summaryData.summaryInfo.premiumPrime?summaryData.summaryInfo.premiumPrime:na}} type="amount"> </misc-display>
+                </td>
+            </tr>
+            <tr>
+                <td>{{'NCPLabel.discount' | translate}} </td>
+                <td>
+                    <misc-display isLabel="true" label={{summaryData.summaryInfo&&summaryData.summaryInfo.discountPrime?summaryData.summaryInfo.discountPrime:na}} type="amount"> </misc-display>
+                </td>
+            </tr>
+            <tr>
+                <td>{{'NCPLabel.gst' | translate}} </td>
+                <td>
+                    <misc-display isLabel="true" label={{summaryData.summaryInfo&&summaryData.summaryInfo.taxPrime?summaryData.summaryInfo.taxPrime:na}} type="amount"> </misc-display>
+                </td>
+            </tr>
+            <tr>
+                <td>{{'NCPLabel.netPremium' | translate}}</td>
+                <td class="fwb">
+                    <misc-display isLabel="true" label={{summaryData.summaryInfo&&summaryData.summaryInfo.clientPremiumPrime?summaryData.summaryInfo.clientPremiumPrime:na}} type="amount" displayClass="fwb"> </misc-display>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</div>

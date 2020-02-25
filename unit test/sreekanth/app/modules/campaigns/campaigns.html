@@ -1,0 +1,64 @@
+<div class="row mlr0">
+	<div class="col-md-9 col-sm-9 col-xs-12">
+		<h1>Campaigns </h1>
+	</div>
+	<div class="col-md-3 col-sm-3 col-xs-12">
+		<select name="" id="" class="form-control form-cont-dust">
+			<option value="Show all campaigns">Show all campaigns</option>
+		</select>
+	</div>
+</div>
+<div>
+	<div *ngIf="campaigns['primary'].length" class="bannerSection b1 mb20">
+		<div class="bannerImg">
+			<img src="assets/img/b2b_dashboard_banner.png" alt="" class="img-responsive">
+		</div>
+		<div class="bannerDetails pl0">
+			<div class="campaignBox w100p">
+				<div class="col-md-10 col-sm-9 col-xs-12 p0">
+					<h2><span class="pr5">{{ campaigns['primary']['title'] }}</span><span>[ {{ campaigns['primary']['code'] }} ]</span></h2>
+				</div>
+				<div *ngIf="campaigns['primary']['endDate']" class="col-md-2 col-sm-3 col-xs-8 campaignCountDown">
+					<countdown units="Days | Hours | Minutes"  [end]="campaigns['primary']['endDate']"></countdown>
+				</div>
+
+				<div class="col-md-12 hidden-xs hidden-sm bannerText">
+					<p *ngIf="campaigns['primary']['briefDesc']"><span class='theme-color pr10'>Campaign Description</span><span>{{campaigns['primary']['briefDesc']}}</span></p>
+					<p *ngIf="campaigns['primary']['businessType']"><span class='theme-color pr10'>Business Type</span><span>{{ util.businessTypeCodeMap[campaigns['primary']['businessType']] }}</span></p>
+					<p *ngIf="campaigns['primary']['discount']"><span class='theme-color pr10'>Incentives</span><span>{{ campaigns['primary']['discount'] }}</span></p>
+
+					<p class="pt30"><span class="theme-color pr10">Campaign Date :</span><span class="pr5">{{ campaigns['primary']['startDate'] }}</span>
+						<span class="pr5">to</span><span>{{ campaigns['primary']['endDate'] }}</span></p>
+				</div>
+				<div class="pull-left">
+					<button-field buttonType="custom" buttonName="NCPBtn.findoutmore" (click)="redirectToDetails(campaigns['primary']['code'])" buttonClass="ncpbtn-default"
+					 iconClass="fa fa-angle-right"></button-field>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div *ngFor="let campaign of campaigns['secondary']" class="row mlr0-i">
+		<div *ngFor="let camp of campaign" class="col-md-6 col-sm-6 col-xs-12 p0">
+			<div class="campaignBox b1">
+				<div class="col-md-8 col-sm-12 col-xs-12 p0">
+					<h2><span class="pr5">{{ camp.title }}</span><span>[ {{ camp.code }} ]</span></h2>
+				</div>
+				<div *ngIf="camp['endDate']" class="col-md-4 col-sm-6 col-xs-12 p0 campaignCountDown">
+					<countdown units="Days | Hours | Minutes" [end]="camp['endDate']"></countdown>
+				</div>
+				<div class="col-md-12 col-xs-12 col-sm-12 p0">
+					<p *ngIf="camp['briefDesc']"><span class='theme-color pr10'>Campaign Description</span><span>{{camp['briefDesc']}}</span></p>
+					<p *ngIf="camp['businessType']"><span class='theme-color pr10'>Business Type</span><span>{{util.businessTypeCodeMap[camp['businessType']] }}</span></p>
+					<p *ngIf="camp['discount']"><span class='theme-color pr10'>Incentives</span><span>{{ camp['discount'] }}</span></p>
+
+					<p class="pt30"><span class="theme-color pr10">Campaign Date :</span><span class="pr5">{{ camp.startDate}}</span><span class="pr5">{{"NCPLabel.to" | translate}}</span><span>{{camp.endDate}}</span></p>
+				</div>
+				<div class="pull-left">
+					<button-field buttonType="custom" buttonName="NCPBtn.findoutmore" (click)="redirectToDetails(camp.code)" buttonClass="ncpbtn-default"
+					 iconClass="fa fa-angle-right"></button-field>
+				</div>
+			</div>
+		</div>
+	</div>
+
+</div>

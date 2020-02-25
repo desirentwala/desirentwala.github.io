@@ -1,0 +1,22 @@
+<div class="col-md-2 col-sm-2 col-xs-4 pl0 mt-xs-10">
+	<div class="scrollMenubar">
+		<span class="openbtn" id="openBtnId" (click)="openNav()">&#9776;{{'NCPLabel.menu' | translate}} </span>
+		<div id="closeBtnId" class="closebtn" (click)="closeNav()"><span class="fs32 fs-xs-25"><b>&times;</b></span><span class="pl8 hidden-xs">{{'NCPLabel.close'| translate}}</span></div>
+		<div id="myNav" class="customMenuNav">
+			<div class="overlay-content">
+				<div class="col-md-12 col-sm-12 col-xs-12">
+					<p class="col-centered">{{'NCPLabel.hiWhatTypeOfInsuranceAreYouLookingForToday' | translate}}</p>
+				</div>
+				<div *ngFor="let list of menuList" class="col-md-12 col-sm-12 col-xs-12 mainMenuList">
+					<a class="col-centered" (click)="goToProduct(list)">
+						<div><i class="fa {{list.iconClass}}"></i><span>{{list.name | translate}}</span></div>
+					</a>
+				</div>
+
+			</div>
+		</div>
+	</div>
+</div>
+<div class="col-md-5 col-sm-6 col-xs-7 pr-xs-0">
+	<a (click)="navigateRouterLink('/b2c')" class='col-md-12 col-sm-12 col-xs-10 pr-xs-0'><img src="{{brandingJson.img_src}}" width="185" height="50" class="img-responsive pull-right" alt="{{brandingJson.header_img}}"></a>
+</div>

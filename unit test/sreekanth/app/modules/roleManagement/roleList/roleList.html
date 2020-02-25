@@ -1,0 +1,116 @@
+<div *ngIf="roleArray && roleArray.length > 0" class="setting-icon">
+      <a data-toggle="modal" (click)="columnFilterModal.open()" class="filterimg">
+            <i class="settingsIcon fa gearIcon"></i>
+      </a>
+</div>
+
+<div *ngIf="roleArray && roleArray.length > 0" class="col-md-3 col-sm-12 col-xs-12  conf">
+      <input class="forconf" [(ngModel)]="searchId" placeholder="{{'NCPBtn.search'| translate}}">
+</div>
+<div style="clear:both;"></div>
+<div class="filterac">
+      <table>
+            <thead>
+                  <tr>
+                        <th *ngFor="let header of tableDetails;let i= index" [class]="selectedClass(header.mapping)"
+                              (click)="changeSorting(header.mapping);(this.rotateFlag === i) ? this.rotateFlag='':this.rotateFlag=i;"
+                              [attr.data-title]="header.header | translate">
+                              <span>
+                                    <span class="labelHeader">{{header.header | translate}}</span>
+                              </span>
+                              <i class="icon-arrow-d indexicon" [class.rotate]="rotateFlag === i"></i>
+                        </th>
+                        <th class="actionCol">
+                              <span>
+                                    <span class="labelHeader">{{'NCPLabel.Action' | translate}}</span>
+                              </span>
+                        </th>
+                  </tr>
+            </thead>
+            <tbody *ngIf="roleArray && roleArray.length > 0">
+                  <tr *ngFor="let object of roleArray  | searchBy : searchId : tableDetails |  orderBy : convertSorting(); let rowIndex=index"
+                        id="tabhide">
+                        <td *ngFor="let mappings of tableDetails; let i=index" [attr.data-title]="mappings.header | translate">
+                              {{object[mappings.mapping]}}
+                        </td>
+                        <td class="actionCol">
+                              <span>
+                                    <i class="fa fa-gear showPopover indexrecus" tooltipPlacement="left" [tooltip]="myTooltip"
+                                          [tooltipHide]="tooltipHide" tooltipClick=true [id]="'roleListTooltip'+rowIndex"></i>
+                              </span>
+                              <tooltip-content #myTooltip [excludeId]="'roleListTooltip'+rowIndex">
+                                    <h3 class="popover-title">&nbsp;
+                                          <a class="close" (click)="tooltipHide = myTooltip.hide()">
+                                                <i class="icon-alert"></i>
+                                          </a>
+                                    </h3>
+                                    <div class="popover-content">
+                                          <div>
+                                                <ul>
+                                                      <li>
+                                                            <a (click)="editRoleDetail(object.roleId,'EU'); tooltipHide = myTooltip.hide()">
+                                                                  <i class=" iconToolTip"></i>
+                                                                  <span class="labelToolTip">{{'NCPLabel.editRole' |
+                                                                        translate}}</span>
+                                                            </a>
+                                                      </li>
+                                                      <li>
+                                                            <a (click)="getValueobject(object.roleId,'EU'); tooltipHide = myTooltip.hide()">
+                                                                  <i class=" iconToolTip"></i>
+                                                                  <span class="labelToolTip">{{'NCPLabel.deleteRole' |
+                                                                        translate}}
+                                                                  </span>
+                                                            </a>
+                                                      </li>
+                                                </ul>
+                                          </div>
+                                    </div>
+                              </tooltip-content>
+                        </td>
+                  </tr>
+            </tbody>
+      </table>
+      <div *ngIf="roleArray.length == 0">
+            <span class="badge">{{'NCPLabel.noRecordsFound' | translate}}</span>
+      </div>
+      <div *ngIf="roleArray && roleArray.length > 0 && viewMore" class="col-centered mtb20">
+            <button-field buttonType="custom" buttonName="NCPBtn.showMore" buttonClass="ncpbtn-default" iconClass="fa fa-arrow-down"
+                  (click)='doViewMore()'>
+            </button-field>
+      </div>
+      <ncp-modal #RoleDeleteModel [closeOnEscape]="false" [closeOnOutsideClick]="false" class="modalForm" modalClass="modal-md"
+            modalTitle="NCPLabel.confirmDeletion" titleIcon="">
+            <modal-content>
+                  <div class="btns-row">
+                        <button-field buttonType="custom" buttonClass="ncp-btn w100p" iconClass="fa fa-check"
+                              buttonName="NCPBtn.yes" (click)="deleteRoleDetail(roleidValue,objectValue);RoleDeleteModel.close();">
+                        </button-field>
+                        <button-field buttonType="custom" buttonClass="ncp-btn w100p" iconClass="fa fa-close "
+                              buttonName="NCPBtn.no" (click)="RoleDeleteModel.close();">
+                        </button-field>
+                  </div>
+            </modal-content>
+      </ncp-modal>
+      <ncp-modal class="modalForm" #columnFilterModal [closeOnEscape]="false" [closeOnOutsideClick]="false" modalClass="modal-lg"
+            modalTitle="NCPLabel.filterTableContents" titleIcon="glyphicon glyphicon-wrench confed">
+            <modal-content>
+                  <div class="row">
+                        <multi-check elementId="cbox" [checkboxArray]="multicheckarray" elementLabel="Fields" ngDefaultControl></multi-check>
+                  </div>
+            </modal-content>
+
+            <modal-footer>
+                  <div class="btns-row">
+                        <div class="col-md-12 col-sm-12 col-xs-12 pull-right plr-xs-0">
+                              <div *ngIf="errmsg">{{'NCPLabel.pleaseselectonefield' | translate}}&nbsp;
+                                    <i class="fa fa-smile-o" aria-hidden="true"></i>
+                              </div>
+                        </div>
+                        <button-field buttonType="custom" buttonClass="ncp-linkBtn w100p " iconClass="fa fa-close" buttonName="NCPBtn.close" (click)="settingsClose();columnFilterModal.close()">
+                        </button-field>
+                        <button-field buttonType="custom" buttonClass="ncpbtn-default w100p" iconClass="fa fa-save" buttonName="NCPBtn.save" (click)="colhide()">
+                        </button-field>
+                  </div>
+            </modal-footer>
+      </ncp-modal>      
+</div>

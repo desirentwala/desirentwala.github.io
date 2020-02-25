@@ -1,0 +1,64 @@
+<!-- <ion-toolbar class="top-header"></ion-toolbar> -->
+
+<ion-content class="disable-background ion-padding">
+  <ion-row class="sign-in-main-row">
+    <ion-card class="ion-padding sign-in-card">
+      <div class="signUpLogo">
+        <i class="fa fa-times float-right fa-1x" (click)="onCloseSignup()" style="cursor: pointer;"></i>
+          <img src="./assets/imgs/logo.png" alt="Logo">
+      </div> 
+      <hr class="horizontalLine">
+      <h1 class="auth-header">Login</h1>
+      <!--Sign in form starts-->
+      <form name="form" #signInForm="ngForm" (keyup.enter)="signIn()">
+        <label>Username / Email address</label>
+        <input #email="ngModel" placeholder="Username / Email address" class="form-control" name="email" type="text" [(ngModel)]="model.email"
+          preventWhiteSpace required/>
+        <div class="text-danger" *ngIf="email.invalid && (email.dirty || email.touched)">
+          <small class="inline" *ngIf="email.errors.required">Username / Email address required.</small>
+        </div>
+        <label>Password</label><br/>
+        <div class="show-password w-100">
+          <input [type]="show?'text':'password'" placeholder="Password" #pswd="ngModel" class="form-control" name="password" [(ngModel)]="model.password"
+          pattern='^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])[\w~@#$%^&*+=`|{}:;!.?\"()\[\]-]{8,16}$' minlength="8" maxlength="16" required/>
+            <ion-icon class="eye-icon" [name]="show?'eye':'eye-off'" (click)='showPassword()'>
+            </ion-icon>
+        </div>
+        <div class="text-danger" *ngIf="pswd.invalid && (pswd.dirty || pswd.touched)">
+          <small *ngIf="pswd.errors.pattern">Min 8 characters, 1 uppercase, 1 lowercase and 1 number.</small>
+          <small *ngIf="pswd.errors.required">Password is required.</small>
+        </div>
+        
+        <ion-row class="justify-content-between mt-4">
+          <div class="my-auto remember-me col-sm-12 col-md-6">
+            <div class="d-flex flex-row">
+              <div>
+                <ion-checkbox slot="start" color="primary" [(ngModel)]='model.isChecked' name="remember"></ion-checkbox>
+              </div>
+              <div class="my-auto">
+                <p class="label-p">&nbsp;&nbsp; Remember me</p>
+              </div>
+            </div>
+          </div>
+          <div class="forgot-password col-sm-12 col-md-6">
+            <p class="label-p" routerLink="/auth/forgotpassword"> <u>Forgotten your password?</u> </p>
+          </div>
+        </ion-row>
+        <hr class="horizontalLine">
+        <!--submit starts-->
+        <div class="pt-2 pb-1 text-right">
+          <ion-button [disabled]="!(signInForm.valid)" (click)="signIn()">
+            <p class="pt-3 submit-btn-txt" slot="start">Log in</p>
+            </ion-button>
+        </div>
+        <!--submit ends-->
+        <!--forgot password and signup navigation starts-->
+        <!-- <ion-row class="justify-content-center pt-4">
+          <p class="label-p" routerLink="/auth/forgotpassword">Forgotten your password?</p>
+        </ion-row> -->
+        <!--forgot password and signup navigation ends-->
+      </form>
+      <!--Sign in form ends-->
+    </ion-card>
+  </ion-row>
+</ion-content>

@@ -1,0 +1,41 @@
+<div class="theme-wrapper">
+    <div class="area"></div>
+    <nav [ngClass]="role === 'PA' || role == 'VET' || role == 'PO'? 'sidebar-PA' : 'sidebar-PO'" class="main-menu">
+        <ul>
+            <li *ngFor="let route of routeList; let ind = index">
+                <a (click)="selecteByRoute(route, ind)" [class.active]="activeIndex === ind">
+                    <i class="icon {{route.icon}} fa-2x"></i>
+                    <span class="nav-text">
+                        {{ route.title }}
+                    </span>
+                </a>
+            </li>
+        </ul>
+
+        <ul class="logout">
+            <li>
+                <a (click)="navigateToProfile()">
+                    <div *ngIf="userProfile?.profilePic">
+                        <img src="{{basePath}}storage/download/{{userProfile.profilePic}}?d={{randomNum}}" alt=""
+                            class="image--cover icon" />
+                    </div>
+                    <div *ngIf="!userProfile?.profilePic">
+                        <img src="../../../../assets/user-avatar.svg" alt="" class="image--cover icon" />
+                    </div>
+
+                    <span class="nav-text pl-2">
+                        {{userName}}
+                    </span>
+                </a>
+            </li>
+            <li>
+                <a (click)="logout()">
+                    <i class="icon fal fa-sign-out fa-2x"></i>
+                    <span class="nav-text">
+                        Logout
+                    </span>
+                </a>
+            </li>
+        </ul>
+    </nav>
+</div>

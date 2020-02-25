@@ -1,0 +1,110 @@
+<ncp-modal modalClass="modal-lg" #shareReassingModal [closeOnEscape]="false" [modalKey]=modalKey [closeOnOutsideClick]="false" [modalTitle]=modalTitle titleIcon="glyphicon glyphicon-wrench confed" [hideCloseButton]=true>
+	<modal-content>
+		<div [formGroup]="shareReassignFormGroup">
+			<div class="row">
+				<ncp-label elementLabel="NCPLabel.transactionId" [mandatoryFlag]=true></ncp-label>
+				<text-box formControlName="txnId" customFlag=true [disabledFlag]="true" textBoxClass="col-sm-7 col-md-5 col-xs-11 pr0"
+				 elementLabel="NCPLabel.leadId">
+				</text-box>
+			</div>
+			<div class="row">
+				<ncp-label elementLabel="NCPLabel.group" [mandatoryFlag]=true></ncp-label>
+				<drop-down elementId="shareType" miscType="MiscInfo" miscSubType='SHTYP' pickListFlag=true formControlName="shareType"
+				 [descControl]="shareReassignFormGroup.controls['shareTypeDesc']" changeId="shareGroupChangeId" param1="SU" [isCodeDesc]=true customFlag=true dropdownClass="col-sm-7 col-md-5 col-xs-11 pr0"
+				 ngDefaultControl elementLabel="NCPLabel.shareType" mandatoryFlag=false displayOnClick=true>
+				</drop-down>
+			</div>
+			<div *ngIf="shareReassignFormGroup.controls['shareType'].value && shareReassignFormGroup.controls['shareType'].value =='UG'">
+				<div class="row">
+					<ncp-label elementLabel="NCPLabel.UserGroup" [mandatoryFlag]=true></ncp-label>
+					<drop-down formControlName="userGroupCode" ngDefaultControl placeHolder="NCPLabel.userGroupId" elementId="userGroupId"
+					 miscType="UsersUG" param1="{{userID}}" pickListFlag=true customFlag=true [isCodeDesc]=true changeId="userGroupChangeId" [descControl]="shareReassignFormGroup.controls['userGroupDesc']"
+					dropdownClass="col-sm-7 col-md-5 col-xs-11 pr0" displayOnClick="true" elementLabel="NCPLabel.userGroupId">
+					</drop-down>
+				</div>
+			</div>
+			<div class="row">
+				<div *ngIf="shareReassignFormGroup.controls['shareType'].value && shareReassignFormGroup.controls['shareType'].value =='SU'">
+					<ncp-label elementLabel="NCPLabel.subordinateUser" [mandatoryFlag]="shareReassignFormGroup.controls['type'].value === 'RA'"></ncp-label>
+				</div>
+				<div *ngIf="shareReassignFormGroup.controls['shareType'].value && shareReassignFormGroup.controls['shareType'].value =='UG' && shareReassignFormGroup.controls['userGroupCode'].value">
+					<ncp-label elementLabel="NCPLabel.UserID" [mandatoryFlag]="shareReassignFormGroup.controls['type'].value === 'RA'"></ncp-label>
+				</div>
+				<div *ngIf="shareReassignFormGroup.controls['type'].value === 'RA' && shareReassignFormGroup.controls['shareType'].value =='SU'">
+					<drop-down elementId="userId" miscType="ChildUsers" param1="{{userID}}" pickListFlag=true formControlName="userId"
+					 [descControl]="shareReassignFormGroup.controls['userIdDesc']" [isCodeDesc]=true customFlag=true
+					 displayCodeAndDesc=true dropdownClass="col-sm-7 col-md-5 col-xs-11 pr0" ngDefaultControl 
+					 mandatoryFlag=false displayOnClick=true>
+					</drop-down>
+				</div>
+				<div *ngIf="shareReassignFormGroup.controls['type'].value === 'RA' && shareReassignFormGroup.controls['shareType'].value =='UG' && shareReassignFormGroup.controls['userGroupCode'].value">
+					<drop-down elementId="userId" miscType="UGUsers" [param1Control]="shareReassignFormGroup.controls['userGroupCode']" param2="{{userID}}" pickListFlag=true formControlName="userId"
+					 [descControl]="shareReassignFormGroup.controls['userIdDesc']" [isCodeDesc]=true customFlag=true
+					 displayCodeAndDesc=true dropdownClass="col-sm-7 col-md-5 col-xs-11 pr0" ngDefaultControl
+					 mandatoryFlag=false displayOnClick=true>
+					</drop-down>
+				</div>
+				<div *ngIf="shareReassignFormGroup.controls['type'].value === 'SH' && shareReassignFormGroup.controls['shareType'].value =='SU'">
+					<drop-down elementId="userId" miscType="ChildUsers" param1="{{userID}}" pickListFlag=true formControlName="userId"
+					  customFlag=true [multipleSelect]=true [useCheckBoxMultiSelect]=true [displaySelectAllCheckBox]=true
+					  displayCodeAndDesc=true dropdownClass="col-sm-7 col-md-5 col-xs-11 pr0" ngDefaultControl 
+					  mandatoryFlag=false displayOnClick=true>
+					</drop-down>
+				</div>
+				<div *ngIf="shareReassignFormGroup.controls['type'].value === 'SH' && shareReassignFormGroup.controls['shareType'].value =='UG' && shareReassignFormGroup.controls['userGroupCode'].value">
+					<drop-down elementId="userId" miscType="UGUsers" [param1Control]="shareReassignFormGroup.controls['userGroupCode']" param2="{{userID}}" param4="GR" pickListFlag=true formControlName="userId"
+					 [descControl]="shareReassignFormGroup.controls['userIdDesc']" customFlag=true [multipleSelect]=true [useCheckBoxMultiSelect]=true [displaySelectAllCheckBox]=true
+					 displayCodeAndDesc=true dropdownClass="col-sm-7 col-md-5 col-xs-11 pr0" ngDefaultControl
+					 mandatoryFlag=false displayOnClick=true>
+					</drop-down>
+				</div>
+			</div>
+		</div>
+	</modal-content>
+	<modal-footer>
+		<div class="btns-row">
+			<button-field buttonType="custom" buttonName="NCPBtn.reset" (click)="reset()" buttonClass="ncpbtn-default w100p"
+			 iconClass="fa fa-undo">
+			</button-field>
+			<div *ngIf="shareReassignFormGroup.controls['type'].value == 'RA'">
+				<button-field buttonType="custom" buttonName="NCPBtn.reassign" [isDisabled]="!this.shareReassignFormGroup.valid" (click)="reAssignTxn()" buttonClass="ncpbtn-default w100p"
+					iconClass="fa fa-filter">
+				</button-field>
+			</div>
+			<div *ngIf="shareReassignFormGroup.controls['type'].value == 'SH' && !(shareReassignFormGroup.controls['type'].value == 'SH' && sharedUsersListData.length >0 && !shareReassignFormGroup.controls['userId'].value)">
+				<button-field buttonType="custom" buttonName="NCPLabel.shareTxn" [isDisabled]="!this.shareReassignFormGroup.valid" (click)="shareTxn()" buttonClass="ncpbtn-default w100p"
+				 	iconClass="fa fa-filter">
+				</button-field>
+			</div>
+			<div *ngIf="shareReassignFormGroup.controls['type'].value == 'SH' && sharedUsersListData.length >0 && !shareReassignFormGroup.controls['userId'].value">
+				<button-field buttonType="custom" buttonName="NCPBtn.submit" [isDisabled]="!this.shareReassignFormGroup.valid" (click)="shareTxn()" buttonClass="ncpbtn-default w100p"
+				 	iconClass="fa fa-filter">
+				</button-field>
+			</div>
+			<button-field buttonType="custom" buttonName="NCPLabel.close" (click)="doActionProcess($event)" buttonClass="ncp-linkBtn"
+			 	iconClass="fa fa-filter">
+			</button-field>
+		</div>
+	</modal-footer>
+</ncp-modal>
+
+<ncp-modal [modalKey]="successModal" [modalTitle]=modalTitle modalClass="modal-lg" [hideCloseButton]=true>
+	<modal-content>
+		<div class="row">
+			<div class="col-md-9 col-sm-9 col-xs-8 label-col">
+				<label class="pl0">
+					<span *ngIf="this.shareReassignFormGroup.controls['type'].value === 'RA'">{{'NCPLabel.transactionId' | translate}}
+						{{this.shareReassignFormGroup.get('txnId').value}} {{'NCPLabel.successfullyReassignedto' | translate}}
+						{{this.shareReassignFormGroup.get('userId').value}}
+					</span>
+					<span *ngIf="this.shareReassignFormGroup.controls['type'].value === 'SH'">{{'NCPLabel.transactionId' | translate}} {{this.shareReassignFormGroup.get('txnId').value}}
+						{{'NCPLabel.successfullySharedto' | translate}} {{this.shareReassignFormGroup.get('userId').value | json}}</span>
+				</label>
+			</div>
+			<div class="col-md-3 col-sm-3 col-xs-4 pull-right pl-md-0 mb20">
+				<button-field buttonClass="ncp-linkBtn" buttonType="custom" (click)="successModal = false;doRefreshListProcess($event)"
+				 buttonName="NCPBtn.close" iconClass="fa fa-close"></button-field>
+			</div>
+		</div>
+	</modal-content>
+</ncp-modal>

@@ -1,0 +1,53 @@
+<div [ngSwitch]="buttonType" [attr.name]="buttonName">
+    <div class="btnContainer" ngClass="{{hasImageIcon || iconClass? 'hasImageIconContainer' : ''}}">
+        <div *ngSwitchCase="'primary'">
+            <button [title]='btnTitle | translate' class="btn btn-primary" (click)="buttonClick()" [disabled]="isDisabled">
+                <span *ngIf="buttonName" class="labelButton">{{buttonName | translate}}</span>
+                <i *ngIf="iconClass" ngClass="{{iconClass}} iconicButton"></i>
+                <div *ngIf="tooltipTitle" class="tooltip-mobile3 buttonTooltipAlign">
+                    <button type="button" class="btn btn-link info-tooltip" data-toggle="toggle" [tooltipPlacement]="tooltipPlacement" [tooltip]="tooltipHTML"
+                        [id]="elementId">
+                        <i class="icon-tooltip" [id]="elementId"></i>
+                        <tooltip-content #tooltipHTML [excludeId]="elementId">
+                            <div [innerHTML]="tooltipTitle"> </div>
+                        </tooltip-content>
+                    </button>
+                </div>
+            </button>
+        </div>
+        <div *ngSwitchCase="'custom'">
+            <button [title]='btnTitle | translate' [class]="buttonClass" (click)="buttonClick()" [disabled]="isDisabled">
+                <span *ngIf="buttonName" class="labelButton">{{buttonName | translate}}</span>
+                <i *ngIf="iconClass" ngClass="{{iconClass}} iconicButton"></i>
+                <div *ngIf="hasImageIcon" class="btnImgIcon componentIcons" [ngClass]="customImageIconClass">
+                        <misc-img [src]="imgIconSrc"></misc-img>
+                    </div>
+                <div *ngIf="tooltipTitle" class="tooltip-mobile3 buttonTooltipAlign">
+                    <button type="button" class="btn btn-link info-tooltip" data-toggle="toggle" [tooltipPlacement]="tooltipPlacement" [tooltip]="tooltipHTML"
+                        [id]="elementId">
+                        <i class="icon-tooltip" [id]="elementId"></i>
+                        <tooltip-content #tooltipHTML [excludeId]="elementId">
+                            <div [innerHTML]="tooltipTitle"> </div>
+                        </tooltip-content>
+                    </button>
+                </div>
+            </button>
+        </div>
+        <div *ngSwitchDefault>
+            <button [title]='btnTitle | translate' class="btn btn-default customBtn" (click)="buttonClick()" [disabled]="isDisabled">
+                <span *ngIf="buttonName" class="labelButton">{{buttonName | translate}}</span>
+                <i *ngIf="iconClass" ngClass="{{iconClass}}  iconicButton"></i>
+                <div *ngIf="tooltipTitle" class="tooltip-mobile3 buttonTooltipAlign">
+                    <button type="button" class="btn btn-link info-tooltip" data-toggle="toggle" [tooltipPlacement]="tooltipPlacement" [tooltip]="tooltipHTML"
+                        [id]="elementId">
+                        <i class="icon-tooltip" [id]="elementId"></i>
+                        <tooltip-content #tooltipHTML [excludeId]="elementId">
+                            <div [innerHTML]="tooltipTitle"> </div>
+                        </tooltip-content>
+                    </button>
+                </div>
+            </button>
+        </div>
+
+    </div>
+</div>

@@ -1,0 +1,348 @@
+input[type="file"] {
+  display: none;
+}
+
+.image-upload img {
+  cursor: pointer;
+}
+
+.destop-view {
+  display: none;
+}
+
+.mobile-view {
+  display: block;
+  margin-top: 5rem;
+}
+
+// .species-card > i {
+//   //float: right;
+//   font-size: 2rem;
+// }
+
+.input-file {
+  width: 150px;
+  height: 150px;
+  cursor: var(--cursor);
+}
+
+@media (min-width: 992px) {
+  .destop-view {
+    display: block;
+  }
+
+  .mobile-view {
+    display: none;
+  }
+}
+hr.horizontalLine {
+  border-top: 1px solid #aeaeae;
+  margin: 1rem 0rem;
+}
+.profileImg {
+  max-width: 150px;
+  max-height: 150px;
+}
+
+.profile-mobile {
+  margin-left: 35%;
+}
+
+.profile-destop {
+  margin-left: 10%;
+}
+
+.upload-image > ion-icon {
+  font-size: var(--size-icon-40);
+  cursor: var(--cursor);
+}
+
+.container {
+  margin-top: 2rem;
+  width: 150px;
+  height: 150px;
+  border: 1px solid var(--ion-color-medium-tint);
+  position: relative;
+  border-radius: 5px;
+  padding-right: 0px !important;
+  padding-left: 0px !important;
+  text-align: -webkit-center !important;
+}
+
+.text {
+  color: #000;
+  font-size: 26px;
+}
+
+.text > label > i {
+  cursor: pointer;
+}
+
+.image {
+  opacity: 1;
+  display: block;
+  width: 100%;
+  height: 100%;
+  border-radius: 4px;
+}
+
+.middle {
+  transition: 0.5s ease;
+  opacity: 0;
+  position: absolute;
+  top: 50%;
+  left: 45%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  -ms-transform: translate(-50%, -50%);
+  text-align: center;
+}
+.editButon {
+  width: 45%;
+  margin-left: 3%;
+}
+
+#speciesList {
+  text-align: center !important;
+}
+@media (max-width: 480px) {
+  #speciesList {
+    text-align: center !important;
+  }
+  // .species-card {
+  //   width: 50%;
+  //   margin: auto;
+  //   // margin-bottom: 10px;
+  // }
+  .pl-1 {
+    margin: 5px 0;
+  }
+}
+/*
+*mobiles landscape view species cards alignment
+*/
+@media (min-width: 480px) and (max-width: 955px) {
+  #speciesList {
+    text-align: center !important;
+  }
+  // .species-card {
+  //   width: 75%;
+  //   margin: auto;
+  //   // margin-bottom: 10px;
+  // }
+  .pl-1 {
+    margin: 5px 0;
+  }
+}
+/*
+  *ipad landscape, ipad pro and ,all large screen view responsive
+*/
+@media screen and (min-width: 1024px) {
+  .content-card {
+    padding-left: 50px;
+  }
+  .profile-form {
+    padding-left: 0 !important;
+  }
+  .pl-1 {
+    margin: 5px 0;
+  }
+  #speciesList {
+    max-width: 33%;
+    text-align: center !important;
+    // .species-card{
+    //   float: none;
+    //   text-align: center !important;
+    //   display: inline-block;
+    //   margin: 0 auto;
+    // }
+  }
+}
+
+// .species-card {
+//   width: 6rem;
+//   height: 7rem;
+// }
+// .navigation-card {
+//   width: 2rem;
+//   height: 7rem;
+// }
+// .iconSize {
+//   font-size: 1.5rem;
+// }
+
+// @media (max-width: 762px) {
+//   .species-card {
+//     width: 3.5rem;
+//     height: 4.5rem;
+//     margin: 0.7rem 0px 0px 1rem !important;
+//     & ion-card-content {
+//       padding-top: 1rem !important;
+//     }
+//   }
+//   .navigation-card {
+//     width: 2rem;
+//     height: 4.5rem;
+//     & ion-icon {
+//       font-size: 30px;
+//       margin-top: 3vh;
+//     }
+//   }
+// }
+
+// @media (width: 768px) {
+//   .navigation-card > ion-icon {
+//     font-size: 30px;
+//     margin-top: 4vh !important;
+//   }
+// }
+// @media (min-width: 768px) and (max-width: 1023px) {
+//   .species-card {
+//     cursor: pointer;
+//     margin-top: 0.5rem;
+//   }
+// }
+// @media (min-width: 1024px) and (max-width: 1365px) {
+//   .species-card {
+//     width: 5rem;
+//     height: 7rem;
+//   }
+//   .navigation-card {
+//     width: 2rem;
+//     height: 6.8rem;
+//     & ion-icon {
+//       font-size: 30px;
+//       margin-top: 3vh !important;
+//     }
+//   }
+// }
+
+.more-icon {
+  font-size: var(--size-icon-20);
+}
+// .container:hover .image {
+//   opacity: 0.1;
+// }
+
+// .container:hover .middle {
+//   opacity: 1;
+// }
+
+.text {
+  color: #000;
+  font-size: 26px;
+}
+.text > label > i {
+  cursor: pointer;
+}
+.select-dropdown {
+  border: 1px solid #dde1e6 !important;
+  background: var(--white-background) !important;
+  padding: 7px !important;
+}
+
+.showMore-card {
+  width: 2vw;
+  height: 16vh;
+  cursor: var(--cursor);
+}
+.showMore-card > ion-icon {
+  font-size: 30px;
+  padding-top: 2rem;
+  cursor: var(--cursor);
+}
+.toggle-align {
+  padding: var(--size-p2) var(--size-pr1);
+}
+.active {
+  background: var(--ion-color-secondary);
+  color: var(--white-background);
+}
+.active > img {
+  color: var(--white-background);
+}
+.species-card {
+  cursor: pointer;
+  // margin-top: 0.5rem;
+}
+.species-card > i {
+  float: right;
+}
+
+//new scss
+
+.species-img {
+  width: 80%;
+  padding: 5px;
+  height: 10vh;
+}
+.create-btn {
+  width: 25%;
+}
+
+.iconSize {
+  font-size: 1.5rem;
+  line-height: 0.8 !important;
+}
+
+.tick-icon {
+  float: left !important;
+  padding: 12px;
+  font-size: 20px;
+}
+
+@media (max-width: 762px) {
+  // .species-card {
+  //   width: 3.5rem;
+  //   height: 4.5rem;
+  //   & ion-card-content {
+  //     padding-top: 1rem !important;
+  //   }
+  // }
+  // .navigation-card {
+  //   width: 2rem;
+  //   height: 4.5rem;
+  //   & ion-icon {
+  //     font-size: 30px;
+  //     margin-top: 3vh;
+  //   }
+  // }
+  .tick-icon {
+    float: left !important;
+    padding: 5px;
+  }
+}
+
+// @media (min-width: 762px) {
+// .species-card {
+//   & ion-card-content {
+//     padding-top: 3.5rem;
+//   }
+// }
+// .navigation-card {
+//   width: 2rem;
+//   height: 6.8rem;
+//   & ion-icon {
+//     font-size: 30px;
+//     margin-top: 5vh;
+//   }
+// }
+// }
+// page header alignment //
+@media only screen and (min-device-width: 320px) and (max-device-width: 900px) and (orientation: portrait) {
+  .page-header {
+    margin-top: 0rem !important;
+  }
+  .content-card {
+    padding: 1.875rem 1.875rem 1.875rem 1.875rem !important;
+  }
+}
+
+@media only screen and (min-device-width: 320px) and (max-device-width: 960px) and (orientation: landscape) {
+  .page-header {
+    margin-top: 0rem !important;
+  }
+  .content-card {
+    padding: 1.875rem 1.875rem 1.875rem 1.875rem !important;
+  }
+}

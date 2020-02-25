@@ -1,0 +1,23 @@
+<accordion [closeOthers]=!hideIndividualCheckBoxCondition>
+    <accordion-group *ngIf="firstHeading" [heading]="firstHeading" [isOpen]="true" [isDisabled]="agreeAllDecelerationsCondition && !elementControl.value">
+        <text-area customFlag="true" textareaClass="declarationTextarea" [displayValue]="importantNotice" [disabledFlag]="true"></text-area>
+        <check-box [changeId]="changeId" checkBoxClass="declarationCheckbox" [formControl]="secondaryFormName" [class.hide]="hideIndividualCheckBoxCondition" itemLabel=" {{'NCPLabel.iReadAndUnderstoodTheImportantNotice' | translate}}" elementId="importantnotice" alignment="right" ngDefaultControl>
+        </check-box>
+    </accordion-group>
+    <accordion-group *ngIf="secondHeading" [heading]="secondHeading" [isOpen]="hideIndividualCheckBoxCondition || secondaryFormName.value" [isDisabled]="!secondaryFormName.value">
+        <text-area customFlag="true" textareaClass="declarationTextarea" [displayValue]="warrantyAndDeclaration" [disabledFlag]="true"></text-area>
+        <check-box [changeId]="changeId" checkBoxClass="declarationCheckbox" [formControl]="thirdElementForm" [class.hide]="hideIndividualCheckBoxCondition" itemLabel=" {{'NCPLabel.iAgree' | translate}}" elementId="warranty&Declaration" alignment="right" ngDefaultControl>
+        </check-box>
+    </accordion-group>
+
+    <accordion-group *ngIf="thirdHeading" [heading]="thirdHeading" [isOpen]="hideIndividualCheckBoxCondition || thirdElementForm.value" [isDisabled]="!thirdElementForm.value">
+        <text-area customFlag="true" textareaClass="declarationTextarea" [displayValue]="personalDataProtectionActStatement" [disabledFlag]="true"></text-area>
+        <check-box [changeId]="changeId" checkBoxClass="declarationCheckbox" [formControl]="fourthElementForm" [class.hide]="hideIndividualCheckBoxCondition" itemLabel="NCPLabel.iAgree" elementId="personalinfostatement" alignment="right" ngDefaultControl>
+        </check-box>
+    </accordion-group>
+
+    <div class="agreeAllContainer">
+        <check-box *ngIf="agreeAllDecelerationsCondition" checkBoxClass="declarationCheckbox" [formControl]="elementControl" itemLabel="{{'NCPLabel.agreeAllNoticeAndDeclerations' | translate}}" elementId="isAllDeclerationsEnabled" checkBoxClass="checkboxContainer" alignment="right" ngDefaultControl>
+        </check-box>
+</div>
+</accordion>

@@ -1,0 +1,38 @@
+<section class="p-xs-0">
+
+    <div *ngFor="let product of products">
+        <div class="row mlr0-i">
+            <div class="b2c-banner-img ht">
+                <div class="col-md-12 col-sm-12 col-xs-12 pt15">
+                    <misc-h2 label="{{product.mainProductName}}" iconClass="fa fa-sun-o" miscClass="text-truncate w90p mt0 pull-left"></misc-h2>
+
+                    <!--<div class="mb10">
+                        <span class="fs25 fs-xs-20 theme-color"><i class="fa fa-sun-o mr10"></i></span><span class="fs25">{{product.mainProductName | translate}}</span>
+                    </div>-->
+                    <div class="col-md-12 col-sm-12 col-xs-12 p0">
+                        <p class="w100p pull-left">{{product.mainProductDesc | translate}}</p>
+                        <button-field buttonType="custom" buttonName="NCPBtn.getQuote" buttonClass="ncpbtn-large" (click)="getQuote(product.code)"
+                            iconClass="fa fa-paper-plane-o"></button-field>
+                        <a class="anchor-link mt10 w100p" (click)="gotoProductDetails(product.code)">{{'NCPLabel.findoutmore'| translate}}</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row mlr0-i">
+            <div *ngFor="let prod of product.products" class="col-md-4 col-sm-6 col-xs-12 pl0">
+                <div class="prodBox b0 pull-left">
+                    <misc-h2 label="{{prod.name}}" miscClass="text-truncate w90p mt0 pull-left"></misc-h2>
+                    <div class="col-md-12 col-sm-12 col-xs-12 p0">
+                        <p class="theme-color w100p pull-left">{{prod.description | translate}}</p>
+                        <button-field buttonType="custom" buttonName="NCPBtn.getQuote" buttonClass="ncpbtn-large pull-left" (click)="getQuote(prod.code)"
+                            iconClass="fa fa-paper-plane-o"></button-field>
+                      <!--  <a class="anchor-link col-md-5 col-sm-5 col-xs-5 pull-right mt10 pr0 text-right" (click)="gotoProductDetails(product.code)">{{'NCPLabel.findoutmore'| translate}}</a>-->
+                    </div>
+                </div>
+            </div>
+
+
+        </div>
+    </div>
+</section>

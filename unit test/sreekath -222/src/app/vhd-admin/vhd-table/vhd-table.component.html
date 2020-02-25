@@ -1,0 +1,127 @@
+<div *ngIf="contents?.length === 0">
+  <h3 class="pl-3 no-appts">No {{header.col1}} present</h3>
+</div>
+
+<div *ngIf="contents?.length > 0" class="desktop-version">
+  <div class="table-responsive  table-striped">
+    <table class="table mtable">
+      <thead class="header">
+        <tr>
+          <th># {{header.col1}}</th>
+          <th *ngIf="type === 'vets'">Username</th>
+          <th *ngIf="type === 'customers'">Contact</th>
+          <th class="pl-4">{{header.col3}}</th>
+          <!-- <th *ngIf="type === 'vets'">Active</th> -->
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody class="tablebody">
+        <tr *ngFor="let data of contents">
+          <td title={{data.name}}>
+            <img class="profile" src="{{data.imgUrl}}" alt="" />
+            {{data.name}}</td>
+          <td *ngIf="type === 'customers'">
+            <p class="mb-0 emailstyle elipsis" title={{data.email}}>{{data.email}}</p>
+            <p class="mb-0 mobilestyle elipsis" title={{data.mobile}}>{{data.mobile}}</p>
+          </td>
+          <td *ngIf="type === 'vets'">
+            {{data.userName}}
+          </td>
+          <td class="petsImages" *ngIf="data.pets.length !== 0">
+            <ion-icon class="nextOrPrevious" name="arrow-dropleft" [ngClass]="{ 'isVisible': data.start === 0 }"
+              (click)="onPrevious(data.id)"></ion-icon>
+            <span *ngIf="type === 'vets'">
+              <em title={{pets.species.speciesName}} *ngFor="let pets of data.images; let i = index"
+                class="{{pets.species.iconName}} speciesIcon"></em>
+            </span>
+            <span *ngIf="type === 'customers'">
+              <img *ngFor="let pets of data.images; let i = index" class="profile editOrDelete" title={{pets.petName}}
+                src="{{pets.imgUrl}}" alt="" (click)="editPet(pets, 'edit')" />
+            </span>
+            <ion-icon class="nextOrPrevious" [ngClass]="{ 'isVisible': data.end >= data.pets?.length }"
+            name="arrow-dropright" (click)="onNext(data.id)"></ion-icon>
+          </td>
+          <td class="petsImages" *ngIf="data.pets.length === 0">
+            <p *ngIf="type === 'vets'" class="mb-o ml-3">
+              No species maped
+            </p>
+            <p *ngIf="type === 'customers'" class="mb-o ml-3">
+              No pets found
+            </p>
+          </td>
+          <!-- <td *ngIf="type === 'vets'">
+            <ion-toggle (click)="delete(data)" mode="md" class="toggle-align" [(ngModel)]="data.active"></ion-toggle>
+          </td> -->
+          <td>
+            <!-- <ion-icon class="p-1 rounded-circle popover-ham" name="more"></ion-icon> -->
+            <em class="fal fa-edit editOrDelete h5 pr-1" title="Edit" (click)="edit(data, 'edit')"></em>
+            <em *ngIf="type === 'vets'" class="far fa-trash-alt editOrDelete"
+            (click)="delete(data)" title="Delete"></em>
+            <em *ngIf="type === 'customers'" class="far fa-plus-circle editOrDelete h5" (click)="editPet(data, 'add')"
+              title="Add pet"></em>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+<app-edit-vet *ngIf="selectedVetData" [vetInfo]="selectedVetData" [flag]="addOrEditVet" (vetDataEmit)="update()">
+</app-edit-vet>
+<app-edit-pet-owner *ngIf="selectedPetOwnerData" [selectedPetOwnerData]="selectedPetOwnerData"
+  (petOwnerDataEmit)="update()"></app-edit-pet-owner>
+<app-edit-pet *ngIf="petInfo" [petInfo]="petInfo" [flag]="addOrEditPet" (petDataEmit)="update()"></app-edit-pet>
+<!-- mobile responsive table -->
+<div class="hide-under-mob">
+  <ion-grid>
+    <ion-row class="w-100">
+      <ion-col class="ion-align-self-center" size="12">
+        <ion-card *ngFor="let data of contents">
+          <ion-card-content>
+            <ion-item lines="none">
+              <ion-label class="placingcontents">
+                <span class="float-right">
+                  <!-- <ion-toggle *ngIf="type === 'vets'" (click)="delete(data)" mode="md" class="toggle-align p-1"
+                    [(ngModel)]="data.active"></ion-toggle> -->
+                  <em class="fal fa-edit pr-1 editOrDelete" title="Edit" (click)="edit(data, 'edit')"></em>
+                  <em *ngIf="type === 'vets'" class="far fa-trash-alt editOrDelete"
+                  (click)="delete(data)" title="Delete"></em>
+
+                  <em *ngIf="type === 'customers'" class="far fa-plus-circle editOrDelete"
+                    (click)="editPet(data, 'add')" title="Add pet"></em>
+                </span>
+                <div class="row pb-3">
+                <img class="profileIpad col-md-4 rounded-circle" src="{{data.imgUrl}}" alt="" />
+                <div class="col-md-8">
+                  <ion-label>{{data.name}}</ion-label>
+                  <ion-label *ngIf="type === 'customers'">{{data.email}}</ion-label>
+                  <ion-label *ngIf="type === 'customers'">{{data.mobile}}</ion-label>
+                  <ion-label *ngIf="type === 'vets'">{{data.userName}}</ion-label>
+                </div>
+              </div>
+                <ion-row>
+                  <ion-col size="1.5">
+                    <ion-icon *ngIf="data.start !== 0" class="nextOrPrevious" name="arrow-dropleft"
+                      (click)="onPrevious(data.id)"></ion-icon>
+                  </ion-col>
+                  <ion-col size="2" *ngFor="let pets of data.images; let i = index">
+                    <span *ngIf="type === 'vets'">
+                      <i title={{pets.species.speciesName}} class="{{pets.species.iconName}} speciesIcon"></i>
+                    </span>
+                    <span *ngIf="type === 'customers'">
+                      <img class="profile rounded-circle" title={{pets.petName}} src="{{pets.imgUrl}}" alt="" 
+                      (click)="editPet(pets, 'edit')"/>
+                    </span>
+                  </ion-col>
+                  <ion-col size="1.5">
+                    <ion-icon *ngIf="data.end < data.pets.length" class="nextOrPrevious" name="arrow-dropright"
+                      (click)="onNext(data.id)"></ion-icon>
+                  </ion-col>
+                </ion-row>
+              </ion-label>
+            </ion-item>
+          </ion-card-content>
+        </ion-card>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+</div>

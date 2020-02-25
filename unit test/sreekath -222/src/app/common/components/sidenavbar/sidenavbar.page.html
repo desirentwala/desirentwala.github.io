@@ -1,0 +1,47 @@
+<nav role='navigation' class="mobile">
+  <div id="menuToggle">
+    <input type="checkbox" [(ngModel)]="toggle" />
+
+    <span class="hamburger"></span>
+    <span class="hamburger"></span>
+    <span class="hamburger"></span>
+
+    <ul id="menu">
+      <li *ngFor="let route of routeList; let ind = index" class="cursor">
+        <a aria-expanded="false" (click)="selecteByRoute(route, ind)">
+          <div [class.active]="activeIndex === ind" class="demo-solution demo-solution--flexbox p-3">
+            <!-- <img class="icons" src='../../../assets/images/side nav/{{ route.icon }}.svg' alt="image" /> -->
+            <i class="{{route.icon}} nav-icons"></i>
+            <span class="pl-3" [class.titles]="activeIndex === ind">{{ route.title }}</span>
+          </div>
+        </a>
+      </li>
+      <div class="logout">
+        <li class="sidebar-header cursor">
+          <!--  images for hide and show -->
+          <a aria-expanded="false" (click)="navigateToProfile()">
+            <div class="demo-solution demo-solution--flexbox p-3">
+              <div *ngIf="userProfile?.profilePic">
+                <img src="{{basePath}}storage/download/{{userProfile.profilePic}}?d={{randomNum}}" alt=""
+                  class="image--cover icon" />
+              </div>
+              <div *ngIf="!userProfile?.profilePic">
+                <img src="../../../../assets/user-avatar.svg" alt="" class="image--cover icon" />
+              </div>
+              <span class="userName pl-3">{{userName}}</span>
+            </div>
+          </a>
+        </li>
+        <li class="sidebar-header cursor">
+          <!--  images for hide and show -->
+          <a aria-expanded="false" (click)="logout()">
+            <div class="demo-solution demo-solution--flexbox p-3">
+              <i class="fal fa-sign-out nav-icons"></i>
+              <span class="pl-3">Logout</span>
+            </div>
+          </a>
+        </li>
+      </div>
+    </ul>
+  </div>
+</nav>

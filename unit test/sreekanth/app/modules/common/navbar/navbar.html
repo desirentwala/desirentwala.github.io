@@ -1,0 +1,16 @@
+<nav *ngIf="shared.doShowElement('showNavbar')" class="navbar navbar-default">
+	<div class="header-holder">
+		<div class="row rowWithNoMarginBottom">
+			<ncp-header></ncp-header>
+			<div *ngIf="!adminFlag">
+				<ncp-search *ngIf="shared.doShowElement('showSearch')"></ncp-search>
+			</div>	
+			<div class="hidden-xs">
+				<span *ngIf="!adminFlag">
+						<ncp-dataSync></ncp-dataSync>
+				</span>
+				<ncp-usernotification *ngIf="shared.doShowElement('showNotification')"></ncp-usernotification>
+			</div>
+		</div>
+	</div>
+</nav>

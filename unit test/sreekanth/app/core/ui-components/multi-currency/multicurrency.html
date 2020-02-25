@@ -1,0 +1,31 @@
+<div [id]="elementId" *ngIf="!customFlag" class="col-md-5 col-sm-6 col-xs-11 pr-sm-0">
+    <div class="col-md-9 col-xs-9 col-sm-9 pr10 pl0 pr-sm-10 pr-xs-9 contactAlignRTL">
+        <drop-down [elementId]="elementId" [formControl]="elementControl" [placeHolder]="placeHolder" [dropdownItems]="dropdownItems" pickListFlag="false" [noFilter]="'false'" [hideArrowFlag]="hideArrowFlag" [showCodeFlag]="showCodeFlag" [elementValue]="elementControl.value"
+            (click)="changeValue()" class="contact-no" displayOnClick=true [isCodeDesc]=true [descControl]="secondaryFormName" customFlag=true>
+        </drop-down>
+    </div>
+    <div class="col-md-3 col-xs-3 col-sm-3 no-pad">
+        <input [ngClass]="'notAllowed'" class="form-control text-center" readonly [value]="rate" id="elementID" [formControl]="thirdFormName" ngDefaultControl>
+    </div>
+</div>
+
+<div [id]="elementId" *ngIf="customFlag" class="col-md-12 col-sm-6 col-xs-11 pr-sm-0 custom-newcurrency">
+    <div class="col-md-9 col-xs-9 col-sm-9 pr10 pl0 pr-sm-10 pr-xs-9 contactAlignRTL">
+        <drop-down [elementId]="elementId" [formControl]="elementControl" [placeHolder]="placeHolder" [dropdownItems]="dropdownItems" pickListFlag="false" [noFilter]="'false'" [hideArrowFlag]="hideArrowFlag" [showCodeFlag]="showCodeFlag" [elementValue]="elementControl.value"
+            (click)="changeValue()" class="contact-no" displayOnClick=true [isCodeDesc]=true [descControl]="secondaryFormName" customFlag=true>
+        </drop-down>
+    </div>
+    <div class="col-md-3 col-xs-3 col-sm-3 no-pad">
+        <input [ngClass]="'notAllowed'" class="form-control text-center" readonly [value]="rate" id="elementID" [formControl]="thirdFormName" ngDefaultControl>
+    </div>
+</div>
+
+<div *ngIf="tooltipTitle" class="col-sm-1 col-md-1 col-xs-1 tooltip-align tooltip-mobile3">
+    <button *ngIf="tooltipTitle" type="button" class="btn btn-link info-tooltip" data-toggle="toggle" [tooltipPlacement]="tooltipPlacement" [tooltip]="tooltipHTML" [id]="elementId">
+      <i class="icon-tooltip" [id]="elementId"></i>
+      <tooltip-content #tooltipHTML [excludeId]="elementId">
+                  <div [innerHTML]="tooltipTitle"> </div>
+            </tooltip-content>
+          </button>
+
+</div>

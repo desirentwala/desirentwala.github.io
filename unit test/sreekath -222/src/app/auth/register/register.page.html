@@ -1,0 +1,142 @@
+<!-- <ion-toolbar class="top-header"></ion-toolbar> -->
+<ion-content class="disable-background">
+  <ion-card class="ion-padding register-card">
+    <div class="signUpLogo">
+      <i class="fa fa-times float-right fa-1x" (click)="onCloseSignup()" style="cursor: pointer;"></i>
+      <img src="./assets/imgs/logo.png" alt="Logo">
+    </div>
+    <hr class="horizontalLine">
+    <div class="mx-auto text-center">
+      <h1 class="auth-header" *ngIf="this.roleId === 'PO'">Signup for free</h1>
+      <h1 class="auth-header" *ngIf="this.roleId !== 'PO'">Signup</h1>
+      <p class="signupLabel" *ngIf="this.roleId === 'PO'">Register your details to book video consultation appointments
+        with your vet practice.</p>
+    </div>
+
+    <!-- form start -->
+    <form [formGroup]="formData" autocomplete="off">
+
+      <!-- field for First name -->
+      <label>Full name</label><i class="fas fa-asterisk form-asterisk"></i>
+      <input type="text" class="form-control" placeholder="Full name" id="firstName" formControlName="firstName" 
+      minlength="2" maxlength="28" required/>
+      <div class="text-danger" *ngIf="formData.controls.firstName.touched">
+        <div *ngIf="formData.controls.firstName.errors?.required">
+          <small> Name required.</small>
+        </div>
+      </div>
+
+
+      <!-- field for mobile number -->
+      <div class="row">
+        <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
+          <!-- field for Email Id -->
+          <label>Email address</label><i class="fas fa-asterisk form-asterisk"></i>
+          <input type="text" class="form-control" placeholder="Email address" id="email" formControlName="email" preventWhiteSpace
+            autocomplete="false" [attr.disabled]="isDisabled" pattern="^(?!.*\.{2})[a-zA-Z0-9.-_]{1,64}@[a-zA-Z.-]{2,}[.]{1}[a-zA-Z]{2,}"/>
+          <div class="text-danger" *ngIf="formData.controls.email.touched">
+            <div *ngIf="formData.controls.email.errors?.required">
+              <small>Email address required.</small>
+            </div>
+            <div *ngIf="formData.controls.email.errors?.pattern">
+              <small>Invalid email address.</small>
+            </div>
+          </div>
+        </div>
+        <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
+          <!-- <div class="row"> -->
+          <!-- <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4">
+              <label>Code</label>
+              <input type="text" class="form-control" placeholder="+44" id="country_code" maxlength=3
+                formControlName="country_code" pattern='^\+[1-9]{2}$' />
+              <div class="text-danger" *ngIf="formData.controls.country_code.touched">
+                <div *ngIf="formData.controls.country_code.errors?.required">
+                  <small>Code required.</small>
+                </div>
+                <div *ngIf="formData.controls.country_code.errors?.pattern">
+                  <small>Invalid code.</small>
+                </div>
+              </div>
+            </div> 
+            <div class="col-lg-8 col-md-8 col-sm-8 col-xs-8 mobile-no">-->
+          <label>Mobile no.</label><i class="fas fa-asterisk form-asterisk"></i>
+          <input type="text" class="form-control" placeholder="Mobile no" id="mobile" minlength="10" maxlength="11"
+            appPhoneNumber formControlName="mobile" numbersOnly required/>
+            <div class="text-danger" *ngIf="formData.controls.mobile.touched">
+                <div *ngIf="formData.controls.mobile.errors?.required">
+                  <small>Mobile number required.</small>
+                </div>
+              </div>
+          <!-- </div>
+          </div> -->
+        </div>
+      </div>
+
+      <!-- field for Password -->
+      <div class="row">
+        <div class="col-md-6 col-sm-12 col-xs-12">
+          <label>Password</label><i class="fas fa-asterisk form-asterisk"></i>
+          <div class="show-password w-100">
+            <input [type]="passwordShow?'text':'password'" placeholder="Password" class="form-control"
+              pattern='^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])[\w~@#$%^&*+=`|{}:;!.?\"()\[\]-]{8,16}$' minlength="8"
+              maxlength="16" id="password" formControlName="password" autocomplete="off" />
+            <ion-icon class="eye-icon" [name]="passwordShow?'eye':'eye-off'" (click)='changePasswordType()'>
+            </ion-icon>
+          </div>
+          <div class="text-danger" *ngIf="formData.controls.password.touched">
+            <div *ngIf="formData.controls.password.errors?.required">
+              <small>Password required.</small>
+            </div>
+            <div *ngIf="formData.controls.password.errors?.pattern">
+              <small>Min 8 characters, 1 uppercase, 1 lowercase and 1 number.</small>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-6 col-sm-12 col-xs-12">
+          <label>Confirm password</label><i class="fas fa-asterisk form-asterisk"></i>
+          <div class="show-password w-100">
+            <input [type]="confirmPasswordShow ? 'text' : 'password'" placeholder="Confirm password"
+              onpaste="return false" formControlName="confirmpassword" class="form-control" type="password"
+              minlength="8" maxlength="16" autocomplete="new-password" />
+          </div>
+          <div class="text-danger" *ngIf="formData.controls.confirmpassword.touched">
+            <div *ngIf="formData.controls.confirmpassword.errors?.required">
+              <small>Confirm password required.</small>
+            </div>
+            <!-- Error message for matching the password and confirm password -->
+            <div class="text-danger"
+              *ngIf="!formData.get('confirmpassword').hasError('required') && formData.hasError('passwordNotMatch') && (formData.get('confirmpassword').dirty || formData.get('confirmpassword').touched)">
+              <small>Passwords are not matching.</small>
+            </div>
+          </div>
+        </div>
+
+      </div>
+      <div class="privacy-conditions">
+        <div class="d-flex flex-row">
+          <div>
+            <ion-checkbox color="primary" formControlName="privacyPolicy" name="" required></ion-checkbox>
+          </div>
+          <div class="my-auto">
+            <p class="label-p">By signing up, I agree to VetHelpDirect
+              <a target="_blank" href="https://vethelpdirect.com/terms/">Terms of use</a> and
+              <a href="https://vethelpdirect.com/privacy/" target="_blank">Privacy Policy</a>
+            </p>
+          </div>
+        </div>
+      </div>
+      <hr class="horizontalLine">
+      <!-- form submit -->
+      <div class="mt-4 text-right">
+        <!-- || !isValidateCaptcha -->
+
+        <ion-button [disabled]="formData.invalid" (click)="signUpForm()">
+          <p class="pt-3 register" slot="start">Register</p>
+          <i class="far fa-long-arrow-right pl-2"></i>
+          <!-- <ion-icon slot="end" name="arrow-forward"></ion-icon> -->
+          </ion-button>
+      </div>
+    </form>
+    <!-- form ends -->
+  </ion-card>
+</ion-content>

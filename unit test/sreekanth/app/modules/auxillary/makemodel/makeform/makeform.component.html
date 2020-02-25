@@ -1,0 +1,33 @@
+<div [formGroup]="makeMaintenanceFormGroup" class="customer-border">
+    <div *ngIf="isError" class="alert alert-danger">
+        <ul *ngFor="let error of errors">
+            <li>
+                {{error.errCode}} - {{error.errDesc}}
+            </li>
+        </ul>
+    </div>
+    <div class="row rowWithNoMarginBottom">
+        <div class="row">
+            <ncp-label elementLabel="NCPLabel.makeCode" elementId="makeCode" mandatoryFlag="true">
+            </ncp-label>
+            <text-box formControlName="makeCode" ngDefaultControl maxLength="6" acceptPattern="[A-Za-z0-9]"
+                elementLabel="NCPLabel.makeCode">
+            </text-box>
+        </div>
+        <error-handler [elementControl]="makeMaintenanceFormGroup.controls['makeCode']" acceptPattern="[A-Za-z0-9]" maxLength="5" [customMessages]="{required: 'NCPLabelcustomMessages.pleaseEnterMakeCode'}">
+        </error-handler>
+        <div class="row">
+            <ncp-label elementLabel="NCPLabel.makeCodeDescription" elementId="makeCodeDescription" mandatoryFlag="true">
+            </ncp-label>
+            <text-box formControlName="makeCodeDesc" ngDefaultControl maxLength="256" acceptPattern="[A-Za-z0-9]"
+                elementLabel="NCPLabel.makeCodeDescription">
+            </text-box>
+        </div>
+        <error-handler [elementControl]="makeMaintenanceFormGroup.controls['makeCodeDesc']" acceptPattern="[A-Za-z0-9]" maxLength="256" [customMessages]="{required: 'NCPLabelcustomMessages.pleaseEnterMakeDesc'}">
+        </error-handler>
+        <div class="btns-row">
+            <button-field buttonType="custom" buttonName="NCPBtn.submit" buttonClass="ncpbtn-default w100p" [isDisabled]="!makeMaintenanceFormGroup.valid"
+            (click)="doAction($event)" iconClass="fa fa-plus"></button-field>
+        </div>
+    </div>
+</div>

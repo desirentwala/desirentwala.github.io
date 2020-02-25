@@ -1,0 +1,24 @@
+<div [formGroup]="currencyFormGroup" class="customer-border">
+  <div *ngIf="isError" class="alert alert-danger">
+      <ul *ngFor="let error of errors">
+          <li>
+              {{error.errCode}} - {{error.errDesc}}
+          </li>
+      </ul>
+  </div>
+<currencyForm [currencyFormGroup]="currencyFormGroup" (doClick)="doCreateNewCurrency()"></currencyForm>
+<ncp-modal [modalKey]="createCurrency" modalTitle="NCPModalTitle.currencyCreation" modalClass="modal-lg" [hideCloseButton]=true>
+    <modal-content>
+        <div class="row">
+            <div class="col-md-9 col-sm-9 col-xs-8 label-col">
+                <label class="pl0">
+                    <span>{{'NCPLabel.currencyCode' | translate}} {{this.currencyFormGroup.get('currencyCode').value}} {{'NCPLabel.hasbeencreatedsuccessfully' | translate}}</span>
+                </label>
+            </div>
+            <div class="col-md-3 col-sm-3 col-xs-4 pull-right pl-md-0 mb20">
+                <button-field buttonClass="ncp-linkBtn" buttonType="custom" (click)="createCurrency = false; navigateList()" buttonName="NCPBtn.close" iconClass="fa fa-close"></button-field>
+            </div>
+        </div>
+    </modal-content>
+</ncp-modal>
+</div>

@@ -1,0 +1,125 @@
+@import "../../theme/variables.scss";
+
+ion-img {
+  width: 11.25rem !important;
+  height: 3.75rem !important;
+  cursor: pointer;
+}
+.top-header {
+  height: auto;
+}
+.home-content {
+  background-color: #0083b4 !important;
+  position: absolute;
+  height: 100%;
+  width: 105vw;
+}
+.ion-padding {
+  margin-left: 18%;
+  margin-top: 9%;
+  width: 431px;
+}
+@media only screen and (min-device-width: 320px) and (max-device-width: 1365px) and (orientation: landscape) {
+  .home-content {
+    background-color: #0083b4 !important;
+    position: absolute;
+    min-height: 100%;
+    height: auto !important;
+    width: 105vw;
+  }
+}
+.home-header {
+  width: 321px;
+  height: 116px;
+  font-size: 48px;
+  line-height: normal;
+  color: var(--white-background);
+}
+.download {
+  height: 20px;
+  font-size: 16px;
+  margin-top: 4rem;
+  line-height: normal;
+  color: var(--white-background);
+}
+// menu btn media query and css
+.menu-btn {
+  text-align: center;
+}
+@media (max-width: 768px) {
+  .menu-btn {
+    width: fit-content;
+    float: right;
+  }
+}
+@media only screen and (min-device-width: 393px) and (max-device-width: 851px) and (orientation: landscape) and (-webkit-min-device-pixel-ratio: 2.75) {
+  .menu-btn {
+    width: fit-content;
+    float: right;
+  }
+}
+@media only screen and (min-device-width: 869px) and (max-device-width: 412px) and (orientation: landscape) and (-webkit-min-device-pixel-ratio: 2.625) {
+  .menu-btn {
+    width: fit-content;
+    float: right;
+  }
+}
+
+.label {
+  width: 412px !important;
+  height: 48px;
+  font-size: 20px;
+  line-height: normal;
+  letter-spacing: normal;
+  color: #f1f1f1;
+  box-align: " justify";
+}
+@media (min-width: 320px) and (max-width: 1022px) {
+  .lg-nav-menu {
+    display: none;
+  }
+  .sm-nav-menu {
+    display: block;
+    width: fit-content;
+    float: right;
+  }
+  h1 {
+    font-size: 41px;
+  }
+  .ion-padding {
+    margin-left: 6%;
+    margin-top: 13%;
+    width: 332px;
+  }
+  ion-img {
+    width: 7.25rem !important;
+    height: 3.75rem !important;
+    cursor: pointer;
+  }
+}
+@media (min-width: 1023px) {
+  .sm-nav-menu {
+    display: none;
+  }
+  .lg-nav-menu {
+    display: inline-table;
+    margin-left: -1rem;
+  }
+}
+
+.home-nav-item {
+  --background: var(--ion-btn-secondary) !important;
+}
+.white {
+  background-image: none !important;
+}
+
+.home-logo-landing {
+  width: 200px;
+  margin: 10px;
+}
+
+.home-signup {
+  --padding-start: 10px !important;
+  --padding-end: 10px !important;
+}

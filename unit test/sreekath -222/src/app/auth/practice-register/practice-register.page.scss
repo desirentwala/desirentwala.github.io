@@ -1,0 +1,336 @@
+@import "../../../theme/variables.scss";
+
+@mixin bordered($color, $width) {
+  border-bottom: $width solid $color;
+}
+
+@media (min-width: 380px) {
+  register-card {
+    -webkit-margin-start: 5% !important;
+    width: calc(95% - 5%) !important;
+    margin: 0;
+    // position: absolute;
+    // -ms-transform: translateY(-50%);
+    // transform: translateY(-50%);
+  }
+}
+register-card {
+  -webkit-margin-start: 5% !important;
+  width: calc(95% - 5%) !important;
+  font-family: var(--ion-default-font);
+  font-weight: bold;
+  font-stretch: normal;
+  font-style: normal;
+  line-height: normal;
+  letter-spacing: normal;
+}
+hr.horizontalLine {
+  border-top: 1px solid #aeaeae;
+  margin: 20px 0rem;
+}
+.signupLabel {
+  font-size: 11px;
+  color: cadetblue !important;
+}
+.signUpLogo {
+  img {
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    width: 50%;
+  }
+}
+
+// .sign-up-for-free {
+//   font-size: 26px;
+//   color: var(--ion-color-medium-shade);
+//   text-align: center;
+//   margin-top: -4px;
+//   margin-bottom: 0px;
+// }
+label {
+  font-family: var(--ion-default-font);
+  font-size: 14px;
+  color: var(--ion-color-dark);
+}
+#country_code {
+  padding: 5px;
+}
+
+.privacy-conditions {
+  margin-top: 15px;
+  ion-label {
+    margin-left: 10px;
+  }
+}
+
+.register {
+  color: var(--white-background);
+  font-family: var(--ion-default-font);
+}
+
+@media (min-width: 480px) and (max-width: 900px) {
+  .register-card {
+    -webkit-margin-start: 5% !important;
+    width: calc(95% - 5%) !important;
+    margin: 0;
+    position: absolute;
+    // top: 50%;
+    // -ms-transform: translateY(-50%);
+    // transform: translateY(-50%);
+  }
+}
+
+@media (min-width: 768px) {
+  .mobile-no {
+    padding-left: 0px;
+  }
+}
+@media only screen and (min-device-width: 1024px) and (max-device-width: 1366px) and (orientation: landscape) and (-webkit-min-device-pixel-ratio: 2) {
+  .register-card {
+    -webkit-margin-start: 18% !important;
+    width: calc(100% - 35%) !important;
+  }
+}
+
+@media (min-width: 1367px) {
+  .register-card {
+    -webkit-margin-start: 33% !important;
+    width: calc(100% - 64%) !important;
+  }
+}
+@media (width: 1024px) {
+  .register-card {
+    -webkit-margin-start: 15% !important;
+    width: calc(100% - 30%) !important;
+  }
+}
+
+/* species card style */
+.container {
+  width: 14.8vw;
+  height: 126px;
+  border: 1px solid var(--ion-color-medium-tint);
+  position: relative;
+  border-radius: 5px;
+  padding-right: 0px !important;
+  padding-left: 0px !important;
+  text-align: -webkit-center !important;
+}
+.upload-image > ion-icon {
+  font-size: var(--size-icon-40);
+  cursor: var(--cursor);
+}
+
+.input-file {
+  width: 14.8vw;
+  height: 126px;
+  padding-top: 0px;
+}
+
+@media (max-width: 762px) {
+  .container {
+    width: 50vw;
+    & .input-file {
+      width: 50vw;
+      padding-top: 0px;
+    }
+  }
+}
+
+@media (width: 768px) {
+  .container {
+    width: 25vw !important;
+  }
+}
+
+.label-top {
+  padding-top: 0.78rem;
+}
+// @media (width: 1024px) {
+//   .container {
+//     width: 45vw !important;
+//   }
+// }
+
+.image {
+  opacity: 1;
+  display: block;
+  width: 100%;
+  height: auto;
+  -webkit-transition: 0.5s ease;
+  transition: 0.5s ease;
+  -webkit-backface-visibility: hidden;
+  backface-visibility: hidden;
+  border-radius: 4px;
+  width: 100%;
+  height: -webkit-fill-available;
+}
+.middle {
+  transition: 0.5s ease;
+  opacity: 0;
+  position: absolute;
+  top: 50%;
+  left: 45%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  -ms-transform: translate(-50%, -50%);
+  text-align: center;
+}
+
+.species-img {
+  width: 80%;
+  padding: 5px;
+  height: 10vh;
+}
+
+// .species-card {
+//   width: 5rem !important;
+//   // height: 5rem;
+// }
+// .navigation-card {
+//   width: 2rem;
+//   height: 5rem;
+// }
+// .iconSize {
+//   font-size: 1.5rem;
+// }
+
+// @media (max-width: 762px) {
+//   .species-card {
+//     width: 3.5rem;
+//     height: 4.5rem;
+//     & ion-card-content {
+//       padding-top: 1rem !important;
+//     }
+//   }
+//   .navigation-card {
+//     width: 2rem;
+//     height: 4.5rem;
+//     & ion-icon {
+//       font-size: 30px;
+//       margin-top: 3vh;
+//     }
+//   }
+// }
+
+// @media (width: 768px) {
+//   .navigation-card > ion-icon {
+//     font-size: 30px;
+//     margin-top: 4vh;
+//   }
+// }
+
+.more-icon {
+  font-size: var(--size-icon-20);
+}
+// .container:hover .image {
+//   opacity: 0.1;
+// }
+
+// .container:hover .middle {
+//   opacity: 1;
+// }
+
+.text {
+  color: #000;
+  font-size: 26px;
+}
+.text > label > i {
+  cursor: pointer;
+}
+.select-dropdown {
+  border: 1px solid #dde1e6 !important;
+  background: var(--white-background) !important;
+  padding: 7px !important;
+}
+
+.showMore-card {
+  width: 2vw;
+  height: 16vh;
+  cursor: var(--cursor);
+}
+.showMore-card > ion-icon {
+  font-size: 30px;
+  padding-top: 2rem;
+  cursor: var(--cursor);
+}
+.toggle-align {
+  padding: var(--size-p2) var(--size-pr1);
+}
+.active {
+  background: var(--ion-color-secondary);
+  color: var(--white-background);
+}
+.active > img {
+  color: var(--white-background);
+}
+.species-card {
+  cursor: pointer;
+}
+.species-card > i {
+  float: right;
+}
+
+//new scss
+
+.species-img {
+  width: 80%;
+  padding: 5px;
+  height: 10vh;
+}
+.create-btn {
+  width: 25%;
+}
+
+.iconSize {
+  font-size: 1.5rem;
+}
+
+.tick-icon {
+  float: left !important;
+  padding: 12px;
+  font-size: 20px;
+}
+
+@media (max-width: 762px) {
+  // .species-card {
+  //   width: 3.5rem;
+  //   height: 4.5rem;
+  //   & ion-card-content {
+  //     padding-top: 1rem !important;
+  //   }
+  // }
+  // .navigation-card {
+  //   width: 2rem;
+  //   height: 4.5rem;
+  //   & ion-icon {
+  //     font-size: 30px;
+  //     margin-top: 3vh;
+  //   }
+  // }
+  .tick-icon {
+    float: left !important;
+    padding: 5px;
+  }
+}
+
+// @media (min-width: 762px) {
+//   .species-card {
+//     & ion-card-content {
+//       padding-top: 2rem;
+//     }
+//   }
+//   .navigation-card {
+//     width: 1.5rem !important;
+//     height: 5.3rem;
+//     & ion-icon {
+//       font-size: 30px;
+//       margin-top: 1.6rem;
+//     }
+//   }
+// }
+
+input[type="file"] {
+  display: none;
+}

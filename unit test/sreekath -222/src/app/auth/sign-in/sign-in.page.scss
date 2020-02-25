@@ -1,0 +1,122 @@
+@import '../../../theme/variables.scss';
+
+.remember-me{
+  padding-left: 0px;
+}
+@media (min-width: 563px) and (max-width: 823px){
+  .sign-in-card {
+    -webkit-margin-start: 3% !important;
+    width: calc(95% - 5%) !important;
+    margin: 0;
+    position: absolute;
+    top: 50% !important;
+    -ms-transform: translateY(-50%);
+    transform: translateY(-50%);
+    .forgot-password{
+      text-align: right;
+    }
+  }
+}
+@media (min-width: 480px) {
+  .sign-in-card {
+    -webkit-margin-start: 3% !important;
+    width: calc(95% - 5%) !important;
+    margin: 0;
+    position: absolute;
+    top: 50%;
+    -ms-transform: translateY(-50%);
+    transform: translateY(-50%);
+
+    .forgot-password{
+      text-align: right;
+    }
+  }
+}
+@media (max-width: 480px) {
+  .sign-in-card {
+    -webkit-margin-start: 1% !important;
+    width: calc(95% - 5%) !important;
+    margin: 0;
+    position: absolute;
+    top: 50%;
+    -ms-transform: translateY(-50%);
+    transform: translateY(-50%);
+    .forgot-password{
+      margin-top: 16px;
+      text-align: center;
+    }
+  }
+}
+@media (max-width: 320px) {
+  .sign-in-card {
+    -webkit-margin-start: 0% !important;
+    width: calc(95% - 5%) !important;
+    margin: 0;
+    position: absolute;
+    top: 50%;
+    -ms-transform: translateY(-50%);
+    transform: translateY(-50%);
+  }
+}
+  
+  .sign-in-card {
+    width: calc(95% - 5%) !important;
+    font-family: var(--ion-default-font);
+    font-weight: bold;
+    font-stretch: normal;
+    font-style: normal;
+    line-height: normal;
+    letter-spacing: normal;
+    padding: 30px 32px 30px 32px;
+
+    hr.horizontalLine {
+      border-top: 1px solid #aeaeae;
+      margin: 20px 0rem;
+    }
+      .signUpLogo{
+        img{
+          display: block;
+          margin-left: auto;
+          margin-right: auto;
+          width: 50%;
+          
+        }
+        }
+    // .sign-in{
+    //     font-size: 22px;
+    //     color: var(--ion-color-medium-shade);
+    //     text-align: center;
+    // }
+    label{
+        font-family: var(--ion-default-font);
+        font-size: 14px;
+        color: var(--ion-color-dark);
+      }
+    
+      .sign-in-button{
+        border-radius: 3px;
+        background-color: var(--ion-color-primary);
+        font-size: 16px;
+        color: var(--ion-color-primary-contrast);
+        width: 110px;
+      }
+  }
+
+  @media (min-width: 1025px) {
+    .sign-in-card {
+      -webkit-margin-start: 33% !important;
+      width: calc(100% - 64%) !important;
+    }
+  }
+/* Landscape */
+@media only screen 
+  and (max-device-width: 1023px) 
+  and (max-device-height: 767px) 
+  and (orientation: landscape) {
+    .sign-in-card{
+      top: 5% !important;
+      -ms-transform: none !important;
+      transform: none !important;
+    }
+}  
+

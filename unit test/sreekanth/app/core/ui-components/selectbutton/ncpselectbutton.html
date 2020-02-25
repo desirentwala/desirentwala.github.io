@@ -1,0 +1,70 @@
+<div *ngIf="!customFlag">
+    <div class="col-md-5 col-sm-6 col-xs-11 pr-sm-0" [id]="elementId">
+        <div class="{{readOnlyFlag ? 'customDisabled' :' '}} radio-group">
+            <ng-template ngFor let-wrapper [ngForOf]="optionsWrapper">
+                <div [ngClass]="'ui-selectbutton ui-buttonset ui-widget ui-corner-all ui-buttonset-' + options?.length" (mouseleave)="hoveredItem=null"
+                    [ngStyle]="style" [class]="styleClass" [formControl]="elementControl" ngDefaultControl>
+                    <div *ngFor="let option of wrapper;" [class]="selectButtonClass" class="ui-button ui-widget ui-state-default ui-button-text-only col-xs-4 col-md-4 col-sm-4"
+                        [ngClass]="{'ui-state-hover': (hoveredItem==option)&&!disabled,'ui-state-active':isSelected(option), 'ui-state-disabled':disabled}"
+                        (mouseenter)="hoveredItem=option" (click)="onItemClick($event,option)">
+                        <span [ngClass]="readOnlyFlag? 'notAllowed' :' '" class="ui-button-text ui-c col-xs-12 col-md-12 col-sm-12">
+                            <i *ngIf="iconClass" ngClass="{{iconClass}} iconSelectBtn"></i>
+                            <span class="labelSelectBtn"> {{option.label | translate}}</span>
+                        </span>
+                    </div>
+                </div>
+            </ng-template>
+        </div>
+    </div>
+</div>
+<div *ngIf="customFlag">
+    <div ngClass="{{wrapperClass ? wrapperClass : 'col-md-5 col-sm-6 col-xs-11 pr-sm-0'}} " [id]="elementId">
+        <div class="{{readOnlyFlag ? 'customDisabled' :' '}} radio-group">
+            <ng-template ngFor let-wrapper [ngForOf]="optionsWrapper">
+                <div [ngClass]="'ui-selectbutton ui-buttonset ui-widget ui-corner-all ui-buttonset-' + options?.length" (mouseleave)="hoveredItem=null"
+                    [ngStyle]="style" [class]="styleClass" [formControl]="elementControl" ngDefaultControl>
+                    <div *ngFor="let option of wrapper;" class="{{ selectButtonClass +' col-xs-'+(12/countPerRow) + ' col-md-'+(12/countPerRow) + ' col-sm-'+(12/countPerRow)}}"
+                        class="ui-button ui-widget ui-state-default ui-button-text-only" [ngClass]="{'ui-state-hover': (hoveredItem==option)&&!disabled,'ui-state-active':isSelected(option), 'ui-state-disabled':disabled}"
+                        (mouseenter)="hoveredItem=option" (click)="onItemClick($event,option)">
+                        <span *ngIf="!option.labelsArray && !option.imageURL" [ngClass]="readOnlyFlag ? 'notAllowed' :' '" class="ui-button-text ui-c col-xs-12 col-md-12 col-sm-12 singleSelectLabelContainer">
+                            <i *ngIf="iconClass" ngClass="{{iconClass}} iconSelectBtn"></i>
+                            <span class="labelSelectBtn">{{option.label | translate}}</span>
+                        </span>
+                        <span *ngIf="option.labelsArray || option.imageURL" [ngClass]="readOnlyFlag ? 'notAllowed' :' '" class="ui-button-text ui-c col-xs-12 col-md-12 col-sm-12">
+                            <div class="multipleSelectLabelsContainer" [class.active]="multiple && isSelected(option)">
+                                <misc-img *ngIf="option.imageURL" [doExtractSVG]="true" [src]="option.imageURL" miscClass="selectBtnImg img-responsive"></misc-img>
+                                <i *ngIf="iconClass" ngClass="{{iconClass}} iconSelectBtn"></i>
+                                <ng-template ngFor let-labelEach [ngForOf]="option.labelsArray">
+                                    <!--class names can be added are : labelSelectBtn, optionalSelectBtnLabel2, optionalSelectBtnLabel3 -->
+                                    <span [class]="labelEach.class">{{labelEach.name | translate}}</span>
+                                </ng-template>
+                                <!-- this is when ribbon is needed  -->
+                            </div>
+                            <div *ngIf="option.favLabel" class="ribbonContainer">
+                                <div class="ribbon">
+                                    <span class="ribbonLabel"> {{ option.favLabel | translate }} </span>
+                                </div>
+                            </div>
+                        </span>
+
+                    </div>
+                </div>
+            </ng-template>
+        </div>
+    </div>
+</div>
+<div *ngIf="tooltipTitle" class="col-sm-1 col-md-1 col-xs-1  tooltip-align tooltip-mobile3 tooltipForMultipleSelectLabel">
+    <button type="button" class="btn btn-link info-tooltip" data-toggle="toggle" [tooltipPlacement]="tooltipPlacement" [tooltip]="tooltipHTML"
+        [id]="elementId">
+        <i class="icon-tooltip" [id]="elementId"></i>
+        <tooltip-content #tooltipHTML [excludeId]="elementId">
+            <div innerHTML="{{tooltipTitle | translate}}"></div>
+        </tooltip-content>
+    </button>
+</div>
+<!--<button-field  *ngIf="tooltipTitle" buttonType="custom"  [tooltipPlacement]="tooltipPlacement" [tooltip]="tooltipTitle" data-toggle="toggle" iconCLass="icon-tooltip" buttonClass="btn btn-link info-tooltip"></button-field>-->
+
+<!--<button *ngIf="tooltipTitle" type="button" class="btn btn-link info-tooltip" data-toggle="toggle" [tooltipPlacement]="tooltipPlacement"
+        [tooltip]="tooltipTitle">
+            <i class="icon-tooltip"></i>
+        </button>-->

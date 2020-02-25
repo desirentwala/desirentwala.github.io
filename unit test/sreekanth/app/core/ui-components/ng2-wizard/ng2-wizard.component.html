@@ -1,0 +1,86 @@
+<div class="steps-section">  
+  <div [class.stickTabNav]="stickTabNav" [class.bodyBg]="stickTabNav" [class.container-fluid]="stickTabNav" class="row">
+    <ng-container *ngTemplateOutlet="headerInputsTpl;context:{$implicit:headerInputs}"></ng-container>
+    <div *ngIf="stickTabNav && stickTabNavButtons" class="col-md-2 col-sm-2 col-xs-1 mt-xs-10 previousBtnAlign">
+      <button *ngIf="hasPreviousStep " (click)="onButtonClick(navigationDirection.PREVIOUS)" class="ncp-btn2">
+        <span class="ff hidden-xs">
+          <span class="labelButton">{{previousTabButton | translate}}</span>
+        </span>
+        <i class="fa fa-angle-left fa-np hidden-xs"></i>
+        <i class="fa fa-angle-left visible-xs"></i>
+      </button>
+    </div>
+    <!-- <div [class.col-md-8]="stickTabNav && stickTabNavButtons"> -->
+    <div [class.hidden]="!showProgress" class="col-md-8 col-sm-8 col-xs-10" [class.col-centered]="!(stickTabNav && stickTabNavButtons)">     
+      <ul class="steps">
+        <li *ngFor="let tab of tabs" id={{tab.tabId}} [class.active]="tab.active">
+          <a [class.cursor-pointer]="doNavigateOnTabClick && tab.visited" [class.cursor-not-allowed]="doNavigateOnTabClick && !tab.visited" [class.cursor-default]="!doNavigateOnTabClick" (click)="doNavigateToTabOnClick(tab)">
+            <span class="">
+              <i ngClass={{tab.tabIcon}} class="iconStepSection"></i>
+              <span class="labelStepSection">{{ tab.tabTitle | translate }}</span>
+            </span>
+          </a>
+        </li>
+      </ul>
+    </div>
+    <div *ngIf="stickTabNav && stickTabNavButtons" class="col-md-2 col-sm-2 col-xs-1 mt-xs-10 nextBtnAlign">
+      <button *ngIf="hasNextStep && stickTabNav" (click)="onButtonClick(navigationDirection.NEXT)" class="ncp-btn2 pull-right"
+        [class.disabled]="disableNext">
+        <span class="ff hidden-xs">
+          <span class="labelButton">{{nextTabButton | translate}}</span>
+        </span>
+        <i class="fa fa-angle-right fa-np hidden-xs"></i>
+        <i class="fa fa-angle-right visible-xs"></i>
+      </button>
+    </div>
+  </div>
+  <div class="visible-xs text-center fs20 " *ngFor="let tab of tabs">
+    <span *ngIf="tab.active" class="pb15 d-block">{{ tab.tabTitle | translate}}</span>
+  </div>
+  <div class="radio-btn">
+    <div *ngIf="showTopNavigationButtons" class="button-container btns-row plr-xs-0">
+      <div class="col-md-2 col-sm-3 col-xs-5 p0">
+        <button *ngIf="hasPreviousStep" class="ncp-btn2 pull-left" (click)="onButtonClick(navigationDirection.PREVIOUS)">{{previousTabButton | translate}}</button>
+      </div>
+      <div class="col-md-2 col-sm-3 col-xs-5 p0 pull-right">
+        <button *ngIf="hasNextStep" class="ncp-btn2 pull-right" [class.disabled]="disableNext" (click)="onButtonClick(navigationDirection.NEXT)">{{nextTabButton | translate}}</button>
+      </div>
+    </div>
+    <ng-content></ng-content>
+    <div *ngIf="showBottomNavigationButtons" class="button-container btns-row plr-xs-0">
+      <div class="col-md-2 col-sm-3 col-xs-5 p0">
+        <button *ngIf="hasPreviousStep" (click)="onButtonClick(navigationDirection.PREVIOUS)" class="ncp-btn2">
+          <i class="fa fa-angle-left fa-np pr5 pl0"></i>
+          <span class="ff">
+            <span class="labelButton">{{previousTabButton | translate}}</span>
+          </span>
+        </button>
+      </div>
+      <div class="col-md-2 col-sm-3 col-xs-5 p0 pull-right nextBtnAlignRTL">
+      <button *ngIf="hasNextStep" (click)="onButtonClick(navigationDirection.NEXT)" class="ncp-btn2 pull-right nextBtnAlignRTL" [class.disabled]="disableNext">
+          <span class="ff">
+            <span class="labelButton">{{nextTabButton | translate}}</span>
+          </span>
+          <i class="fa fa-angle-right fa-np"></i>
+        </button>
+      </div>
+    </div>
+  </div>
+  <!-- Header Contents -->
+  <ng-template #headerInputsTpl let-list>
+    <div [hidden]="!list || list.length < 1" class="transaction-info">
+      <div class="header-top">
+        <div class="row">
+          <div class="col-md-12 p0 hidden-xs flex-display hidden-sm">
+             <ng-container *ngFor="let input of list">
+               <div class="entry">
+                 <b>{{ input.label }}</b>
+                 <p>{{ input.data }}</p>
+               </div>
+             </ng-container>
+          </div>
+        </div>
+      </div>
+    </div>
+  </ng-template>
+</div>

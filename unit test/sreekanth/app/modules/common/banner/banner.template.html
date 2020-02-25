@@ -1,0 +1,55 @@
+<div *ngIf="shared.doShowElement('showBanner')" class="bannerSection" [class.noImageBanner]="!imgURL || !showAllBanner">
+	<div *ngIf="showAllBanner">
+		<div *ngIf="imgURL" class="bannerImg hidden-xs">
+			<img class="img-responsive" [src]="imgURL" alt="Banner">
+			<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1500.001 143.369" class="footer-wave">
+				<defs>
+					<style>
+						.cls-1 {
+							fill: #f6f6f8;
+						}
+					</style>
+				</defs>
+				<path id="Subtraction_106" data-name="Subtraction 106" class="cls-1" d="M-2555-7853.631h0c-14.039-6.534-27.986-12.668-41.453-18.232-13.233-5.472-26.524-10.6-39.5-15.248-12.7-4.543-25.41-8.725-37.784-12.431-12.162-3.641-24.374-6.934-36.3-9.787a572.607,572.607,0,0,0-134.888-16.131c-19.576,0-39.217.953-60.044,2.914-19.147,1.8-38.89,4.422-60.358,8.008-38.954,6.5-79.189,15.442-127.618,26.869-13.379,3.157-27.5,5.951-41.978,8.3-14.121,2.293-28.942,4.225-44.049,5.741-29.161,2.923-60.443,4.408-92.978,4.412-38.473,0-79.438-2.067-121.756-6.146-39.913-3.846-81.428-9.511-123.392-16.838-39.762-6.945-80.117-15.406-119.943-25.15-38.037-9.308-75.519-19.762-111.4-31.071-21.88-6.9-44.048-12.924-65.888-17.906-19.978-4.554-40.107-8.331-59.83-11.228a685.034,685.034,0,0,0-99.132-7.474c-36.905,0-64.8,3.343-81.707,6.147V-7997h1500Z"
+				 transform="translate(4055 7997)" />
+			</svg>
+		</div>
+		
+
+	</div>
+
+	<div class="bannerDetails">
+
+			<bread-crumb></bread-crumb>
+
+		<div *ngIf="showAllBanner">
+			<h1 class="hiddenInRBT"><span *ngIf="headerText1">{{headerText1 | translate}}&nbsp;</span><span class="theme-color">{{headerText | translate}}</span></h1>
+
+			<div *ngIf="!hideNotification">
+				<div *ngIf="showNotificationYes">
+					<h5>{{'NCPLabel.youHave' | translate}}&nbsp;<a (click)="navigateToNotification()" class="theme-color"><span>{{notificationArray}}</span> {{'NCPLabel.notifications' | translate}}</a></h5>
+				</div>
+				<div *ngIf="showNotificationNo">
+					<h5>{{'NCPLabel.youHave' | translate}}&nbsp;<a class="theme-color"><span>{{'NCPLabel.noNew' | translate}}&nbsp;</span>{{'NCPLabel.notifications' | translate}}</a></h5>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-md-7 col-sm-7 col-xs-12 bannerText">
+					<div *ngIf="descriptionTitle">
+						<misc-h5  miscClass="headerInCaps" [label]="'banner'+'.'+ descriptionTitle"></misc-h5>
+					</div>
+					<div *ngIf="showSecondTitle">
+						<misc-h5  miscClass="" [label]="'banner'+'.'+ descriptionSecondTitle"></misc-h5>
+					</div>
+					<ol class="ul-css">
+						<li *ngFor="let description of descriptionDetails" class="mb10 mb-xs-0">
+							<div *ngIf="description">
+								<span>{{'banner'+'.'+ description | translate}}</span>
+							</div>
+						</li>
+					</ol>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>

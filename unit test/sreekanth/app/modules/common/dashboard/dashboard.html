@@ -1,0 +1,491 @@
+<div class="row rowWithNoMarginBottom dashboardContainer"  *ngIf="widgetList.length > 1">
+	<div class="pull-right z100">
+		<div class="btn-group pull-right">
+			<div class="setting-icon pull-left" *ngIf="!editFlag" (click)="editFlag = true;setEditable();getDashBoardDataByLazyLoading()">
+				<a class="" type="button" class="filterimg">
+					<i class="settingsIcon fa fa-lock"></i>
+				</a>
+			</div>
+			<div class="setting-icon pull-left" *ngIf="editFlag" (click)="editFlag = false;setNonEditable()">
+				<a class="" type="button" class="filterimg">
+					<i class="settingsIcon fa fa-unlock">
+				</i>
+				</a>
+			</div>
+			<div class="setting-icon pull-left" *ngIf="editFlag" (click)="editFlag = false;setNonEditable();saveConfig()">
+				<a class="" type="button" class="filterimg">
+					<i class="settingsIcon fa fa-save">
+				</i>
+				</a>
+			</div>
+		</div>
+	</div>
+</div>
+<div class=" form row" *ngIf="editFlag ">
+	<div class="row">
+		<div class="col-md-8 col-sm-8 col-xs-12">
+			<ncp-label elementLabel="NCPLabel.selectWidgets" elementId="selectWidget">
+			</ncp-label>
+			<drop-down multipleSelect="true" elementId="selectWidget" [formControl]="widgetControl" placeHolder="NCPLabel.selectWidgets"
+			 [elementValue]="widgetControl.value" [dropdownItems]="missingWidgetList" elementLabel="NCPLabel.selectWidgets">
+			</drop-down>
+		</div>
+		<div *ngIf="widgetControl.value && widgetControl.value.length > 0">
+			<button-field buttonType="custom" buttonName="NCPLabel.addWidgets" (click)="addWidgets()" buttonClass="ncpbtn-default"
+			 iconClass="fa fa-add">
+			</button-field>
+		</div>
+	</div>
+</div>
+<!-- <div class="numberCardBlock hide">
+	<div class="numberCardContainer">
+		<div class="col-md-4 col-sm-4 col-xs-12 pl0">
+			<div class="cardContainer">
+				<div class="cardDigits">200</div>
+				<div class="cardDesc">Quotes</div>
+			</div>
+			<div class="progressBarContainer mt25">
+				<span>Pending</span>
+				<div class="progress">
+					<div class="progress-bar progress-bar-striped active pending" role="progressbar" aria-valuenow="40" aria-valuemin="0" aria-valuemax="100"
+					 style="width:40%">
+						40%
+					</div>
+				</div>
+			</div>
+			<div class="progressBarContainer">
+				<span>Converted</span>
+				<div class="progress">
+					<div class="progress-bar progress-bar-striped active completed" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100"
+					 style="width:60%">
+						60%
+					</div>
+				</div>
+			</div>
+
+		</div>
+		<div class="col-md-4 col-sm-4 col-xs-12">
+			<div class="cardContainer">
+				<div class="cardDigits">150</div>
+				<div class="cardDesc">Policies</div>
+			</div>
+			<div class="progressBarContainer mt25">
+				<span>Pending</span>
+				<div class="progress">
+					<div class="progress-bar progress-bar-striped active pending" role="progressbar" aria-valuenow="20" aria-valuemin="0" aria-valuemax="100"
+					 style="width:20%">
+						20%
+					</div>
+				</div>
+			</div>
+			<div class="progressBarContainer">
+				<span>Posted</span>
+				<div class="progress">
+					<div class="progress-bar progress-bar-striped active completed" role="progressbar" aria-valuenow="80" aria-valuemin="0" aria-valuemax="100"
+					 style="width:80%">
+						80%
+					</div>
+				</div>
+			</div>
+
+		</div>
+		<div class="col-md-4 col-sm-4 col-xs-12 pr0">
+			<div class="cardContainer">
+				<div class="cardDigits">100</div>
+				<div class="cardDesc">Claims</div>
+			</div>
+			<div class="progressBarContainer mt25">
+				<span>Pending</span>
+				<div class="progress">
+					<div class="progress-bar progress-bar-striped active pending" role="progressbar" aria-valuenow="40" aria-valuemin="0" aria-valuemax="100"
+					 style="width:40%">
+						40%
+					</div>
+				</div>
+			</div>
+			<div class="progressBarContainer">
+				<span>Notified</span>
+				<div class="progress">
+					<div class="progress-bar progress-bar-striped active completed" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100"
+					 style="width:60%">
+						60%
+					</div>
+				</div>
+			</div>
+
+		</div>
+	</div>
+</div> -->
+<dashboard *ngIf="widgetList.length > 0" class="row form" #ncpDash (onOrderChange)="orderChange($event)" [widgetsSize]="widgetsSize"
+ [margin]="dashboardMargin">
+	<ng-template ngFor let-widget [ngForOf]="widgetList">
+		<widget widgetId="{{widget.widgetID}}" [size]="widget.size" *ngIf="widget.userGroup === 'ALL' || widget.userGroup === userGroup">
+			<div [ngSwitch]="widget.widgetID">
+				<div *ngSwitchCase="'numberCard'">
+					<div class="panel panel-info dragMeContainer" *ngIf="editFlag">
+						<h4 class="dragMe panel-heading w100p pull-left" widgetHandle>{{'NCPLabel.dragMe' | translate}}
+							<span class="pull-right fa fa-trash-o" (click)="removeWidget(widget.widgetID)"></span>
+						</h4>
+						<div class="panel-body">
+							<ncp-chart type="NumberCard" [single]="dataCard" doTranslate=true (chartSelect)="openActivity($event)" [showUtilityButton]=false
+							 fileName="out">
+							</ncp-chart>
+						</div>
+					</div>
+					<div *ngIf="!editFlag">
+						<ncp-chart type="NumberCard" [single]="dataCard" doTranslate=true (chartSelect)="openActivity($event)" [showUtilityButton]=false
+						 fileName="out">
+						</ncp-chart>
+					</div>
+				</div>
+				<div *ngSwitchCase="'premiumPerQuarter'">
+					<!--<div class="col-md-6 col-lg-6 col-sm-6 col-xs-12">-->
+					<div class="panel panel-info dragMeContainer" *ngIf="editFlag">
+						<h4 class="dragMe panel-heading w100p pull-left" widgetHandle>{{'NCPLabel.dragMe' | translate}}
+							<span class="pull-right fa fa-trash-o" (click)="removeWidget(widget.widgetID)"></span>
+						</h4>
+						<div class="panel-body">
+							<ncp-chart *ngIf="!repFilter.get('isProductWise').value" titleHeader="NCPLabel.premiumperQuarter" type="BarVerticalGrouped"
+							 [multi]="dataMulti" showLegend=true showXAxis=false yAxisLabel="NCPLabel.premium" headerGroup="NCPLabel.quarter" header1="NCPLabel.product"
+							 header2="NCPLabel.premium" [showUtilityButton]=true fileName="premiumperQuarter" (chartSelect)="getProductLevelPremiumData($event)">
+							</ncp-chart>
+							<ncp-chart *ngIf="repFilter.get('isProductWise').value" titleHeader="NCPLabel.premiumperQuarter" type="Pie" [single]="dataMulti"
+							 showLegend=true [pieView]="pieView" headerGroup="NCPLabel.Product" header1="NCPLabel.premium" [showUtilityButton]=true
+							 [showLabels]=true fileName="premiumperQuarter" isDepthGraph=true (chartBack)="getPremiumData()">
+							</ncp-chart>
+						</div>
+					</div>
+					<div *ngIf="!editFlag">
+						<ncp-chart *ngIf="!repFilter.get('isProductWise').value" type="BarVerticalGrouped" titleHeader="NCPLabel.premiumperQuarter"
+						 [multi]="dataMulti" showLegend=true showXAxis=false yAxisLabel="NCPLabel.premium" headerGroup="NCPLabel.quarter" header1="NCPLabel.product"
+						 header2="NCPLabel.premium" [showUtilityButton]=true fileName="premiumperQuarter" (chartSelect)="getProductLevelPremiumData($event)">
+						</ncp-chart>
+						<ncp-chart *ngIf="repFilter.get('isProductWise').value" type="Pie" titleHeader="NCPLabel.premiumperQuarter" [single]="dataMulti"
+						 showLegend=true [pieView]="pieView" headerGroup="NCPLabel.Product" header1="NCPLabel.premium" [showUtilityButton]=true
+						 [showLabels]=true fileName="premiumperQuarter" isDepthGraph=true (chartBack)="getPremiumData()">
+						</ncp-chart>
+					</div>
+				</div>
+				<div *ngSwitchCase="'policesExpiringperQuarter'">
+					<!--<div class="col-md-6 col-lg-6 col-sm-6 col-xs-12">-->
+					<div class="panel panel-info dragMeContainer" *ngIf="editFlag">
+						<h4 class="dragMe panel-heading w100p pull-left" widgetHandle>{{'NCPLabel.dragMe' | translate}}
+							<span class="pull-right fa fa-trash-o" (click)="removeWidget(widget.widgetID)"></span>
+						</h4>
+						<div class="panel-body">
+							<ncp-chart *ngIf="!policyExpFilterObj['isLOBWise'] && !policyExpFilterObj['isProductWise']" titleHeader="NCPLabel.policesExpiringperQuarter"
+							 type="BarVertical" [single]="dataSingle" [pieView]="pieView" showLegend=true headerGroup="NCPLabel.quarter" header1="NCPLabel.noOfPolicies"
+							 [showUtilityButton]=true [showLabels]=true fileName="policesExpiringperQuarter" (chartSelect)="getLobLevelExpiringData($event)">
+							</ncp-chart>
+							<ncp-chart *ngIf="policyExpFilterObj['isLOBWise'] && !policyExpFilterObj['isProductWise']" type="BarVertical" titleHeader="NCPLabel.policesExpiringperQuarter"
+							 [single]="dataSingle" [pieView]="pieView" showLegend=true headerGroup="NCPLabel.quarter" header1="NCPLabel.noOfPolicies"
+							 [showUtilityButton]=true [showLabels]=true fileName="policesExpiringperQuarter" isDepthGraph=true (chartSelect)="getProductLevelExpiringData($event)"
+							 (chartBack)="getPolicyExpiringData()">
+							</ncp-chart>
+							<ncp-chart *ngIf="!policyExpFilterObj['isLOBWise'] && policyExpFilterObj['isProductWise']" type="Pie" [single]="dataSingle"
+							 titleHeader="NCPLabel.policesExpiringperQuarter" showLegend=true [pieView]="pieView" headerGroup="NCPLabel.quarter"
+							 header1="NCPLabel.noOfPolicies" [showUtilityButton]=true [showLabels]=true fileName="policesExpiringperQuarter" isDepthGraph=true
+							 (chartBack)="getPolicyExpiringData()">
+							</ncp-chart>
+						</div>
+					</div>
+					<div *ngIf="!editFlag">
+						<ncp-chart *ngIf="!policyExpFilterObj['isLOBWise'] && !policyExpFilterObj['isProductWise']" type="BarVertical" titleHeader="NCPLabel.policesExpiringperQuarter"
+						 [single]="dataSingle" showLegend=true [pieView]="pieView" headerGroup="NCPLabel.quarter" header1="NCPLabel.noOfPolicies"
+						 [showUtilityButton]=true [showLabels]=true fileName="policesExpiringperQuarter" (chartSelect)="getLobLevelExpiringData($event)">
+						</ncp-chart>
+						<ncp-chart *ngIf="policyExpFilterObj['isLOBWise'] && !policyExpFilterObj['isProductWise']" type="BarVertical" [single]="dataSingle"
+						 titleHeader="NCPLabel.policesExpiringperQuarter" [pieView]="pieView" showLegend=true headerGroup="NCPLabel.quarter"
+						 header1="NCPLabel.noOfPolicies" [showUtilityButton]=true [showLabels]=true fileName="policesExpiringperQuarter" isDepthGraph=true
+						 (chartSelect)="getProductLevelExpiringData($event)" (chartBack)="getPolicyExpiringData()">
+						</ncp-chart>
+						<ncp-chart *ngIf="!policyExpFilterObj['isLOBWise'] && policyExpFilterObj['isProductWise']" type="Pie" [single]="dataSingle"
+						 showLegend=true [pieView]="pieView" titleHeader="NCPLabel.policesExpiringperQuarter" headerGroup="NCPLabel.quarter"
+						 header1="NCPLabel.noOfPolicies" [showUtilityButton]=true [showLabels]=true fileName="policesExpiringperQuarter" isDepthGraph=true
+						 (chartBack)="getPolicyExpiringData()">
+						</ncp-chart>
+					</div>
+				</div>
+				<div *ngSwitchCase="'currentActivity'">
+					<div class="panel panel-info dragMeContainer" *ngIf="editFlag">
+						<h4 class="dragMe panel-heading w100p pull-left" widgetHandle>{{'NCPLabel.dragMe' | translate}}
+							<span class="pull-right fa fa-trash-o" (click)="removeWidget(widget.widgetID)"></span>
+						</h4>
+						<div class="panel-body">
+							<ul class="nav nav-tabs maintab">
+								<li class="mainTabList">
+                                    <input id="tab1" (click)="activityType='CA'; showTabContent($event);" class="podi" type="radio" name="tabs" value="currentActivity" [checked]="activityType=='CA'" checked>
+                                    <label for="tab1" class="filterac"><i class="icon-reports iconLabel"></i><span class="labelDisplay">{{'NCPLabel.currentActivity' | translate}}</span></label>
+                                </li>
+                                <!-- <li class="">
+                                    <input id="tab2" (click)="activityType='RP'; showTabContent($event);" class="podi" type="radio" name="tabs" value="renewalPolicies" [checked]="activityType=='RP'">
+                                    <label for="tab2" class="filterac"><i class=""></i><span class="labelDisplay">{{'NCPLabel.renewalPolicies' | translate}}</span></label>
+                                </li> -->
+							</ul>
+
+							<div class="setting-icon">
+								<a data-toggle="modal" (click)="thirdModal.open()" class="filterimg">
+									<!-- <img src="assets/img/tool.png" />-->
+									<i class="settingsIcon fa gearIcon"></i>
+								</a>
+							</div>
+
+							<div class="setting-icon">
+								<a data-toggle="modal" (click)="customerEditView.open()" class="filterimg">
+									<i class="settingsIcon fa filterIcon"></i>
+								</a>
+							</div>
+                            <div id="content1" class="activityDataTable">
+                                <table-filter class="sortable-theme-bootstrap" [tableData]=currentActivityList [mappingList]=currentActivityMapping [headerList]=currentActivityHeader sortByDefault="name" showSearch="Y" modalID="currentActivity" [classNameList]="currentActivityIconsClassNames"
+                                    [dataClickIdList]="currentActivityDataClickId">
+                                </table-filter>
+                                <div *ngIf="!disableShowMoreButton">
+                                    <div class="col-centered">
+                                        <button-field buttonType="custom" buttonName="NCPBtn.showMore" (click)="showMoreActivity(widget.widgetID)" buttonClass="ncpbtn-default" iconClass="fa fa-arrow-down">
+                                        </button-field>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- <div id="content2" class="activityDataTable">
+                                <renewal-enquiry showSearch="Y" [tableData]="renewalActivityList" [searchId]="searchId" [renewalActivityHeader]="renewalActivityHeader" [renewalActivityMapping]="renewalActivityMapping" [renewalActivityIconsClassNames]="renewalActivityIconsClassNames">
+                                </renewal-enquiry>
+                                <div *ngIf="showMoreRenewalActivityFlag" class="col-centered mtb20">
+                                    <button-field buttonType="custom" buttonName="NCPBtn.showMore" (click)="showMoreRenewalPolicies();showMoreActivity(widget.widgetID);" buttonClass="ncpbtn-default" iconClass="fa fa-arrow-down">
+									</button-field>
+								</div>
+							</div> -->
+						</div>
+					</div>
+					<div *ngIf="!editFlag">
+						<ul class="nav nav-tabs maintab">
+							<li class="">
+                                <input id="tab1" (click)="activityType='CA'; showTabContent($event);" class="podi" type="radio" name="tabs" value="currentActivity" [checked]="activityType=='CA'" checked>
+                                <label for="tab1" class="filterac"><i class=""></i><span class="labelDisplay">{{'NCPLabel.currentTravelActivity' | translate}}</span></label>
+                            </li>
+                            <!-- <li class="">
+                                <input id="tab2" (click)="activityType='RP'; showTabContent($event);" class="podi" type="radio" name="tabs" value="renewalPolicies" [checked]="activityType=='RP'">
+                                <label for="tab2" class="filterac"><i class=""></i><span class="labelDisplay">{{'NCPLabel.renewalPolicies' | translate}}</span></label>
+                            </li> -->
+						</ul>
+
+						<div class="setting-icon">
+							<a data-toggle="modal" (click)="thirdModal.open()" class="filterimg">
+								<!-- <img src="assets/img/tool.png" /> -->
+								<i class="settingsIcon fa gearIcon"></i>
+							</a>
+						</div>
+
+						<div class="setting-icon">
+							<a data-toggle="modal" (click)="customerEditView.open()" class="filterimg">
+								<i class="settingsIcon fa filterIcon"></i>
+							</a>
+						</div>
+                        <div id="content1" class="activityDataTable">
+                            <table-filter class="sortable-theme-bootstrap" [tableData]=currentActivityList [mappingList]=currentActivityMapping [headerList]=currentActivityHeader sortByDefault="name" showSearch="Y" modalID="currentActivity" [classNameList]="currentActivityIconsClassNames"
+                                [dataClickIdList]="currentActivityDataClickId">
+                            </table-filter>
+                            <div *ngIf="!disableShowMoreButton">
+                                <div class="col-centered mtb20">
+                                    <button-field buttonType="custom" buttonName="NCPBtn.showMore" (click)="showMoreActivity(widget.widgetID)" buttonClass="ncpbtn-default" iconClass="fa fa-arrow-down">
+                                    </button-field>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- <div id="content2" class="activityDataTable" style="display:none;">
+                            <renewal-enquiry showSearch="Y" [tableData]="renewalActivityList" [searchId]="searchId" [renewalActivityHeader]="renewalActivityHeader" [renewalActivityMapping]="renewalActivityMapping" [renewalActivityIconsClassNames]="renewalActivityIconsClassNames">
+                            </renewal-enquiry>
+                            <div *ngIf="showMoreRenewalActivityFlag" class="col-centered mtb20">
+                                <button-field buttonType="custom" buttonName="NCPBtn.showMore" (click)="showMoreRenewalPolicies()" buttonClass="ncpbtn-default" iconClass="fa fa-arrow-down">
+								</button-field>
+							</div>
+						</div> -->
+					</div>
+				</div>
+				<div *ngSwitchCase="'favoriteProductWidget'">
+					<div class="panel panel-info dragMeContainer" *ngIf="editFlag">
+						<h4 class="dragMe panel-heading w100p pull-left" widgetHandle>{{'NCPLabel.dragMe' | translate}}
+							<span class="pull-right fa fa-trash-o" (click)="removeWidget(widget.widgetID)"></span>
+						</h4>
+						<div class="panel-body">
+							<favorite-FavoriteComponent label="NCPLabel.favouriteProducts"></favorite-FavoriteComponent>
+						</div>
+					</div>
+					<div *ngIf="!editFlag">
+						<favorite-FavoriteComponent label="NCPLabel.favouriteProducts"></favorite-FavoriteComponent>
+					</div>
+				</div>
+				<div *ngSwitchCase="'newsWidget'">
+					<div class="panel panel-info dragMeContainer" *ngIf="editFlag">
+						<h4 class="dragMe panel-heading w100p pull-left" widgetHandle>{{'NCPLabel.dragMe' | translate}}
+							<span class="pull-right fa fa-trash-o" (click)="removeWidget(widget.widgetID)"></span>
+						</h4>
+						<div class="panel-body">
+							<news-dashboard [newsData]=newsData (doClick)="viewAllNewsModel($event)"></news-dashboard>
+						</div>
+					</div>
+					<div *ngIf="!editFlag">
+						<news-dashboard [newsData]=newsData (doClick)="viewAllNewsModel($event)"></news-dashboard>
+					</div>
+				</div>
+				<div *ngSwitchCase="'calendarWidget'">
+					<div class="panel panel-info dragMeContainer" *ngIf="editFlag">
+						<h4 class="dragMe panel-heading w100p pull-left" widgetHandle>{{'NCPLabel.dragMe' | translate}}
+							<span class="pull-right fa fa-trash-o" (click)="removeWidget(widget.widgetID)"></span>
+						</h4>
+						<div class="panel-body">
+							<ncp-calendar [user_technical]="user_technical"></ncp-calendar>
+						</div>
+					</div>
+					<div *ngIf="!editFlag" class="">
+						<ncp-calendar [user_technical]="user_technical"></ncp-calendar>
+					</div>
+				</div>
+			</div>
+		</widget>
+	</ng-template>
+</dashboard>
+
+
+
+<ncp-modal class="modalForm" #thirdModal [closeOnEscape]="false" [closeOnOutsideClick]="false" modalClass="modal-lg" modalTitle="NCPLabel.filterTableContents" hideCloseButton="true"
+ titleIcon="glyphicon glyphicon-wrench confed">
+	<!--Procuct Panel-->
+
+	<modal-content>
+		<div class="row">
+			<multi-check elementId="cbox" [checkboxArray]="multicheckarray" elementLabel="Fields" separator="-" ngDefaultControl></multi-check>
+		</div>
+	</modal-content>
+
+	<modal-footer>
+		<div class="btns-row">
+			<div class="col-md-12 col-sm-12 col-xs-12 pull-right plr-xs-0">
+				<div class="red" *ngIf="errmsg">{{'NCPLabel.pleaseselectonefield'| translate}}&nbsp;<i class="fa fa-smile-o" aria-hidden="true"></i></div>
+				</div>
+			<!--<div class="col-md-3 col-sm-6 col-xs-12 pull-right pr-md-0 pr-sm-0 p-xs-0">
+							<button type="submit" class="ncp-btn2" (click)="selectall()" (click)="thirdModal.close()">{{'NCPBtn.showAll&Close' | translate}}</button>
+						</div>-->
+			<button-field buttonType="custom" buttonName="NCPBtn.close" (click)="thirdModal.close();settingsClose()" buttonClass="ncp-linkBtn w100p "
+			 iconClass="fa fa-close">
+			</button-field>
+			<button-field buttonType="custom" buttonName="NCPBtn.save" (click)="colhide()" buttonClass="ncpbtn-default" iconClass="fa fa-save" [isDisabled]="errmsg">
+			</button-field>
+		</div>
+	</modal-footer>
+</ncp-modal>
+<ncp-modal class="modalForm bannerModal" #viewNewsModel [closeOnEscape]="false" [closeOnOutsideClick]="false" modalClass="modal-lg">
+	<modal-header>
+		<img src="assets/img/News-Banner.jpg" class="img-responsive" alt="">
+		<div class="row bannerModalHeader1">
+			<div class="col-md-6 col-sm-6 col-xs-6 p0">
+				<div class="newsType pull-left"><span class="labelDisplay">{{newsType}}</span></div>
+			</div>
+			<div class="col-md-6 col-sm-6 col-xs-6 p0">
+				<div class="dateContainer pull-right"><i class="fa fa-calendar iconLabel"></i><span class="labelDisplay">{{newsDate}}</span></div>
+			</div>
+			<div class="col-md-12 col-sm-12 col-xs-12 bannerModalTitle">
+				<!--<h2><span class="labelHeader">{{newsDataForModelTitle}}</span></h2>-->
+				<misc-h2 [label]="newsDataForModelTitle"></misc-h2>
+			</div>
+		</div>
+	</modal-header>
+	<modal-content>
+		<div class="row">
+			<div class="bannerModalContent">
+				<!--<div class="col-md-1 col-sm-2 col-xs-2 pl0">
+					<i class="filledIcon fa fa-file-text-o"></i>
+				</div>-->
+				<div class="col-md-12 col-sm-12 col-xs-12">
+					<p [innerHTML]=newsDataForModelNewsDetails></p>
+				</div>
+			</div>
+		</div>
+
+	</modal-content>
+	<modal-footer>
+		<div class="btns-row">
+			<button-field buttonType="custom" buttonName="NCPBtn.close" (click)="viewNewsModel.close()" buttonClass="ncp-linkBtn w100p "
+			 iconClass="fa fa-close">
+			</button-field>
+		</div>
+	</modal-footer>
+</ncp-modal>
+
+
+
+<ncp-modal #customerEditView [closeOnEscape]="false" [closeOnOutsideClick]="false" modalClass="modal-lg" modalTitle="NCPLabel.filterTableContent"
+ titleIcon="glyphicon glyphicon-wrench confed">
+	<modal-content>
+		<div [formGroup]="searchlDetailsFormGroup">
+			<div class="row" *ngIf="activityType=='CA'">
+				<ncp-label elementLabel="NCPLabel.customer" customFlag=true labelClass="col-md-4 col-sm-4 col-xs-12 labelAlign"></ncp-label>
+				<text-box [inputType]="text" formControlName=clientName customFlag=true textBoxClass="col-md-6 col-sm-6 col-xs-12" elementLabel="NCPLabel.customer"></text-box>
+			</div>
+			<div class="row" *ngIf="activityType=='CA'">
+				<ncp-label elementLabel="NCPLabel.reference" customFlag=true labelClass="col-md-4 col-sm-4 col-xs-12 labelAlign"></ncp-label>
+				<text-box [inputType]="text" formControlName=quoteNo customFlag=true textBoxClass="col-md-6 col-sm-6 col-xs-12" elementLabel="NCPLabel.reference"></text-box>
+			</div>
+			<div class="row" *ngIf="activityType=='CA'">
+				<ncp-label elementLabel="NCPLabel.identityNo" customFlag=true labelClass="col-md-4 col-sm-4 col-xs-12 labelAlign"></ncp-label>
+				<text-box [inputType]="text" formControlName=identityNo customFlag=true textBoxClass="col-md-6 col-sm-6 col-xs-12" elementLabel="NCPLabel.identityNo"></text-box>
+			</div>
+		</div>
+		<div [formGroup]="renewalSearchlDetailsFormGroup">
+			<div class="row" *ngIf="activityType=='RP'">
+				<ncp-label elementLabel="NCPLabel.product" customFlag=true labelClass="col-md-4 col-sm-4 col-xs-12 labelAlign"></ncp-label>
+				<drop-down formControlName="product" ngDefaultControl placeHolder="NCPLabel.pleaseSelectType" elementId="product" miscSubType="PROD"
+					miscType="MiscInfo" pickListFlag=true customFlag=true dropdownClass="col-md-6 col-sm-6 col-xs-12" displayOnClick="true" elementLabel="NCPLabel.product">
+				</drop-down>
+			</div>
+			<div class="row" *ngIf="activityType=='RP'">
+				<ncp-label elementLabel="NCPLabel.clientName" customFlag=true labelClass="col-md-4 col-sm-4 col-xs-12 labelAlign"></ncp-label>
+				<text-box [inputType]="text" formControlName=clientName customFlag=true textBoxClass="col-md-6 col-sm-6 col-xs-12" elementLabel="NCPLabel.clientName"></text-box>
+			</div>
+			<div class="row" *ngIf="activityType=='RP'">
+				<ncp-label elementLabel="NCPLabel.policyNumber" customFlag=true labelClass="col-md-4 col-sm-4 col-xs-12 labelAlign"></ncp-label>
+				<text-box [inputType]="text" formControlName=policyNo customFlag=true textBoxClass="col-md-6 col-sm-6 col-xs-12" elementLabel="NCPLabel.policyNumber"></text-box>
+			</div>
+			<div class="row" *ngIf="activityType=='RP'">
+				<ncp-label elementLabel="NCPLabel.policyStatus" customFlag=true labelClass="col-md-4 col-sm-4 col-xs-12 labelAlign"></ncp-label>
+				<drop-down formControlName="status" ngDefaultControl placeHolder="NCPLabel.pleaseSelectType" elementId="status"
+				miscSubType="STAT" miscType="MiscInfo" param1="REN" pickListFlag=true customFlag=true dropdownClass="col-md-6 col-sm-6 col-xs-12" displayOnClick="true" elementLabel="NCPLabel.policyStatus">
+			</drop-down>
+			</div>
+			<div class="row" *ngIf="activityType=='RP'">
+				<ncp-label elementLabel="NCPLabel.newPolicyFrom"></ncp-label>
+				 <ncp-date-picker [options]="NCPDatePickerNormalOptions" formControlName="fromDate" ngDefaultControl customFlag=true 
+				 datepickerClass="col-xs-6 col-sm-4 col-md-3 pr0">
+				 </ncp-date-picker>
+				 <ncp-date-picker [options]="NCPDatePickerToDateOptions" formControlName="toDate" ngDefaultControl customFlag=true 
+				 datepickerClass="col-xs-6 col-sm-4 col-md-3 pr0">
+				 </ncp-date-picker>
+		   </div>
+		</div>
+	</modal-content>
+	<modal-footer>
+
+		<div class="btns-row">
+			<div class="col-md-12 col-sm-12 col-xs-12 pull-right mb-xs-10">
+				<div class="red" *ngIf="searchErrmsg">{{'NCPLabel.noRecordsFound' | translate}} &nbsp;<i class="fa fa-smile-o" aria-hidden="true"></i></div>
+			</div>
+			<button-field *ngIf="activityType=='CA'" buttonType="custom" buttonName="NCPBtn.clear" [isDisabled]="!enableSearchBtn" (click)="clearSearchModol()"
+			 buttonClass="ncpbtn-default" data-dismiss="modal" iconClass="fa fa-eraser">
+			</button-field>
+			<button-field *ngIf="activityType=='RP'" buttonType="custom" buttonName="NCPBtn.clear" [isDisabled]="!enableFilterBtn" (click)="clearSearchModol()"
+			buttonClass="ncpbtn-default" data-dismiss="modal" iconClass="fa fa-eraser">
+		   </button-field>
+			<button-field *ngIf="activityType=='CA'" buttonType="custom" buttonName="NCPBtn.reset" (click)="closeSearchModol()" buttonClass="ncpbtn-default"
+			 iconClass="fa fa-undo">
+			</button-field>
+			<button-field *ngIf="activityType=='RP'" buttonType="custom" buttonName="NCPBtn.reset" (click)="renewalCloseSearchModol()" buttonClass="ncpbtn-default"
+			iconClass="fa fa-undo">
+		   </button-field>
+			<button-field *ngIf="activityType=='CA'" buttonType="custom" buttonName="NCPBtn.filter" [isDisabled]="!enableSearchBtn" (click)="customerDetailsSearch();"
+			 buttonClass="ncpbtn-default" iconClass="fa fa-filter">
+			</button-field>
+			<button-field *ngIf="activityType=='RP'" buttonType="custom" buttonName="NCPBtn.filter" [isDisabled]="!enableFilterBtn" (click)="renewalDetailsSearch();"
+			buttonClass="ncpbtn-default" iconClass="fa fa-filter">
+		   </button-field>
+		</div>
+	</modal-footer>
+</ncp-modal>

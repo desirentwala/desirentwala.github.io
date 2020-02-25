@@ -1,0 +1,23 @@
+<ion-content class="contentbg">
+  <div class="row">
+    <div class="col-lg-1 destop-view"></div>
+    <div class="col-lg-11 col-md-12 col-sm-12 col-xs-12 pl-0">
+      <div class="app-logo">
+        <img class="home-logo" src="./assets/imgs/logo.png" alt="logo">
+      </div>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-lg-1 col-md-1 destop-view"></div>
+    <div class="col-lg-11 col-md-12 col-sm-12 col-xs-12">
+      <h1 class="pad-head page-header">Appointments</h1>
+      <hr class="horizontalLine">
+      <div class="table-content">
+        <app-table *ngIf="bookingData" [bookingdata]="bookingData" [flag]="value" [header]="header"
+          [menuItems]="menuItems">
+        </app-table>
+      </div>
+    </div>
+  </div>
+</ion-content>

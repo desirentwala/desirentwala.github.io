@@ -1,0 +1,39 @@
+<ul>
+  <div *ngIf="notifications.length < 1" class="noNotificationBox">
+    <span>
+      <i class="fa fa-frown-o"></i>
+    </span>
+    <span>{{noNotificationLabel}}</span>
+  </div>
+  <li *ngFor="let notification of notifications;let i=index" class="notificationList pr-xs-10">
+      <div class="row" [ngClass]="{'checkedNotification': !notification.hasNotificationViewed}" [class.deleteNotification]="deleteFlag === notification.id"
+          [class.showNotification]="deleteFlag !== notification.id">
+
+          <div [ngClass]="notification.showDeletebtn ?'col-md-10 col-lg-10 col-sm-10 col-xs-10' : 'col-md-12 col-lg-12 col-sm-12 col-xs-12'">
+            <div class="col-md-2 col-lg-2 pr0 pt10 col-sm-2 col-xs-2"><span class="icon-bell icon-cust"></span></div>
+            <div class="col-md-10 col-lg-10 col-sm-10 col-xs-12 pl0 pt10">
+              <div class="notifdate pt-md-10" (click)="viewNotification(notification)">{{notification.displayTime}}</div>
+              <div class="notifTitle" (click)="viewNotification(notification)">{{notification.title}}</div>
+            </div>
+          </div>
+          <div   class="col-md-2 col-lg-2 col-sm-2 col-xs-2">
+            <div class="col-md-12 col-lg-12 col-sm-12 col-xs-12 pt25"><span class="glyphicon glyphicon-trash icon-cust-bar pull-right" id="delete-click" (click)="deleteNotification(notification)"></span></div>
+          </div>
+      </div>
+        <div *ngIf="deleteFlag === notification.id" class="col-md-12 col-lg-12 col-sm-12">
+          <div class="row mlr0-i">
+            <div class="col-md-12 col-lg-12 col-sm-12 col-xs-12 text-center pt10 pb5"><i class="fa fa-bell iconLabel"></i><span class="labelDisplay">{{notificationDeletedLabel}}</span></div>
+            <div class="col-xs-offset-0 col-md-offset-4 col-md-2 col-lg-offset-4 col-lg-2 col-sm-offset-4 col-sm-2 col-xs-6 mb10">
+              <a class="col-md-12 col-sm-12 col-xs-10 col-xs-offset-1 col-sm-4 clearfix btn btn-default btn-mr" id="undo-confirm" (click)="clickUndo(notification)"><i class="fa fa-undo iconAnchorLink"></i><span class="labelAnchorLink">{{undoLabel}}</span></a>
+            </div>
+            <div class="col-md-2 col-lg-2 col-sm-2 col-xs-6">
+              <a class="col-md-12 col-xs-10 col-xs-offset-1 col-sm-12 clearfix btn btn-default btn-mr" id="ok-confirm" (click)="confirmDelete(notification)"><i class="fa fa-check iconAnchorLink"></i><span class="labelAnchorLink">{{okLabel}}</span></a>
+          </div>
+        <!--when there is no notification to the user-->
+
+      </div>
+    </div>
+
+
+  </li>
+  </ul>

@@ -1,0 +1,36 @@
+<div class="row">
+  <div class="col-md-12">
+    <h1 class="page-header">Invite customer</h1>
+  </div>
+</div>
+
+<form class="m-auto ion-padding" #customerForm="ngForm">
+  <div class="row">
+    <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12 pl-0">
+      <label for="po">Pet owner email address</label><i class="fas fa-asterisk form-asterisk"></i>
+
+      <input #emailId="ngModel" class="form-control" name="email" type="text" [(ngModel)]="model.email"
+        placeholder="Pet owner email address"
+        pattern="^(?!.*\.{2})[a-zA-Z0-9.-_]{1,64}@[a-zA-Z.-]{2,}[.]{1}[a-zA-Z]{2,}" required />
+      <div class="text-danger" *ngIf="emailId.invalid && (emailId.dirty || emailId.touched)">
+        <small class="inline" *ngIf="emailId.errors.pattern">Invalid email address.</small>
+        <small class="inline" *ngIf="emailId.errors.required">Email address required.</small>
+      </div>
+
+      <label for="petname">Pet name</label>
+      <input #name="ngModel" class="form-control" name="petName" type="text" [(ngModel)]="model.petName" maxlength="50"
+        placeholder="Pet name"/>
+      <!-- <div class="text-danger" *ngIf="name.invalid && (name.dirty || name.touched)">
+        <small class="inline" *ngIf="name.errors.required">Pet name required.</small>
+      </div> -->
+    </div>
+  </div>
+  <br>
+  <div class="row">
+    <div class="col-md-6 pl-0">
+      <ion-button ion-button color="primary" [disabled]="!(customerForm.valid)" (click)="inviteCustomer()">
+        Send invite
+      </ion-button>
+    </div>
+  </div>
+</form>

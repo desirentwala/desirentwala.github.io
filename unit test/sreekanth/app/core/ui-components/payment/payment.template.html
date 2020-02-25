@@ -1,0 +1,184 @@
+<ncp-modal class="modalForm bannerModal" [modalKey]="isViewpaymentModal" [closeOnEscape]="false" [closeOnOutsideClick]="false"
+    hideCloseButton="true" modalClass="modal-lg" modalTitle="Payment Options">
+
+    <modal-content>
+        <div *ngIf="!isBatchPolicy" class="radio-btn row pb10">
+            <ncp-label elementLabel="Pay On" elementId="Pay On" mandatoryFlag="true"></ncp-label>
+            <div class="col-md-8 col-sm-8 col-xs-12 text-left radiolist">
+                <div *ngFor="let radiobutton of payOnList;let i = index" class="radioVerticalBtns">
+                    <label [ngClass]="!radioButtonflag? 'notAllowed' :' '">
+                        <input type="radio" [name]="payOnName" [id]="payOnName+i+1" [value]="radiobutton.value" [formControl]="elementControl1">
+                        <span class="fake-input" [class.invalid]="invalidFlag"></span>
+                        <span class="fake-label" [attr.for]="payOnName+i">
+                            <i ngClass="{{radiobutton.iconClass}} iconRadioBtn"></i>
+                            <span class="labelRadioBtn">{{radiobutton.label | translate}}</span>
+                        </span>
+                    </label>
+                </div>
+            </div>
+        </div>
+        <div *ngIf="isBatchPolicy" class="row">
+            <div class="col-md-12 col-sm-12 col-xs-12 text-center">
+                <div *ngFor="let radiobutton of payOnList;let i = index">
+                    <ncp-label elementLabel="Payable Amount" customFlag=true labelClass="col-md-6 col-sm-6 col-xs-6 labelAlign mt-5"></ncp-label>
+                    <div class="col-md-6 col-sm-6 col-xs-6 text-left mt-3">
+                        <misc-display isLabel="true" type="amount" label="{{radiobutton.value}}" displayClass="displayAsLabel"> </misc-display>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div *ngIf="elementControl1.valid" class="">
+            <tabset vertical="true">
+                <tab *ngFor="let payObj of paymentGatewayList ;let i = index" active="i==1" title="{{payObj.desc | translate }}">
+                    <div class="radio-btn row">
+                        <div *ngFor="let payListRadiobutton of payObj.pgList;let i = index" class="col-md-12 col-sm-12 col-xs-12 radiolist">
+                            <label [ngClass]="!radioButtonflag? 'notAllowed' :' '">
+                                <input type="radio" [name]="radioName" [id]="radioName+i" [(ngModel)]="value" [value]="payListRadiobutton" [formControl]="elementControl">
+                                <span class="fake-input" [class.invalid]="invalidFlag"></span>
+                                <span class="fake-label" [attr.for]="radioName+i">
+                                    <!-- <i ngClass="{{payListRadiobutton.iconClass}} iconRadioBtn"></i> -->
+                                    <span class="labelRadioBtn">{{payListRadiobutton.pgName | translate}}</span>
+                                    <span *ngIf="payListRadiobutton['supportedBanks']?.length > 0" class="pl5 pr5"> - </span>
+                                    <span *ngFor=" let banks of payListRadiobutton['supportedBanks'];let last= last">
+                                        {{banks.desc}}
+                                        <span *ngIf="!last" class="pr5">,</span>
+                                    </span>
+                                </span>
+                            </label>
+                        </div>
+                    </div>
+                </tab>
+            </tabset>
+
+            <!-- <tabset vertical=true>
+				<tab title="Credit Card">
+					<div class="radio-btn row">
+						<div *ngFor="let payListRadiobutton of paymentGatewayList;let i = index" class="col-md-12 col-sm-12 col-xs-6 text-left radiolist mb10">
+							<label *ngIf="payListRadiobutton.isActive" [ngClass]="!radioButtonflag? 'notAllowed' :' '">  
+                    <input type="radio"   [name]="radioName" [id]="radioName+i" [(ngModel)]="value" [value]="payListRadiobutton.pgwKey"  [formControl]="elementControl"> 
+                    <span class="fake-input" [class.invalid]="invalidFlag"></span>
+                    <span class="fake-label" [attr.for]="radioName+i" ><i ngClass="{{payListRadiobutton.iconClass}} iconRadioBtn"></i><span class="labelRadioBtn">{{payListRadiobutton.pgwTitle | translate}}</span></span>
+               </label>
+						</div>
+					</div>
+				</tab>
+				<tab title="Net Banking">
+					Net Banking coming soon
+				</tab>
+				<tab title="ATM Card">
+					ATM Card coming soon
+				</tab>
+				<tab title="Cheque">
+					Cheque coming soon
+				</tab>
+			</tabset> -->
+        </div>
+    </modal-content>
+    <modal-footer>
+        <div class="btns-row">
+            <!--<div *ngIf="enableUpdateButton">-->
+            <button-field buttonType="custom" buttonName="NCPBtn.close" (click)="isViewpaymentModal=false" buttonClass="ncp-linkBtn w100p"
+                iconClass="fa fa-close">
+            </button-field>
+            <button-field buttonName="NCPBtn.pay" buttonType="custom" buttonClass="ncp-btn" (click)="callPaymentGateway()"></button-field>
+            <!--</div>-->
+        </div>
+    </modal-footer>
+</ncp-modal>
+<ncp-modal class="modalForm bannerModal" [modalKey]="isViewpaymentPageModal" [closeOnEscape]="false" [closeOnOutsideClick]="false"
+    hideCloseButton="true" modalClass="modal-lg">
+    <modal-header *ngIf="isCancelButtonRequired" >
+        <button-field buttonType="custom" buttonName="NCPBtn.cancel" (click)="cancelQuestionModal()" buttonClass="ncp-linkBtn w100p"
+                iconClass="fa fa-close"></button-field>
+    </modal-header>
+    <modal-content>
+        <iframe *ngIf="paymentURL" id="paymentGateWayIframe" class="iframeContainer" [src]="paymentURL"></iframe>
+    </modal-content>
+</ncp-modal>
+
+<ncp-modal class="modalForm bannerModal" [modalKey]="isPaymentRefundPageModal" [closeOnEscape]="false" [closeOnOutsideClick]="false"
+    hideCloseButton="true" modalClass="modal-md">
+    <modal-content>
+        <div class="row">
+            <span>{{'NCPLabel.PaymentRefNo' | translate}} </span>
+            <span>{{paymentReferenceNo}}</span>
+        </div>
+        <div *ngIf="isBatchPolicy" class="row">
+            <span>{{'NCPLabel.QuoteRefNo' | translate}} </span>
+            <span>{{policyNumber}}</span>
+        </div>
+        <div class="row">
+            <span>{{'NCPLabel.PolicyPostingFailedMsg' | translate}}</span>
+        </div>
+    </modal-content>
+    <modal-footer>
+        <div class="btns-row">
+            <div class="col-md-12 col-sm-12 col-xs-12 pull-right p0">
+                <button-field buttonType="custom" buttonName="NCPBtn.close" (click)="isPaymentRefundPageModal=false" buttonClass="ncp-linkBtn w100p"
+                    iconClass="fa fa-close">
+                </button-field>
+
+                <button-field buttonName="NCPBtn.postAgain" buttonType="custom" buttonClass="ncp-btn w100p" (click)="doPolicyRePost()"></button-field>
+            </div>
+        </div>
+    </modal-footer>
+</ncp-modal>
+
+<ncp-modal class="modalForm bannerModal" [modalKey]="isPaymentRefundResultPageModal" [closeOnEscape]="false" [closeOnOutsideClick]="false"
+    hideCloseButton="true" modalClass="modal-md">
+
+    <modal-content>
+
+        <div class="row">
+            <span>{{'NCPLabel.PaymentRefNo' | translate}} </span>
+            <span>{{paymentReferenceNo}}</span>
+        </div>
+        <div *ngIf="isBatchPolicy" class="row">
+            <span>{{'NCPLabel.QuoteRefNo' | translate}} </span>
+            <span>{{policyNumber}}</span>
+        </div>
+    </modal-content>
+    <modal-footer>
+        <div class="btns-row">
+            <div class="col-md-2 col-sm-3 col-xs-12 pull-right p0">
+                <button-field buttonType="custom" buttonName="NCPBtn.close" (click)="isPaymentRefundResultPageModal=false" buttonClass="ncp-linkBtn w100p"
+                    iconClass="fa fa-close">
+                </button-field>
+
+            </div>
+        </div>
+    </modal-footer>
+</ncp-modal>
+
+<ncp-modal class="modalForm bannerModal" [modalKey]="isPaymentFailedPageModal" [closeOnEscape]="false" [closeOnOutsideClick]="false"
+    hideCloseButton="true" modalClass="modal-md">
+
+    <modal-content>
+        <div class="row">
+            <span>{{'NCPLabel.PaymentFailed' | translate}}</span>
+        </div>
+    </modal-content>
+    <modal-footer>
+        <div class="btns-row">
+            <div class="col-md-12 col-sm-12 col-xs-12 pull-right p0">
+                <button-field buttonType="custom" buttonName="NCPBtn.close" (click)="isPaymentFailedPageModal=false" buttonClass="ncp-linkBtn w100p"
+                    iconClass="fa fa-close">
+                </button-field>
+                <button-field buttonName="NCPBtn.reTryPayment" buttonType="custom" buttonClass="ncp-btn w100p" (click)="doReTryPayment()"></button-field>
+            </div>
+        </div>
+    </modal-footer>
+</ncp-modal>
+<ncp-modal  [modalKey]="isCancelPaymentPageModal" [closeOnEscape]="false" [closeOnOutsideClick]="false"
+    hideCloseButton="true" modalClass="modal-lg" modalTitle="NCPLabel.paymentCancel">
+    <modal-footer>
+        <div class="btns-row">
+            <button-field buttonType="custom" buttonName="NCPBtn.yes" (click)="cancelPayment(true)" buttonClass="ncp-linkBtn w100p"
+                iconClass="fa fa-close">
+            </button-field>
+            <button-field buttonType="custom" buttonName="NCPBtn.no" (click)="cancelPayment(false)" buttonClass="ncp-linkBtn w100p"
+                iconClass="fa fa-close">
+            </button-field>
+        </div>
+    </modal-footer>
+</ncp-modal>

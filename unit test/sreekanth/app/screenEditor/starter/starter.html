@@ -1,0 +1,313 @@
+<form class="form">
+    <div class="row starteHeader">
+        <h2>NCP Screen Editor Starter Screen </h2>
+        <button class="pull-right btn btn-primary" (click)="config.navigateToHome()">Back to application</button>
+    </div>
+    <section>
+        <div class="row">
+            <div class="col-md-2 text-right ">
+                <label>Select a Mode: </label>
+            </div>
+            <div class="col-md-6">
+                <select class="form-control" [formControl]="mode">
+                    <option value=""> </option>
+                    <option *ngFor=" let item of modeList">{{item}}</option>
+                </select>
+            </div>
+        </div>
+    </section>
+    <section *ngIf="mode.value === 'Quotes'">
+        <div class="row">
+            <div class="col-md-2"></div>
+            <div class="col-md-4">
+                <button ngClass="{{isNewProd ? 'btn btn-info' : 'btn btn-default' }}" class="se-button" (click)="isNewProd = true">Create a Product</button>
+            </div>
+            <div class="col-md-4">
+                <button ngClass="{{isNewProd ? 'btn btn-default' :'btn btn-info'  }}" class="se-button" [disabled]="disableEdit" (click)="isNewProd = false">Edit a product</button>
+            </div>
+        </div>
+        <div class="row" *ngIf="!isNewProd && mode.value === 'Quotes'">
+            <div class="col-md-2"></div>
+            <div class="col-md-4">
+                <button ngClass="{{isB2c ? 'btn btn-info' : 'btn btn-default' }}" class="se-button" (click)="isB2c = true;">B2C</button>
+            </div>
+            <div class="col-md-4">
+                <button ngClass="{{isB2c? 'btn btn-default' :'btn btn-info'  }}" class="se-button" [disabled]="disableEdit" (click)="isB2c = false">B2B</button>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-2 text-right">
+                <label>Select an Lob:</label>
+            </div>
+            <div class="col-md-6">
+                <select class="form-control" [formControl]="lob">
+                    <option value=""> </option>
+                    <option *ngFor="let elem of lobList" [value]="elem" (click)="populateProdList(elem)"> {{elem}}</option>
+                </select>
+            </div>
+        </div>
+        <div *ngIf="isNewProd">
+            <div class="row">
+                <div class="col-md-2"></div>
+                <div class="col-md-6">
+                    <input class="form-control" id="copyProd" class="checkboxinput" (click)="setCheckBoxValue()" type="checkbox" [(checked)]="isCopyProd">
+                    <span class="fake-input checkbox" for="copyProd" (click)="setCheckBoxValue()"></span>
+                    <label>Copy from existing products </label>
+                </div>
+            </div>
+        </div>
+        <div class="row" *ngIf="isNewProd">
+            <div class="col-md-2 text-right">
+                <label>Template Name:</label>
+            </div>
+            <div class="col-md-6">
+                <input class="form-control" type="text" autocomplete="off" [formControl]="prodCode">
+            </div>
+        </div>
+        <div class="row" *ngIf="isCopyProd || !isNewProd">
+            <div class="col-md-2 text-right">
+                <label>Select a Product:</label>
+            </div>
+            <div class="col-md-6">
+                <select class="form-control" [formControl]="existingProd">
+                    <option value=""> </option>
+                    <option *ngFor="let item of applicableProds" [value]="item.code"> {{item.code}} - {{item.desc}}</option>
+                </select>
+            </div>
+        </div>
+        <div *ngIf="isNewProd">
+            <div class="row" *ngIf="!isCopyProd && prodCode.valid">
+                <button class="btn btn-primary pull-right" (click)="goToEditor()">Let's Create!</button>
+            </div>
+            <div class="row" *ngIf="isCopyProd && prodCode.valid && existingProd.valid">
+                <button class="btn btn-primary pull-right" (click)="goToEditor()">Let's Copy & Edit!</button>
+            </div>
+        </div>
+        <div *ngIf="!isNewProd">
+            <div class="row" *ngIf="existingProd.valid">
+                <button class="btn btn-primary pull-right" (click)="goToEditor()">Let's Edit!</button>
+            </div>
+        </div>
+    </section>
+    <section *ngIf="mode.value === 'Endorsements' || mode.value === 'Snippet'">
+        <div class="row">
+            <div class="col-md-2"></div>
+            <div class="col-md-4">
+                <button ngClass="{{isNewProd ? 'btn btn-info' : 'btn btn-default' }}" class="se-button" (click)="isNewProd = true">Create </button>
+            </div>
+            <div class="col-md-4">
+                <button ngClass="{{isNewProd ? 'btn btn-default' :'btn btn-info'  }}" class="se-button" [disabled]="disableEdit" (click)="isNewProd = false">Edit</button>
+            </div>
+        </div>
+        <div *ngIf="mode.value === 'Endorsements'">
+            <div class="row" *ngIf="isNewProd">
+                <div class="col-md-3 text-right">
+                    <label> Endorsement template name:</label>
+                </div>
+                <div class="col-md-4">
+                    <input class="form-control" type="text" autocomplete="off" [formControl]="prodCode">
+                </div>
+            </div>
+            <div class="row" *ngIf="!isNewProd">
+                <div class="col-md-3 text-right">
+                    <label>Select a endorsement template:</label>
+                </div>
+                <div class="col-md-6">
+                    <select class="form-control" [formControl]="prodCode" (change)="selectTemplate(prodCode.value)">
+                        <option value=""> </option>
+                        <option *ngFor="let item of endtArray" [value]="item['path']"> {{item['name']}}</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+        <div *ngIf="mode.value === 'Snippet'">
+            <div class="row" *ngIf="isNewProd">
+                <div class="col-md-2 text-right">
+                    <label> Snippet name:</label>
+                </div>
+                <div class="col-md-6">
+                    <input class="form-control" type="text" autocomplete="off" [formControl]="prodCode">
+                </div>
+            </div>
+            <div class="row" *ngIf="!isNewProd">
+                <div class="col-md-2 text-right">
+                    <label>Select a snippet:</label>
+                </div>
+                <div class="col-md-6">
+                    <select class="form-control" [formControl]="prodCode" (change)="selectTemplate(prodCode.value)">
+                        <option value=""> </option>
+                        <option *ngFor="let item of snippetArray" [value]="item['path']"> {{item['name']}}</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+        <div class="row" *ngIf="prodCode.valid && templateJson">
+            <button class="btn btn-primary pull-right" *ngIf="!isNewProd" (click)="goToEditor()">Let's Edit!</button>
+            <button class="btn btn-primary pull-right" *ngIf="isNewProd" (click)="goToEditor()">Let's Create!</button>
+        </div>
+    </section>
+    <section *ngIf="mode.value === 'Language upload/download'">
+        <div class="row">
+            <div class="col-md-2"></div>
+            <div class="col-md-4">
+                <button ngClass="{{isUploadExcel ? 'btn btn-info' : 'btn btn-default' }}" class="se-button" (click)="isUploadExcel = true">Create language json from excel</button>
+            </div>
+            <div class="col-md-4">
+                <button ngClass="{{isUploadExcel ? 'btn btn-default' :'btn btn-info'  }}" class="se-button" [disabled]="disableEdit" (click)="isUploadExcel = false">Download language labels</button>
+            </div>
+        </div>
+        <ng-container *ngIf="isUploadExcel">
+
+            <div class="row">
+                <div class="col-md-2 text-right">
+                    <label> Country Code :</label>
+                </div>
+                <div class="col-md-6">
+                    <input type="text" class="form-control" [formControl]="countryCode" (change)="updateCountryCode(countryCode.value)">
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-2 text-right">
+                    <label> Project Code :</label>
+                </div>
+                <div class="col-md-6">
+                    <input type="text" [formControl]="projectCode" class="form-control" (change)="updateProjectCode(projectCode.value)">
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-2 text-right">
+                    <label> Upload Excel :</label>
+                </div>
+                <div class="col-md-6">
+                    <input type="file" class="form-control" (change)="fileUploaded($event)">
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-2"></div>
+                <ng-container *ngFor="let lang of utils.obj.keys(langDownload)">
+                    <button class="se-button btn btn-default" (click)="saveLang(lang)">
+                        {{lang}}
+                        <i class="fa fa-download"></i>
+                    </button>
+                </ng-container>
+            </div>
+        </ng-container>
+        <ng-container *ngIf="!isUploadExcel">
+            <div class="row">
+                <div class="col-md-2 text-right">
+                    <label> Download Language Excel:</label>
+                </div>
+                <div class="col-md-6">
+                    <ng-container *ngFor="let lang of langArray;">
+                        <button class="se-button btn btn-default" (click)="downLoadLang(lang)">{{lang}}</button>
+                    </ng-container>
+                    <button class="se-button btn btn-default fa fa-plus" (click)="isAddLang = true"></button>
+                </div>
+            </div>
+            <div class="row" *ngIf="isAddLang">
+                <div class="col-md-2 text-right">
+                    <label> Enter Language Code: </label>
+                </div>
+                <div class="col-md-6 display-if">
+                    <input type="text" [formControl]="langCode" class="form-control">
+                    <button *ngIf="langCode.value" class="se-button btn btn-default fa fa-plus" (click)="addLang(langCode.value);">Add lang</button>
+                </div>
+            </div>
+        </ng-container>
+    </section>
+    <section *ngIf="mode.value === 'Product Setup' || mode.value === 'Menu Setup'">
+        <div class="row" *ngIf="mode.value === 'Product Setup'">
+            <div class="col-md-2"></div>
+            <div class="col-md-4">
+                <button ngClass="{{isNewLOB ? 'btn-info' : 'btn-default' }}" class="btn se-button" (click)="isNewLOB = true; isNewProd = true;">Create </button>
+            </div>
+            <div class="col-md-4">
+                <button ngClass="{{isNewLOB ? 'btn-default' :'btn-info'  }}" class="btn se-button" [disabled]="disableEdit" (click)="isNewLOB = false; isNewProd = false;">Edit</button>
+            </div>
+        </div>
+        <ng-container *ngIf="mode.value === 'Product Setup'">
+            <div class="row" *ngIf="isNewLOB">
+                <div class="col-md-3 text-right">
+                    <label> LOB Name:
+                        <span class="aste">*</span>
+                    </label>
+                </div>
+                <div class="col-md-4">
+                    <input class="form-control" type="text" autocomplete="off" [formControl]="productSetupLOBCode">
+                </div>
+            </div>
+            <div class="row" *ngIf="isNewLOB">
+                <div class="col-md-3 text-right">
+                    <label>Refer Existing LOB Templates</label>
+                </div>
+                <div class="col-md-6">
+                    <div *ngFor="let elem of lobList; let i=index;" class="col-md-2">
+                        <ng-container *ngIf="i<8">
+                            <button style="padding: 2px 5px 1px;" (click)="copiedProductSetupLOBCode.value != elem ? copiedProductSetupLOBCode.patchValue(elem) : copiedProductSetupLOBCode.patchValue('');populateProdList(copiedProductSetupLOBCode.value)" type="button" [class.active]="elem===copiedProductSetupLOBCode.value" class="btn btn-primary btn-xs h25">{{elem}}</button>
+                        </ng-container>
+                    </div>
+                </div>
+
+            </div>
+            <div class="row" *ngIf="!isNewLOB">
+                <div class="col-md-2 text-right">
+                    <label>Select an LOB:</label>
+                </div>
+                <div class="col-md-6">
+                    <select class="form-control" [formControl]="productSetupLOBCode" (change)="populateProdList(productSetupLOBCode.value)">
+                        <option value=""> Select LOB </option>
+                        <option *ngFor="let elem of lobList" [value]="elem"> {{elem}}</option>
+                    </select>
+                </div>
+            </div>
+            <div class="row" *ngIf="!isNewLOB && productSetupLOBCode.value !== ''">
+                <div class="col-md-2"></div>
+                <div class="col-md-4">
+                    <button ngClass="{{isNewProd ? 'btn-info' : 'btn-default' }}" class="btn se-button" (click)="isNewProd = true; existingProd.setValue('')">Create Product</button>
+                </div>
+                <div class="col-md-4">
+                    <button ngClass="{{isNewProd ? 'btn-default' :'btn-info'  }}" class="btn se-button" [disabled]="disableEdit" (click)="isNewProd = false; prodCode.setValue('')">Edit Existing Product</button>
+                </div>
+            </div>
+            <div class="row" *ngIf="isNewProd && productSetupLOBCode.value !== ''">
+                <div class="col-md-3 text-right">
+                    <label> Product Name:
+                        <span class="aste">*</span>
+                    </label>
+                </div>
+                <div class="col-md-4">
+                    <input class="form-control" type="text" autocomplete="off" [formControl]="prodCode">
+                </div>
+            </div>
+            <!-- <div class="row" *ngIf="isNewProd && isNewLOB && copiedProductSetupLOBCode.value !== '' && productSetupLOBCode.value !== ''">
+                <div class="col-md-3 text-right">
+                    <label>Refer Existing {{copiedProductSetupLOBCode.value}} Product Templates</label>
+                </div>
+                <div class="col-md-6">
+                    <div *ngFor="let item of applicableProds; let i=index;" class="col-md-2">
+                        <ng-container *ngIf="i<8">
+                            <button style="padding: 2px 5px 1px;" (click)="prodCode.value != item.code ? prodCode.patchValue(item.code): prodCode.patchValue('');" type="button" [class.active]="item.code===prodCode.value" class="btn btn-primary btn-xs h25">{{item.code}}</button>
+                        </ng-container>
+                    </div>
+                </div>    
+            </div> -->
+            <div class="row" *ngIf="!isNewProd && productSetupLOBCode.value !== ''">
+                <div class="col-md-2 text-right">
+                    <label>Select Product:</label>
+                </div>
+                <div class="col-md-6">
+                    <select class="form-control" [formControl]="existingProd">
+                        <option value=""> Select Product </option>
+                        <option *ngFor="let item of applicableProds" [value]="item.code"> {{item.code}} - {{item.desc}}</option>
+                    </select>
+                </div>
+            </div>
+        </ng-container>
+        <div class="row">
+            <button [class.disabled]="mode.value === 'Product Setup' && !productSetupLOBCode.valid" class="btn btn-primary pull-right" *ngIf="!isNewLOB && !isNewProd"
+                (click)="goToEditor()">Let's Edit!</button>
+            <button [class.disabled]="mode.value === 'Product Setup' && ((isNewLOB && (!prodCode.valid || !productSetupLOBCode) ) || (isNewProd && !prodCode.valid ))"
+                class="btn btn-primary pull-right" *ngIf="isNewLOB || isNewProd" (click)="goToEditor()">Let's Create!</button>
+        </div>
+    </section>
+</form>

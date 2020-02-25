@@ -1,0 +1,117 @@
+<div *ngIf="customFlag">
+    <div *ngIf="type !== 'switchbutton'" [id]="elementId" [class]="radioCustomClass">
+        <p class="mainFloatLabel">{{elementLabel | translate}}<span *ngIf="mandatoryFlag" class="aste">*</span></p>
+        <ng-template [ngIf]="horizontalflag">
+            <div *ngFor="let radiobutton of radioArray;let i = index" class="radioHorizontalBtns" ngClass="{{hasImageIcon == true ? 'imageRadioBtnsContainer hasImageIconContainer' : ''}}">
+                <span *ngIf="hasImageIcon" class="verticalLine"></span>
+                <label [class.cursor-not-allowed]="radiobutton.disabled" [ngClass]="!radioButtonflag? 'notAllowed' :' '" class="radioinline" [class.checkedItemLabel]="innerValue === radiobutton.value">  
+                    <input type="radio" [class.checkedItem]="innerValue === radiobutton.value" [attr.disabled]="radiobutton.disabled === true || elementControl.disabled || null" [name]="radioName" [id]="radioName+i" [(ngModel)]="value" [value]="radiobutton.value" [formControl]="elementControl" > 
+                    <span class="fake-input" [class.invalid]="invalidFlag" ></span>
+                    <div *ngIf="hasImageIcon" class="radioImgIcon componentIcons" [ngClass]="customImageIcon" >
+                        <misc-img [doExtractSVG] = "true" [src]="radiobutton.imgIconSrc"></misc-img>
+                    </div>
+                    <span class="fake-label" [attr.for]="radioName+i">
+                        <i *ngIf="iconClass" ngClass="{{radiobutton.iconClass}} iconRadioBtn"></i>
+                        <span class="labelRadioBtn">{{radiobutton.label | translate}}</span></span>
+              </label>
+            </div>
+        </ng-template>
+        <ng-template [ngIf]="!horizontalflag">
+            <div *ngFor="let radiobutton of radioArray;let i = index" class="radioVerticalBtns">
+                <label [class.cursor-not-allowed]="radiobutton.disabled" [ngClass]="!radioButtonflag? 'notAllowed' :' '" class="col-md-8 col-sm-8 col-xs-12 radiolist">  
+                    <input type="radio"  [attr.disabled]="radiobutton.disabled === true || elementControl.disabled || null" [name]="radioName" [id]="radioName+i" [(ngModel)]="value" [value]="radiobutton.value"  [formControl]="elementControl" > 
+                    <span class="fake-input" [class.invalid]="invalidFlag"></span>
+                    <span class="fake-label" [attr.for]="radioName+i" ><i ngClass="{{radiobutton.iconClass}} iconRadioBtn"></i><span class="labelRadioBtn">{{radiobutton.label | translate}}</span></span>
+                </label>
+            </div>
+        </ng-template>
+
+    </div>
+    <div *ngIf="type === 'switchbutton' && (value === true || value === false)" class="switchBtnsContainer">
+        <p [class.floatLabel]="value">{{elementLabel | translate}}<span *ngIf="mandatoryFlag" class="aste">*</span></p>
+        <label [ngClass]="!radioButtonflag? 'notAllowed' :' '" class="switch-btns">    
+            <input type="checkbox" [checked]="value" [(ngModel)]="value">
+            <span class="slider"></span>
+            <span *ngFor="let radiobutton of radioArray;let i = index" class="btn-yes">
+               <i ngClass="{{radiobutton.iconClass}} iconRadioBtn"></i> <span class="labelRadioBtn">{{radiobutton.value}}</span>
+            </span>
+         </label>
+    </div>
+    <div *ngIf="type === 'switchbutton' && (value !== true && value !== false)" class="switchBtnsContainer">
+        <p [class.floatLabel]="value">{{elementLabel | translate}}<span *ngIf="mandatoryFlag" class="aste">*</span></p>
+        <label [ngClass]="!radioButtonflag? 'notAllowed' :' '" class="switch-btns">  
+            <input type="checkbox" (click)="pushValue = !pushValue;setPushButtonValue(!pushValue)" [checked]="pushValue">
+            <span class="slider"></span>
+            <span *ngFor="let radiobutton of radioArray;let i = index"  class="btn-yes">
+               <i ngClass="{{radiobutton.iconClass}} iconRadioBtn"></i><span class="labelRadioBtn"> {{radiobutton.label}}</span>
+            </span>
+        </label>
+    </div>
+    <div *ngIf="tooltipTitle" class="col-sm-1 col-md-1 col-xs-1  tooltip-align tooltip-mobile3">
+        <button *ngIf="tooltipTitle" type="button" class="btn btn-link info-tooltip" data-toggle="toggle" [tooltipPlacement]="tooltipPlacement"
+			 [tooltip]="tooltipHTML" [id]="elementId">
+               <i class="icon-tooltip" [id]="elementId"></i>
+               <tooltip-content #tooltipHTML [excludeId]="elementId">
+                       <div [innerHTML]="tooltipTitle | translate"> </div>
+                   </tooltip-content>
+               </button>
+    </div>
+</div>
+<div *ngIf="!customFlag">
+    <div *ngIf="type !== 'switchbutton'" [id]="elementId" class="col-md-5 col-sm-6 col-xs-11 pr-sm-0">
+        <p class="mainFloatLabel">{{elementLabel | translate}}<span *ngIf="mandatoryFlag" class="aste">*</span></p>
+        <ng-template [ngIf]="horizontalflag">
+            <div *ngFor="let radiobutton of radioArray;let i = index" class="radioHorizontalBtns" ngClass="{{hasImageIcon == true ? 'hasImageIconContainer' : ''}}">
+                <label [class.cursor-not-allowed]="radiobutton.disabled" [ngClass]="!radioButtonflag? 'notAllowed' :' '" class="radioinline">  
+                    <input type="radio" [attr.disabled]="radiobutton.disabled === true || elementControl.disabled || null" [name]="radioName" [id]="radioName+i" [(ngModel)]="value" [value]="radiobutton.value"  [formControl]="elementControl" > 
+                    <span class="fake-input" [class.invalid]="invalidFlag"></span>
+                    <span class="fake-label" [attr.for]="radioName+i"><i ngClass="{{radiobutton.iconClass}} iconRadioBtn"></i><span class="labelRadioBtn">{{radiobutton.label | translate}}</span></span>
+                </label>
+            </div>
+        </ng-template>
+        <ng-template [ngIf]="!horizontalflag">
+            <div *ngFor="let radiobutton of radioArray;let i = index" class="radioVerticalBtns">
+                <label [class.cursor-not-allowed]="radiobutton.disabled" [ngClass]="!radioButtonflag? 'notAllowed' :' '" class="col-md-8 col-sm-8 col-xs-12 radiolist">  
+                    <input type="radio" [attr.disabled]="radiobutton.disabled === true || elementControl.disabled || null" [name]="radioName" [id]="radioName+i" [(ngModel)]="value" [value]="radiobutton.value"  [formControl]="elementControl" > 
+                    <span class="fake-input" [class.invalid]="invalidFlag"></span>
+                    <span class="fake-label" [attr.for]="radioName+i" ><i ngClass="{{radiobutton.iconClass}} iconRadioBtn"></i><span class="labelRadioBtn">{{radiobutton.label | translate}}</span></span>
+               </label>
+            </div>
+        </ng-template>
+        <!--<button *ngIf="tooltipTitle" type="button" class="btn btn-link info-tooltip" data-toggle="toggle" [tooltipPlacement]="tooltipPlacement"
+            [tooltip]="tooltipTitle">
+            <i class="icon-tooltip"></i>
+        </button>           -->
+        <button-field *ngIf="tooltipTitle" buttonType="custom" [tooltipPlacement]="tooltipPlacement" [tooltip]="tooltipTitle" data-toggle="toggle" iconCLass="icon-tooltip" buttonClass="btn btn-link info-tooltip"></button-field>
+
+    </div>
+    <div *ngIf="type === 'switchbutton' && (value === true || value === false)" class="switchBtnsContainer">
+        <p [class.floatLabel]="value">{{elementLabel | translate}}<span *ngIf="mandatoryFlag" class="aste">*</span></p>
+        <label [ngClass]="!radioButtonflag? 'notAllowed' :' '" class="switch-btns">    
+            <input type="checkbox" [checked]="value" [(ngModel)]="value" >
+            <span class="slider"></span>
+            <span *ngFor="let radiobutton of radioArray;let i = index" class="btn-yes">
+               <i ngClass="{{radiobutton.iconClass}} iconRadioBtn"></i> <span class="labelRadioBtn">{{radiobutton.label | translate}}</span>
+            </span>
+        </label>
+    </div>
+    <div *ngIf="type === 'switchbutton' && (value !== true && value !== false)" class="switchBtnsContainer">
+        <p [class.floatLabel]="value">{{elementLabel | translate}}<span *ngIf="mandatoryFlag" class="aste">*</span></p>
+        <label [ngClass]="!radioButtonflag? 'notAllowed' :' '" class="switch-btns">   
+            <input type="checkbox" (click)="pushValue = !pushValue;setPushButtonValue(pushValue)" [checked]="pushValue">
+            <span class="slider"></span>
+            <span *ngFor="let radiobutton of radioArray;let i = index"  class="btn-yes">
+               <i ngClass="{{radiobutton.iconClass}} iconRadioBtn"></i> <span class="labelRadioBtn">{{radiobutton.label | translate}}</span>
+            </span>
+        </label>
+    </div>
+    <div *ngIf="tooltipTitle" class="col-sm-1 col-md-1 col-xs-1  tooltip-align tooltip-mobile3">
+        <button *ngIf="tooltipTitle" type="button" class="btn btn-link info-tooltip" data-toggle="toggle" [tooltipPlacement]="tooltipPlacement"
+		 [tooltip]="tooltipHTML" [id]="elementId">
+               <i class="icon-tooltip" [id]="elementId"></i>
+               <tooltip-content #tooltipHTML [excludeId]="elementId">
+                       <div [innerHTML]="tooltipTitle | translate"> </div>
+                   </tooltip-content>
+               </button>
+    </div>
+</div>

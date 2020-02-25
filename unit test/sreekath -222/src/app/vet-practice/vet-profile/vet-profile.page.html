@@ -1,0 +1,119 @@
+<ion-content>
+  <div class="back-card">
+    <div class="row mobile-card-align">
+      <!-- <div class="col-12">
+        <img src="../../../assets/imgs/mobile-logo.png" class="mobile-logo" alt="mobile-logo">
+      </div> -->
+      <div class=" col-md-12 col-sm-12 col-lg-6 content-card w-100">
+        <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12 desktop-logo">
+          <img class="home-logo" src="./assets/imgs/logo.png" alt="logo">
+        </div>
+        <h1 class="page-header">My profile</h1>
+        <hr class="horizontalLine">
+        <h2 class="page-sub-header">Personal information</h2>
+        <div *ngIf="currentImage && !isMobile" class="container">
+          <img [src]="currentImage" class="image" alt="Profile photo">
+          <div class="middle">
+            <div class="text">
+              <label for="userProfile" class="input-file">
+                <ion-icon name="create"></ion-icon>
+              </label>
+              <input id="userProfile" accept='image/*' type="file" (change)="uploadPicture($event)" />
+            </div>
+          </div>
+        </div>
+
+        <div *ngIf="currentImage && isMobile" class="container">
+          <img class="image" [src]="currentImage" (click)="selectImage()" >
+        </div>
+        <div *ngIf="!currentImage" class="container">
+          <label for="file-input" *ngIf="isMobile" class="input-file">
+            <div class="upload-image text-center p-4" (click)="selectImage()">
+              <ion-icon name="camera"></ion-icon>
+              <p>Click here to upload photo</p>
+            </div>
+          </label>
+          <div *ngIf="!isMobile">
+            <label for="file-input">
+              <div class="upload-image text-center p-4">
+                <ion-icon name="camera"></ion-icon>
+                <p>Click here to upload photo</p>
+              </div>
+            </label>
+            <input id="file-input" accept='image/*' type="file" (change)="uploadPicture($event)" />
+          </div>
+        </div>
+
+
+        <!-- user form profile form  contains the inputs which come from API exhisting users after LOGIN
+                they can edit and change and update their detrails-->
+        <form class="p-4" name="form" (ngSubmit)="updateProfile()" class="profile-form" #userForm="ngForm" novalidate>
+          <div *ngIf="vetData">
+            <label position="stacked">Full name</label><i class="fas fa-asterisk form-asterisk"></i>
+            <input class="form-control pl-1" #firstNames="ngModel" name="firstName" type="text"
+              [(ngModel)]="vetData.firstName" [readonly]="!readFormValue" required placeholder="Full name" minlength="2" maxlength="28">
+            <div class="text-danger" *ngIf="firstNames.invalid && (firstNames.dirty || firstNames.touched)">
+              <small class="inline" *ngIf="firstNames.errors.required">Full name required.</small>
+            </div>
+
+            <!-- <label position="stacked">Email address</label><i class="fas fa-asterisk form-asterisk"></i>
+            <input class="form-control pl-1" #email="ngModel" name="email" type="text" [(ngModel)]="vetData.email" readonly >
+
+            <label position="stacked">Phone no.</label><i class="fas fa-asterisk form-asterisk"></i>
+            <input class="form-control pl-1" #mobile="ngModel" name="mobile" type="text"
+              [(ngModel)]="vetData.mobile" readonly> -->
+              <label for="userName">User name</label><i class="fas fa-asterisk form-asterisk"></i>
+                <input type="text" id="userName" class="form-control" placeholder="User name" #userName="ngModel" name="userName"
+                  type="text" [(ngModel)]="vetData.userName" minlength="6" maxlength="25" pattern='^[a-zA-Z0-9]*$'
+                  aria-describedby="basic-addon1" readonly>
+              <label>Password</label><i class="fas fa-asterisk form-asterisk"></i>
+              <div class="show-password w-100">
+                <input [type]="show?'text':'password'" placeholder="Password" #pswd="ngModel" class="form-control" name="password"
+                  [(ngModel)]="vetData.password" pattern='^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])[\w~@#$%^&*+=`|{}:;!.?\"()\[\]-]{8,16}$'
+                  minlength="8" maxlength="16" required [readonly]="!readFormValue" />
+                <ion-icon class="eye-icon" [name]="show?'eye':'eye-off'" (click)='showPassword()'>
+                </ion-icon>
+              </div>
+              <div class="text-danger" *ngIf="pswd.invalid && (pswd.dirty || pswd.touched)">
+                <small *ngIf="pswd.errors.pattern">Min 8 characters, 1 uppercase, 1 lowercase and 1 number.</small>
+                <small *ngIf="pswd.errors.required">Password is required.</small>
+              </div>
+
+              <label for="speciesList">I see ...</label><i class="fas fa-asterisk form-asterisk"></i>
+            <ion-row class="w-100">
+              <ion-col size="1.5" *ngIf=" from !== 0 ">
+                <ion-card class="navigation-card" (click)="onPrevious()">
+                  <i class="fas fa-chevron-left"></i>
+                </ion-card>
+              </ion-col>
+              <ion-col size="3" *ngFor="let species of speciesArray; let i = index"
+                [ngClass]="{'isDisable':!readFormValue || species.isEditable}">
+                <ion-card class="species-card" title="{{species.speciesName}}" (click)="selectedSpecies(species,i)"
+                  [ngClass]="{'active':species.isActive === true ? true : false}">
+                  <em [ngClass]='{"isDisplay": species.isActive === true? false: true}' class="far fa-check tick-icon"></em>
+                  <ion-card-content></ion-card-content>
+                  <em class="{{species.iconName}} ion-float-end iconSize text-right p-2"></em>
+                </ion-card>
+              </ion-col>
+              <ion-col size="1.5" *ngIf="initialImages < speciesList.length">
+                <ion-card class="navigation-card" (click)="onNext()">
+                  <i class="fas fa-chevron-right"></i>
+                </ion-card>
+              </ion-col>
+            </ion-row>
+          </div>
+          <div class="row text-center p-2">
+            <ion-button class="create-btn editButon" expand="block" color="primary" (click)="editProfileEnable()">
+              Edit 
+            </ion-button>
+            <ion-button class="create-btn editButon" expand="block" color="primary"
+            [disabled]="userForm.invalid || !isEdit || selectedSpeciess.length === 0" (click)="updateProfile()">
+              Save
+            </ion-button>
+          </div>
+        </form>
+        <!-- form got ended-->
+      </div>
+    </div>
+  </div>
+</ion-content>

@@ -1,0 +1,239 @@
+@import "../../../theme/variables.scss";
+
+.container {
+  width: 210px;
+  height: 138px;
+  border: 1px solid var(--ion-color-medium-tint);
+  position: relative;
+  border-radius: 5px;
+  padding-right: 0px !important;
+  padding-left: 0px !important;
+  text-align: -webkit-center !important;
+}
+
+@media (max-width: 762px) {
+  .container {
+    width: fit-content;
+  }
+}
+
+.image {
+  opacity: 1;
+  display: block;
+  width: 100%;
+  height: auto;
+  -webkit-transition: 0.5s ease;
+  transition: 0.5s ease;
+  -webkit-backface-visibility: hidden;
+  backface-visibility: hidden;
+  border-radius: 4px;
+  width: 100%;
+  height: -webkit-fill-available;
+}
+
+.middle {
+  transition: 0.5s ease;
+  opacity: 0;
+  position: absolute;
+  top: 50%;
+  left: 45%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  -ms-transform: translate(-50%, -50%);
+  text-align: center;
+}
+
+.species-img {
+  width: 80%;
+  padding: 5px;
+  height: 10vh;
+}
+.species-card {
+  cursor: pointer;
+}
+
+@media (max-width: 762px) {
+  .species-card {
+    width: 50%;
+    margin: auto;
+    margin-bottom: 10px;
+  }
+}
+.more-icon {
+  font-size: var(--size-icon-20);
+}
+
+.text {
+  color: #000;
+  font-size: 26px;
+}
+.text > label > i {
+  cursor: pointer;
+}
+
+.select-dropdown {
+  border: 1px solid #dde1e6 !important;
+  background: #fff !important;
+  padding: 7px !important;
+}
+.create-btn {
+  width: 25%;
+}
+.showMore-card {
+  width: 2vw;
+  height: 16vh;
+  cursor: var(--cursor);
+}
+.showMore-card > ion-icon {
+  font-size: 30px;
+  padding-top: 2rem;
+  cursor: var(--cursor);
+}
+
+.toggle-icon {
+  padding: var(--size-p2) var(--size-pr1);
+}
+
+.pet-name {
+  font-family: var(--ion-default-font);
+}
+.pet-detail {
+  box-shadow: 0px 0px 5px #888888;
+}
+.pet-img {
+  width: 90px;
+  height: 90px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+.flex-img {
+  width: 105px;
+}
+.pet-info {
+  width: 100%;
+  padding: 0rem 0rem 0rem 2rem;
+}
+
+.list-label {
+  font-family: var(--ion-default-font);
+  font-size: 36px;
+  color: var(--ion-color-medium);
+}
+
+.list-label-small {
+  font-family: var(--ion-header-font);
+  font-size: 16px;
+  color: var(--ion-color-dark);
+}
+
+.insurance {
+  font-family: var(--ion-default-font);
+  width: 39px;
+  height: 19px;
+  opacity: 0.5;
+  font-size: 16px;
+  color: var(--ion-color-medium);
+}
+
+.action-color {
+  color: var(--ion-color-secondary);
+}
+
+.disable {
+  font-family: var(--ion-header-font);
+  font-size: 16px;
+  color: var(--ion-color-medium-shade);
+  cursor: none;
+}
+
+.btn-add {
+  font-size: 15px !important;
+  background: var(--ion-color-primary) !important;
+  color: var(--ion-color-primary-contrast);
+  border-radius: 0.15rem !important;
+  margin-right: 0.5rem;
+}
+.toggle-icon {
+  width: 41px;
+  height: 22px;
+}
+.toggle-inner {
+  width: 18px;
+  height: 18px;
+}
+@media (min-width: 768px) {
+  .pet-info {
+    padding: 0rem 0rem 0rem 2rem;
+  }
+}
+
+// @media (max-width: 480px) {
+//   .text-left {
+//     font-size: 21px;
+//     width: 25vw;
+//   }
+// }
+// @media (max-width: 320px) {
+//   .text-left {
+//     font-size: 23px;
+//   }
+// }
+
+.toggle-align {
+  position: relative;
+  top: 13px;
+  left: 10px;
+}
+.toggle-btn {
+  width: auto;
+}
+@media (min-width: 1024px) {
+  .toggle-btn {
+    width: auto !important;
+  }
+}
+@media (max-width: 762px) {
+  .toggle-btn {
+    width: auto;
+    font-size: var(--size-font-12);
+    margin: auto;
+    margin-right: 0px !important;
+    position: relative;
+    bottom: 15px;
+  }
+}
+@media (min-width: 768px) {
+  .toggle-btn {
+    width: auto;
+    font-size: var(--size-font-12);
+    margin: auto;
+    margin-right: 0px !important;
+  }
+}
+
+@media (width: 320px) {
+  .toggle-btn {
+    display: block;
+    width: 100vw;
+    font-size: var(--size-font-12);
+  }
+}
+
+.appt-btn {
+  width: 80%;
+  max-width: 13rem;
+  height: 40px;
+  padding: 6px 0px 0px 0px;
+  text-align: center;
+  border-radius: 4px;
+  border: solid 1px #0083b4;
+}
+.appt-btn:hover {
+  width: 80%;
+  max-width: 13rem;
+  height: 40px;
+  border-radius: 4px;
+  box-shadow: inset 0 0 0 20px rgba(0, 131, 180, 0.1);
+  border: solid 1px #0083b4;
+  cursor: var(--cursor);
+}

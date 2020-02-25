@@ -1,0 +1,192 @@
+<ncp-errorHandler [isError]="isError" [errors]="errors"> </ncp-errorHandler>
+<div class="steps-section radio-btn">
+    <div class="done w100p">
+        <div class="step active">
+            <div class="row">
+                <div class="col-md-12 col-sm-12 col-xs-12 pl0">
+                    <misc-h4 miscClass="planDetailsContainer">
+                        <misc-span spanClass="planDetailsText">{{'NCPLabel.policyNo' | translate}}</misc-span>
+                        <misc-span spanClass="planDetailsText">{{this.endtFormData.policyInfo.policyNo }}-{{this.endtFormData.policyInfo.policyEndtNo }}</misc-span>
+                    </misc-h4>
+                </div>
+
+                <div class="col-md-12 col-sm-12 col-xs-12 pl0 mt20">
+                    <div [formGroup]="travelPolicyFormGroup">
+                        <div formGroupName="policyInfo">
+                            <!--<div class="row">
+                                <div class="col-md-12 col-sm-12 no-pad">
+                                    <ncp-label elementLabel="NCPLabel.endorsementType" labelClass="col-md-3 col-sm-4 col-xs-12 pl0 text-left" customFlag=true mandatoryFlag="true"></ncp-label>
+                                    <drop-down elementId="endorsementPrimaryType" formControlName="endtPrimaryReasonCode" [dropdownItems]="endorsementPrimaryType"
+                                        isCodeDesc=true customFlag=true [descControl]="travelPolicyFormGroup.controls['policyInfo'].get('endtPrimaryReasonDesc')"
+                                        dropdownClass="col-md-5 col-xs-12 col-sm-6 p0" displayOnClick=true ngDefaultControl>
+                                    </drop-down>
+                                </div>
+
+                            </div>-->
+                            <ncp-label elementLabel="NCPLabel.endorsementType" labelClass="col-md-2 col-sm-3 col-xs-12 labelAlign" customFlag=true mandatoryFlag="true"></ncp-label>
+                            <drop-down elementId="endorsementType" miscSubType="ENDT" miscType="MiscInfo" pickListFlag=true formControlName="endtReasonCode"
+                                isCodeDesc=true placeHolder='NCPPlaceHolder.pleaseSelect' [descControl]="travelPolicyFormGroup.controls['policyInfo'].get('endtReasonCodeDesc')"
+                                [param1]="covertypeParamEndorsementType()" [productCode]="endtFormData.policyInfo.productCd"
+                                customFlag=true dropdownClass="col-md-5 col-xs-12 col-sm-6 p0 pr-xs-15 endoTypeDDAlignRTL" displayOnClick=true ngDefaultControl elementLabel="NCPLabel.endorsementType" mandatoryFlag="true">
+                            </drop-down>
+                            <!--<div class="col-md-1 col-sm-1 col-xs-2 p0">
+                                    <button-field (click)="doEndorsement(travelPolicyFormGroup.value);" [isDisabled]="isFormGroupValid" buttonName="NCPBtn.go"
+                                        buttonType="custom" buttonClass="btn pull-right btn-primary">
+                                    </button-field>
+                                </div>-->
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!--<div class="row">
+                <div class="col-md-5 col-sm-12">
+                    <div *ngIf="isHolderTypeIndividual">
+                        <h4><span>{{'NCPLabel.policyFor' | translate}}</span> <span>{{this.endtFormData.customerInfo.appFName }} </span><span>{{this.endtFormData.customerInfo.appLName
+                            }}</span>
+                        </h4>
+                    </div>
+                    <div *ngIf="!isHolderTypeIndividual">
+                        <h4><span>{{'NCPLabel.policyFor' | translate}}</span><span> {{this.endtFormData.customerInfo.companyName }}</span></h4>
+                    </div>
+                </div>
+            </div>-->
+            <div *ngFor="let plan of this.endtFormData.riskInfo[0].plans; let i=index">
+                <div *ngIf="plan.isPlanSelected">
+                    <!--<h2><span class="w-xs-100p"><b>{{plan.planTypeDesc}}</b></span> <span>{{'NCPLabel.planSelectedFor' | translate}} {{plan.planPrem}}</span></h2>-->
+                    <misc-h2>
+                        <misc-span miscClass="w-xs-100p fwb">{{plan.planTypeDesc}}</misc-span>
+                        <misc-span>{{'NCPLabel.with' | translate}} {{planPremium}} </misc-span>
+                    </misc-h2>
+                </div>
+            </div>
+                <h4 class="policySummaryTableHeader">{{'NCPLabel.policyDetails' | translate}}</h4>
+            <div class="tableSimple tableMaxWidth">
+
+                <table>
+                    <tbody>
+                        <tr>
+                            <td>{{'NCPLabel.status' | translate}}</td>
+                            <td [attr.data-title]="'NCPLabel.status' | translate">{{this.endtFormData.policyInfo.statusDesc }} </td>
+                        </tr>
+                        <tr *ngIf="isHolderTypeIndividual">
+                            <td>{{'NCPLabel.policyFor' | translate}}</td>
+                            <td class="planDetailsContainer" [attr.data-title]="'NCPLabel.policyFor' | translate">
+                                <span class="planDetailsText">{{this.endtFormData.customerInfo.prefixDesc }}</span>
+                                <span class="planDetailsPrefix">{{'NCPLabel.dot' | translate}} </span>
+                                <span class="planDetailsText">{{this.endtFormData.customerInfo.appFName }} </span>
+                                <span class="planDetailsText">{{this.endtFormData.customerInfo.appLName }}
+                                </span>
+                            </td>
+                        </tr>
+                        <tr *ngIf="!isHolderTypeIndividual">
+                            <td>{{'NCPLabel.policyFor' | translate}}</td>
+                            <td [attr.data-title]="'NCPLabel.policyFor' | translate">
+                                <span> {{this.endtFormData.customerInfo.companyName }}</span>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>{{'NCPLabel.product' | translate}}</td>
+                            <td [attr.data-title]="'NCPLabel.product' | translate">{{this.endtFormData.policyInfo.productDesc }} </td>
+                        </tr>
+                        <tr>
+                            <td>{{'NCPLabel.policyPeriod' | translate}}</td>
+                            <td [attr.data-title]="'NCPLabel.policyPeriod' | translate">{{this.endtFormData.policyInfo.inceptionDt }} {{'NCPLabel.to' | translate}} {{this.endtFormData.policyInfo.expiryDt
+                                }}
+                            </td>
+                        </tr>
+                        <tr>
+                            <td> {{'NCPLabel.policyType' | translate}}</td>
+                            <td [attr.data-title]="'NCPLabel.policyType' | translate">{{this.endtFormData.policyInfo.policyTermDesc }}</td>
+                        </tr>
+                        <tr *ngIf="!isPolicyTypeAnnual && this.endtFormData.riskInfo[0].travellingTo">
+                            <td>{{'NCPLabel.countries' | translate }}</td>
+                            <td [attr.data-title]="'NCPLabel.countries' | translate">
+                                <span *ngFor="let plan1 of this.endtFormData.riskInfo[0].travellingTo">{{plan1.desc }},</span>
+                            </td>
+                        </tr>
+                        <tr *ngIf="this.endtFormData.riskInfo[0].regionDesc">
+                            <td>{{'NCPLabel.region' | translate}}</td>
+                            <td [attr.data-title]="'NCPLabel.region' | translate">{{this.endtFormData.riskInfo[0].regionDesc }}</td>
+                        </tr>
+                        <tr>
+                            <td>{{"NCPLabel.premium" | translate}}</td>
+                            <td [attr.data-title]="'NCPLabel.premium' | translate">{{planPremium}}</td>
+                        </tr>
+                        <!--  <tr (click)="isCollapsedTr = !isCollapsedTr">
+                            <td>{{'NCPLabel.discount' | translate}} </td>
+                            <td>{{this.endtFormData.summaryInfo.discountPrime }} <i class="pull-right icon-arrow-d icon-arrow-ud-lh"></i></td>
+                        </tr>
+                        <tr *ngIf="isCollapsedTr">
+                            <td>{{'NCPLabel.campaignDiscount' | translate}}</td>
+                            <td>{{this.endtFormData.summaryInfo.chargesPrime }}</td>
+                        </tr>
+                        <tr *ngIf="isCollapsedTr">
+                            <td>{{'NCPLabel.schemeDiscount' | translate}}</td>
+                            <td>{{this.endtFormData.summaryInfo.commissionPrime }}</td>
+                        </tr>
+                        <tr *ngIf="isCollapsedTr">
+                            <td>{{'NCPLabel.multiProductDiscount' | translate}}</td>
+                            <td>{{this.endtFormData.summaryInfo.commissionTaxPrime }}</td>
+                        </tr>
+                        <tr>
+                            <td>{{'NCPLabel.netPremium' | translate}}</td>
+                            <td>{{this.endtFormData.summaryInfo.netPremiumPrime }}</td>
+                        </tr>-->
+                    </tbody>
+                </table>
+            </div>
+
+            <expand-collapse heading="NCPLabel.insuredSummary" alignment="left">
+                <div class="filterac">
+                    <table *ngIf="covertypeSelected()" class="tableMaxWidth">
+                        <tbody>
+                            <tr>
+                                <td>{{'NCPLabel.totalNumberOfAdults' | translate}}</td>
+                                <td colspan="2">{{this.endtFormData.riskInfo[0].numberofAdults }}</td>
+                            </tr>
+                            <tr>
+                                <td>{{'NCPLabel.totalNumberOfChildren' | translate}}</td>
+                                <td colspan="2">{{this.endtFormData.riskInfo[0].numberofChildren }}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="filterac">
+
+                    <table *ngIf="isHolderTypeIndividual" class="tableMaxWidth">
+                        <thead class="headsx">
+                            <th>{{'NCPLabel.policyholdername' | translate}}</th>
+                            <th>{{identityNumberLabel | translate }}</th>
+                            <th>{{'NCPLabel.age' | translate}}</th>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td [attr.data-title]="'NCPLabel.policyholdername' | translate">
+                                    <span>{{this.endtFormData.customerInfo.prefixDesc }}{{'NCPLabel.dot' | translate}} </span>
+                                    <span>{{this.endtFormData.customerInfo.appFName}} {{this.endtFormData.customerInfo.appLName}}</span>
+                                </td>
+                                <td [attr.data-title]="'identityNumberLabel' | translate"> {{identityNumber}}</td>
+                                <td [attr.data-title]="'NCPLabel.age' | translate"> {{this.endtFormData.customerInfo.age}}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="filterac">
+
+                    <table *ngIf="!isHolderTypeIndividual" class="tableMaxWidth">
+                        <tbody>
+                            <tr class="headsx">
+                                <th>{{'NCPLabel.policyholdername' | translate}}</th>
+                                <th>{{'NCPLabel.trade/Business' | translate}}</th>
+                            </tr>
+                            <tr>
+                                <td [attr.data-title]="'NCPLabel.policyholdername' | translate">{{this.endtFormData.customerInfo.companyName }} </td>
+                                <td [attr.data-title]="'NCPLabel.trade/Business' | translate"> {{this.endtFormData.customerInfo.occupationDesc }}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </expand-collapse>
+        </div>
+    </div>

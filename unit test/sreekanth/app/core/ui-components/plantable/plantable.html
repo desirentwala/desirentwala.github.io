@@ -1,0 +1,203 @@
+<!--  Plantable-->
+<fieldset *ngIf="!showPlansInSinglePage">
+    <div class="row plantableRow" *ngIf="carouselFlag" [class.carouselActivated]="carouselFlag">
+        <div class="col-md-1 cersx hidden-sm planPreviousArrow">
+            <a class="prev glyphicon glyphicon-chevron-left" [class.hide]="prevFlag" (click)="prev()"></a>
+        </div>
+        <section class="col-md-10 col-sm-11 col-xs-10 plansContainer">
+            <ncp-carousel (getOwl)="getOwlElement($event)" (onNext)="doShowHideNextNavButton($event)" (onPrevious)="doShowHidePrevNavButton($event)" [numberOfColumns]='noOfColumns' [dotsEach]='true'>
+                <div *ngFor="let plan of plans; let i = index;" class="col-sm-12 col-md-12 col-xs-12 item">
+                    <div [ngClass]="enquiryFlag ? 'notAllowed' :' '" class="pri-head" [class.planselected]="plan.isPlanSelected" (click)="selectPlan(plan);">
+                        <p class="ders">{{plan.planTypeDesc | translate}}</p>
+                        <misc-h3 miscClass="heads" [class.striked]="plan.displayClientPrem" label="{{plan.displayPlanPrem}}"></misc-h3>
+                        <misc-h3 *ngIf="plan.displayClientPrem" miscClass="heads" label="{{plan.displayClientPrem}}"></misc-h3>
+                    </div>
+                    <div [class.hide]="!favPlansFlag">
+                        <div *ngFor="let favPlan of plan.favPlans;let evenFlag = even; let oddFlag = odd">
+                            <div *ngIf="utils.doCheckForArray(filterByCoverageGrpCode) && !filterByCoverageGrpCode.includes(favPlan.coverageGrpCode) || favPlan.coverageGrpCode!== filterByCoverageGrpCode" class="pri-list row col-sm-12" [class.planeven]="evenFlag && !plan.isPlanSelected"
+                                [class.planodd]="oddFlag && !plan.isPlanSelected" [class.planselectedeven]="evenFlag && plan.isPlanSelected"
+                                [class.planselectedodd]="oddFlag && plan.isPlanSelected">
+                                <!--<img src="assets/img/right.png" class="quotenew">-->
+                                <i *ngIf="!doFilterZeroPremiumPlans" class="fa fa-check quotenew"></i>
+                                <i *ngIf="doFilterZeroPremiumPlans && favPlan.covgSi !== '0.00'" class="fa fa-check quotenew hiddenInRBT col-md-2 col-sm-2 col-xs-2"></i>
+                                <i *ngIf="doFilterZeroPremiumPlans && favPlan.covgSi === '0.00'" class="fa fa-times quotenew hiddenInRBT col-md-2 col-sm-2 col-xs-2"></i>
+                                <div class="col-xs-10 col-sm-10">
+                                    <h6>{{favPlan.covgDesc | translate}}</h6>
+                                    <h3 *ngIf="!showCoveragePremimunFlag" class="hiddenInRBT">{{ !doFilterZeroPremiumPlans || favPlan.covgSi!== '0.00' ? favPlan.displayCovgSi : na
+                                        }}
+                                    </h3>
+                                    <h3 *ngIf="showCoveragePremimunFlag" class="hiddenInRBT">{{ favPlan.displayCovgPrm }}</h3>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div [class.hide]="favPlansFlag">
+                        <div *ngFor="let cvgGrp of cvgGroups; let j = index;let evenFlag = even; let oddFlag = odd;">
+                            <div *ngIf="utils.doCheckForArray(filterByCoverageGrpCode) ? !filterByCoverageGrpCode.includes(cvgGrp.cvgGrpCode) : cvgGrp.cvgGrpCode !== filterByCoverageGrpCode" (click)="toggleDetail(i,j);(this.rotateFlag === i.toString()+j.toString()) ? this.rotateFlag='':this.rotateFlag= i.toString()+j.toString();"
+                                class="pri-list row col-sm-12" [class.planeven]="evenFlag && !plan.isPlanSelected" [class.planodd]="oddFlag && !plan.isPlanSelected"
+                                [class.planselectedeven]="evenFlag && plan.isPlanSelected" [class.planselectedodd]="oddFlag && plan.isPlanSelected">
+                                <div class="col-xs-12 col-sm-12 col-xs-12 plantable-align">
+                                    <p>{{cvgGrp.cvgGrpDesc | translate}}</p>
+                                    <i class="icon-arrow-d" [class.rotate]="rotateFlag === i.toString()+j.toString()"></i>
+                                </div>
+                                <div style="display:none;" id="{{i}}{{j}}-plan">
+                                    <h1 ></h1>
+                                    <table class="w100p">
+                                        <tbody *ngFor="let planDetail of plan.planDetails" [class.hide]="!(planDetail.coverageGrpCode === cvgGrp.cvgGrpCode)">
+                                            <tr [class.hide]="planDetail.covgSi==='0.00' && doFilterZeroCovgSi">
+                                                <td class="col-md-8 col-sm-8 idata col-xs-6">{{planDetail.covgDesc | translate}}</td>
+                                                <td *ngIf="doFilterZeroPremiumPlans && !showCoveragePremimunFlag" class="idata col-md-4 col-sm-4 col-xs-6 hiddenInRBT">{{planDetail.displayCovgSi}}</td>
+                                                <td *ngIf="showCoveragePremimunFlag" class="idata col-md-4 col-sm-4 col-xs-6 hiddenInRBT">{{ planDetail.displayCovgPrm }}</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div *ngIf="plans.length > 1 && !enquiryFlag" [ngClass]="enquiryFlag ? 'notAllowed' :' '" class="clr-whi col-md-12 col-sm-12 col-xs-12 mt15 no-pad">
+                        <div class="text-xs-center wert" [class.selectplanbutton]="plan.isPlanSelected" *ngIf="plan.isPlanSelected" (click)="selectPlan(plan);">{{unSelectText | translate}}</div>
+                        <div class="text-xs-center wert" [class.selectplanbutton]="plan.isPlanSelected" *ngIf="!plan.isPlanSelected" (click)="selectPlan(plan);">{{selectText | translate}}</div>
+                    </div>
+                </div>
+            </ncp-carousel>
+        </section>
+        <div class="col-md-1 cersx hidden-sm planNextArrow">
+            <a class="next glyphicon glyphicon-chevron-right" [class.hide]="nextFlag" (click)="next()"></a>
+        </div>
+        <!--<div class="row">
+            <div class="col-md-1 cersx">
+                <a class="next glyphicon glyphicon-chevron-right" [class.hide]="nextFlag" (click)="next()"></a>
+            </div>
+        </div>-->
+    </div>
+    <div class="row plantableRow" *ngIf="!carouselFlag">
+        <section class="max2PlansBlock">
+            <div *ngFor="let plan of plans; let i = index;" class="col-md-6 col-sm-6 col-xs-11 pl0 item ml-xs-15  col-centered">
+                <div class="pri-head" [class.planselected]="plan.isPlanSelected" (click)="selectPlan(plan);">
+                    <p class="ders">{{plan.planTypeDesc | translate}}</p>
+                    <misc-h3 miscClass="heads" [class.striked]="plan.displayClientPrem" label="{{plan.displayPlanPrem}}"></misc-h3>
+                    <misc-h3 *ngIf="plan.displayClientPrem" miscClass="heads" label="{{plan.displayClientPrem}}"></misc-h3>
+                </div>
+                <div [class.hide]="!favPlansFlag">
+                    <div *ngFor="let favPlan of plan.favPlans;let evenFlag = even; let oddFlag = odd">
+                        <div class="pri-list row col-sm-12" [class.planeven]="evenFlag && !plan.isPlanSelected" [class.planodd]="oddFlag && !plan.isPlanSelected"
+                            [class.planselectedeven]="evenFlag && plan.isPlanSelected" [class.planselectedodd]="oddFlag && plan.isPlanSelected">
+                            <i *ngIf="!doFilterZeroPremiumPlans" class="fa fa-check quotenew"></i>
+                            <i *ngIf="doFilterZeroPremiumPlans && favPlan.covgSi !== '0.00'" class="fa fa-check quotenew hiddenInRBT col-md-2 col-sm-2 col-xs-2"></i>
+                            <i *ngIf="doFilterZeroPremiumPlans && favPlan.covgSi === '0.00'" class="fa fa-times quotenew hiddenInRBT col-md-2 col-sm-2 col-xs-2"></i>
+                            <div class="col-xs-10 col-sm-10">
+                                <h6>{{favPlan.covgDesc | translate}}</h6>
+                                <h3 *ngIf="!showCoveragePremimunFlag" class="hiddenInRBT">{{ !doFilterZeroPremiumPlans || favPlan.covgSi!== '0.00' ? favPlan.displayCovgSi : na }}</h3>
+                                <h3 *ngIf="showCoveragePremimunFlag" class="hiddenInRBT">{{ favPlan.displayCovgPrm }}</h3>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div [class.hide]="favPlansFlag">
+                    <div *ngFor="let cvgGrp of cvgGroups; let j = index;let evenFlag = even; let oddFlag = odd;">
+                        <div *ngIf="utils.doCheckForArray(filterByCoverageGrpCode) ? !filterByCoverageGrpCode.includes(cvgGrp.cvgGrpCode) : cvgGrp.cvgGrpCode !== filterByCoverageGrpCode" (click)="toggleDetail(i,j);(this.rotateFlag === i.toString()+j.toString()) ? this.rotateFlag='':this.rotateFlag=i.toString()+j.toString();"
+                            class="pri-list row col-sm-12" [class.planeven]="evenFlag && !plan.isPlanSelected" [class.planodd]="oddFlag && !plan.isPlanSelected"
+                            [class.planselectedeven]="evenFlag && plan.isPlanSelected" [class.planselectedodd]="oddFlag && plan.isPlanSelected">
+                            <div class="col-xs-12 col-md-12 col-sm-12 plantable-align">
+                                <p>{{cvgGrp.cvgGrpDesc | translate}}</p>
+                                <i class="icon-arrow-d" [class.rotate]="rotateFlag === i.toString()+j.toString()"></i>
+                            </div>
+                            <div style="display:none;" id="{{i}}{{j}}-plan" class="table">
+                                <table>
+                                    <tbody *ngFor="let planDetail of plan.planDetails" [class.hide]="!(planDetail.coverageGrpCode === cvgGrp.cvgGrpCode)">
+                                        <tr>
+                                            <td class="col-md-8 col-sm-8 col-xs-6 idata">{{planDetail.covgDesc | translate}}</td>
+                                            <td *ngIf="!showCoveragePremimunFlag" class="idata col-md-4 col-sm-4 col-xs-6 hiddenInRBT">{{planDetail.displayCovgSi}}</td>
+                                            <td *ngIf="showCoveragePremimunFlag" class="idata col-md-4 col-sm-4 col-xs-6 hiddenInRBT">{{ planDetail.displayCovgPrm }}</td>                                            
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div *ngIf="plans.length > 1 && !enquiryFlag" class="clr-whi col-md-12 col-sm-12 mt15 no-pad">{{selectText | translate}}
+                    <div class="text-xs-center wert" [class.selectplanbutton]="plan.isPlanSelected" *ngIf="plan.isPlanSelected" (click)="selectPlan(plan);">{{unSelectText | translate}}</div>
+                    <div class="text-xs-center wert" [class.selectplanbutton]="plan.isPlanSelected" *ngIf="!plan.isPlanSelected" (click)="selectPlan(plan);">{{selectText | translate}}</div>
+                </div>
+            </div>
+        </section>
+    </div>
+    <div *ngIf="showCoveragePremimum" class="col-md-12 col-sm-12 col-xs-10 col-centered p0">
+        <p class="policy-link">
+            <a (click)="showCoveragePremimunFlag=!showCoveragePremimunFlag;showhideCoveragePremium()" id="viewCvgPremimum"> {{ !showCoveragePremimunFlag ? (premiumBreakupText |translate) : (siBreakupText | translate)}}</a>
+        </p>
+    </div>
+    <div class="col-md-12 col-sm-12 col-xs-10 col-centered p0">
+        <p class="policy-link">
+            <a (click)="switchView()" id="viewPlans"> {{policyViewText | translate}}</a>
+        </p>
+    </div>
+</fieldset>
+<fieldset *ngIf="showPlansInSinglePage">
+    <div class="row plantableRow">
+        <div class="col-md-6 col-sm-7 col-xs-12 pl0">
+            <misc-h2 miscClass="text-left text-xs-center" id="planSelectText" label="{{unSelectedPlanText1}}"></misc-h2>
+        </div>
+        <div class="col-md-6 col-sm-5 col-xs-12 pr0 btnBottom pl-xs-0">
+            <span (click)="showBenefits = !showBenefits;showCoveragePremimunFlag=showCoveragePremimunFlag">    
+               <div class="benefitsIcon setting-icon" *ngIf="!showBenefits" >
+                    <span><ncp-label customFlag=true elementLabel="NCPBtn.showKeyBenefits"></ncp-label></span>
+            <i class="fa fa-plus-circle"></i>
+        </div>
+        <div class="benefitsIcon setting-icon" *ngIf="showBenefits">
+            <span><ncp-label  customFlag=true elementLabel="NCPBtn.closeKeyBenefits"></ncp-label></span>
+            <i class="fa fa-minus-circle"></i>
+        </div>
+
+        </span>
+        <div (click)="showprodBrochurePdf()" class="benefitsIcon setting-icon">
+            <span><ncp-label  customFlag=true elementLabel="NCPBtn.productBrochure"></ncp-label></span>
+            <i class="fa fa-file-pdf-o"></i>
+        </div>
+        <div *ngIf="showCoveragePremimum && showBenefits"  class="benefitsIcon setting-icon">
+            <ncp-label (click)="showCoveragePremimunFlag=!showCoveragePremimunFlag" customFlag=true [elementLabel]="!showCoveragePremimunFlag ? premiumBreakupText : siBreakupText"></ncp-label>
+        </div>
+    </div>
+    </div>
+    <div class="row plantableRow">
+        <section>
+            <div *ngFor="let plan of plans; let i = index;" class="plantableContainer">
+                <div class="col-md-6 col-sm-6 col-xs-12">
+                    <div [class.noArrow]="!showBenefits" class="pri-head col-md-12 col-sm-12 col-xs-12" [class.planselected]="plan.isPlanSelected"
+                        (click)="selectPlan(plan);">
+                        <div class="cursor-pointer">
+                            <p class="ders">{{plan.planTypeDesc | translate}}</p>
+                            <h3 class="heads" [class.striked]="plan.displayClientPrem">{{plan.displayPlanPrem | translate}}</h3>
+                            <h3 class="heads" *ngIf="plan.displayClientPrem">{{plan.displayClientPrem | translate}}</h3>
+                        </div>
+                    </div>
+                    <div [class.hide]="!showBenefits" class="col-md-12 col-sm-12 col-xs-12 no-pad">
+                        <div *ngFor="let favPlan of plan.favPlans;let evenFlag = even; let oddFlag = odd">
+                            <div class="pri-list row col-sm-12" [class.planeven]="evenFlag && !plan.isPlanSelected" [class.planodd]="oddFlag && !plan.isPlanSelected"
+                                [class.planselectedeven]="evenFlag && plan.isPlanSelected" [class.planselectedodd]="oddFlag && plan.isPlanSelected">
+                                <!--<img src="assets/img/right.png" class="quotenew">-->
+                                <i *ngIf="!doFilterZeroPremiumPlans" class="fa fa-check quotenew"></i>
+                                <i *ngIf="doFilterZeroPremiumPlans && favPlan.covgSi !== '0.00'" class="fa fa-check quotenew hiddenInRBT col-md-2 col-sm-2 col-xs-2"></i>
+                                <i *ngIf="doFilterZeroPremiumPlans && favPlan.covgSi === '0.00'" class="fa fa-times quotenew hiddenInRBT col-md-2 col-sm-2 col-xs-2"></i>
+                                <div class="col-xs-10 col-sm-10 plantableText">
+                                    <h6>{{favPlan.covgDesc | translate}}</h6>
+                                    <h3 *ngIf="!showCoveragePremimunFlag" class="hiddenInRBT">{{ !doFilterZeroPremiumPlans || favPlan.covgSi!== '0.00' ? favPlan.displayCovgSi : na
+                                        }}</h3>
+                                <h3 *ngIf="showCoveragePremimunFlag" class="hiddenInRBT">{{ favPlan.displayCovgPrm }}</h3>                                    
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+</fieldset>
+<div class="selectedPolicyText">
+    <ng-content></ng-content>
+    <h2 [ngClass]="enquiryFlag ? 'notAllowed' :' '" class="planDefaultText" id="selectDisplayText">{{planSelectText1 | translate}}</h2>
+
+    <h1 [ngClass]="enquiryFlag ? 'notAllowed' :' '" class="verk" id="planSelectText">{{unSelectedPlanText1 | translate}}</h1>
+</div>

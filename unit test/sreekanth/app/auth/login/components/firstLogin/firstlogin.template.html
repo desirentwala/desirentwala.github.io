@@ -1,0 +1,111 @@
+<div class="BrowserNotSupportPage hide">
+	<div class="container-fluid">
+		<div class="row">
+			<div class="col-md-8 col-sm-10 col-xs-12 col-centered text-center">
+				<i class="fa fa-meh-o fs80 d-block"></i>
+				<h1 class="mtb20 fs35">Looks like you're using an unsupported browser <span>ver</span>.</h1>
+				<h2 class="mb20">Please update to your browser to <span>ver</span>></h2>
+				<!--<h2 class="">
+					<ul class="listExplaination"> 
+						<li class="mb10"><b>Chrome</b> : 43+</li>
+						<li class="mb10"><b>Morzilla Firefox</b> : 38+</li>
+						<li class="mb10"><b>Explorer</b> : 14+</li>
+					</ul>
+				</h2>-->
+			</div>
+		</div>
+	</div>
+</div>
+<form [formGroup]="createNewUserFormGroup">
+	<ncp-modal [modalKey]="createNewUserModal"  [closeOnEscape]="false" [closeOnOutsideClick]="false" modalClass="modal-lg" modalTitle="NCPBtn.changePassword" titleIcon="fa fa-lock" hideCloseButton="true" >
+		
+		<modal-content>
+			<ncp-errorHandler [isError]="isError" [errors]="errors" customFlag=true errorCustomClass="alert alert-danger clearfix mb10" > </ncp-errorHandler>			
+			<div *ngIf="!isError">
+			<div class="row">
+				<div class="col-md-3 col-sm-3 col-xs-12 label-col">
+					<label>{{"NCPLabel.UserPassword" | translate}}</label>
+				</div>
+				<text-box formControlName="user_password" inputType="password" (keyup)="passwordStrength($event)" customFlag=true textBoxClass="col-md-6 col-sm-6 col-xs-12 pr-sm-0"
+				 ngDefaultControl tooltipTitle="Password must be one Capital Letter,one Symbol, one Number and more than 8 digits">
+				</text-box>
+			</div>
+			<error-handler [elementControl]="createNewUserFormGroup.controls['user_password']" [customMessages]="{required: 'userPassword',pattern: 'pattern'}">
+			</error-handler>
+			 <div class="progress_bar_parent">
+				<ncp-password-strength-bar
+					[passwordToCheck]="acceptPassword">
+				</ncp-password-strength-bar>
+			</div>
+			<div class="row">
+				<div class="col-md-3 col-sm-3 col-xs-12 label-col">
+					<label>{{"NCPLabel.ConfirmPassword" | translate}}</label>
+				</div>
+				<text-box formControlName="confirm_password" inputType="password" customFlag=t rue textBoxClass="col-md-6 col-sm-6 col-xs-12 pr-sm-0"
+				 ngDefaultControl>
+				</text-box>
+			</div>
+			<error-handler [elementControl]="createNewUserFormGroup.controls['confirm_password']" [customMessages]="{required: 'confirmPassword', mismatch: 'mismatch'}">
+			</error-handler>			
+			<div class="row">
+				<div class="col-md-12 col-sm-12 col-xs-12 label-col">
+					<h2>{{"NCPLabel.setRecoveryQuestion" | translate}}</h2>
+				</div>
+			</div>
+			<hr>
+			<div class="row">
+				<div class="col-md-3 col-sm-3 col-xs-12 label-col">
+					<label>{{"NCPLabel.recoveryQuestion" | translate}}</label>
+				</div>
+				<drop-down elementId="recovery1" elementId="recovery1" formControlName="recoveryQuestion1_code" miscSubType="QUES" miscType="MiscInfo"
+				 pickListFlag=true isCodeDesc=true [descControl]="createNewUserFormGroup.controls['recoveryQuestion1_desc']" customFlag=t
+				 rue dropdownClass="col-md-6 col-sm-6 col-xs-12 pr-sm-0" ngDefaultControl>
+				</drop-down>
+			</div>
+			<div class="row">
+				<div class="col-md-3 col-sm-3 col-xs-12 label-col">
+					<label>{{"NCPLabel.answers1" | translate}}</label>
+				</div>
+				<text-box formControlName="recoveryAnswer1" customFlag=true textBoxClass="col-md-6 col-sm-6 col-xs-12 pr-sm-0" ngDefaultControl>
+				</text-box>
+			</div>
+			<div class="row">
+				<div class="col-md-3 col-sm-3 col-xs-12 label-col">
+					<label>{{"NCPLabel.recoveryQuestion2" | translate}}</label>
+				</div>
+				<drop-down elementId="recovery2" elementId="recovery2" formControlName="recoveryQuestion2_code" miscSubType="QUES" miscType="MiscInfo"
+				 pickListFlag=true isCodeDesc=true customFlag=t rue dropdownClass="col-md-6 col-sm-6 col-xs-12 pr-sm-0" [descControl]="createNewUserFormGroup.controls['recoveryQuestion2_desc']"
+				 ngDefaultControl>
+				</drop-down>
+			</div>
+			<div class="row">
+				<div class="col-md-3 col-sm-3 col-xs-12 label-col">
+					<label>{{"NCPLabel.answers1" | translate}}</label>
+				</div>
+				<text-box formControlName="recoveryAnswer2" customFlag=true textBoxClass="col-md-6 col-sm-6 col-xs-12 pr-sm-0" ngDefaultControl>
+				</text-box>
+			</div>
+			<!--<button 
+			       class="btn btn-primary btn-shadow" 
+				   type="button" 
+				   (click)="firstLoginUser()" 
+				   [disabled]="!(createNewUserFormGroup.valid)">Submit</button>
+			<button 
+			        class="btn btn-primary btn-shadow" 
+					type="button" 
+					(click)="createNewUserModal = false;">Close</button>-->
+		</div>			
+		</modal-content>
+		<modal-footer>
+			<div class="btns-row">				
+				<div *ngIf="!isError" class="col-md-2 col-sm-3 col-xs-12 pull-right mb10 mt-xs-10 plr-xs-0">
+					<button class="btn btn-primary btn-shadow w100p" type="button" (click)="firstLoginUser()" [disabled]="!(createNewUserFormGroup.valid)">{{"NCPBtn.submit" | translate}}</button>
+				</div>
+				<div *ngIf="isError" class="col-md-2 col-sm-3 col-xs-12 pull-right mb10 mt-xs-10 plr-xs-0">
+					<button class="btn btn-primary btn-shadow w100p" type="button" (click)="modalClose()">{{"NCPBtn.Close" | translate}}</button>
+				</div>
+
+			</div>
+		</modal-footer>
+	</ncp-modal>
+</form>

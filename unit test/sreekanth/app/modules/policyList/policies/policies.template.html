@@ -1,0 +1,212 @@
+<div class="activity-tab">
+    <div class="setting-icon">
+        <a data-toggle="modal" (click)="searchCust.open()" class="filterimg">
+            <i class="settingsIcon glyphicon glyphicon-filter"></i>
+        </a>
+    </div>
+    <ul class="nav nav-tabs maintab">
+        <li class="mainTabList">
+            <label for="tab1" class="filterre"><i class="fa fa-life-saver iconLabel"></i><span class="labelDisplay">{{'NCPLabel.policies' | translate}}</span></label>
+        </li>
+    </ul>
+    <div class="col-md-3 col-sm-12 col-xs-12  conf">
+        <input class="forconf" [(ngModel)]="searchId" placeholder="{{'NCPBtn.search' | translate}}">
+    </div>
+    <div class="filterac">
+        <table>
+            <thead>
+                <tr>
+                    <th *ngFor="let header of policyTableDetails;let i = index" [class]="selectedClass(header.mapping)" (click)="changeSorting(header.mapping);this.rotateFlag === i ? this.rotateFlag='':this.rotateFlag=i;"
+                        [attr.data-title]="header.header | translate">
+
+                        <span class="labelDisplay">{{header.header | translate}}</span>
+                        <i class="icon-arrow-d indexicon" [class.rotate]="rotateFlag === i"></i>
+                    </th>
+                    <th class="actionCol">
+                        <span class="labelHeader">{{'NCPLabel.Action' | translate}}</span>
+                    </th>
+                    <!-- <th *ngIf="isActionFlag" class="actionCol">
+                            <span class="labelHeader">{{'NCPLabel.Action' | translate}}</span>
+                        </th> -->
+
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let object of policyEnquiryInput  | searchBy : searchId : policyTableDetails | orderBy : convertSorting()" id="tabhide">
+                    <td *ngFor="let mappings of policyTableDetails; let i=index" [attr.data-title]="mappings.header | translate">
+                        <span *ngIf="mappings.mapping !== 'policyNo' && mappings.mapping !== 'premium'">{{object[mappings.mapping]}}</span>
+                       
+                        <span *ngIf="mappings.mapping === 'policyNo'">
+                            {{object['policyNo']}}-{{object['endtNo']}}</span>
+                    </td>
+                <td class="actionCol" *ngIf="isActionFlag">
+                    <!--<button type=radio name="button" class="fa fa-gear showPopover indexrecus" tooltipPlacement="left" [tooltip]="policyModalTooltip"
+                						[tooltipHide]="tooltipHide" tooltipClick=true (click)="doAction($event); tooltipHide = policyModalTooltip.show(); setCurrentPolicyTooltip(policyModalTooltip);">
+                						</button>-->
+                    <span>
+                        <i class="fa fa-gear showPopover indexrecus" tooltipPlacement="left" [tooltip]="policyModalTooltip" [tooltipHide]="tooltipHide"
+                            tooltipClick=true [id]="'policyTooltip'+rowIndex"></i>
+                    </span>
+                    <tooltip-content #policyModalTooltip [excludeId]="'policyTooltip'+rowIndex">
+                        <h3 class="popover-title">&nbsp;
+                            <a class="close" (click)="tooltipHide = policyModalTooltip.hide()">
+                                <i class="icon-alert"></i>
+                            </a>
+                        </h3>
+                        <div class="popover-content">
+                            <div *ngIf="object.policyNo">
+                                                                
+                                <ul >
+                                    <li>
+                                        <a (click)="doActionClickRow(object,'PENQ'); tooltipHide = policyModalTooltip.hide()">
+                                            <i class="fa fa-eye iconToolTip"></i>
+                                            <span class="labelToolTip">{{'NCPLabel.viewQuote' | translate}}</span>
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a (click)="doActionClickRow(object,'PHLD'); tooltipHide = policyModalTooltip.hide()">
+                                            <i class=" iconToolTip"></i>
+                                            <span class="labelToolTip">{{'NCPLabel.editQuote' | translate}}</span>
+                                        </a>
+                                    </li>
+                                </ul>
+                                
+                            </div>
+                
+                        </div>
+                    </tooltip-content>
+                </td>
+                </tr>
+            </tbody>
+        </table>
+        <div class="col-centered mtb20" *ngIf="disableShowMoreButton===false">
+            <button-field buttonType="custom" buttonClass="ncpbtn-default" iconClass="fa fa-arrow-down" buttonName="NCPBtn.showMore"
+                (click)='doViewMore()'>
+            </button-field>
+        </div>
+    </div>
+
+    <!--Search Customer Modal-->
+    <ncp-modal modalClass="modal-lg" #searchCust [closeOnEscape]="false" [closeOnOutsideClick]="false" modalTitle="NCPLabel.filterTableContent"
+        titleIcon="glyphicon glyphicon-wrench confed">
+        <modal-content>
+            <div [formGroup]="searchlDetailsFormGroup">
+                <div class="row">
+                    <ncp-label elementLabel="NCPLabel.policyNo"></ncp-label>
+                    <text-box inputType="text" formControlName=policyNo customFlag=true textBoxClass="col-md-6 col-sm-6 col-xs-12" elementLabel="NCPLabel.policyNo">
+                    </text-box>
+                </div>
+                <div class="row">
+                    <ncp-label elementLabel="NCPLabel.product"></ncp-label>
+                    <drop-down formControlName="productCode" ngDefaultControl placeHolder="NCPLabel.pleaseSelectType" elementId="product" 
+                         miscType="ProductInfo" pickListFlag=true customFlag=true dropdownClass="col-md-6 col-sm-6 col-xs-12" 
+                        displayOnClick="true" elementLabel="NCPLabel.product">
+                    </drop-down>
+                </div>
+                <div class="row">
+                    <ncp-label elementLabel="NCPLabel.clientName"></ncp-label>
+                    <text-box inputType="text" formControlName=clientName customFlag=true textBoxClass="col-md-6 col-sm-6 col-xs-12" elementLabel="NCPLabel.clientCode">
+                    </text-box>
+                </div>
+                <div class="row">
+                    <ncp-label elementLabel="NCPLabel.subordinateUser"></ncp-label>
+                    <div class="col-md-6 col-sm-6 col-xs-11 p-sm-0">
+                        <div class="form-check disabled">
+                            <drop-down formControlName="subOrdinateUser" ngDefaultControl placeHolder="NCPLabel.pleaseSelectType" elementId="ProposalStatus"
+                                miscType="ChildUsers" param1="{{userID}}" pickListFlag=true customFlag=true dropdownClass="col-md-12 col-sm-12 col-xs-12 no-pad"
+                                 displayCodeAndDesc=true displayOnClick="true" elementLabel="NCPLabel.subordinateUser">
+                            </drop-down>
+                        </div>
+                    </div>
+                </div>
+                <br>
+            </div>
+        </modal-content>
+        <modal-footer>
+            <div class="btns-row">
+                <button-field buttonType="custom" buttonClass="ncp-linkBtn" iconClass="fa fa-close" buttonName="NCPBtn.close" (click)="searchCust.close()">
+                </button-field>
+                <button-field buttonType="custom" buttonClass="ncpbtn-default" iconClass="fa fa-eraser" buttonName="NCPBtn.clear" (click)="clearCustomerSearchModel()">
+                </button-field>
+                <button-field buttonType="custom" buttonClass="ncpbtn-default" [isDisabled]="!enableFilterBtn" iconClass="fa fa-filter" buttonName="NCPBtn.filter"
+                    (click)="searchCust.close(); searchCustomerModel()">
+                </button-field>
+            </div>
+        </modal-footer>
+    </ncp-modal>
+    <!-- modal for showing recepts-->
+    <ncp-modal class="modalForm" [modalKey]="receptViewmodal" [closeOnEscape]="false" [closeOnOutsideClick]="false" [hideCloseButton]="true"
+        modalClass="modal-md">
+
+        <modal-content>
+            <div *ngIf="showErrorFlag === false">
+                <div class="row">
+                    <div class="col-md-12 col-sm-12 col-xs-12 p0 text-left mt0">
+                        <!--<h4 class="mt0">{{ 'NCPLabel.listOfDocument' | translate }}</h4>-->
+                        <misc-h4 miscClass="mt0" [label]="'NCPLabel.listOfRecept'"></misc-h4>
+                    </div>
+                </div>
+
+                <div class="filterac">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>
+                                    {{ 'NCPLabel.source' | translate }}
+                                </th>
+                                <th>
+                                    {{ 'NCPLabel.receiptNumber' | translate }}
+                                </th>
+                                <th>
+                                    {{ 'NCPLabel.premium' | translate }}
+                                </th>
+                                <th class="text-center">
+                                    {{ 'NCPLabel.Action' | translate }}
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr *ngFor="let info of policyAcntDetailsInfo; let i = index">
+                                <td class="hidden-xs">
+                                    {{info.source}}
+                                </td>
+                                <td class="hidden-xs">
+                                    {{info.targetReference}}
+                                </td>
+                                <td class="hidden-xs">
+                                    <misc-display class="d-inlineBlock" label="{{info.targetAmount}}" type="amount"></misc-display>
+                                </td>
+                                <td (click)="viewReceiptDocument(info)" class="text-center" [attr.data-title]="info.documentDesc | translate">
+                                    <button-field buttonType="custom" buttonClass="ncpbtn-default  ml-sm-10 mt-xs-0" buttonName="NCPBtn.viewFile" iconClass="fa fa-external-link-square">
+                                    </button-field>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <div class="popupLabel">
+                        <!--<label>{{ 'NCPLabel.popup' | translate }}</label>-->
+                        <misc-span class="text-center">{{'NCPLabel.popup' | translate}}</misc-span>
+                    </div>
+                </div>
+
+            </div>
+
+            <div *ngIf="showErrorFlag === true">
+                <div class="popupLabel">
+                    <misc-span class="text-center">{{'NCPLabel.noRecordsFound' | translate}}</misc-span>
+                </div>
+            </div>
+        </modal-content>
+        <modal-footer>
+            <div class="btns-row mt10">
+                <button-field buttonType="custom" buttonClass="ncp-linkBtn mb10" iconClass="fa fa-close" buttonName="NCPBtn.close" (click)="receptViewmodal=false"
+                    data-dismiss="modal">
+                </button-field>
+            </div>
+
+        </modal-footer>
+
+    </ncp-modal>
+
+
+</div>

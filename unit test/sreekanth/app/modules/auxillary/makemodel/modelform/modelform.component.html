@@ -1,0 +1,47 @@
+<div [formGroup]="modelFormGroup" class="row radio-btn">
+    <div *ngIf="isError" class="alert alert-danger">
+        <ul *ngFor="let error of errors">
+            <li>
+                {{error.errCode}} - {{error.errDesc}}
+            </li>
+        </ul>
+    </div>
+    <div>
+        <div class="row">
+            <ncp-label elementLabel="NCPLabel.makeCode" elementId="makeCode" mandatoryFlag="true">
+            </ncp-label>
+            <drop-down elementId="make" formControlName="makeCode" miscType="MotorMake" pickListFlag=true
+                displayCodeAndDesc=true [isCodeDesc]=true ngDefaultControl displayOnClick=true
+                elementLabel="NCPLabel.make" [descControl]="modelFormGroup.controls['makeCodeDesc']"
+                mandatoryFlag="true">
+            </drop-down>
+        </div>
+        <error-handler [elementControl]="modelFormGroup.controls['makeCode']"
+            [customMessages]="{required: 'NCPLabelcustomMessages.pleaseEnterMakeCode'}">
+        </error-handler>
+        <div class="row">
+            <ncp-label elementLabel="NCPLabel.modelCode" elementId="modelCode" mandatoryFlag="true">
+            </ncp-label>
+            <text-box formControlName="modelCode" maxLength="6" acceptPattern="[A-Za-z0-9]"
+                ngDefaultControl elementLabel="NCPLabel.modelCode" mandatoryFlag="true"></text-box>
+        </div>
+        <error-handler [elementControl]="modelFormGroup.controls['modelCode']" acceptPattern="[A-Za-z0-9]" maxLength="4"
+            [customMessages]="{required: 'NCPLabelcustomMessages.pleaseEnterModelCode'}">
+        </error-handler>
+        <div class="row">
+            <ncp-label elementLabel="NCPLabel.modelCodeDesc" elementId="modelCodeDesc" mandatoryFlag="true">
+            </ncp-label>
+            <text-box formControlName="modelCodeDesc" maxLength="256" acceptPattern="[A-Za-z0-9]"
+                ngDefaultControl elementLabel="NCPLabel.modelCodeDesc" mandatoryFlag="true"></text-box>
+        </div>
+        <error-handler [elementControl]="modelFormGroup.controls['modelCodeDesc']" acceptPattern="[A-Za-z0-9]"
+            [customMessages]="{required: 'NCPLabelcustomMessages.pleaseEnterModelDesc'}">
+        </error-handler>
+
+
+        <div class="btns-row">
+            <button-field (click)="doAction($event)" buttonType="custom" [isDisabled]="!modelFormGroup.valid"
+                buttonClass="ncpbtn-default" buttonName="NCPBtn.submit"></button-field>
+        </div>
+    </div>
+</div>

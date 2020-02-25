@@ -1,0 +1,662 @@
+<div [formGroup]="claimFNOLFormGroup" novalidate (ngSubmit)="save(claimFNOLFormGroup)" class="radio-btn">
+    <!--<pre>{{claimFNOLFormGroup.value | json}}</pre>-->
+    <ng2-wizard eventValidateTabId="claimFNOLValidate" eventNextTabId="claimFNOLNext" eventPreviousTabId="claimFNOLPrev" eventTabChangeId="claimFNOLChange"
+        [config]="wizardConfig" previousTabButton="{{'NCPBtn.back'}}" nextTabButton="{{'NCPBtn.next'}}" [disableNext]="!isValidFNOLForm">
+        <div *ngIf="isError" class="alert alert-danger">
+            <ul *ngFor="let error of errors">
+                <li>
+                    {{error.errCode}} - {{error.errDesc | translate}}
+                </li>
+            </ul>
+        </div>
+        <ng2-wizard-tab tabTitle="NCPTab.BasicDetails" tabId="01" [doValidateSubBeforeNavigation] = "false">
+            <ng2-wizard-step>
+
+                <tab-error [displayFlag]="!isValidFNOLForm && isNextFlag" errorMessage="NCPErrorMessage.pleaseCorrectErrorsBelow">
+                </tab-error>
+                <tab-error [displayFlag]="isMaxClaimantError" errorMessage="NCPErrorMessage.maxClaimantLimitExceededError">
+                </tab-error>
+                <tab-error [displayFlag]="isMinClaimantError" errorMessage="NCPErrorMessage.minClaimantLimitExceededError">
+                </tab-error>
+
+                 <div *ngIf="isEnquiryFlag" formGroupName="claimInfo">
+                    <div class="row">
+                        <ncp-label elementLabel="NCPLabel.claimLastMvmtStatus"></ncp-label>
+                        <text-box elementId="statusDesc" formControlName="statusDesc" ngDefaultControl customFlag=true textBoxClass="col-sm-6 col-md-5 col-xs-11 pr-sm-0" >
+                        </text-box>
+                    </div>
+                </div>
+
+                <div formGroupName="policyInfo">
+                    <div class="row">
+                        <ncp-label elementLabel="NCPLabel.policyNumber"></ncp-label>
+                        <text-box elementId="policyNo" formControlName="policyNo" ngDefaultControl customFlag=true textBoxClass="col-sm-6 col-md-5 col-xs-11 pr-sm-0"
+                            (change)="policyRefresh()" elementLabel="NCPLabel.policyNumber">
+                        </text-box>
+                        <!--<text-box [inputType]="text" formControlName=policyNo customFlag=true textBoxClass="form-control col-sm-5 col-md-5 col-xs-11 pr-sm-0">
+                        </text-box>-->
+
+                        <!--<button *ngIf="isEnquiryFlag==false" class="ncpbtn-default ml-sm-5" (click)="policyRefresh()"><i class="glyphicon glyphicon-refresh showdiv"></i>
+			                </button>-->
+                    </div>
+                    <error-handler [elementControl]="claimFNOLFormGroup.controls['policyInfo']['controls']['policyNo']" [customMessages]="{required: 'Please Enter Your Policy Number'}">
+                    </error-handler>
+                </div>
+
+                    <div formGroupName="customerInfo">
+                        <div class="row">
+                            <ncp-label elementLabel="NCPLabel.policyholderName"></ncp-label>
+                            <text-box elementId="appFullName" formControlName="appFullName" elementLabel="NCPLabel.policyholderName" ngDefaultControl>
+                            </text-box>
+                        </div>
+                    </div>
+
+                    <div *ngIf=!isProductBuildFlag>
+                        <div formGroupName="claimInfo">
+
+                            <div class="row">
+                                <ncp-label elementLabel="NCPLabel.ChooseClaimant" mandatoryFlag="true"></ncp-label>
+
+                                <drop-down *ngIf="b2bFlag" formControlName="claimantName" elementId="claimantName" [dropdownItems]="claimantNameList" changeId="doCheckIsOtherClaimantSelected"
+                                elementLabel="NCPLabel.ChooseClaimant" mandatoryFlag="true" ngDefaultControl>
+                                </drop-down>
+                                <text-box *ngIf="b2cFlag" formControlName="claimantName" elementId="claimantName" elementLabel="NCPLabel.ChooseClaimant" mandatoryFlag="true" ngDefaultControl>
+                                </text-box>
+                            </div>
+                            <div class="row">
+                                <ncp-label *ngIf="isOtherClaimantSelectedFlag" elementLabel="NCPLabel.other"></ncp-label>
+                                <text-box *ngIf="isOtherClaimantSelectedFlag" formControlName="otherClaimantName" elementId="otherClaimantName" elementLabel="NCPLabel.other" ngDefaultControl>
+                                </text-box>
+                            </div>
+                            <error-handler [elementControl]="claimFNOLFormGroup.controls['claimInfo']['controls']['claimantName']" [customMessages]="{required: 'Please Select Claimant Names'}">
+                            </error-handler>
+                            <div class="row">
+                                <ncp-label elementLabel="NCPLabel.relationshipToPolicyHolder"></ncp-label>
+                                <drop-down elementId="claimantRelationCode" formControlName="claimantRelationCode" miscSubType="PART" miscType="MiscInfo"
+                                    pickListFlag=true isCodeDesc=true [descControl]="claimFNOLFormGroup.controls['claimInfo']['controls']['claimantRelationDesc']"
+                                    ngDefaultControl changeId="claimantRelationChanged" elementLabel="NCPLabel.relationshipToPolicyHolder">
+                                </drop-down>
+                                <!--<drop-down formControlName="claimantRelation" elementId="claimantRelation" [dropdownItems]="claimantRelationList" ngDefaultControl>
+                                </drop-down>-->
+                                <button-field (click)="addClaimant()" buttonType="custom" buttonClass="ncpbtn-default ml-sm-10 mr-xs-15" buttonName="{{'NCPLabel.addAnotherClaimant' | translate }}"
+                                    [isDisabled]="!isClaimantRelationSelected || isEnquiryFlag">
+                                </button-field>
+                            </div>
+                        </div>
+                        <div *ngIf=isShowClaimantList>
+                            <div formArrayName="selectedInsuredInfo">
+                                <div *ngFor="let temp of this.claimFNOLFormGroup.controls.selectedInsuredInfo.controls; let i=index">
+                                    <join-field *ngIf="( (isEnquiryFlag ) && i >= 0 ) || ( (!isEnquiryFlag ) && i > 0 )">
+                                        <div [formGroupName]="i">
+                                            <div class="row">
+                                                <text-box customFlag=true elementId="claimantCdDesc" textBoxClass="col-md-11 col-sm-11 col-xs-11" formControlName="appFullName"></text-box>
+                                                <!--<button *ngIf="!isEnquiryFlag" class="btn btn-link"><i class="glyphicon glyphicon-remove showdiv" (click)="deleteClaimant(i)"></i></button>-->
+                                                <button-field *ngIf="!isEnquiryFlag" buttonType="custom" buttonClass="btn btn-link" (click)="deleteClaimant(i)" iconClass="glyphicon glyphicon-remove showdiv"></button-field>
+
+                                            </div>
+                                        </div>
+                                    </join-field>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div formGroupName="claimInfo">
+                        <div class="row" *ngIf="b2bFlag && !isLifeLob">
+                            <ncp-label elementLabel="NCPLabel.notifier"></ncp-label>
+                            <radio-button [radioArray]="contactperson" radioName="noticeBy" elementId="noticeBy" customFlag=true radioCustomClass="col-md-5 col-sm-6 col-xs-11 pr-sm-0 "
+                                horizontalflag=false formControlName="noticeBy" tooltipTitle="NCPTooltip.notifierLodgingThisClaim" elementLabel="NCPLabel.notifier">
+                            </radio-button>
+                        </div>
+                        <div class="row" *ngIf="isLifeLob">
+                            <ncp-label elementLabel="NCPLabel.notifier"></ncp-label>
+                            <drop-down elementId="noticeBy" formControlName="noticeBy" miscSubType="PHTY" miscType="MiscInfo" pickListFlag=true isCodeDesc=true
+                                [descControl]="claimFNOLFormGroup.controls['claimInfo']['controls']['noticeByDesc']" ngDefaultControl
+                                displayOnClick=true>
+                            </drop-down>
+                        </div>
+                        <misc-h5 miscClass="notifierDetailsMargin" label="NCPLabel.notifierDetails"></misc-h5>
+                        <div class="row">
+                            <ncp-label elementLabel="NCPLabel.notifierFirstName"></ncp-label>
+                            <text-box elementId="notifierClientFirstName" formControlName="notifierClientFirstName" elementLabel="NCPLabel.notifierFirstName" ngDefaultControl>
+                            </text-box>
+                        </div>
+
+                        <div class="row">
+                            <ncp-label elementLabel="NCPLabel.notifierSurname"></ncp-label>
+                            <text-box elementId="notifierClientLastName" formControlName="notifierClientLastName" elementLabel="NCPLabel.notifierSurname" ngDefaultControl>
+                            </text-box>
+                        </div>
+
+
+                        <div class="row">
+                            <ncp-label elementLabel="NCPLabel.phone"></ncp-label>
+                            <contact-number elementId="notifierClientMobile" [isEnquiryFlag]="isEnquiryFlag" maxLength=10 acceptPattern="^[0-9]*$" hideArrowFlag="true" showCodeFlag="true" formControlName="notifierClientMobile" elementLabel="NCPLabel.phone">
+                            </contact-number>
+                        </div>
+
+                        <error-handler [elementControl]="claimFNOLFormGroup.controls['claimInfo']['controls']['notifierClientMobile']" [customMessages]="{maxlength: 'Maximunm length is 10'}">
+                        </error-handler>
+
+                        <div class="row">
+                            <ncp-label elementLabel="NCPLabel.email" mandatoryFlag="true"></ncp-label>
+                            <text-box elementId="notifierClientEmail" formControlName="notifierClientEmail" elementLabel="NCPLabel.email" mandatoryFlag="true" ngDefaultControl>
+                            </text-box>
+                        </div>
+                        <error-handler [elementControl]="claimFNOLFormGroup.controls['claimInfo']['controls']['notifierClientEmail']" [showErrorOnBlur]=true
+                            [customMessages]="{mailFormat: 'Please enter valid emailid'}">
+                        </error-handler>
+
+                    <div *ngIf="!isLifeLob" class="row">
+                        <ncp-label elementLabel="NCPLabel.initialAssessmentAmount"></ncp-label>
+                        <amount-field elementId="estimatedLossAmount" formControlName="estimatedLossAmount" elementLabel="NCPLabel.initialAssessmentAmount"
+                            [symbolDisplay]="'true'" ngDefaultControl>
+                        </amount-field>
+                        </div>
+                       
+                        <div *ngIf="!b2cFlag && !isProductBuildFlag" class="row col-sm-offset-4 col-xs-offset-0 col-md-offset-4 col-md-6 col-sm-7 col-xs-12 pl15 pl-xs-20">
+                            <check-box elementId="mailTheChequeToAgent" formControlName="mailTheChequeToAgent" itemLabel="NCPLabel.sendClaimPaymentChequeToTheIntermediary"
+                                alignment="center" ngDefaultControl></check-box>
+                        </div>
+                    </div>
+
+                <!--<div class="col-md-2 col-sm-4 col-xs-12 pr-md-0 mb20 col-centered mb20">
+                    <button-field buttonType="custom" buttonClass="ncp-btn pull-right w100p" [isDisabled]="!isShowBasicDetailsFlag"
+                        buttonName="NCPBtn.saveClaim" (click)="saveClaimFNOL();"></button-field>
+                </div>-->
+                <ncp-modal [modalKey]="isSaveClaimFNOLModal" modalTitle="" modalClass="modal-lg" [closeOnEscape]="false" [closeOnOutsideClick]="false">
+                    <modal-content>
+                        <div class="row"><span> The Claim Number {{this.claimFNOLFormGroup.controls['claimInfo'].get('claimNo').value }}  has been Hold</span></div>
+                    </modal-content>
+                    <modal-footer>
+                        <div class="btns-row">
+                            <!--<button class="ncp-linkBtn" (click)="isSaveClaimFNOLModal=false;navigateToHome()">{{'NCPBtn.close' | translate}}</button>-->
+                            <button-field buttonType="custom" buttonClass="ncp-linkBtn" (click)="isSaveClaimFNOLModal=false;navigateToHome()" elementLabel="NCPBtn.close"
+                                iconClass="fa fa-close">
+                            </button-field>
+                        </div>
+                    </modal-footer>
+                </ncp-modal>
+                <ncp-modal [modalKey]="searchModal" modalTitle="NCPModalTitle.searchPolicy" modalClass="modal-lg" [closeOnEscape]="false"
+                    [closeOnOutsideClick]="false" hideCloseButton=true>
+                    <modal-content>
+                        <div formGroupName="policyInfo">
+                            <div class="row">
+                                <ncp-label elementLabel="NCPLabel.policyNo" mandatoryFlag="true"></ncp-label>
+                                <text-box formControlName="policyNo" elementId="policyNo" elementLabel="NCPLabel.policyNo" mandatoryFlag="true" ngDefaultControl>
+                                </text-box>
+                            </div>
+
+                        </div>
+
+                        <div formGroupName="claimInfo">
+                            <div class="row">
+                                <ncp-label elementLabel="NCPLabel.claimType"></ncp-label>
+                                <drop-down elementId="claimType" formControlName="claimType" miscSubType="CLTY" miscType="MiscInfo" pickListFlag=true isCodeDesc=true
+                                    [descControl]="claimFNOLFormGroup.controls['claimInfo']['controls']['claimTypeDesc']" ngDefaultControl
+                                    displayOnClick=true>
+                                </drop-down>
+                            </div>
+
+                        </div>
+                    </modal-content>
+                    <modal-footer>
+                        <div class="btns-row">
+                            <button-field buttonType="custom" buttonName="NCPBtn.close" buttonClass="ncp-linkBtn" (click)="searchModal = false;navigateToHome()"></button-field>
+                            <button-field buttonType="custom" buttonName="NCPBtn.search" buttonClass="ncp-linkBtn" (click)="searchOnclaimType()"></button-field>
+                        </div>
+                    </modal-footer>
+                </ncp-modal>
+            </ng2-wizard-step>
+        </ng2-wizard-tab>
+
+        <ng2-wizard-tab tabTitle="NCPTab.Incidentdetails" tabId="02" [doValidateSubBeforeNavigation] = "false">
+            <ng2-wizard-step>
+                <tab-error [displayFlag]="!isValidFNOLForm && isNextFlag" errorMessage="NCPErrorMessage.pleaseCorrectErrorsBelow">
+                </tab-error>
+                <div formGroupName="claimInfo">
+
+                    <div class="row">
+                        <ncp-label elementLabel="NCPLabel.lossDate" mandatoryFlag="true"></ncp-label>
+                        <ncp-date-picker [options]="datePickerNormalOptions" formControlName="lossDate" ngDefaultControl customFlag=true datepickerClass="col-xs-6 col-sm-3 col-md-2 pr0 claimsDatePickerAlignRTL" elementLabel="NCPLabel.lossDate" mandatoryFlag="true">
+                        </ncp-date-picker>
+                    </div>
+
+                    <div class="row">
+                        <ncp-label elementLabel="NCPLabel.time"></ncp-label>
+                        <time-picker elementId="lossTime" formControlName="lossTime" ngDefaultControl customFlag=true timePickerClass="col-xs-6 col-sm-3 col-md-2 pr0 claimsTimePickerAlignRTL" elementLabel="NCPLabel.time">
+                        </time-picker>
+                    </div>
+
+                    <div class="row">
+                        <ncp-label *ngIf="!isProductBuildFlag" elementLabel="NCPLabel.selectCountry"></ncp-label>
+                        <ncp-label *ngIf="isProductBuildFlag" elementLabel="NCPLabel.location"></ncp-label>
+                        <drop-down elementId="placeOfLossCode" formControlName="placeOfLossCode" miscSubType="CTRY" miscType="MiscInfo" pickListFlag=true
+                            isCodeDesc=true [descControl]="claimFNOLFormGroup.controls['claimInfo']['controls']['placeOfLossCodeDesc']"
+                            ngDefaultControl displayOnClick=true>
+                        </drop-down>
+                    </div>
+
+                    <div class="row" *ngIf="!isLifeLob">
+                        <ncp-label elementLabel="NCPLabel.claimType"></ncp-label>
+                        <drop-down elementId="claimType" formControlName="claimType" miscSubType="CTYP" miscType="MiscInfo" pickListFlag=true isCodeDesc=true [descControl]="claimFNOLFormGroup.controls['claimInfo']['controls']['claimTypeDesc']" ngDefaultControl displayOnClick=true>
+                        </drop-down>
+                    </div>
+                    <div *ngIf="isLifeLob">
+                        <div class="row">
+                            <ncp-label elementLabel="NCPLabel.claimType"></ncp-label>
+                            <drop-down elementId="claimType" formControlName="claimType" miscSubType="CLTY" miscType="MiscInfo" pickListFlag=true isCodeDesc=true
+                                [descControl]="claimFNOLFormGroup.controls['claimInfo']['controls']['claimTypeDesc']" ngDefaultControl
+                                displayOnClick=true>
+                            </drop-down>
+                        </div>
+                        <div class="row">
+                            <ncp-label elementLabel="NCPLabel.claimSubType"></ncp-label>
+                            <drop-down elementId="claimType" formControlName="claimSubType" miscSubType="DISE" miscType="MiscInfo" pickListFlag=true
+                                isCodeDesc=true [descControl]="claimFNOLFormGroup.controls['claimInfo']['controls']['claimSubTypeDesc']"
+                                ngDefaultControl displayOnClick=true>
+                            </drop-down>
+                        </div>
+                        <div class="row">
+                            <ncp-label elementLabel="NCPLabel.claimReason"></ncp-label>
+                            <drop-down elementId="claimType" formControlName="claimReason" miscSubType="CTYP" miscType="MiscInfo" pickListFlag=true isCodeDesc=true
+                                [descControl]="claimFNOLFormGroup.controls['claimInfo']['controls']['claimReasonDesc']" ngDefaultControl
+                                displayOnClick=true>
+                            </drop-down>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <ncp-label elementLabel="NCPLabel.incidentDescription" mandatoryFlag="true"></ncp-label>
+                        <text-area formControlName=incidentDesc textAreaRow="4" textAreaCol="6" elementLabel="NCPLabel.incidentDescription" mandatoryFlag="true">
+                        </text-area>
+                    </div>
+                </div>
+
+                <div *ngIf="!isProductBuildFlag">
+                    <div formArrayName="claimantInfo">
+                        <div *ngFor="let claim of this.claimFNOLFormGroup.controls.claimantInfo.controls; let i=index">
+                            <div [formGroupName]="i" class="claimantListDetails">
+                                <div class="row p15">
+                                    <div class="col-md-4 col-xs-12 col-sm-4 ml-sm-0 ml-xs-0 pl0 mb-xs-20 pr-xs-0">
+                                        <div class="claims-name">
+                                            <!--<h5 class="theme-color p10 m0 text-center mb10 mb-xs-0">{{ 'NCPLabel.Claimant' | translate }}</h5>-->
+                                            <misc-h5 miscClass="theme-color p10 m0 text-center mb10 mb-xs-0" iconClass="" [label]="'NCPLabel.Claimant'"></misc-h5>
+                                            <drop-down elementId="claimantCd" formControlName="claimantCd" [dropdownItems]="claimantDropDownList" isCodeDesc=true customFlag=true
+                                                [dropdownClass]="col-md-7" [descControl]="claimFNOLFormGroup.controls['claimantInfo'].at(i).controls['claimantCdDesc']"
+                                                ngDefaultControl>
+                                            </drop-down>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4 col-xs-12 col-sm-4  mb-xs-20 pl-xs-0  pr-xs-0">
+                                        <!--<h5 class="theme-color  text-center p10 m0 mb10 mb-xs-0">{{ 'NCPLabel.Benefitclaimed' | translate }}</h5>-->
+                                        <misc-h5 miscClass="theme-color  text-center p10 m0 mb10 mb-xs-0" iconClass="" [label]="'NCPLabel.Benefitclaimed'"></misc-h5>
+                                        <div class="claims-name">
+                                            <drop-down elementId="benefitClaimed" formControlName="benefitClaimed" [dropdownItems]="benefitClaimedDropDownList" isCodeDesc=true
+                                                customFlag=true changeId="changeBenefitClaimed" [dropdownClass]="col-md-7" [descControl]="claimFNOLFormGroup.controls['claimantInfo'].at(i)['controls']['benefitClaimedDesc']"
+                                                ngDefaultControl>
+                                            </drop-down>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-md-4 col-xs-12 col-sm-4 pr0 mb-xs-20 pl-xs-0">
+                                        <h5 class="theme-color text-center  p10 m0 mb10 mb-xs-0">{{ 'NCPLabel.amount' | translate }}</h5>
+                                        <div class="claims-name">
+                                            <div class="row plr15">
+                                                <drop-down elementId="claimantCurr" formControlName="claimantCurr" [dropdownItems]="currency" isCodeDesc=true customFlag=true
+                                                    [dropdownClass]="col-md-3" [descControl]="claimFNOLFormGroup.controls['claimantInfo'].at(i)['controls']['claimantCurrDesc']"
+                                                    dropdownClass="col-md-4 col-sm-4 col-xs-4 no-pad" ngDefaultControl>
+                                                </drop-down>
+                                                <text-box customFlag=true elementId="claimantAmount" textBoxClass="col-md-8 col-sm-8 col-xs-8 pr0 pl0 pr-md-0 pl-sm-0 pr-sm-0 pr-xs-0"
+                                                    formControlName="claimantAmount">
+                                                </text-box>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row p15">
+                                        <div class="claimantDetails">
+                                            <accordion [closeOthers]="oneAtATime">
+                                                <accordion-group heading="NCPAccordionHeading.PleaseProvideMoreDetails">
+                                                    <div *ngIf="otherClaimSelected[i] || isEnquiryFlag" class="row">
+                                                        <ncp-label elementLabel="NCPLabel.pleaseDescribeTheBenefitYouWantToClaim" labelClass="col-sm-4 col-md-4 text-right text-xs-left mb20 mb-xs-0"
+                                                            customFlag=true></ncp-label>
+                                                        <text-box elementId="otherClaim" formControlName="otherClaim"></text-box>
+                                                    </div>
+                                                    <div formArrayName="questionnaires">
+                                                        <div *ngFor="let claimant of claim.controls.questionnaires.controls; let j= index;">
+                                                            <div [formGroupName]="j">
+                                                                <div *ngIf="isEnquiryFlag || status == 'OpenHeld'">
+                                                                    <!--<div *ngIf="( !isEnquiryFlag && claim.controls.questionnaires.value[j].questionType==='DATE' ) || ( isEnquiryFlag && claim.controls.questionnaires.at(j).controls.questionType.value==='DATE')" class="row">-->
+                                                                    <div *ngIf="claim.controls.questionnaires.at(j).controls.questionType.value==='DATE'" class="row">
+                                                                        <div class="col-sm-4 col-md-4 pos_static text-right text-xs-left mb20 mb-xs-0">
+                                                                            <label class="pl-xs-0 pb-xs-0">{{ claim.controls.questionnaires.at(j).controls.question.value }}</label>
+                                                                        </div>
+                                                                        <div class="pos_static staticDatepicker pl-md-0">
+                                                                            <ncp-date-picker [options]="datePickerNormalOptions" customFlag=true datepickerClass="col-sm-6 col-md-3 col-xs-6  mydp text-right no-pad pos_static"
+                                                                                formControlName="questionAnswer" ngDefaultControl>
+                                                                            </ncp-date-picker>
+                                                                        </div>
+                                                                    </div>
+                                                                    <div *ngIf="claim.controls.questionnaires.at(j).controls.questionType.value==='TEXT'" class="row">
+                                                                        <div class="col-sm-4 col-md-4 text-right text-xs-left mb20 mb-xs-0">
+                                                                            <label class="pl-xs-0 pb-xs-0">{{ claim.controls.questionnaires.at(j).controls.question.value }}</label>
+                                                                        </div>
+                                                                        <text-box elementId="questionAnswer" formControlName="questionAnswer">
+                                                                        </text-box>
+                                                                    </div>
+                                                                </div>
+                                                                <div *ngIf="!isEnquiryFlag && status !== 'OpenHeld' && claim.controls.questionnaires.value[j]">
+                                                                    <div *ngIf="claim.controls.questionnaires.value[j].questionType==='DATE'" class="row">
+                                                                        <div class="col-sm-4 col-md-4 pos_static text-right text-xs-left mb20 mb-xs-0">
+                                                                            <label class="pl-xs-0 pb-xs-0">{{ claim.controls.questionnaires.value[j].question }}</label>
+                                                                            <!--<misc-display [isLabel]=false [label]="claim.controls.questionnaires.value[j].question" [class]="pl-xs-0 pb-xs-0"></misc-display>-->
+                                                                        </div>
+                                                                        <div class="pos_static staticDatepicker pl-md-0">
+                                                                            <ncp-date-picker [options]="datePickerNormalOptions" customFlag=true datepickerClass="col-sm-6 col-md-3 col-xs-6 mydp text-right no-pad pos_static"
+                                                                                formControlName="questionAnswer" ngDefaultControl>
+                                                                            </ncp-date-picker>
+                                                                        </div>
+                                                                    </div>
+                                                                    <div *ngIf="claim.controls.questionnaires.value[j].questionType==='TEXT'" class="row">
+                                                                        <div class="col-sm-4 col-md-4 text-right text-xs-left mb20 mb-xs-0">
+                                                                            <label class="pl-xs-0 pb-xs-0">{{ claim.controls.questionnaires.value[j].question }}</label>
+                                                                            <!--<misc-display [isLabel]=false [label]="question"></misc-display>-->
+                                                                        </div>
+                                                                        <text-box elementId="questionAnswer" formControlName="questionAnswer">
+                                                                        </text-box>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="red" *ngIf="docCheckInfo[i] && docCheckInfo[i].length > 0">
+                                                        <p>{{'NCPLabel.supportingDocuments'| translate}}</p>
+                                                        <span>{{ docCheckInfo[i] }}</span>
+                                                    </div>
+                                                </accordion-group>
+                                            </accordion>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div *ngIf="!isEnquiryFlag && status!=='OpenHeld'" class="row">
+                    <ncp-label *ngIf="!isLifeLob" elementLabel="NCPLabel.uploadDocument"></ncp-label>
+                    <div formArrayName="attachments" *ngFor="let temp of claimFNOLFormGroup.get('attachments').controls; let i=index; let last = last">
+                        <div [formGroupName]="i">
+                            <div *ngIf="i === 0">
+                                <ncp-label *ngIf="isLifeLob" mandatoryFlag="true" [elementLabel]="claimFNOLFormGroup.get('documentInfo').at(i).get('documentDesc').value"></ncp-label>
+                                <text-box elementId="documentContent" ngDefaultControl customFlag=true textBoxClass="col-sm-5 col-md-5 col-xs-11 claimsFirstUploadTextBox"
+                                    formControlName="fileName" changeId="documentContent" [index]="i+1" inputType="file"></text-box>
+                            </div>
+                                <ncp-label *ngIf="isLifeLob && i > 0" mandatoryFlag="true" [elementLabel]="claimFNOLFormGroup.get('documentInfo').at(i).get('documentDesc').value"></ncp-label>
+                                <text-box *ngIf="i > 0 && isLifeLob" customFlag=true textBoxClass="col-sm-5 col-md-5 col-xs-11 pr-sm-0" elementId="documentContent"  ngDefaultControl formControlName="fileName" changeId="documentContent" [index]="i+1" inputType="file"></text-box>
+                                <text-box *ngIf="i > 0 && !isLifeLob" elementId="documentContent" customFlag=true textBoxClass="col-sm-5 col-md-5 col-xs-7 pr-sm-0 col-xs-offset-0 col-md-offset-4 col-sm-offset-4 col-lg-offset-4 mt10" ngDefaultControl formControlName="fileName" changeId="documentContent" [index]="i+1" inputType="file"></text-box>
+                            <div class="btnAlignField pull-left d-flex uploadBtnAlignRTL" *ngIf="!isEnquiryFlag">
+                                <button-field *ngIf="this.claimFNOLFormGroup.controls.attachments.controls.length > 1 && !isLifeLob" buttonType="custom"
+                                    buttonClass="ncpbtn-default fa fa-close ml5 mt-xs-0" (click)="deleteuploadDocument(i)" [class.mt10]="i > 0"
+                                    elementId="deleteDocument"></button-field>
+                                <button-field *ngIf="last && !isLifeLob" buttonType="custom" buttonClass="ncpbtn-default pull-left fa fa-plus ml5 mt-xs-0"
+                                    (click)="addUploadDocument()" elementId="addDocument" [class.mt10]="i > 0" [class.ml15]="i > 0"></button-field>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div *ngIf="status==='OpenHeld'" class="row">
+                    <ncp-label *ngIf="!isLifeLob" elementLabel="NCPLabel.uploadDocument"></ncp-label>
+                    <div formArrayName="attachments" *ngFor="let temp of claimFNOLFormGroup.get('attachments').controls; let i=index; let last = last">
+                        <div [formGroupName]="i">
+                            <ncp-label *ngIf="isLifeLob" [elementLabel]="claimFNOLFormGroup.get('documentInfo').at(i).get('documentDesc').value"></ncp-label>
+                            <text-box elementId="documentContent" customFlag=true textBoxClass="col-sm-5 col-md-5 col-xs-7 pr-sm-0 col-xs-offset-0 col-md-offset-4 col-sm-offset-4 col-lg-offset-4"
+                                ngDefaultControl formControlName="fileName" changeId="documentContent" [index]="i+1" inputType="file"
+                                elementLabel="NCPLabel.uploadDocument"></text-box>
+                            <div class="btnAlignField pull-left d-flex uploadBtnAlignRTL mb10" *ngIf="!isEnquiryFlag">
+                                <button-field buttonType="custom" buttonClass="ncpbtn-default fa fa-eye ml5 mt-xs-0" (click)="viewDocument(i)" elementId="viewDocument"></button-field>
+                                <button-field *ngIf="this.claimFNOLFormGroup.controls.attachments.controls.length > 1" buttonType="custom" buttonClass="ncpbtn-default fa fa-close ml15 mt-xs-0"
+                                    (click)="deleteuploadDocument(i)" elementId="deleteDocument"></button-field>
+                                <button-field *ngIf="last" buttonType="custom" buttonClass="ncpbtn-default pull-left fa fa-plus ml5 mt-xs-0" (click)="addUploadDocument()"
+                                    elementId="addDocument" [class.ml15]="i > 0"></button-field>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div *ngIf="isEnquiryFlag && !emptyAttachmentFlag" class="row">
+                    <ncp-label *ngIf="!isLifeLob" elementLabel="NCPLabel.uploadDocument"></ncp-label>
+                    <div formArrayName="attachments" *ngFor="let temp of claimFNOLFormGroup.get('attachments').controls; let i=index; let last = last">
+                        <div [formGroupName]="i">
+                            <ncp-label *ngIf="isLifeLob" [elementLabel]="claimFNOLFormGroup.get('documentInfo').at(i).get('documentDesc').value"></ncp-label>
+                            <text-box elementId="fileName" customFlag=true textBoxClass="col-sm-5 col-md-5 col-xs-7 pr-sm-0 col-xs-offset-0 col-md-offset-4 col-sm-offset-4 col-lg-offset-4"
+                                ngDefaultControl formControlName="fileName" [index]="i+1" inputType="text" elementLabel="NCPLabel.uploadDocument"></text-box>
+                            <div class="btnAlignField pull-left d-flex mb10 uploadBtnAlignRTL">
+                                <button-field buttonType="custom" buttonClass="ncpbtn-default fa fa-eye ml5 mt-xs-0" (click)="viewDocument(i)" elementId="viewDocument"></button-field>
+                            </div>
+                        </div>
+                    </div>
+                
+                </div>
+                <div class="btns-row">
+                    <div *ngIf="!isProductBuildFlag">
+                        <button-field buttonType="custom" buttonClass="ncp-btn" [isDisabled]="isEnquiryFlag" buttonName="{{'NCPBtn.addAnotherClaim' | translate}}"
+                            (click)="addClaim();"></button-field>
+                    </div>
+                    <div *ngIf="b2bFlag">
+                        <button-field buttonType="custom" buttonClass="ncp-btn" [isDisabled]="isEnquiryFlag" buttonName="{{'NCPBtn.saveClaim' | translate }}"
+                            clickId="saveClaim"></button-field>
+                    </div>
+                </div>
+                <ncp-modal [modalKey]="isSaveClaimFNOLIncidentModal" modalClass="modal-md" [closeOnEscape]="false" [closeOnOutsideClick]="false" hideCloseButton="true">
+                    <modal-content>
+
+                        <div class="mb20"> {{'NCPLabel.yourClaim' | translate}} <span class="theme-color">{{this.claimFNOLFormGroup.controls['claimInfo'].value.claimNo }}</span>                            {{'NCPLabel.savedSucessfully' | translate}}</div>
+                        <div class="pr0 col-xs-12 pull-right pl-md-0 pl-sm-0 mb20 ">
+                            <!--<button class="ncp-linkBtn" (click)="isSaveClaimFNOLIncidentModal=false;navigateToHome()">{{'NCPBtn.close' | translate}}</button>-->
+                            <button-field buttonType="custom" buttonClass="ncp-linkBtn" buttonName="NCPBtn.close" (click)="isSaveClaimFNOLIncidentModal=false;navigateToHome()"
+                                iconClass="fa fa-close"></button-field>
+                        </div>
+                    </modal-content>
+                </ncp-modal>
+
+            </ng2-wizard-step>
+        </ng2-wizard-tab>
+        <ng2-wizard-tab tabTitle="NCPTab.confirm" tabId="03" [doValidateSubBeforeNavigation] = "false">
+            <ng2-wizard-step class="">
+                <!--<h2>{{'NCPLabel.summery' | translate }}</h2>-->
+                <misc-h2 [label]="'NCPLabel.summery'"></misc-h2>
+                <p>{{ 'NCPLabel.summeryText' | translate }}</p>
+                <div class="filterac">
+                    
+                <table class="">
+                    <tbody>
+                        <tr>
+                            <td class="hidden-xs">{{'NCPLabel.policyNo' | translate}}</td>
+                            <td [attr.data-title]="'NCPLabel.policyNo' | translate"> {{this.claimFNOLFormGroup.controls['policyInfo'].get('policyNo').value }}</td>
+                        </tr>
+                        <tr>
+                            <td class="hidden-xs">{{'NCPLabel.policyholdername' | translate}}</td>
+                            <td [attr.data-title]="'NCPLabel.policyholdername' | translate"> {{this.claimFNOLFormGroup.controls['customerInfo'].value.appFullName }}</td>
+                        </tr>
+                        <tr>
+                            <td class="hidden-xs">{{'NCPLabel.ClaimNo' | translate}}</td>
+                            <td [attr.data-title]="'NCPLabel.ClaimNo' | translate"> {{this.claimFNOLFormGroup.controls['claimInfo'].value.claimNo }}</td>
+                        </tr>
+
+                    </tbody>
+                </table>
+            </div>
+            <div class="filterac">
+                <table *ngIf="!isProductBuildFlag" class="">
+                    <tbody>
+                        <tr>
+                            <th>{{'NCPLabel.Claimant' | translate}}</th>
+                            <th>{{'NCPLabel.relationshipToPolicyHolder' | translate}}</th>
+                        </tr>
+                        <tr *ngFor="let temp of this.claimFNOLFormGroup.controls.selectedInsuredInfo.value; let i=index">
+                            <td [attr.data-title]="'NCPLabel.Claimant' | translate">{{temp.appFullName}}</td>
+                            <td [attr.data-title]="'NCPLabel.ClaimantRelationship' | translate">{{temp.relationship}}</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div *ngIf=isLifeLob class="filterac">
+                <table class="">
+                    <tbody>
+                        <tr>
+                            <th class="w-xs-100p defaultTableHeaderLh">{{'NCPLabel.lifeAssured' | translate}}</th>
+                            <th class="hidden-xs"></th>
+                        </tr>
+                        <tr>
+                            <td class="hidden-xs"> {{'NCPLabel.firstName' | translate}}</td>
+                            <td [attr.data-title]="'NCPLabel.firstName' | translate">{{this.claimFNOLFormGroup.controls['claimInfo'].value.lifeAssuredFName}}</td>
+                        </tr>
+                        <tr>
+                            <td class="hidden-xs">{{'NCPLabel.lastName' | translate}}</td>
+                            <td [attr.data-title]="'NCPLabel.lastName' | translate">{{this.claimFNOLFormGroup.controls['claimInfo'].value.lifeAssuredLName}}</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="filterac">
+                <table class="">
+                    <tbody>
+                        <tr>
+                            <th class="w-xs-100p defaultTableHeaderLh">{{'NCPLabel.Preferredcontactperson' | translate}}</th>
+                            <th class="hidden-xs"></th>
+                        </tr>
+                        <tr>
+                            <td class="hidden-xs"> {{'NCPLabel.firstName' | translate}}</td>
+                            <td *ngIf=!isOtherNotifier [attr.data-title]="'NCPLabel.firstName' | translate">{{this.polNotifierFirstName}}</td>
+                            <td *ngIf=isOtherNotifier [attr.data-title]="'NCPLabel.firstName' | translate">{{this.claimFNOLFormGroup.controls['claimInfo'].get('notifierClientFirstName').value}}</td>
+                        </tr>
+                        <tr>
+                            <td class="hidden-xs">{{'NCPLabel.lastName' | translate}}</td>
+                            <td *ngIf=!isOtherNotifier [attr.data-title]="'NCPLabel.lastName' | translate">{{this.polNotifierLastName}}</td>
+                            <td *ngIf=isOtherNotifier [attr.data-title]="'NCPLabel.lastName' | translate">{{this.claimFNOLFormGroup.controls['claimInfo'].get('notifierClientLastName').value}}</td>
+                        </tr>
+                        <tr>
+                            <td class="hidden-xs">{{'NCPLabel.contactNumber' | translate}}</td>
+                            <td [attr.data-title]="'NCPLabel.contactNumber' | translate">{{this.claimFNOLFormGroup.controls['claimInfo'].value.notifierClientMobile}}</td>
+                        </tr>
+                        <tr>
+                            <td class="hidden-xs">{{'NCPLabel.contactEmail' | translate}}</td>
+                            <td [attr.data-title]="'NCPLabel.contactNumber' | translate">{{this.claimFNOLFormGroup.controls['claimInfo'].value.notifierClientEmail}}</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+                <div formGroupName="policyInfo">
+                    <accordion [closeOthers]="oneAtATime" Class="customDeclaration">
+                        <accordion-group heading="{{'NCPAccordionHeading.Declarations' | translate}}" [isOpen]=true>
+                            <!--<textarea class="text-xs-justify rea" disabled>
+                               {{'NCPTextarea.importantNotice' | translate}}
+                            </textarea>-->
+
+                            <check-box formControlName="isImportantNoticeEnabled" itemLabel=" {{'NCPTextarea.importantNoticeClaim' | translate}}" elementId="importantnotice"
+                                alignment="left" ngDefaultControl class="w100p pull-left pb20 pt10" (click)="confirmClaimFNOL()">
+                            </check-box>
+                            <!--<textarea class="text-xs-justify rea" diasabled>
+                           {{'NCPTextarea.warranty&Declaration' | translate}}
+                        </textarea>-->
+                            <check-box formControlName="isWarantyAndDeclarationEnabled" itemLabel="{{'NCPTextarea.warranty&DeclarationClaim' | translate}}"
+                                elementId="warantyanddeclaration" alignment="left" ngDefaultControl class="w100p pull-left pb10" (click)="confirmClaimFNOL()">
+                            </check-box>
+                        </accordion-group>
+
+                        <!--<accordion-group heading="NCPAccordionHeading.personalDataProtectionAct" [isOpen]="this.claimFNOLFormGroup.controls['policyInfo'].value.isWarantyAndDeclarationEnabled"
+                    [isDisabled]="!this.claimFNOLFormGroup.controls['policyInfo'].value.isWarantyAndDeclarationEnabled">
+                    <textarea class="text-xs-justify rea" disabled>
+                           {{'NCPTextarea.personalDataProtectionActStatement' | translate}}
+                         </textarea>
+                    <check-box formControlName="isPersonalInfoStatementEnabled" itemLabel="NCPLabel.iAgree" elementId="personalinfostatement"
+                        alignment="right" ngDefaultControl>
+                    </check-box>
+                </accordion-group>-->
+                    </accordion>
+                </div>
+
+                <div *ngIf="confirmFlag" class="btns-row p0">
+
+                    <button-field buttonType="custom" buttonClass="ncpbtn-default w100p" clickId="confirmClaim" [isDisabled]="isEnquiryFlag"
+                        buttonName="{{'NCPBtn.confirm' | translate}}" buttonType="custom" iconClass="fa fa-check">
+                    </button-field>
+                </div>
+                <ncp-modal [modalKey]="isPostClaimFNOLModal" modalTitle="" modalClass="modal-md" [closeOnEscape]="false" [closeOnOutsideClick]="false" hideCloseButton=true>
+                    <modal-content>
+                        <div *ngIf='hkBuild' class="mb20">{{ 'NCPLabel.claimConfirmMessage' | translate }} {{ 'NCPLabel.hkContactNumber' | translate}} {{'NCPLabel.claimConfirmMessage1'
+                            | translate}} {{this.claimFNOLFormGroup.controls['claimInfo'].get('claimNo').value }} </div>
+                        <div *ngIf='!hkBuild' class="mb20">
+                            {{ 'NCPLabel.claimConfirmMessage' | translate }} {{ 'NCPLabel.sgContactNumber' | translate}} {{'NCPLabel.claimConfirmMessage1'
+                            | translate}} {{this.claimFNOLFormGroup.controls['claimInfo'].get('claimNo').value }}
+                        </div>
+
+                        <!--<button class="ncp-linkBtn" (click)="isPostClaimFNOLModal=false; navigateToHome()">{{'NCPBtn.close' | translate}}</button>-->
+                        <button-field buttonType="custom" buttonClass="ncp-linkBtn" (click)="isPostClaimFNOLModal=false; navigateToHome()" buttonName="NCPBtn.close"
+                            iconClass="fa fa-close">
+                        </button-field>
+                    </modal-content>
+                </ncp-modal>
+                <!--<ncp-modal [modalKey]="isPostClaimFNOLModal && !b2cFlag" modalTitle="NCPModalTitle.claimPost" modalClass="modal-lg" [closeOnEscape]="false"
+                     formGroupName="emailQuotInfo" [closeOnOutsideClick]="false">
+                    <modal-content>
+                        <div class="row">
+                            <ncp-label elementLabel="NCPLabel.to" mandatoryFlag="true"></ncp-label>
+                            <text-box elementId="toAddress" formControlName="toAddress" inputType="email" ngDefaultControl>
+                            </text-box>
+                            <error-handler [elementControl]="claimFNOLFormGroup.controls['emailQuotInfo'].controls['toAddress']" [customMessages]="{mailFormat: 'Please Enter Valid EmailId'}">
+                            </error-handler>
+
+                        </div>
+                        <div class="row">
+                            <ncp-label elementLabel="NCPLabel.ccAddress" mandatoryFlag="true"></ncp-label>
+                            <text-box elementId="ccAddress" formControlName="ccAddress" inputType="email" ngDefaultControl>
+                            </text-box>
+                            <error-handler [elementControl]="claimFNOLFormGroup.controls['emailQuotInfo'].controls['ccAddress']" [customMessages]="{mailFormat: 'Please Enter Valid EmailId'}">
+                            </error-handler>
+                        </div>
+                        <div class="row">
+                            <ncp-label elementLabel="NCPLabel.subject" mandatoryFlag="true"></ncp-label>
+                            <text-box elementId="subject" formControlName="subject" inputType="text" ngDefaultControl>
+                            </text-box>
+                        </div>
+                        <div class="row">
+                            <ncp-label elementLabel="NCPLabel.reason" mandatoryFlag="true"></ncp-label>
+                            <text-area elementId="reason" formControlName="reason" textAreaRow="4" textAreaCol="6" ngDefaultControl>
+                            </text-area>
+                        </div>
+                        <div class="row">
+                            <ncp-label elementLabel="NCPLabel.uploadDocument" mandatoryFlag="true"></ncp-label>
+                            <text-box elementId="fileUpload" formControlName="fileUpload" inputType="file" changeId="emailFileUpload" ngDefaultControl>
+                            </text-box>
+                        </div>
+                    </modal-content>
+                    <modal-footer>
+                        <div class="row">
+                            <div class="col-md-3 col-sm-6"></div>
+                            <button-field (click)="isPostClaimFNOLModal=false;navigateToHome()" buttonName="NCPBtn.cancel">
+                            </button-field>
+                            <button-field [isDisabled]="!isValidFNOLForm" (click)="isPostClaimFNOLModal=false;isEmailSuccessFNOLModal=true" clickId="emailQuoteModalMailSend"
+                                buttonName="NCPBtn.send">
+                                </button-field>
+                        </div>
+                    </modal-footer>
+                    </ncp-modal>-->
+                <ncp-modal [modalKey]="isEmailSuccessFNOLModal" modalTitle="NCPModalTitle.claimPost" modalClass="modal-lg" [closeOnEscape]="false"
+                    [closeOnOutsideClick]="false">
+                    <modal-content>
+                        <div class="row">
+                            <span> {{ 'NCPLabel.emailSuccessFNOLModalContent' | translate }} {{this.claimFNOLFormGroup.controls['claimInfo'].value.claimNo }}  .</span>
+                        </div>
+                    </modal-content>
+                    <modal-footer>
+                        <div class="btns-row">
+
+                            <!--<button class="ncp-linkBtn" (click)="isEmailSuccessFNOLModal=false; navigateToHome()">{{'NCPBtn.close' | translate}}</button>-->
+                            <button-field buttonType="custom" buttonClass="ncp-linkBtn" (click)="isEmailSuccessFNOLModal=false; navigateToHome()" buttonName="NCPBtn.close"
+                                iconClass="fa fa-close">
+                            </button-field>
+                        </div>
+                    </modal-footer>
+                </ncp-modal>
+            </ng2-wizard-step>
+        </ng2-wizard-tab>
+    </ng2-wizard>
+</div>
